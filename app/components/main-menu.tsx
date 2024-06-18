@@ -6,23 +6,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ProfileImage from "./profile-image";
+import { signInWithTwitter, signOut } from "@/lib/client-authentication";
 
 export default function MainMenu() {
   const supabase = createClient();
-  async function signInWithTwitter() {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: "twitter",
-      options: {
-        redirectTo: "http://localhost:3000/auth/callback",
-      },
-    });
-    console.log(data, error);
-  }
-
-  async function signOut() {
-    const { error } = await supabase.auth.signOut();
-    console.log(error);
-  }
 
   const [isSignedIn, setIsSignedIn] = useState<boolean>();
   const [user, setUser] = useState<User>();
