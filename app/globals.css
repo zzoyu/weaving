@@ -4,7 +4,7 @@
 
 @layer base {
   h1 {
-    @apply text-4xl font-bold;
+    @apply text-4xl font-bold font-playwrite;
   }
 }
 
@@ -35,7 +35,7 @@ body {
     )
     rgb(var(--background-start-rgb));
 
-  @apply antialiased h-full;
+  @apply antialiased h-full font-pretendard;
 }
 
 @layer utilities {

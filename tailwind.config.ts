@@ -8,6 +8,14 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        playwrite: [
+          "var(--font-playwrite)",
+          "var(--font-pretendard)",
+          "cursive",
+        ],
+        pretendard: ["var(--font-pretendard)", "sans"],
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
