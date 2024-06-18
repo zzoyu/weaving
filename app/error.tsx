@@ -1,4 +1,12 @@
-export default function ErrorPage() {
+"use client";
+
+import { SupabaseError } from "@/types/error-code";
+
+export default function Error({
+  error,
+}: {
+  error: SupabaseError & { digest?: string };
+}) {
   return (
     <main className="h-full grid place-items-center">
       <div>

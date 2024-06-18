@@ -4,7 +4,16 @@
 
 @layer base {
   h1 {
-    @apply text-4xl font-bold font-playwrite;
+    @apply text-4xl font-playwrite;
+  }
+  h2 {
+    @apply text-3xl font-pretendard;
+  }
+}
+
+@layer components {
+  .text-profile-twitter {
+    @apply text-gray-300 dark:text-gray-500 font-light text-sm;
   }
 }
 
