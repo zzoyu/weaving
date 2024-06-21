@@ -1,18 +1,24 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Poiret_One } from "next/font/google";
 import "./globals.css";
 import clsx from "clsx";
 
-const fontTitle = localFont({
-  src: "../public/assets/fonts/playwrite/PlaywritePL-ExtraLight.ttf",
-  display: "swap",
-  variable: "--font-playwrite",
+// const fontTitle = localFont({
+//   src: "../public/assets/fonts/playwrite/PlaywritePL-ExtraLight.ttf",
+//   display: "swap",
+//   variable: "--font-playwrite",
+// });
+const fontTitle = Poiret_One({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-poiret-one",
 });
 
 const fontBody = localFont({
-  src: "../public/assets/fonts/pretendard/woff2/PretendardVariable.woff2",
+  src: "../public/assets/fonts/suit/SUIT-Variable.woff2",
   display: "swap",
-  variable: "--font-pretendard",
+  variable: "--font-suit",
 });
 
 export const metadata: Metadata = {
@@ -26,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={clsx(fontTitle.variable, fontBody.variable)}>
+    <html lang="ko" className={clsx(fontTitle, fontBody.variable)}>
       <body className={clsx(fontTitle.className, fontBody.className)}>
         {children}
       </body>
