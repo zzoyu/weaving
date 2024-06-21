@@ -3,6 +3,7 @@
 import { ImagePath } from "@/types/image";
 import { uploadImage } from "./upload-image";
 import { createClient } from "@/utils/supabase/server";
+import { revalidatePath } from "next/cache";
 
 export async function changeProfileImage(slug: string, payload: FormData) {
   const supabase = createClient();
@@ -32,4 +33,6 @@ export async function changeProfileImage(slug: string, payload: FormData) {
   } else {
     throw new Error("Profile not found");
   }
+
+  revalidatePath(`/u/${slug}`, "page");
 }
