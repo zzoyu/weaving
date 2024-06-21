@@ -9,12 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        playwrite: [
-          "var(--font-playwrite)",
-          "var(--font-pretendard)",
-          "cursive",
-        ],
-        pretendard: ["var(--font-pretendard)", "sans"],
+        "poiret-one": ["var(--font-poiret-one)", "var(--font-suit)", "cursive"],
+        suit: ["var(--font-suit)", "sans"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

@@ -4,10 +4,10 @@
 
 @layer base {
   h1 {
-    @apply text-4xl font-playwrite;
+    @apply text-4xl font-poiret-one;
   }
   h2 {
-    @apply text-3xl font-pretendard;
+    @apply text-3xl font-suit;
   }
 }
 
@@ -44,7 +44,7 @@ body {
     )
     rgb(var(--background-start-rgb));
 
-  @apply antialiased h-full font-pretendard;
+  @apply antialiased h-full font-suit;
 }
 
 @layer utilities {
