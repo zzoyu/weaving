@@ -2,7 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 
-export async function fetchProfile(slug: string) {
+export async function fetchProfileBySlug(slug: string) {
   const supabase = createClient();
   const { data, error } = (await supabase
     .from("profile")
