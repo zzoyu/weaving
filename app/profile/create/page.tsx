@@ -1,13 +1,14 @@
 import { createClient } from "@/utils/supabase/server";
-import { createProfile, fetchProfile } from "../actions";
+import { fetchProfileById } from "@/app/profile/actions";
 import Link from "next/link";
+import { createProfile } from "./actions";
 
 export default async function ProfileCreatePage() {
   const supabase = createClient();
   const { data } = await supabase.auth.getUser();
   if (!data.user) throw new Error("User not found");
 
-  const profileResponse = await fetchProfile(data.user.id);
+  const profileResponse = await fetchProfileById(data.user.id);
   if (profileResponse) {
     return (
       <main className="flex flex-col justify-center items-center pt-16 gap-16">

@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import ProfileTwitter from "./components/profile-twitter";
-import { fetchProfile } from "./actions";
+import { fetchProfileById } from "./actions";
 import Link from "next/link";
 import ProfileInformation from "./components/profile-information";
 
@@ -9,7 +9,7 @@ export default async function ProfilePage() {
   const { data } = await supabase.auth.getUser();
   const metadata = data.user?.user_metadata as TwitterMetadata;
 
-  const profileResponse = await fetchProfile(data.user?.id as string);
+  const profileResponse = await fetchProfileById(data.user?.id as string);
 
   console.log(profileResponse);
 

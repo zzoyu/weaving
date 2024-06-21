@@ -2,7 +2,7 @@ export enum ErrorCode {
   NOT_FOUND = "42P01",
 }
 
-export interface SupabaseError {
+interface SupabaseError {
   code: ErrorCode;
   message: string;
   details: string | null;
