@@ -5,6 +5,7 @@ import { title } from "process";
 import { Metadata, ResolvingMetadata } from "next";
 import ProfileImage from "./components/profile-image";
 import { createClient } from "@/utils/supabase/server";
+import Information from "./components/information";
 
 type Props = {
   params: { slug: string };
@@ -57,17 +58,10 @@ export default async function PublicProfilePage({
 
   return (
     <main className="flex flex-col justify-center items-center pt-16">
-      <h1 className="text-xl mb-5">{data.nickname}</h1>
-
-      {data.profile_image && (
-        <ProfileImage
-          src={data.profile_image}
-          isEditable={currentUser?.data?.user?.id === data.user_id}
-          slug={slug}
-        />
-      )}
-      <p className="text-profile-twitter">weaving@{data?.slug}</p>
-      <p>{data?.nickname}</p>
+      <Information
+        profile={data}
+        isEditable={currentUser?.data?.user?.id === data.user_id}
+      />
     </main>
   );
 }
