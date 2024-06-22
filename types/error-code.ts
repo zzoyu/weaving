@@ -1,4 +1,4 @@
-export enum ErrorCode {
+enum ErrorCode {
   NOT_FOUND = "42P01",
 }
 
