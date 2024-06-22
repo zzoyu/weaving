@@ -1,13 +1,7 @@
-import Image from "next/image";
-import ButtonProfileLink from "./components/button-profile-link";
 import { fetchProfileBySlug } from "./actions";
-import { title } from "process";
 import { Metadata, ResolvingMetadata } from "next";
-import ProfileImage from "./components/profile-image";
 import { createClient } from "@/utils/supabase/server";
 import Information from "./components/information";
-import { Tab } from "./components/tab/tab";
-import { TabItem } from "./components/tab/tab-item";
 
 type Props = {
   params: { slug: string };
@@ -59,28 +53,12 @@ export default async function PublicProfilePage({
   console.log(currentUser.data.user?.id, data.user_id);
 
   return (
-    <main className="flex flex-col justify-center items-center pt-16">
+    <main className="flex flex-col justify-center items-center pt-10">
       <Information
         profile={data}
         isEditable={currentUser?.data?.user?.id === data.user_id}
       />
-      <article className="flex flex-col gap-4 mt-10">
-        <h2 className="text-lg">식구 소개</h2>
-        <Tab>
-          <TabItem title="위빙1">
-            <p>q위빙은 무엇인가요?</p>
-            <p>위빙은 무엇이고, 어떻게 사용하나요?</p>
-          </TabItem>
-          <TabItem title="위빙2">
-            <p>w위빙은 무엇인가요?</p>
-            <p>위빙은 무엇이고, 어떻게 사용하나요?</p>
-          </TabItem>
-          <TabItem title="위빙3">
-            <p>e위빙은 무엇인가요?</p>
-            <p>위빙은 무엇이고, 어떻게 사용하나요?</p>
-          </TabItem>
-        </Tab>
-      </article>
+      <article className="flex flex-col gap-4 mt-5"></article>
     </main>
   );
 }

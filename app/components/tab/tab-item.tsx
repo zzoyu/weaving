@@ -11,11 +11,10 @@ export interface TabItemProps {
 export function TabItem({ title, children, isActive }: TabItemProps) {
   return (
     <div
-      className={clsx("flex flex-col", {
+      className={clsx("w-full flex flex-col items-center", {
         hidden: !isActive,
       })}
     >
-      <h2>{title}</h2>
       {children}
     </div>
   );

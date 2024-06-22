@@ -12,11 +12,11 @@ import {
 import TabHeader from "./tab-header";
 import { TabItemProps, TabItem } from "./tab-item";
 
-interface TabProps {
+interface TabProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactElement<TabItemProps> | ReactElement<TabItemProps>[];
 }
 
-export function Tab({ children }: TabProps) {
+export function Tab({ children, ...props }: TabProps) {
   const tabHeaders: string[] = Array.isArray(children)
     ? Children.map(children, ({ props }) => {
         return props.title;
@@ -27,7 +27,7 @@ export function Tab({ children }: TabProps) {
 
   const [activeTab, setActiveTab] = useState(0);
   return (
-    <div>
+    <div {...props}>
       <div>
         {tabHeaders.map((header, index) => (
           <TabHeader
@@ -39,7 +39,12 @@ export function Tab({ children }: TabProps) {
         ))}
       </div>
       {Children.map(children, (child, index) => {
-        return <TabItem {...child.props} isActive={activeTab === index} />;
+        const { children, ...props } = child.props;
+        return (
+          <TabItem {...props} isActive={activeTab === index}>
+            {children}
+          </TabItem>
+        );
       })}
     </div>
   );
