@@ -45,6 +45,7 @@ export default function ProfileImage({
 
           <input
             type="file"
+            accept="image/*"
             className="hidden"
             ref={profileFileInput}
             onChange={handleChangeProfileImage}

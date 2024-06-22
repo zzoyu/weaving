@@ -1,5 +1,7 @@
 "use client";
 
+import { SupabaseError } from "@/types/error-code";
+
 export default function Error({
   error,
 }: {

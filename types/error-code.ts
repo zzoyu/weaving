@@ -1,8 +1,9 @@
-enum ErrorCode {
+export enum ErrorCode {
   NOT_FOUND = "42P01",
+  NO_ITEM = "42703",
 }
 
-interface SupabaseError {
+export interface SupabaseError {
   code: ErrorCode;
   message: string;
   details: string | null;

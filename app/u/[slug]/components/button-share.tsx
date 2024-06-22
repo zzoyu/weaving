@@ -3,7 +3,7 @@
 import ShareIcon from "@/public/assets/icons/share.svg";
 
 interface ButtonShareProps {
-  shareData: ShareData;
+  shareData?: ShareData;
 }
 export default function ButtonShare({ shareData }: ButtonShareProps) {
   function handleShare() {

@@ -1,3 +1,4 @@
+import { Character } from "@/types/character";
 import Image from "next/image";
 
 export default function ListCharacterItem({
@@ -6,16 +7,16 @@ export default function ListCharacterItem({
   character: Character;
 }) {
   return (
-    <div>
-      <h2>{character.name}</h2>
-      {character.image && (
+    <div className="flex flex-col items-center justify-center gap-1">
+      <div className="rounded-full overflow-hidden">
         <Image
-          src={character.image}
+          src={character.thumbnail || character?.image?.[0] || ""}
           alt={character.name}
-          width={200}
-          height={200}
+          width={100}
+          height={100}
         />
-      )}
+      </div>
+      <p className="">{character.name}</p>
     </div>
   );
 }
