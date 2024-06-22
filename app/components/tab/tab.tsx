@@ -33,9 +33,10 @@ export function Tab({ children, ...props }: TabProps) {
           <TabHeader
             onClick={() => setActiveTab(index)}
             key={"tab-header-" + header}
-            children={header}
             isActive={activeTab === index}
-          />
+          >
+            {header}
+          </TabHeader>
         ))}
       </div>
       {Children.map(children, (child, index) => {
