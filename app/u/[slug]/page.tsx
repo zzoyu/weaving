@@ -6,6 +6,8 @@ import { Metadata, ResolvingMetadata } from "next";
 import ProfileImage from "./components/profile-image";
 import { createClient } from "@/utils/supabase/server";
 import Information from "./components/information";
+import { Tab } from "./components/tab/tab";
+import { TabItem } from "./components/tab/tab-item";
 
 type Props = {
   params: { slug: string };
@@ -62,6 +64,23 @@ export default async function PublicProfilePage({
         profile={data}
         isEditable={currentUser?.data?.user?.id === data.user_id}
       />
+      <article className="flex flex-col gap-4 mt-10">
+        <h2 className="text-lg">식구 소개</h2>
+        <Tab>
+          <TabItem title="위빙1">
+            <p>q위빙은 무엇인가요?</p>
+            <p>위빙은 무엇이고, 어떻게 사용하나요?</p>
+          </TabItem>
+          <TabItem title="위빙2">
+            <p>w위빙은 무엇인가요?</p>
+            <p>위빙은 무엇이고, 어떻게 사용하나요?</p>
+          </TabItem>
+          <TabItem title="위빙3">
+            <p>e위빙은 무엇인가요?</p>
+            <p>위빙은 무엇이고, 어떻게 사용하나요?</p>
+          </TabItem>
+        </Tab>
+      </article>
     </main>
   );
 }
