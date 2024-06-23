@@ -34,3 +34,22 @@ export async function fetchRelationships(
   }
   return data as Relationship[];
 }
+
+export async function createRelationship(
+  from_id: number,
+  to_id: number,
+  name: string
+) {
+  const supabase = createClient();
+  const { data, error } = await supabase.from("relationship").insert([
+    {
+      from_id,
+      to_id,
+      name: name || "friend",
+    },
+  ]);
+  if (error) {
+    throw error;
+  }
+  return data;
+}

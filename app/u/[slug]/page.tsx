@@ -76,11 +76,10 @@ export default async function PublicProfilePage({
           isEditable={currentUser?.data?.user?.id === data.user_id}
         />
         <article className="flex flex-col gap-4 mt-5">
-          {responseCharacters.data.length > 0 ? (
-            <ListCharacter characters={responseCharacters.data} />
-          ) : (
-            <ButtonAddCharacter slug={slug} />
+          {responseCharacters.data.length > 0 && (
+            <ListCharacter characters={responseCharacters.data} slug={slug} />
           )}
+          <ButtonAddCharacter slug={slug} />
         </article>
       </main>
     </div>

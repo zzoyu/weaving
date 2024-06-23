@@ -18,6 +18,7 @@ interface Character {
   properties: Property[];
   hashtags?: string;
   crop_size?: string;
+  profile_id: number;
 }
 
 export { EPropertyType };

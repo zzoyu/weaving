@@ -25,6 +25,9 @@ export async function createCharacter(
   const profile_id = responseProfile?.data?.id;
   if (!profile_id) throw new Error("Profile not found");
 
+  console.log(properties);
+  if (!name) throw new Error("Name is required");
+
   const imageUrl = await uploadImage(
     image,
     Math.floor(Math.random() * 10000).toString(),
@@ -43,9 +46,13 @@ export async function createCharacter(
       description,
       image: [imageUrl],
       thumbnail: thumbnailUrl,
-      properties: [...properties],
+      properties,
     },
   ]);
+
+  if (error) {
+    throw error;
+  }
 
   redirect(`/u/${profile_slug}`);
 }

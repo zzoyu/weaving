@@ -2,6 +2,10 @@ import { notFound } from "next/navigation";
 import { fetchCharacter, fetchRelationships } from "./actions";
 import Image from "next/image";
 import { Character } from "@/types/character";
+import { ListRelationship } from "./components/list-relationship";
+import ButtonAddRelationship from "./components/button-add-relationship";
+import { revalidatePath } from "next/cache";
+import RelationshipGraph from "./components/relationship-graph";
 
 export default async function CharacterPage({
   params,
@@ -16,6 +20,10 @@ export default async function CharacterPage({
   const relationships = await fetchRelationships(Number(id));
   console.log(relationships);
 
+  function handleAddRelationship() {
+    revalidatePath(`/u/${slug}/${id}`);
+  }
+
   return (
     <div>
       <h1>캐릭터 페이지</h1>
@@ -28,36 +36,22 @@ export default async function CharacterPage({
         width={300}
         height={300}
       />
-      {/* <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
         {characterData.properties.map((property) => (
           <div key={`property-${property.key}`} className="flex">
             <span>{property.key}</span>
             <span>{property.value}</span>
           </div>
         ))}
-      </div> */}
-      {relationships && (
-        <div className="flex flex-col gap-2">
-          {relationships.map((relationship) => {
-            const character = relationship.character as Character;
-            return (
-              <div
-                key={`relationship-${relationship.id}`}
-                className="flex flex-col"
-              >
-                <Image
-                  src={character?.thumbnail || ""}
-                  alt={character.name}
-                  width={100}
-                  height={100}
-                />
-                <p>{character.name}</p>
+      </div>
+      {relationships && <ListRelationship relationships={relationships} />}
+      <ButtonAddRelationship character={characterData} />
 
-                <span>{relationship.name}</span>
-              </div>
-            );
-          })}
-        </div>
+      {relationships && (
+        <RelationshipGraph
+          character={characterData}
+          relationships={relationships}
+        />
       )}
     </div>
   );
