@@ -9,3 +9,10 @@ export interface Relationship {
     | Pick<Character, "id" | "name" | "thumbnail">[]
     | Pick<Character, "id" | "name" | "thumbnail">;
 }
+
+export enum ERelationshipType {
+  FRIEND = "friend",
+  FAMILY = "family",
+  LOVE = "love",
+  HATE = "hate",
+}

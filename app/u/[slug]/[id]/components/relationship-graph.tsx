@@ -95,8 +95,8 @@ export default function RelationshipGraph({
       ctx.fillText(character.name, x, y + 50);
       ctx.fillText(
         relationship.name,
-        middlePoint.x + (middlePoint.x - x) / 2,
-        middlePoint.y + (middlePoint.x - y) / 2
+        middlePoint.x + (x - middlePoint.x) / 2,
+        middlePoint.y + (y - middlePoint.x) / 2
       );
 
       ctx.restore();

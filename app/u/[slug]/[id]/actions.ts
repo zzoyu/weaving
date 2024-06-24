@@ -53,3 +53,19 @@ export async function createRelationship(
   }
   return data;
 }
+
+export async function updateRelationship(id: number, name: string) {
+  console.log("update", id, name);
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("relationship")
+    .update({
+      name: name || "friend",
+    })
+    .eq("id", id);
+  console.log(data, error);
+  if (error) {
+    throw error;
+  }
+  return data;
+}
