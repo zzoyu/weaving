@@ -45,7 +45,10 @@ export default async function CharacterPage({
         ))}
       </div>
       {relationships && <ListRelationship relationships={relationships} />}
-      <ButtonAddRelationship character={characterData} />
+      <ButtonAddRelationship
+        character={characterData}
+        relationships={relationships || []}
+      />
 
       {relationships && (
         <RelationshipGraph
