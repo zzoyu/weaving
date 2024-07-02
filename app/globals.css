@@ -16,7 +16,7 @@
 
 @layer components {
   .text-profile-twitter {
-    @apply text-gray-300 dark:text-gray-500 font-light text-sm;
+    @apply text-gray-500 dark:text-gray-500 font-light text-sm;
   }
 }
 
@@ -32,6 +32,10 @@
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
+}
+
+html {
+  @apply h-full;
 }
 
 body {

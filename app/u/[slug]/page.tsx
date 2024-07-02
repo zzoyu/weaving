@@ -1,4 +1,8 @@
-import { fetchCharactersByProfileId, fetchProfileBySlug } from "./actions";
+import {
+  fetchCharactersByProfileId,
+  fetchFriendById,
+  fetchProfileBySlug,
+} from "./actions";
 import { Metadata, ResolvingMetadata } from "next";
 import { createClient } from "@/utils/supabase/server";
 import Information from "./components/information";
@@ -7,6 +11,8 @@ import ListCharacter from "./components/list-character/list-character";
 import ButtonAddCharacter from "./components/button-add-character";
 import { ButtonHome } from "./components/button-home";
 import ButtonShare from "./components/button-share";
+import ButtonApplyFriend from "./components/button-apply-friend";
+import { fetchProfileById } from "@/app/profile/actions";
 
 type Props = {
   params: { slug: string };
@@ -55,6 +61,13 @@ export default async function PublicProfilePage({
   const supabase = createClient();
 
   const currentUser = await supabase.auth.getUser();
+  let myProfile;
+  let friendData;
+  if (currentUser?.data) {
+    myProfile = await fetchProfileById(currentUser.data.user?.id as string);
+    friendData = await fetchFriendById(myProfile.id, data.id!);
+    console.log(friendData);
+  }
 
   const responseCharacters = await fetchCharactersByProfileId(data.id!);
   console.log(responseCharacters);
@@ -64,6 +77,8 @@ export default async function PublicProfilePage({
     }
   }
 
+  const isMine = currentUser?.data?.user?.id === data.user_id;
+
   return (
     <div className="w-full">
       <div className="w-full flex justify-between p-3">
@@ -71,15 +86,20 @@ export default async function PublicProfilePage({
         <ButtonShare />
       </div>
       <main className="flex flex-col justify-center items-center pt-10">
-        <Information
-          profile={data}
-          isEditable={currentUser?.data?.user?.id === data.user_id}
-        />
+        <Information profile={data} isEditable={isMine} />
+        {!isMine && myProfile && (
+          <ButtonApplyFriend
+            isFriend={friendData !== null}
+            isApproved={Boolean(friendData?.is_approved)}
+            fromId={myProfile.id}
+            toId={data.id!}
+          />
+        )}
         <article className="flex flex-col gap-4 mt-5">
           {responseCharacters.data.length > 0 && (
             <ListCharacter characters={responseCharacters.data} slug={slug} />
           )}
-          <ButtonAddCharacter slug={slug} />
+          {isMine && <ButtonAddCharacter slug={slug} />}
         </article>
       </main>
     </div>
