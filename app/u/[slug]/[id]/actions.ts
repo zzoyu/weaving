@@ -3,6 +3,7 @@
 import { Character } from "@/types/character";
 import { Relationship } from "@/types/relationship";
 import { createClient } from "@/utils/supabase/server";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function fetchCharacter(id: number): Promise<Character | null> {
   const supabase = createClient();
@@ -14,6 +15,7 @@ export async function fetchCharacter(id: number): Promise<Character | null> {
   if (error) {
     throw error;
   }
+  revalidateTag("relationships");
   return data;
 }
 
@@ -32,6 +34,7 @@ export async function fetchRelationships(
   if (error) {
     throw error;
   }
+  revalidateTag("relationships");
   return data as Relationship[];
 }
 
@@ -51,6 +54,7 @@ export async function createRelationship(
   if (error) {
     throw error;
   }
+  revalidatePath("/u/[slug]/[id]", "page");
   return data;
 }
 
@@ -67,5 +71,20 @@ export async function updateRelationship(id: number, name: string) {
   if (error) {
     throw error;
   }
+  revalidatePath("/u/[slug]/[id]", "page");
+  return data;
+}
+
+export async function deleteRelationship(id: number) {
+  console.log("delete", id);
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("relationship")
+    .delete()
+    .eq("id", id);
+  if (error) {
+    throw error;
+  }
+  revalidatePath("/u/[slug]/[id]", "page");
   return data;
 }

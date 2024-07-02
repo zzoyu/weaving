@@ -3,7 +3,11 @@
 import { Character } from "@/types/character";
 import { LayerAddRelationship } from "./layer-add-relationship";
 import { Suspense, useState } from "react";
-import { createRelationship, updateRelationship } from "../actions";
+import {
+  createRelationship,
+  deleteRelationship,
+  updateRelationship,
+} from "../actions";
 import { revalidatePath } from "next/cache";
 import { on } from "events";
 import { Relationship } from "@/types/relationship";
@@ -11,9 +15,11 @@ import { Relationship } from "@/types/relationship";
 export default function ButtonAddRelationship({
   character,
   relationships,
+  currentPath,
 }: {
   character: Character;
   relationships?: Relationship[];
+  currentPath: string;
 }) {
   const [isRelationshipLayerOpen, setIsRelationshipLayerOpen] = useState(false);
   return (
@@ -41,6 +47,16 @@ export default function ButtonAddRelationship({
             } else {
               createRelationship(character.id, toId, type);
             }
+            setIsRelationshipLayerOpen(false);
+          }}
+          onRemoveRelationship={(toId) => {
+            const existingRelationship = relationships?.find(
+              (relationship) => relationship.to_id === toId
+            );
+            if (!existingRelationship?.id) {
+              return;
+            }
+            deleteRelationship(existingRelationship.id);
             setIsRelationshipLayerOpen(false);
           }}
         />

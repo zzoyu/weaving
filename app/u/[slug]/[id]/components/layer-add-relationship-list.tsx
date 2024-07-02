@@ -6,10 +6,12 @@ import { Character } from "@/types/character";
 import { Suspense, useEffect, useState } from "react";
 import { ERelationshipType, Relationship } from "@/types/relationship";
 import { LayerAddRelationshipItem } from "./layer-add-relationship-item";
+import { on } from "events";
 
 export function LayerAddRelationshipList({
   character,
   onAddRelationship,
+  onRemoveRelationship,
   relationships,
 }: {
   character: Character;
@@ -17,6 +19,7 @@ export function LayerAddRelationshipList({
     toId: number,
     relationshipType: ERelationshipType
   ) => void;
+  onRemoveRelationship: (toId: number) => void;
   relationships?: Relationship[];
 }) {
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -58,6 +61,9 @@ export function LayerAddRelationshipList({
             onAddRelationship={(relationshipType) =>
               onAddRelationship(item.id, relationshipType)
             }
+            onRemoveRelationship={() => {
+              onRemoveRelationship(item.id);
+            }}
           />
         );
       })}
