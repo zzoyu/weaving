@@ -9,17 +9,22 @@ import { ERelationshipType, Relationship } from "@/types/relationship";
 export function LayerAddRelationshipItem({
   character,
   onAddRelationship,
+  onRemoveRelationship,
   relationship,
 }: {
   character: Character;
   onAddRelationship: (relationshipType: ERelationshipType) => void;
+  onRemoveRelationship: () => void;
   relationship?: Relationship;
 }) {
   const [isActive, setIsActive] = useState(false);
 
   function handleClick() {
     setIsActive(!isActive);
-    // onAddRelationship();
+  }
+
+  function handleRemove() {
+    onRemoveRelationship();
   }
 
   return (
@@ -45,9 +50,14 @@ export function LayerAddRelationshipItem({
             추가
           </button>
         ) : (
-          <button className="shrink-0 w-10" onClick={handleClick}>
-            수정
-          </button>
+          <div>
+            <button className="shrink-0 w-10" onClick={handleClick}>
+              수정
+            </button>
+            <button className="shrink-0 w-10" onClick={handleRemove}>
+              삭제
+            </button>
+          </div>
         ))}
       {isActive && (
         <div className="flex gap-2">

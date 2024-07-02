@@ -1,10 +1,8 @@
 import { notFound } from "next/navigation";
 import { fetchCharacter, fetchRelationships } from "./actions";
 import Image from "next/image";
-import { Character } from "@/types/character";
 import { ListRelationship } from "./components/list-relationship";
 import ButtonAddRelationship from "./components/button-add-relationship";
-import { revalidatePath } from "next/cache";
 import RelationshipGraph from "./components/relationship-graph";
 
 export default async function CharacterPage({
@@ -20,15 +18,9 @@ export default async function CharacterPage({
   const relationships = await fetchRelationships(Number(id));
   console.log(relationships);
 
-  function handleAddRelationship() {
-    revalidatePath(`/u/${slug}/${id}`);
-  }
-
   return (
     <div>
       <h1>캐릭터 페이지</h1>
-      <p>slug: {slug}</p>
-      <p>id: {id}</p>
       <p>{characterData.name}</p>
       <Image
         src={characterData?.image?.[0] || ""}
@@ -48,6 +40,7 @@ export default async function CharacterPage({
       <ButtonAddRelationship
         character={characterData}
         relationships={relationships || []}
+        currentPath={`/u/${slug}/${id}`}
       />
 
       {relationships && (
