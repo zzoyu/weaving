@@ -4,11 +4,13 @@ const nextConfig = {
     domains: [
       "abs.twimg.com",
       "pbs.twimg.com",
-      process.env.NEXT_PUBLIC_SUPABASE_STORAGE_HOST,
+      process.env.SUPABASE_STORAGE_HOST,
     ],
   },
   env: {
     NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   },
   webpack(config) {
     // Grab the existing rule that handles SVG imports
