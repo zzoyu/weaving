@@ -63,7 +63,7 @@ export default async function PublicProfilePage({
   const currentUser = await supabase.auth.getUser();
   let myProfile;
   let friendData;
-  if (currentUser?.data) {
+  if (currentUser?.data.user) {
     myProfile = await fetchProfileById(currentUser.data.user?.id as string);
     friendData = await fetchFriendById(myProfile.id, data.id!);
     console.log(friendData);
