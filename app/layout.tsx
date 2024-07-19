@@ -17,6 +17,7 @@ const fontTitle = Poiret_One({
 
 const fontBody = localFont({
   src: "../public/assets/fonts/pretendard/woff2/PretendardVariable.woff2",
+  weight: "300",
   display: "swap",
   variable: "--font-pretendard",
 });
