@@ -10,7 +10,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         "poiret-one": ["var(--font-poiret-one)", "var(--font-suit)", "cursive"],
-        suit: ["var(--font-suit)", "sans"],
+        pretendard: ["var(--font-pretendard)", "sans"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

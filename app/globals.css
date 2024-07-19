@@ -7,7 +7,7 @@
     @apply text-4xl font-poiret-one;
   }
   h2 {
-    @apply text-3xl font-suit;
+    @apply text-3xl font-pretendard;
   }
   input {
     @apply bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded border;
@@ -47,7 +47,7 @@ body {
     )
     rgb(var(--background-start-rgb));
 
-  @apply antialiased h-full font-suit;
+  @apply antialiased h-full font-pretendard;
 }
 
 @layer utilities {

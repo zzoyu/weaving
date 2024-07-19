@@ -16,9 +16,9 @@ const fontTitle = Poiret_One({
 });
 
 const fontBody = localFont({
-  src: "../public/assets/fonts/suit/SUIT-Variable.woff2",
+  src: "../public/assets/fonts/pretendard/woff2/PretendardVariable.woff2",
   display: "swap",
-  variable: "--font-suit",
+  variable: "--font-pretendard",
 });
 
 export const metadata: Metadata = {
