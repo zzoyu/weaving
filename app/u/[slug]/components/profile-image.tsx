@@ -33,8 +33,8 @@ export default function ProfileImage({
 
   return (
     <div className="relative">
-      <div className="w-20 h-20 dark:bg-slate-800 rounded-full overflow-hidden mb-2">
-        <Image src={src} alt={"프로필 이미지"} fill className="object-cover" />
+      <div className="relative w-20 h-20 dark:bg-slate-800 rounded-full overflow-hidden mb-2 flex justify-center items-center">
+        <Image src={src} alt="프로필 이미지" width={80} height={80} />
       </div>
       {isEditable && (
         <button
