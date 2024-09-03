@@ -31,11 +31,13 @@ export async function fetchRelationships(
       `
     )
     .eq("from_id", id);
+
   if (error) {
     throw error;
   }
+
   revalidateTag("relationships");
-  return data as Relationship[];
+  return (data as unknown as Relationship[]) || null;
 }
 
 export async function createRelationship(

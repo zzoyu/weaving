@@ -49,14 +49,8 @@ export default function RelationshipGraph({
   useEffect(() => {
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
-    svg
-      .append("defs")
-      .append("clipPath")
-      .attr("id", "round-clip")
-      .append("circle")
-      .attr("cx", 50)
-      .attr("cy", 50)
-      .attr("r", 50);
+    svg.style("text-anchor", "middle");
+
     const width = 600;
     const height = 600;
     const xScale = d3.scaleLinear().domain([0, 100]).range([0, width]);
@@ -85,7 +79,27 @@ export default function RelationshipGraph({
         .attr("y1", fromY)
         .attr("x2", startPosition.centroid.x)
         .attr("y2", startPosition.centroid.y)
-        .attr("stroke", "black");
+        .attr("stroke", "gray")
+        .attr("stroke-width", 2);
+
+      const lineCenterX = (fromX + startPosition.centroid.x) / 2;
+      const lineCenterY = (fromY + startPosition.centroid.y) / 2;
+
+      svg
+        .append("text")
+        .attr("font-size", "10px")
+        .attr("x", lineCenterX)
+        .attr("y", lineCenterY - 10)
+        .text(relationship.name || "");
+
+      svg
+        .append("defs")
+        .append("clipPath")
+        .attr("id", `round-clip-${index}`)
+        .append("circle")
+        .attr("cx", startPosition.centroid.x)
+        .attr("cy", startPosition.centroid.y)
+        .attr("r", 25);
 
       svg
         .append("image")
@@ -94,20 +108,33 @@ export default function RelationshipGraph({
         .attr("height", 50)
         .attr("x", startPosition.x)
         .attr("y", startPosition.y)
-        .append("clipPath")
-        .attr("id", "round-clip")
+        .attr("clip-path", `url(#round-clip-${index})`);
+
+      svg
         .append("circle")
         .attr("cx", startPosition.centroid.x)
         .attr("cy", startPosition.centroid.y)
-        .attr("r", 50)
-        .attr("clip-path", "url(#round-clip)");
+        .attr("r", 25)
+        .attr("fill", "none") // 원 안을 채우지 않음
+        .attr("stroke", "gray") // 테두리 색상
+        .attr("stroke-width", 2); // 테두리 두께
 
       svg
         .append("text")
+        .attr("font-size", "10px")
         .attr("x", startPosition.centroid.x)
-        .attr("y", startPosition.centroid.y + 50)
+        .attr("y", startPosition.centroid.y + 40)
         .text(relationship.character?.name || "");
     });
+
+    svg
+      .append("defs")
+      .append("clipPath")
+      .attr("id", `round-clip-main`)
+      .append("circle")
+      .attr("cx", startPosition.x + 40)
+      .attr("cy", startPosition.y + 40)
+      .attr("r", 40);
 
     svg
       .append("image")
@@ -115,7 +142,17 @@ export default function RelationshipGraph({
       .attr("width", 80)
       .attr("height", 80)
       .attr("x", startPosition.x)
-      .attr("y", startPosition.y);
+      .attr("y", startPosition.y)
+      .attr("clip-path", `url(#round-clip-main)`);
+
+    svg
+      .append("circle")
+      .attr("cx", startPosition.x + 40)
+      .attr("cy", startPosition.y + 40)
+      .attr("r", 40)
+      .attr("fill", "none") // 원 안을 채우지 않음
+      .attr("stroke", "gray") // 테두리 색상
+      .attr("stroke-width", 2); // 테두리 두께
   }, [relationships]);
   return <svg ref={svgRef} width="600" height="600" style={{}}></svg>;
 }
