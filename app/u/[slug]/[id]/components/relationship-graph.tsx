@@ -2,7 +2,7 @@
 
 import { Character } from "@/types/character";
 import { Relationship } from "@/types/relationship";
-import { useEffect, useRef } from "react";
+import { use, useEffect, useMemo, useRef, useState } from "react";
 import * as d3 from "d3";
 
 export default function RelationshipGraph({
@@ -12,7 +12,18 @@ export default function RelationshipGraph({
   character: Character;
   relationships: Relationship[];
 }) {
-  const svgRef = useRef(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  const width = 600;
+  const height = 600;
+
+  const xScale = d3.scaleLinear().domain([0, 100]).range([0, width]);
+  const yScale = d3.scaleLinear().domain([0, 100]).range([0, height]);
+  const xAxis = d3.axisBottom(xScale);
+  const yAxis = d3.axisLeft(yScale);
+
+  const originX = xScale(50);
+  const originY = yScale(50);
 
   function calcImagePosition(
     width: number,
@@ -33,8 +44,8 @@ export default function RelationshipGraph({
     distance: number,
     radius: number
   ) {
-    const centroidX = x + distance * Math.cos(angle);
-    const centroidY = y + distance * Math.sin(angle);
+    const centroidX = x + xScale(distance) * Math.cos(angle);
+    const centroidY = y + yScale(distance) * Math.sin(angle);
 
     return {
       x: centroidX - radius / 2,
@@ -46,113 +57,161 @@ export default function RelationshipGraph({
     };
   }
 
+  const distance = xScale(35);
+  const radius = [xScale(10), xScale(8)];
+
+  const nodes = useMemo(
+    () =>
+      relationships.map((relationship, index) => {
+        const angle = (index * (360 / relationships.length) * Math.PI) / 180;
+        const x = originX + distance * Math.cos(angle);
+        const y = originY + distance * Math.sin(angle);
+
+        return {
+          angle,
+          x: x,
+          y: y,
+          lineCenter: {
+            x: (x + originX) / 2,
+            y: (y + originY) / 2,
+          },
+        };
+      }),
+    [relationships, width, height]
+  );
+
+  function drawNode(
+    target: d3.Selection<any, any, any, any>,
+    node: {
+      x: number;
+      y: number;
+      lineCenter: { x: number; y: number };
+    },
+    relationship: Relationship,
+    index: number
+  ) {
+    const r = radius[1];
+
+    target
+      .append("line")
+      .attr("x1", originX)
+      .attr("y1", originY)
+      .attr("x2", node.x)
+      .attr("y2", node.y)
+      .attr("stroke", "gray")
+      .attr("stroke-width", 2);
+
+    target
+      .append("defs")
+      .append("clipPath")
+      .attr("id", `round-clip-${index}`)
+      .append("circle")
+      .attr("cx", node.x)
+      .attr("cy", node.y)
+      .attr("r", r);
+
+    target
+      .append("image")
+      .attr("xlink:href", relationship?.character?.thumbnail || "")
+      .attr("width", r * 2)
+      .attr("height", r * 2)
+      .attr("x", node.x - r)
+      .attr("y", node.y - r)
+      .attr("clip-path", `url(#round-clip-${index})`);
+
+    target
+      .append("circle")
+      .attr("cx", node.x)
+      .attr("cy", node.y)
+      .attr("r", r)
+      .attr("fill", "none") // 원 안을 채우지 않음
+      .attr("stroke", "gray") // 테두리 색상
+      .attr("stroke-width", 2); // 테두리 두께
+  }
+
+  function drawNodeText(
+    target: d3.Selection<any, any, any, any>,
+    node: { x: number; y: number; lineCenter: { x: number; y: number } },
+    relationship: Relationship,
+    index: number
+  ) {
+    const r = radius[1];
+
+    target
+      .append("text")
+      .attr("x", node.lineCenter.x)
+      .attr("y", node.lineCenter.y)
+      .text(relationship.name)
+      .attr("font-size", `${xScale(1.5)}px`)
+      .attr("fill", "black");
+
+    target
+      .append("text")
+      .attr("x", node.x)
+      .attr("y", node.y + r * 1.4)
+      .attr("font-size", `${xScale(2)}px`)
+      .text(relationship.character?.name || "");
+  }
+
   useEffect(() => {
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
+    svg.style("paint-order", "stroke");
     svg.style("text-anchor", "middle");
 
-    const width = 600;
-    const height = 600;
-    const xScale = d3.scaleLinear().domain([0, 100]).range([0, width]);
-    const yScale = d3.scaleLinear().domain([0, 100]).range([0, height]);
-    const xAxis = d3.axisBottom(xScale);
-    const yAxis = d3.axisLeft(yScale);
-
-    const startPosition = calcImagePosition(80, 80, xScale(50), yScale(50));
+    const startPosition = calcImagePosition(
+      radius[0],
+      radius[0],
+      xScale(50),
+      yScale(50)
+    );
 
     const degreeCount = relationships.length;
 
-    relationships.forEach((relationship, index) => {
-      const fromX = xScale(50);
-      const fromY = yScale(50);
-
-      const startPosition = calcImagePositionWithAngle(
-        xScale(50),
-        yScale(50),
-        (index * (360 / degreeCount) * Math.PI) / 180,
-        200,
-        50
-      );
-      svg
-        .append("line")
-        .attr("x1", fromX)
-        .attr("y1", fromY)
-        .attr("x2", startPosition.centroid.x)
-        .attr("y2", startPosition.centroid.y)
-        .attr("stroke", "gray")
-        .attr("stroke-width", 2);
-
-      const lineCenterX = (fromX + startPosition.centroid.x) / 2;
-      const lineCenterY = (fromY + startPosition.centroid.y) / 2;
-
-      svg
-        .append("text")
-        .attr("font-size", "10px")
-        .attr("x", lineCenterX)
-        .attr("y", lineCenterY - 10)
-        .text(relationship.name || "");
-
-      svg
-        .append("defs")
-        .append("clipPath")
-        .attr("id", `round-clip-${index}`)
-        .append("circle")
-        .attr("cx", startPosition.centroid.x)
-        .attr("cy", startPosition.centroid.y)
-        .attr("r", 25);
-
-      svg
-        .append("image")
-        .attr("xlink:href", relationship?.character?.thumbnail || "")
-        .attr("width", 50)
-        .attr("height", 50)
-        .attr("x", startPosition.x)
-        .attr("y", startPosition.y)
-        .attr("clip-path", `url(#round-clip-${index})`);
-
-      svg
-        .append("circle")
-        .attr("cx", startPosition.centroid.x)
-        .attr("cy", startPosition.centroid.y)
-        .attr("r", 25)
-        .attr("fill", "none") // 원 안을 채우지 않음
-        .attr("stroke", "gray") // 테두리 색상
-        .attr("stroke-width", 2); // 테두리 두께
-
-      svg
-        .append("text")
-        .attr("font-size", "10px")
-        .attr("x", startPosition.centroid.x)
-        .attr("y", startPosition.centroid.y + 40)
-        .text(relationship.character?.name || "");
+    nodes.forEach((node, index) => {
+      drawNode(svg, node, relationships[index], index);
     });
+
+    const r = radius[0];
 
     svg
       .append("defs")
       .append("clipPath")
       .attr("id", `round-clip-main`)
       .append("circle")
-      .attr("cx", startPosition.x + 40)
-      .attr("cy", startPosition.y + 40)
-      .attr("r", 40);
+      .attr("cx", originX)
+      .attr("cy", originY)
+      .attr("r", r);
 
     svg
       .append("image")
       .attr("xlink:href", character.thumbnail || "")
-      .attr("width", 80)
-      .attr("height", 80)
-      .attr("x", startPosition.x)
-      .attr("y", startPosition.y)
+      .attr("width", r * 2)
+      .attr("height", r * 2)
+      .attr("x", originX - r)
+      .attr("y", originY - r)
       .attr("clip-path", `url(#round-clip-main)`);
 
     svg
       .append("circle")
-      .attr("cx", startPosition.x + 40)
-      .attr("cy", startPosition.y + 40)
-      .attr("r", 40)
+      .attr("cx", originX)
+      .attr("cy", originY)
+      .attr("r", r)
       .attr("fill", "none") // 원 안을 채우지 않음
       .attr("stroke", "gray") // 테두리 색상
-      .attr("stroke-width", 2); // 테두리 두께
-  }, [relationships]);
-  return <svg ref={svgRef} width="600" height="600" style={{}}></svg>;
+      .attr("stroke-width", 3); // 테두리 두께
+
+    nodes.forEach((node, index) => {
+      drawNodeText(svg, node, relationships[index], index);
+    });
+  }, [width]);
+  return (
+    <svg
+      ref={svgRef}
+      width={width}
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
+      preserveAspectRatio="xMidYMid meet"
+    ></svg>
+  );
 }

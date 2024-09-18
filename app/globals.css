@@ -51,9 +51,9 @@ body {
 }
 
 svg > text {
-  @apply text-sm font-black fill-gray-900 dark:fill-gray-100;
-  @apply stroke-white stroke-1 dark:stroke-orange-300;
-  @apply font-pretendard antialiased z-50;
+  @apply font-black fill-gray-900 dark:fill-gray-100;
+  @apply stroke-2 stroke-white dark:stroke-orange-300;
+  @apply font-pretendard antialiased;
 }
 
 svg > path {

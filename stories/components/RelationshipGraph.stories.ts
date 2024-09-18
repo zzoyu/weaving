@@ -40,10 +40,10 @@ export const Demo: Story = {
       {
         from_id: 1,
         to_id: 2,
-        name: "Relationship Name 1",
+        name: "관계 1",
         character: {
           id: 2,
-          name: "Character Name 2",
+          name: "캐릭터 이름 2",
           thumbnail: ProfileDummy.src,
         },
         id: 0,
