@@ -1,16 +1,16 @@
 "use client";
 
-import { applyFriend, removeFriend } from "../actions";
+import { removeFriendByProfileId, requestFriendByProfileId } from "../actions";
 
-export default function ButtonApplyFriend({
+export default function ButtonRequestFriend({
   isFriend,
-  toId,
-  fromId,
+  from,
+  to,
   isApproved = false,
 }: {
   isFriend: boolean;
-  toId: number;
-  fromId: number;
+  from: Profile;
+  to: Profile;
   isApproved?: boolean;
 }) {
   return (
@@ -20,7 +20,7 @@ export default function ButtonApplyFriend({
           className="bg-green-500 text-white px-4 py-2 rounded-md mt-5"
           onClick={() => {
             if (confirm("친구를 삭제하시겠습니까?")) {
-              removeFriend(fromId, toId);
+              removeFriendByProfileId(from.id!, to.id!);
             }
           }}
         >
@@ -29,7 +29,12 @@ export default function ButtonApplyFriend({
       ) : !isFriend ? (
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded-md mt-5"
-          onClick={() => applyFriend(fromId, toId)}
+          onClick={() =>
+            requestFriendByProfileId(from.id!, to.id!, {
+              landing_url: `/u/${from.slug}`,
+              content: `${from.nickname} 님이 친구 신청을 보냈습니다.`,
+            })
+          }
         >
           친구신청
         </button>
@@ -37,8 +42,8 @@ export default function ButtonApplyFriend({
         <button
           className="bg-gray-300 text-white px-4 py-2 rounded-md mt-5"
           onClick={() => {
-            if (confirm("친구신청을 취소하시겠습니까?")) {
-              removeFriend(fromId, toId);
+            if (confirm("친구 신청을 취소하시겠습니까?")) {
+              removeFriendByProfileId(from.id!, to.id!);
             }
           }}
         >

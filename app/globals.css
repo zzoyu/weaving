@@ -50,6 +50,16 @@ body {
   @apply antialiased h-full font-pretendard;
 }
 
+svg > text {
+  @apply font-black fill-gray-900 dark:fill-gray-100;
+  @apply stroke-2 stroke-white dark:stroke-orange-300;
+  @apply font-pretendard antialiased;
+}
+
+svg > path {
+  @apply fill-current;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

@@ -11,8 +11,8 @@ import ListCharacter from "./components/list-character/list-character";
 import ButtonAddCharacter from "./components/button-add-character";
 import { ButtonHome } from "./components/button-home";
 import ButtonShare from "./components/button-share";
-import ButtonApplyFriend from "./components/button-apply-friend";
 import { fetchProfileById } from "@/app/profile/actions";
+import ButtonRequestFriend from "./components/button-request-friend";
 
 type Props = {
   params: { slug: string };
@@ -88,11 +88,11 @@ export default async function PublicProfilePage({
       <main className="flex flex-col justify-center items-center pt-10">
         <Information profile={data} isEditable={isMine} />
         {!isMine && myProfile && (
-          <ButtonApplyFriend
+          <ButtonRequestFriend
             isFriend={friendData !== null}
             isApproved={Boolean(friendData?.is_approved)}
-            fromId={myProfile.id}
-            toId={data.id!}
+            from={myProfile}
+            to={data}
           />
         )}
         <article className="flex flex-col gap-4 mt-5">
