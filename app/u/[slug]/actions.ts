@@ -16,6 +16,18 @@ export async function fetchProfileBySlug(slug: string) {
   return { data, error };
 }
 
+export async function fetchProfilesByIds(ids: number[]) {
+  const supabase = createClient();
+  console.log("fetchProfilesByIds", ids);
+  const { data, error } = await supabase.from("profile").select().in("id", ids);
+
+  if (error) {
+    throw error;
+  }
+
+  return { requestedProfiles: data, error };
+}
+
 export async function fetchCharactersByProfileId(profileId: number) {
   console.log("fetchCharactersByProfileId", profileId);
   const supabase = createClient();
@@ -37,6 +49,15 @@ export async function requestFriendByProfileId(
 ) {
   const { landing_url, content } = payload;
   const supabase = createClient();
+
+  // check whether the friend request already exists
+  const existingFriend = await fetchIsFriendByIds(from, to);
+
+  if (existingFriend) {
+    revalidatePath("/u/[slug]", "page");
+    return null;
+  }
+
   const { data, error } = await supabase.from("profile_friend").insert([
     {
       from_profile_id: from,
@@ -69,18 +90,21 @@ export async function requestFriendByProfileId(
 
 export async function removeFriendByProfileId(from: number, to: number) {
   const supabase = createClient();
+
   const { data, error } = await supabase
     .from("profile_friend")
     .delete()
     .eq("from_profile_id", from)
     .eq("to_profile_id", to);
 
+  console.log("removeFriendByProfileId", data, error);
+
   revalidatePath("/u/[slug]", "page");
 
   return { data, error };
 }
 
-export async function fetchFriendById(from: number, to: number) {
+export async function fetchExactFriendById(from: number, to: number) {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("profile_friend")
@@ -94,4 +118,48 @@ export async function fetchFriendById(from: number, to: number) {
   }
 
   return data;
+}
+
+export async function fetchIsFriendByIds(id1: number, id2: number) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("profile_friend")
+    .select()
+    .or(
+      `and(from_profile_id.eq.${id1},to_profile_id.eq.${id2}),and(from_profile_id.eq.${id2},to_profile_id.eq.${id1})`
+    );
+
+  console.log("fetchIsFriendByIds", data, error);
+
+  if (error || (Array.isArray(data) && data.length === 0) || !data) {
+    return false;
+  }
+  return true;
+}
+
+export async function updateFriendAccepted(from: number, to: number) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("profile_friend")
+    .update({ is_approved: true })
+    .eq("from_profile_id", from)
+    .eq("to_profile_id", to);
+
+  revalidatePath("/u/[slug]", "page");
+
+  return { data, error };
+}
+
+export async function deleteFriend(from: number, to: number) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("profile_friend")
+    .delete()
+    .or(
+      `and(from_profile_id.eq.${from},to_profile_id.eq.${to}),and(from_profile_id.eq.${to},to_profile_id.eq.${from})`
+    );
+
+  revalidatePath("/u/[slug]", "page");
+
+  return { data, error };
 }
