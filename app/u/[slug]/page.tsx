@@ -1,6 +1,6 @@
 import {
   fetchCharactersByProfileId,
-  fetchFriendById,
+  fetchExactFriendById,
   fetchProfileBySlug,
 } from "./actions";
 import { Metadata, ResolvingMetadata } from "next";
@@ -13,6 +13,8 @@ import { ButtonHome } from "./components/button-home";
 import ButtonShare from "./components/button-share";
 import { fetchProfileById } from "@/app/profile/actions";
 import ButtonRequestFriend from "./components/button-request-friend";
+import ButtonAcceptFriend from "./components/button-accept-friend";
+import { useMemo } from "react";
 
 type Props = {
   params: { slug: string };
@@ -61,16 +63,24 @@ export default async function PublicProfilePage({
   const supabase = createClient();
 
   const currentUser = await supabase.auth.getUser();
-  let myProfile;
-  let friendData;
+  let myProfile: Profile = await fetchProfileById(
+    currentUser?.data?.user?.id as string
+  );
+  let friendDataFromMe: Friend | null = null;
+  let friendDataFromUser: Friend | null = null;
+  let isFriend = false;
   if (currentUser?.data.user) {
-    myProfile = await fetchProfileById(currentUser.data.user?.id as string);
-    friendData = await fetchFriendById(myProfile.id, data.id!);
-    console.log(friendData);
+    friendDataFromMe = await fetchExactFriendById(myProfile.id!, data.id!);
+    friendDataFromUser = await fetchExactFriendById(data.id!, myProfile.id!);
+    console.log("friendDataFromMe", friendDataFromMe);
+    console.log("friendDataFromUser", friendDataFromUser);
+    isFriend = Boolean(friendDataFromMe || friendDataFromUser);
   }
 
+  console.log("isFriend", isFriend);
+
   const responseCharacters = await fetchCharactersByProfileId(data.id!);
-  console.log(responseCharacters);
+
   if (responseCharacters.error) {
     if (responseCharacters.error?.code !== ErrorCode.NO_ITEM) {
       throw responseCharacters.error;
@@ -89,8 +99,13 @@ export default async function PublicProfilePage({
         <Information profile={data} isEditable={isMine} />
         {!isMine && myProfile && (
           <ButtonRequestFriend
-            isFriend={friendData !== null}
-            isApproved={Boolean(friendData?.is_approved)}
+            isFriend={isFriend}
+            isApproved={
+              !!(
+                Boolean(friendDataFromMe?.is_approved) ||
+                Boolean(friendDataFromUser?.is_approved)
+              )
+            }
             from={myProfile}
             to={data}
           />

@@ -4,6 +4,13 @@ import {
   fetchNotificationsByProfileId,
 } from "./actions";
 import Link from "next/link";
+import NotificationItem from "./components/notification-item";
+import {
+  deleteFriend,
+  fetchProfilesByIds,
+  updateFriendAccepted,
+} from "../u/[slug]/actions";
+import FriendRequestItem from "./components/friend-request-item";
 
 export default async function NotificationsPage() {
   const supabase = createClient();
@@ -26,7 +33,9 @@ export default async function NotificationsPage() {
   const { notifications } = await fetchNotificationsByProfileId(profile.id);
   const { friendRequests } = await fetchFriendRequestsByProfileId(profile.id);
 
-  console.log(friendRequests);
+  const { requestedProfiles, error } = await fetchProfilesByIds(
+    friendRequests.map((friendRequest) => friendRequest.from_profile_id)
+  );
 
   return (
     <div>
@@ -34,7 +43,15 @@ export default async function NotificationsPage() {
       <div>
         <h2>친구신청</h2>
         <ul>
-          {friendRequests.map((friendRequest) => JSON.stringify(friendRequest))}
+          {requestedProfiles.map((requestedProfile) => (
+            <FriendRequestItem
+              key={requestedProfile.id}
+              profile={requestedProfile}
+              onAccept={updateFriendAccepted}
+              onReject={deleteFriend}
+              to={profile.id}
+            />
+          ))}
         </ul>
 
         <h2>안읽은알림</h2>
@@ -42,9 +59,7 @@ export default async function NotificationsPage() {
           <li>
             {notifications.map((notification) => (
               <div key={notification.id}>
-                <Link href={notification.landing_url}>
-                  {notification.content}
-                </Link>
+                <NotificationItem notification={notification} />
               </div>
             ))}
           </li>
