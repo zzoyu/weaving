@@ -15,6 +15,8 @@ import { fetchProfileById } from "@/app/profile/actions";
 import ButtonRequestFriend from "./components/button-request-friend";
 import ButtonAcceptFriend from "./components/button-accept-friend";
 import { useMemo } from "react";
+import { TabHeader } from "./components/tab-header";
+import { ProfileList } from "./components/profile-list";
 
 type Props = {
   params: { slug: string };
@@ -90,33 +92,24 @@ export default async function PublicProfilePage({
   const isMine = currentUser?.data?.user?.id === data.user_id;
 
   return (
-    <div className="w-full">
-      <div className="w-full flex justify-between p-3">
-        <ButtonHome />
-        <ButtonShare />
-      </div>
-      <main className="flex flex-col justify-center items-center pt-10">
-        <Information profile={data} isEditable={isMine} />
-        {!isMine && myProfile && (
-          <ButtonRequestFriend
-            isFriend={isFriend}
-            isApproved={
-              !!(
-                Boolean(friendDataFromMe?.is_approved) ||
-                Boolean(friendDataFromUser?.is_approved)
-              )
-            }
-            from={myProfile}
-            to={data}
-          />
-        )}
-        <article className="flex flex-col gap-4 mt-5">
-          {responseCharacters.data.length > 0 && (
-            <ListCharacter characters={responseCharacters.data} slug={slug} />
-          )}
-          {isMine && <ButtonAddCharacter slug={slug} />}
-        </article>
-      </main>
-    </div>
+    <main className="flex flex-col justify-center items-center pt-10">
+      {/* <Information profile={data} isEditable={isMine} /> */}
+      {isMine && <TabHeader />}
+
+      {!isMine && myProfile && (
+        <ButtonRequestFriend
+          isFriend={isFriend}
+          isApproved={
+            !!(
+              Boolean(friendDataFromMe?.is_approved) ||
+              Boolean(friendDataFromUser?.is_approved)
+            )
+          }
+          from={myProfile}
+          to={data}
+        />
+      )}
+      <ProfileList characters={responseCharacters?.data || []} slug={slug} />
+    </main>
   );
 }

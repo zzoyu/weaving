@@ -37,15 +37,14 @@ export default async function CharacterPage({
   }
 
   return (
-    <div>
-      <h1>캐릭터 페이지</h1>
-      <p>{characterData.name}</p>
+    <div className="flex flex-col justify-center items-center">
       <Image
         src={characterData?.image?.[0] || ""}
         alt={characterData.name}
         width={300}
         height={300}
       />
+      <p>{characterData.name}</p>
       <div className="flex flex-col gap-2">
         {characterData.properties.map((property) => (
           <div key={`property-${property.key}`} className="flex">

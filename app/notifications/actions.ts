@@ -1,3 +1,4 @@
+import { Notification } from "@/types/notification";
 import { createClient } from "@/utils/supabase/server";
 
 export async function fetchFriendRequestsByProfileId(id: number) {
@@ -19,7 +20,9 @@ export async function fetchFriendRequestsByProfileId(id: number) {
   return { friendRequests };
 }
 
-export async function fetchNotificationsByProfileId(profileId: number) {
+export async function fetchNotificationsByProfileId(
+  profileId: number
+): Promise<{ notifications: Notification[] }> {
   const supabase = createClient();
 
   const { data: notifications, error: notificationsError } = await supabase

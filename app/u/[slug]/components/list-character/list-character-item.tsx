@@ -14,7 +14,14 @@ export default function ListCharacterItem({
 }) {
   return (
     <Link href={`/u/${slug}/${character.id}`}>
-      <div className="flex flex-col items-center justify-center gap-1">
+      <div
+        className="flex flex-col items-center justify-center gap-1 overflow-hidden rounded-md"
+        style={{
+          backgroundColor:
+            character?.properties?.find?.((i) => i.key === "themeColor")
+              ?.value || "white",
+        }}
+      >
         <div className="rounded-full overflow-hidden">
           <Image
             src={character.thumbnail || character?.image?.[0] || ""}
