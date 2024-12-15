@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        "poiret-one": ["var(--font-poiret-one)", "var(--font-suit)", "cursive"],
+        "poiret-one": ["var(--font-poiret-one)", "cursive"],
         pretendard: ["var(--font-pretendard)", "sans"],
       },
       backgroundImage: {
