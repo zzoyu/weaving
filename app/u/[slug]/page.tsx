@@ -92,7 +92,7 @@ export default async function PublicProfilePage({
   const isMine = currentUser?.data?.user?.id === data.user_id;
 
   return (
-    <main className="flex flex-col justify-center items-center pt-10">
+    <main className="flex flex-col justify-center items-center pt-10 max-w-[40rem] mx-auto">
       {/* <Information profile={data} isEditable={isMine} /> */}
       {isMine && <TabHeader />}
 

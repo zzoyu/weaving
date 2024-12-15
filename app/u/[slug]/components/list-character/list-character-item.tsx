@@ -22,7 +22,7 @@ export default function ListCharacterItem({
               ?.value || "white",
         }}
       >
-        <div className="rounded-full overflow-hidden">
+        <div className="rounded-full overflow-hidden m-2">
           <Image
             src={character.thumbnail || character?.image?.[0] || ""}
             alt={character.name}

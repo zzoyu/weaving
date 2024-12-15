@@ -33,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={clsx(fontTitle, fontBody.variable)}>
+    <html lang="ko">
       <body className={clsx(fontTitle.className, fontBody.className)}>
         {children}
       </body>

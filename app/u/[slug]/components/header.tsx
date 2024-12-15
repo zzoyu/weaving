@@ -9,8 +9,8 @@ export async function Header() {
   const supabase = createClient();
   const { data } = await supabase.auth.getUser();
 
-  const profile = await fetchProfileById(data.user?.id as string);
-  const { notifications } = await fetchNotificationsByProfileId(profile.id);
+  const profile = await fetchProfileById(data?.user?.id as string);
+  const { notifications } = await fetchNotificationsByProfileId(profile?.id);
 
   console.log("profile", profile);
 

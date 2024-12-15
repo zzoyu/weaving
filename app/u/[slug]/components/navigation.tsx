@@ -9,11 +9,11 @@ export function Navigation() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-green-200 h-14">
-      <div className="flex justify-around py-2">
+      <div className="flex justify-center py-2  max-w-[40rem] mx-auto">
         {navItems.map((item, index) => (
           <Link
             key={index}
-            className="flex flex-col items-center"
+            className="flex flex-col items-center w-full"
             href={item.href}
           >
             <span className="text-xl">{item.icon}</span>
