@@ -1,6 +1,7 @@
 import {
   fetchCharactersByProfileId,
   fetchExactFriendById,
+  fetchFavoriteCharactersByProfileId,
   fetchProfileBySlug,
 } from "./actions";
 import { Metadata, ResolvingMetadata } from "next";
@@ -68,6 +69,7 @@ export default async function PublicProfilePage({
   let myProfile: Profile = await fetchProfileById(
     currentUser?.data?.user?.id as string
   );
+
   let friendDataFromMe: Friend | null = null;
   let friendDataFromUser: Friend | null = null;
   let isFriend = false;
@@ -91,10 +93,15 @@ export default async function PublicProfilePage({
 
   const isMine = currentUser?.data?.user?.id === data.user_id;
 
+  let favoriteCharacters: number[] = [];
+  if (isMine) {
+    favoriteCharacters = await fetchFavoriteCharactersByProfileId(myProfile.id);
+  }
+
   return (
     <main className="flex flex-col justify-center items-center pt-10 max-w-[40rem] mx-auto">
       {/* <Information profile={data} isEditable={isMine} /> */}
-      {isMine && <TabHeader />}
+      {isMine && <TabHeader slug={myProfile.slug} activeIndex={0} />}
 
       {!isMine && myProfile && (
         <ButtonRequestFriend
@@ -109,7 +116,13 @@ export default async function PublicProfilePage({
           to={data}
         />
       )}
-      <ProfileList characters={responseCharacters?.data || []} slug={slug} />
+      <ProfileList
+        characters={responseCharacters?.data || []}
+        slug={slug}
+        isMine={isMine}
+        favoriteCharacters={favoriteCharacters}
+        profileId={myProfile?.id}
+      />
     </main>
   );
 }

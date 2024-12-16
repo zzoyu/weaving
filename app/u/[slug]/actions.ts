@@ -163,3 +163,57 @@ export async function deleteFriend(from: number, to: number) {
 
   return { data, error };
 }
+
+export async function fetchFavoriteCharactersByProfileId(
+  profileId?: number
+): Promise<number[]> {
+  if (!profileId) {
+    return [];
+  }
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("character_favorite")
+    .select("character_id")
+    .eq("profile_id", profileId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw error;
+  }
+
+  return data?.map((item) => item.character_id) ?? [];
+}
+
+export async function addFavoriteCharacter(
+  profile_id: number,
+  character_id: number
+) {
+  console.log("addFavoriteCharacter", profile_id, character_id);
+  const supabase = createClient();
+  const { data, error } = await supabase.from("character_favorite").insert([
+    {
+      profile_id,
+      character_id,
+    },
+  ]);
+
+  revalidatePath("/u/[slug]", "page");
+
+  return { data, error };
+}
+
+export async function removeFavoriteCharacter(
+  profile_id: number,
+  character_id: number
+) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("character_favorite")
+    .delete()
+    .eq("profile_id", profile_id)
+    .eq("character_id", character_id);
+
+  revalidatePath("/u/[slug]", "page");
+
+  return { data, error };
+}

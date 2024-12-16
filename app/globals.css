@@ -10,7 +10,7 @@
     @apply text-3xl font-pretendard;
   }
   input {
-    @apply bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded border;
+    @apply bg-background-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded border;
   }
 }
 

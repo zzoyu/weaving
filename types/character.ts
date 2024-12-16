@@ -19,6 +19,8 @@ interface Character {
   hashtags?: string;
   crop_size?: string;
   profile_id: number;
+  isFavorite?: boolean;
+  password?: string;
 }
 
 export { EPropertyType };

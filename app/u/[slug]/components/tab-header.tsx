@@ -1,12 +1,44 @@
-export function TabHeader() {
+import clsx from "clsx";
+import Link from "next/link";
+
+function TabHeaderItem({
+  isActive,
+  href,
+  children,
+}: {
+  isActive: boolean;
+  href: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className={clsx("text-black border-b-4 w-full text-center", {
+        "text-black border-black": isActive,
+        "text-gray-400 border-gray-400": !isActive,
+      })}
+    >
+      {children}
+    </Link>
+  );
+}
+
+export function TabHeader({
+  slug,
+  activeIndex,
+}: {
+  slug: string;
+  activeIndex: number;
+}) {
   return (
     <div className="flex items-center space-x-0 w-full px-8">
-      <button className="font-bold text-black border-b-4 border-black w-full">
+      <TabHeaderItem isActive={activeIndex === 0} href={`/u/${slug}`}>
         프로필 목록
-      </button>
-      <button className="text-gray-400 border-b-4 border-gray-400 w-full">
-        프로필 추가
-      </button>
+      </TabHeaderItem>
+
+      <TabHeaderItem isActive={activeIndex === 1} href={`/u/${slug}/add`}>
+        캐릭터 추가
+      </TabHeaderItem>
     </div>
   );
 }
