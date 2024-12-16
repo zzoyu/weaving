@@ -12,6 +12,7 @@ import clsx from "clsx";
 const fontTitle = Poiret_One({
   weight: "400",
   subsets: ["latin"],
+  display: "swap",
   variable: "--font-poiret-one",
 });
 
@@ -34,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={clsx(fontTitle.className, fontBody.className)}>
+      <body className={clsx(fontTitle.variable, fontBody.variable)}>
         {children}
       </body>
     </html>

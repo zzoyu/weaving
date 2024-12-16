@@ -7,7 +7,7 @@ export default async function Home() {
     <main className="h-full flex flex-col items-center">
       <div className="h-1/2 w-1/3 max-w-48 flex flex-col items-start justify-end gap-2">
         <LogoColored></LogoColored>
-        <h1 className=" font-thin font-poiret-one">Welcome!</h1>
+        <h1 className="font-thin font-poiret-one">Welcome!</h1>
       </div>
 
       <MainMenu />
