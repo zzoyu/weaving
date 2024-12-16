@@ -63,7 +63,7 @@ export function ProfileList({
             placeholder="검색"
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
-            className="flex-1 px-8 py-2 rounded-md border-green-200 border-2 bg-white focus:outline-none"
+            className="flex-1 px-8 py-2 rounded-md border-primary-100 border-2 bg-white focus:outline-none"
           />
           <button className="p-2 text-white rounded-full absolute">🔍</button>
           {searchKeyword && (
@@ -111,7 +111,7 @@ function FilterPopup({
   const [type, setType] = useState<"themeColor" | "eyeColor" | "hairColor">(
     "themeColor"
   );
-  const [color, setColor] = useState<string>();
+  const [color, setColor] = useState<string[]>();
 
   const colorList = [
     {
@@ -228,12 +228,15 @@ function FilterPopup({
                       className={clsx(
                         `w-8 h-8 rounded-full ${item.color} border border-gray-300`,
                         {
-                          "border-2 border-red-500": color === item.text,
+                          "border-2 border-primary-100": color?.includes(
+                            item.text
+                          ),
                         }
                       )}
                       onClick={() => {
-                        if (color === item.text) setColor(undefined);
-                        else setColor(item.text);
+                        if (color?.includes(item.text))
+                          setColor(color.filter((c) => c !== item.text));
+                        else setColor([...(color || []), item.text]);
                       }}
                     />
                   ))}
@@ -241,11 +244,11 @@ function FilterPopup({
               </div>
 
               <button
-                className="w-full py-2 text-white bg-green-500 rounded-lg"
+                className="w-full py-2 text-white bg-primary-200 rounded-lg"
                 onClick={() => {
                   setIsOpen(false); // 선택 후 팝업 닫기
                   // 필터 적용 로직 추가
-                  onUpdate(type, color ? [color] : []);
+                  onUpdate(type, color || []);
                 }}
               >
                 검색
