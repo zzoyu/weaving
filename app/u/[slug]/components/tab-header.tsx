@@ -31,7 +31,7 @@ export function TabHeader({
   activeIndex: number;
 }) {
   return (
-    <div className="flex items-center space-x-0 w-full px-8">
+    <div className="flex items-center space-x-0 w-full px-0 md:px-8">
       <TabHeaderItem isActive={activeIndex === 0} href={`/u/${slug}`}>
         프로필 목록
       </TabHeaderItem>

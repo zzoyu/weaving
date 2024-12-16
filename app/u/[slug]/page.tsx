@@ -54,6 +54,7 @@ export default async function PublicProfilePage({
 }: {
   params: { slug: string };
 }) {
+  "use cache";
   const { slug } = params;
   if (!slug) throw { message: "Slug not found" };
 
@@ -94,13 +95,11 @@ export default async function PublicProfilePage({
   const isMine = currentUser?.data?.user?.id === data.user_id;
 
   let favoriteCharacters: number[] = [];
-  if (isMine) {
-    favoriteCharacters = await fetchFavoriteCharactersByProfileId(myProfile.id);
-  }
+
+  favoriteCharacters = await fetchFavoriteCharactersByProfileId(data.id);
 
   return (
-    <main className="flex flex-col justify-center items-center pt-10 max-w-[40rem] mx-auto">
-      {/* <Information profile={data} isEditable={isMine} /> */}
+    <main className="flex flex-col justify-center items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto">
       {isMine && <TabHeader slug={myProfile.slug} activeIndex={0} />}
 
       {!isMine && myProfile && (

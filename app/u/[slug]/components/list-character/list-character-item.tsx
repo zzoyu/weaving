@@ -6,6 +6,7 @@ import Link from "next/link";
 import IconFavorite from "@/public/assets/icons/favorite.svg";
 import IconFavoriteFilled from "@/public/assets/icons/favorite_filled.svg";
 import clsx from "clsx";
+import { colorList } from "@/types/color";
 
 export default function ListCharacterItem({
   character,
@@ -21,35 +22,36 @@ export default function ListCharacterItem({
   return (
     <Link href={`/u/${slug}/${character.id}`}>
       <div
-        className="flex flex-col items-center justify-center gap-1 overflow-hidden rounded-md relative group focus-within:ring-2"
-        style={{
-          backgroundColor:
+        className={clsx(
+          "flex flex-col items-center justify-center gap-1 overflow-hidden rounded-md relative group focus-within:ring-2",
+          colorList?.[
             character?.properties?.find?.((i) => i.key === "themeColor")
-              ?.value || "white",
-        }}
+              ?.value || "white"
+          ]
+        )}
       >
         {isMine &&
           (character?.isFavorite ? (
             <button
-              className="absolute top-1 right-1 rounded-full z-50"
+              className="absolute top-1 right-1 rounded-full"
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
                 onFavoriteClick?.();
               }}
             >
-              <IconFavoriteFilled />
+              <IconFavoriteFilled className="text-primary-100" />
             </button>
           ) : (
             <button
-              className="absolute top-1 right-1 z-50 rounded-full invisible group-hover:visible"
+              className="absolute top-1 right-1 rounded-full invisible group-hover:visible"
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
                 onFavoriteClick?.();
               }}
             >
-              <IconFavorite />
+              <IconFavorite className="text-primary-100" />
             </button>
           ))}
         <div className="rounded-full overflow-hidden m-2">

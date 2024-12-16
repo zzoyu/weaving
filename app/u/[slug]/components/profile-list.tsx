@@ -4,6 +4,7 @@ import { Character } from "@/types/character";
 import ListCharacter from "./list-character/list-character";
 import { useMemo, useState } from "react";
 import clsx from "clsx";
+import { colorList } from "@/types/color";
 
 export function ProfileList({
   characters,
@@ -30,7 +31,8 @@ export function ProfileList({
         if (character.name.includes(searchKeyword)) return true;
         return false;
       });
-    if (filteredColor?.colors.length) {
+    if (filteredColor?.colors?.length) {
+      console.log("filteredColor", filteredColor);
       tempCharacters = tempCharacters.filter((character) => {
         const color = character.properties.find(
           (property) => property.key === filteredColor.type
@@ -113,49 +115,6 @@ function FilterPopup({
   );
   const [color, setColor] = useState<string[]>();
 
-  const colorList = [
-    {
-      text: "black",
-      color: "bg-black",
-    },
-    {
-      text: "white",
-      color: "bg-white",
-    },
-    {
-      text: "green",
-      color: "bg-green-500",
-    },
-    {
-      text: "yellow",
-      color: "bg-yellow-400",
-    },
-    {
-      text: "blue",
-      color: "bg-blue-400",
-    },
-    {
-      text: "purple",
-      color: "bg-purple-400",
-    },
-    {
-      text: "gray",
-      color: "bg-gray-200",
-    },
-    {
-      text: "orange",
-      color: "bg-orange-400",
-    },
-    {
-      text: "red",
-      color: "bg-red-500",
-    },
-    {
-      text: "pink",
-      color: "bg-pink-500",
-    },
-  ];
-
   return (
     <div>
       {/* 필터 버튼 */}
@@ -186,7 +145,7 @@ function FilterPopup({
             {/* 필터 옵션 */}
             <div className="space-y-4">
               <div>
-                <h3 className="font-semibold text-red-500">테마색</h3>
+                <h3 className="font-semibold text-primary-300">테마색</h3>
                 <div className="flex items-center space-x-2">
                   <input
                     type="radio"
@@ -222,21 +181,19 @@ function FilterPopup({
               <div>
                 <h3 className="font-semibold">색상</h3>
                 <div className="grid grid-cols-5 gap-2">
-                  {colorList.map((item, index) => (
+                  {Object.entries(colorList).map((item, index) => (
                     <button
                       key={index}
                       className={clsx(
-                        `w-8 h-8 rounded-full ${item.color} border border-gray-300`,
+                        `w-8 h-8 rounded-full ${item[1]} border border-gray-300`,
                         {
-                          "border-2 border-primary-100": color?.includes(
-                            item.text
-                          ),
+                          " ring-2 ring-primary-100": color?.includes(item[0]),
                         }
                       )}
                       onClick={() => {
-                        if (color?.includes(item.text))
-                          setColor(color.filter((c) => c !== item.text));
-                        else setColor([...(color || []), item.text]);
+                        if (color?.includes(item[0]))
+                          setColor(color?.filter((color) => color !== item[0]));
+                        else setColor([...(color || []), item[0]]);
                       }}
                     />
                   ))}

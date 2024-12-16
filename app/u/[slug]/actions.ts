@@ -34,7 +34,11 @@ export async function fetchCharactersByProfileId(profileId: number) {
   const { data, error } = (await supabase
     .from("character")
     .select()
-    .eq("profile_id", profileId)) as { data: Character[]; error: any };
+    .eq("profile_id", profileId)
+    .order("created_at", { ascending: true })) as {
+    data: Character[];
+    error: any;
+  };
 
   return { data: data ?? [], error };
 }
