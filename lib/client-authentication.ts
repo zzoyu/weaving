@@ -12,13 +12,14 @@ export async function signInWithTwitter() {
         "//" +
         window.location.host +
         "/auth/callback",
+      queryParams: {
+        next: "/profile",
+      },
     },
   });
-  console.log(data, error);
 }
 
 export async function signOut() {
   const supabase = createClient();
   const { error } = await supabase.auth.signOut();
-  console.log(error);
 }

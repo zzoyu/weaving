@@ -97,6 +97,20 @@ export function ProfileList({
           profileId={isMine ? profileId : undefined}
         />
       )}
+
+      {filteredList.length === 0 && characters.length > 0 && (
+        <div className="flex justify-center items-center h-20">
+          <span className="text-gray-500">검색 결과가 없습니다.</span>
+        </div>
+      )}
+
+      {!characters.length && (
+        <div className="flex justify-center items-center h-20">
+          <span className="text-gray-500">
+            캐릭터가 없습니다. 추가해보세요!
+          </span>
+        </div>
+      )}
     </article>
   );
 }
@@ -178,6 +192,7 @@ function FilterPopup({
                 </div>
               </div>
 
+              <hr />
               <div>
                 <h3 className="font-semibold">색상</h3>
                 <div className="grid grid-cols-5 gap-2">
