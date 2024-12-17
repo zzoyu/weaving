@@ -14,9 +14,9 @@ export default function ListPropertiesItem({
   const [value, setValue] = useState(property.value);
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 w-full">
       <input
-        className="w-20"
+        className="w-1/3"
         type="text"
         value={key}
         onChange={(event) => {
@@ -25,6 +25,7 @@ export default function ListPropertiesItem({
       />
       <input
         type="text"
+        className="w-full"
         value={value}
         onChange={(event) => {
           setValue(event.target.value);

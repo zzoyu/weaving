@@ -23,8 +23,6 @@ export function Tab({ children, ...props }: TabProps) {
       })
     : [children?.props?.title];
 
-  console.log(tabHeaders);
-
   const [activeTab, setActiveTab] = useState(0);
   return (
     <div {...props}>

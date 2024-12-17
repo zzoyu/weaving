@@ -57,8 +57,8 @@ export function ProfileList({
     return tempCharacters;
   }, [characters, searchKeyword, filteredColor, favoriteCharacters]);
   return (
-    <article className="flex flex-col gap-4 mt-5">
-      <div className="px-4 py-2 bg-gray-100 flex flex-row gap-4 justify-center items-center">
+    <article className="flex flex-col gap-2 md:gap-4 mt-2 md:mt-5 w-full md:w-fit px-2 md:px-0">
+      <div className="px-2 py-0 md:px-4 md:py-2 bg-gray-100 flex flex-row gap-2 md:gap-4 justify-center items-center">
         <div className="flex items-center rounded-full relative w-full h-fit">
           <input
             type="text"

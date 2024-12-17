@@ -18,7 +18,6 @@ export async function fetchProfileBySlug(slug: string) {
 
 export async function fetchProfilesByIds(ids: number[]) {
   const supabase = createClient();
-  console.log("fetchProfilesByIds", ids);
   const { data, error } = await supabase.from("profile").select().in("id", ids);
 
   if (error) {

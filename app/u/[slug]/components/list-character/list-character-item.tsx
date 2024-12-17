@@ -27,7 +27,7 @@ export default function ListCharacterItem({
           colorList?.[
             character?.properties?.find?.((i) => i.key === "themeColor")
               ?.value || "white"
-          ]
+          ] + " bg-opacity-50"
         )}
       >
         {isMine &&

@@ -15,7 +15,6 @@ export async function isGrantedUserByProfileSlug(slug: string | null) {
     currentUser?.data?.user?.id as string
   );
 
-  console.log(slug, myProfile);
   if (myProfile?.slug === slug) return true;
   return false;
 }

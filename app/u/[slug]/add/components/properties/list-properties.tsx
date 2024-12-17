@@ -9,7 +9,7 @@ export default function ListProperties({
   handler: (properties: Property[]) => void;
 }) {
   return (
-    <div className="flex flex-col gap-2 p-1 rounded border">
+    <div className="flex flex-col gap-2 p-1 rounded border w-full">
       {properties.map((property, index) => (
         <ListPropertiesItem
           key={index}

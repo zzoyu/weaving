@@ -19,7 +19,6 @@ export default function MainMenu() {
       if (session) {
         setIsSignedIn(true);
         setUser(session.user);
-        console.log(session.user);
       } else {
         setIsSignedIn(false);
       }

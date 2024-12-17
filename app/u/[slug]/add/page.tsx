@@ -18,7 +18,7 @@ export default function NewCharacterPage({
     <main className="flex flex-col justify-center items-center pt-10 max-w-[40rem] mx-auto gap-10">
       <TabHeader slug={params.slug} activeIndex={1} />
       <form
-        className="flex flex-col gap-2 items-center"
+        className="flex flex-col gap-2 items-center w-full"
         action={(formData) => createCharacter(formData, properties)}
       >
         <input type="hidden" name="profile_slug" value={params.slug} />

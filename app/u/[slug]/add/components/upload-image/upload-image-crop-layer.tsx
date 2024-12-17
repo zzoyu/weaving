@@ -42,8 +42,17 @@ export default function UploadImageCropLayer({
   });
 
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen flex flex-col items-center justify-center gap-10">
-      <p>썸네일로 사용할 영역을 선택해주세요.</p>
+    <div className="fixed top-0 left-0 w-screen h-screen flex flex-col items-center justify-center gap-10 bg-background-200 z-10">
+      <small
+        className="
+      border-2 border-primary-100 rounded-lg p-1
+      fixed top-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+      bg-background-100 z-10
+      opacity-80
+      "
+      >
+        썸네일로 사용할 영역을 선택해주세요.
+      </small>
       <div>
         <ReactCrop
           crop={crop}
@@ -54,18 +63,26 @@ export default function UploadImageCropLayer({
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            className="max-w-96 max-h-96 w-fit h-fit object-cover rounded-lg"
+            className="w-fit h-fit object-contain rounded-lg"
             src={src}
             alt="이미지"
             ref={imageRef}
           />
         </ReactCrop>
       </div>
-      <div className="flex flex-row gap-10">
-        <button type="button" onClick={handleSave}>
+      <div className="flex flex-row gap-10 fixed bottom-10 left-1/2 transform -translate-x-1/2">
+        <button
+          type="button"
+          onClick={handleSave}
+          className="bg-primary-200 text-white px-4 py-2 rounded-lg"
+        >
           저장
         </button>
-        <button type="button" onClick={onClose}>
+        <button
+          type="button"
+          onClick={onClose}
+          className="bg-background-100 text-primary-200 px-4 py-2 rounded-lg"
+        >
           취소
         </button>
       </div>
