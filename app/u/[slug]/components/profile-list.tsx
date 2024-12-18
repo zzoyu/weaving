@@ -5,6 +5,7 @@ import ListCharacter from "./list-character/list-character";
 import { useMemo, useState } from "react";
 import clsx from "clsx";
 import { colorList } from "@/types/color";
+import SearchIcon from "@/public/assets/icons/search.svg";
 
 export function ProfileList({
   characters,
@@ -67,7 +68,9 @@ export function ProfileList({
             onChange={(e) => setSearchKeyword(e.target.value)}
             className="flex-1 px-8 py-2 rounded-md border-primary-100 border-2 bg-white focus:outline-none"
           />
-          <button className="p-2 text-white rounded-full absolute">🔍</button>
+          <button className="p-2 text-white rounded-full absolute pointer-events-none">
+            <SearchIcon className="text-primary-200" />
+          </button>
           {searchKeyword && (
             <button
               className=" right-2 text-white bg-slate-300 w-6 h-6 rounded-full absolute"

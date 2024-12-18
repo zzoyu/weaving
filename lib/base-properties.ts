@@ -1,39 +1,43 @@
 import { EPropertyType, Property } from "@/types/character";
 
-export const baseProperties: Property[] = [
+export enum EPropertyColor {
+  THEME = "themeColor",
+  EYE = "eyeColor",
+  HAIR = "hairColor",
+}
+
+export const baseColorProperties: Property[] = [
   {
-    key: "성별",
+    key: EPropertyColor.THEME,
     value: "",
-    type: EPropertyType.STRING,
+    type: EPropertyType.COLOR,
   },
+  {
+    key: EPropertyColor.EYE,
+    value: "",
+    type: EPropertyType.COLOR,
+  },
+  {
+    key: EPropertyColor.HAIR,
+    value: "",
+    type: EPropertyType.COLOR,
+  },
+];
+
+export const baseProperties: Property[] = [
   {
     key: "생일",
     value: "",
     type: EPropertyType.DATE,
   },
   {
+    key: "성별",
+    value: "",
+    type: EPropertyType.STRING,
+  },
+  {
     key: "키",
     value: "",
     type: EPropertyType.STRING,
-  },
-  {
-    key: "성격",
-    value: "",
-    type: EPropertyType.STRING,
-  },
-  {
-    key: "themeColor",
-    value: "",
-    type: EPropertyType.COLOR,
-  },
-  {
-    key: "eyeColor",
-    value: "",
-    type: EPropertyType.COLOR,
-  },
-  {
-    key: "hairColor",
-    value: "",
-    type: EPropertyType.COLOR,
   },
 ];

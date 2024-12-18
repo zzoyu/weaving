@@ -17,7 +17,7 @@ const nextConfig = {
         protocol: "https",
       },
       {
-        hostname: process.env.NEXT_PUBLIC_SUPABASE_STORAGE_HOST,
+        hostname: "*.supabase.co",
         protocol: "https",
       },
     ],
