@@ -16,7 +16,7 @@ export default function ProfileBadge({
   console.log(profile);
   return (
     <Link className="relative" href="/notifications">
-      <div className="relative w-10 h-10 dark:bg-slate-800 rounded-full overflow-hidden flex justify-center items-center">
+      <div className="relative w-10 h-10 dark:bg-slate-800 rounded-full overflow-hidden flex justify-center items-center border border-primary-100">
         <Image
           src={profile?.profile_image || ""}
           alt="프로필 이미지"
@@ -26,7 +26,7 @@ export default function ProfileBadge({
         />
       </div>
       {(notifications?.length || 0) > 0 && (
-        <div className="absolute top-0 right-0 z-10 w-4 h-4 bg-red-500 rounded-full"></div>
+        <div className="absolute top-0.5 right-0.5 z-10 w-2.5 h-2.5 bg-red-500 rounded-full"></div>
       )}
     </Link>
   );

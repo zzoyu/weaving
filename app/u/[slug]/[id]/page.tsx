@@ -6,6 +6,7 @@ import ButtonAddRelationship from "./components/button-add-relationship";
 import RelationshipGraph from "./components/relationship-graph";
 import { createClient } from "@/utils/supabase/server";
 import { fetchProfileBySlug } from "../actions";
+import { ProfileCard } from "./components/profile-card";
 
 export default async function CharacterPage({
   params,
@@ -37,22 +38,9 @@ export default async function CharacterPage({
   }
 
   return (
-    <div className="flex flex-col justify-center items-center">
-      <Image
-        src={characterData?.image?.[0] || ""}
-        alt={characterData.name}
-        width={300}
-        height={300}
-      />
-      <p>{characterData.name}</p>
-      <div className="flex flex-col gap-2">
-        {characterData.properties.map((property) => (
-          <div key={`property-${property.key}`} className="flex">
-            <span>{property.key}</span>
-            <span>{property.value}</span>
-          </div>
-        ))}
-      </div>
+    <div className="w-full p-4 md:max-w-[40rem] mx-auto">
+      <ProfileCard character={characterData} />
+
       {relationships && <ListRelationship relationships={relationships} />}
       {isMyProfile && (
         <ButtonAddRelationship

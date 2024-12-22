@@ -21,7 +21,7 @@ export async function fetchFriendRequestsByProfileId(id: number) {
 }
 
 export async function fetchNotificationsByProfileId(
-  profileId: number
+  profileId?: number
 ): Promise<{ notifications: Notification[] }> {
   if (!profileId) return { notifications: [] };
   const supabase = createClient();

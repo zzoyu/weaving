@@ -21,6 +21,7 @@ interface Character {
   profile_id: number;
   isFavorite?: boolean;
   password?: string;
+  description?: string;
 }
 
 export { EPropertyType };

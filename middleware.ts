@@ -34,8 +34,9 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname
   );
   if (dynamicRouteMatch) {
-    const isGranted = await isGrantedUserByProfileSlug(dynamicRouteMatch[1]);
-    if (!isGranted) return NextResponse.rewrite(new URL("/", request.url));
+    console.log("dynamicRouteMatch");
+    // const isGranted = await isGrantedUserByProfileSlug(dynamicRouteMatch[1]);
+    // if (!isGranted) return NextResponse.rewrite(new URL("/", request.url));
   }
   // update user's auth session
   return await updateSession(request);

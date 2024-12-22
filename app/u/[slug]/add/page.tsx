@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useMemo, useState } from "react";
 import ListProperties from "./components/properties/list-properties";
 import UploadImage from "./components/upload-image/upload-image";
 import { baseProperties } from "@/lib/base-properties";
@@ -8,6 +8,7 @@ import { createCharacter } from "./actions";
 import { TabHeader } from "../components/tab-header";
 import { Property } from "@/types/character";
 import { ColorProperties } from "./components/properties/color-properties";
+import InputHashtag from "./components/input-hashtag";
 
 export default function NewCharacterPage({
   params,
@@ -15,6 +16,15 @@ export default function NewCharacterPage({
   params: { slug: string };
 }) {
   const [properties, setProperties] = useState([...baseProperties]);
+  const [hashtags, setHashtags] = useState<string>("");
+  const [currentHashtag, setCurrentHashtag] = useState<string>("");
+  const previewHashtags = useMemo(() => {
+    if (!hashtags) return [];
+    return hashtags
+      .trim()
+      .split(" ")
+      .map((tag) => tag.trim());
+  }, [hashtags]);
 
   const [colors, setColors] = useState<Property[]>([]);
   return (
@@ -43,6 +53,17 @@ export default function NewCharacterPage({
         <ListProperties properties={properties} handler={setProperties} />
         <hr className="mt-2 p-2 w-full" />
         <ColorProperties properties={colors} handler={setColors} />
+        <hr className="mt-2 p-2 w-full" />
+        <InputHashtag
+          value={currentHashtag}
+          hashtags={previewHashtags}
+          onChange={(newValue) => {
+            if (newValue[newValue.length - 1] === " ") {
+              setHashtags(hashtags + newValue);
+              setCurrentHashtag("");
+            } else setCurrentHashtag(newValue);
+          }}
+        />
         <button
           type="submit"
           className="bg-primary-200 text-white rounded w-full text-xl p-2"

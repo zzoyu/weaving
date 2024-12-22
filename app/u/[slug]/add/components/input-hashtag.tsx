@@ -2,12 +2,40 @@
 
 export default function InputHashtag({
   value,
+  onChange,
+  hashtags,
 }: {
+  hashtags: string[];
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value?: string) => void;
 }) {
-  const splitValue = value.split(" ");
-  const currentHashtagList = splitValue.filter((v) => v.startsWith("#"));
-
-  return <input type="text" value={value} />;
+  return (
+    <div className="flex flex-col gap-2 w-full">
+      <h2 className="text-xl font-bold">해시태그</h2>
+      <div className="w-full relative flex items-center">
+        <span className="absolute ml-2 font-bold text-primary-200">#</span>
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="해시태그 입력"
+          className="w-full text-xl  border-primary-100 focus:outline-none pl-6 py-1"
+        />
+      </div>
+      <div className=" inline-flex flex-wrap gap-2">
+        {hashtags.length ? (
+          hashtags.map((hashtag, index) => (
+            <span
+              className="rounded-full px-8 py-1 bg-primary-100 border border-primary-300"
+              key={`hashtag-${index}-${hashtag}`}
+            >
+              #{hashtag}
+            </span>
+          ))
+        ) : (
+          <span className="text-primary-200">해시태그를 입력해주세요.</span>
+        )}
+      </div>
+    </div>
+  );
 }
