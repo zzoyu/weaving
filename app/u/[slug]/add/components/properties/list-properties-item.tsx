@@ -20,6 +20,7 @@ export default function ListPropertiesItem({
   return (
     <div className="w-full h-fit relative flex items-center justify-center group">
       <div className="w-full flex gap-4">
+        <input type="hidden" name="list-properties" value={`${key}:${value}`} />
         <input
           className="w-1/3 text-center p-1  border-primary-100 focus:outline-none"
           type="text"

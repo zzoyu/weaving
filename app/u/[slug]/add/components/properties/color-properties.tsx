@@ -9,6 +9,7 @@ function ColorModal({
   isOpen,
   onClose,
 }: {
+  editable?: boolean;
   isOpen: boolean;
   onClose: (newValue?: string | null) => void;
 }) {
@@ -22,13 +23,13 @@ function ColorModal({
       <div className="w-96 h-fit bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <h2 className="text-center text-xl my-4">색상 선택</h2>
         <div className="grid place-items-center grid-flow-dense grid-cols-7 gap-2 p-4">
-          {Object.values(colorList).map((color) => (
+          {Object.entries(colorList).map(([key, color]) => (
             <button
               type="button"
               key={`color-chip-${color}`}
               className={clsx("w-10 h-10 border-gray-300 border", color)}
               onClick={() => {
-                onClose(color);
+                onClose(key);
               }}
             ></button>
           ))}
@@ -37,9 +38,9 @@ function ColorModal({
             type="button"
             key={`color-chip-none`}
             className="w-10 h-10 border-gray-300 border bg-transparent relative
-            bg- from-white to-gray-300"
+            bg-from-white to-gray-300"
             onClick={() => {
-              onClose(null);
+              onClose("");
             }}
           >
             <div className="absolute w-full h-px bg-gray-300 rotate-45 top-1/2 left-0 transform -translate-y-1/2"></div>
@@ -61,15 +62,18 @@ function ColorModal({
 function ColorPicker({
   property,
   handler,
+  editable = false,
 }: {
   property: Property;
-  handler: (property: Property) => void;
+  handler: (property: any) => void;
+  editable?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="p-4 flex justify-center items-center">
       <ColorModal
+        editable={editable}
         isOpen={isOpen}
         onClose={(newValue) => {
           setIsOpen(false);
@@ -80,11 +84,22 @@ function ColorPicker({
       />
       <button
         type="button"
-        className="w-10 h-10 bg-white border-primary-100 border"
+        className={clsx(
+          "relative w-10 h-10 border-primary-100 border",
+          colorList[property.value as string]
+        )}
         onClick={() => {
-          setIsOpen(true);
+          if (editable) setIsOpen(true);
         }}
-      ></button>
+      >
+        {property.value === null ||
+          (property.value === "" && (
+            <>
+              <div className="absolute w-full h-px bg-gray-300 rotate-45 top-1/2 left-0 transform -translate-y-1/2"></div>
+              <div className="absolute w-full h-px bg-gray-300 -rotate-45 top-1/2 left-0 transform -translate-y-1/2"></div>
+            </>
+          ))}
+      </button>
     </div>
   );
 }
@@ -92,9 +107,11 @@ function ColorPicker({
 export function ColorProperties({
   properties,
   handler,
+  editable = false,
 }: {
   properties: Property[];
-  handler: (properties: Property[]) => void;
+  handler?: (properties: Property[]) => void;
+  editable?: boolean;
 }) {
   return (
     <div className="w-full grid grid-cols-3">
@@ -103,27 +120,30 @@ export function ColorProperties({
       <div className="bg-primary-100 text-center py-1">머리색</div>
 
       <ColorPicker
+        editable={editable}
         property={properties[0]}
         handler={(property) => {
           const newProperties = [...properties];
           newProperties[0] = property;
-          handler(newProperties);
+          handler?.(newProperties);
         }}
       />
       <ColorPicker
+        editable={editable}
         property={properties[1]}
         handler={(property) => {
           const newProperties = [...properties];
           newProperties[1] = property;
-          handler(newProperties);
+          handler?.(newProperties);
         }}
       />
       <ColorPicker
+        editable={editable}
         property={properties[2]}
         handler={(property) => {
           const newProperties = [...properties];
           newProperties[2] = property;
-          handler(newProperties);
+          handler?.(newProperties);
         }}
       />
     </div>

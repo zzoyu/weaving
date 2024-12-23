@@ -7,6 +7,8 @@ import RelationshipGraph from "./components/relationship-graph";
 import { createClient } from "@/utils/supabase/server";
 import { fetchProfileBySlug } from "../actions";
 import { ProfileCard } from "./components/profile-card";
+import { ColorProperties } from "../add/components/properties/color-properties";
+import { RelationshipCard } from "./components/relationship-card";
 
 export default async function CharacterPage({
   params,
@@ -38,20 +40,25 @@ export default async function CharacterPage({
   }
 
   return (
-    <div className="w-full p-4 md:max-w-[40rem] mx-auto">
+    <div className="w-full p-4 md:max-w-[40rem] mx-auto flex flex-col gap-8">
       <ProfileCard character={characterData} />
 
-      {relationships && <ListRelationship relationships={relationships} />}
-      {isMyProfile && (
+      {/* {isMyProfile && (
         <ButtonAddRelationship
           character={characterData}
           relationships={relationships || []}
           currentPath={`/u/${slug}/${id}`}
         />
-      )}
+      )} */}
+
+      <hr className="mt-10 p-0 w-full" />
+
+      <ColorProperties properties={characterData.properties} />
+
+      <hr className="mt-0 p-0 w-full" />
 
       {relationships && (
-        <RelationshipGraph
+        <RelationshipCard
           character={characterData}
           relationships={relationships}
         />

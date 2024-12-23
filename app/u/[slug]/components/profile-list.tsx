@@ -110,7 +110,9 @@ export function ProfileList({
       {!characters.length && (
         <div className="flex justify-center items-center h-20">
           <span className="text-gray-500">
-            캐릭터가 없습니다. 추가해보세요!
+            {isMine
+              ? "등록된 캐릭터가 없습니다. 추가해보세요!"
+              : "등록된 캐릭터가 없습니다."}
           </span>
         </div>
       )}
@@ -213,7 +215,11 @@ function FilterPopup({
                           setColor(color?.filter((color) => color !== item[0]));
                         else setColor([...(color || []), item[0]]);
                       }}
-                    />
+                    >
+                      {color?.includes(item[0]) && (
+                        <span className="text-primary-100">✓</span>
+                      )}
+                    </button>
                   ))}
                 </div>
               </div>

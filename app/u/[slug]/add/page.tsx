@@ -6,7 +6,7 @@ import UploadImage from "./components/upload-image/upload-image";
 import { baseProperties } from "@/lib/base-properties";
 import { createCharacter } from "./actions";
 import { TabHeader } from "../components/tab-header";
-import { Property } from "@/types/character";
+import { EPropertyType, Property } from "@/types/character";
 import { ColorProperties } from "./components/properties/color-properties";
 import InputHashtag from "./components/input-hashtag";
 
@@ -26,7 +26,11 @@ export default function NewCharacterPage({
       .map((tag) => tag.trim());
   }, [hashtags]);
 
-  const [colors, setColors] = useState<Property[]>([]);
+  const [colors, setColors] = useState<Property[]>([
+    { key: "themeColor", value: "", type: EPropertyType.COLOR },
+    { key: "eyeColor", value: "", type: EPropertyType.COLOR },
+    { key: "hairColor", value: "", type: EPropertyType.COLOR },
+  ]);
   return (
     <main className="flex flex-col justify-center items-center pt-10 w-full md:max-w-[40rem] mx-auto gap-10">
       <TabHeader slug={params.slug} activeIndex={1} />
@@ -35,6 +39,7 @@ export default function NewCharacterPage({
         action={(formData) => createCharacter(formData, properties)}
       >
         <input type="hidden" name="profile_slug" value={params.slug} />
+
         <UploadImage />
         <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
           <input
@@ -45,6 +50,7 @@ export default function NewCharacterPage({
           />
           <input
             type="text"
+            name="description"
             className="text-xl w-full max-w-72 text-center border-primary-100  focus:outline-none mb-4"
             placeholder="캐릭터의 한 마디"
           />
@@ -52,7 +58,7 @@ export default function NewCharacterPage({
 
         <ListProperties properties={properties} handler={setProperties} />
         <hr className="mt-2 p-2 w-full" />
-        <ColorProperties properties={colors} handler={setColors} />
+        <ColorProperties properties={colors} handler={setColors} editable />
         <hr className="mt-2 p-2 w-full" />
         <InputHashtag
           value={currentHashtag}
@@ -64,6 +70,7 @@ export default function NewCharacterPage({
             } else setCurrentHashtag(newValue);
           }}
         />
+
         <button
           type="submit"
           className="bg-primary-200 text-white rounded w-full text-xl p-2"
