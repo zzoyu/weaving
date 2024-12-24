@@ -33,7 +33,6 @@ function ColorModal({
               }}
             ></button>
           ))}
-          {/* add x lines for transparent color, with tailwindcss */}
           <button
             type="button"
             key={`color-chip-none`}
@@ -86,7 +85,7 @@ function ColorPicker({
         type="button"
         className={clsx(
           "relative w-10 h-10 border-primary-100 border",
-          colorList[property.value as string]
+          colorList?.[property.value as string]
         )}
         onClick={() => {
           if (editable) setIsOpen(true);

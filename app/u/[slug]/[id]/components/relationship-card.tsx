@@ -14,9 +14,11 @@ export function RelationshipCard({
   relationships: Relationship[];
 }) {
   return (
-    <div>
-      <ListRelationship relationships={relationships} />
-      <hr className="mt-20 p-20 w-full" />
-    </div>
+    relationships.length > 0 && (
+      <div>
+        <ListRelationship relationships={relationships} />
+        <hr className="mt-10 p-10 w-full" />
+      </div>
+    )
   );
 }

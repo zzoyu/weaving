@@ -1,3 +1,4 @@
+import { symbol } from "d3";
 import { Character } from "./character";
 
 export interface Relationship {
@@ -14,3 +15,10 @@ export enum ERelationshipType {
   LOVE = "love",
   HATE = "hate",
 }
+
+export const relationshipTypeList = [
+  { label: "Friend", value: ERelationshipType.FRIEND, symbol: "" },
+  { label: "Family", value: ERelationshipType.FAMILY },
+  { label: "Love", value: ERelationshipType.LOVE },
+  { label: "Hate", value: ERelationshipType.HATE },
+];

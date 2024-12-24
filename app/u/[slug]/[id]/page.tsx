@@ -9,6 +9,7 @@ import { fetchProfileBySlug } from "../actions";
 import { ProfileCard } from "./components/profile-card";
 import { ColorProperties } from "../add/components/properties/color-properties";
 import { RelationshipCard } from "./components/relationship-card";
+import { EPropertyType } from "@/types/character";
 
 export default async function CharacterPage({
   params,
@@ -39,6 +40,10 @@ export default async function CharacterPage({
     isMyProfile = true;
   }
 
+  const colorProperties = characterData.properties.filter(
+    (property) => property.type === EPropertyType.COLOR
+  );
+
   return (
     <div className="w-full p-4 md:max-w-[40rem] mx-auto flex flex-col gap-8">
       <ProfileCard character={characterData} />
@@ -53,7 +58,7 @@ export default async function CharacterPage({
 
       <hr className="mt-10 p-0 w-full" />
 
-      <ColorProperties properties={characterData.properties} />
+      <ColorProperties properties={colorProperties} />
 
       <hr className="mt-0 p-0 w-full" />
 
