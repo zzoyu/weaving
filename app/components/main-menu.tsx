@@ -28,7 +28,9 @@ export default function MainMenu() {
   return (
     <div className="h-1/2 flex flex-col justify-start items-center gap-10 pt-10">
       {isSignedIn === false && (
-        <button onClick={signInWithTwitter}>트위터로 시작하기</button>
+        <button onClick={signInWithTwitter} className="text-primary-300">
+          트위터로 시작하기
+        </button>
       )}
       {isSignedIn && (
         <>
