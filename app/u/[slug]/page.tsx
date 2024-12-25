@@ -1,6 +1,7 @@
 import {
   fetchCharactersByProfileId,
   fetchExactFriendById,
+  fetchFavoriteCharactersByProfileId,
   fetchProfileBySlug,
 } from "./actions";
 import { Metadata, ResolvingMetadata } from "next";
@@ -15,6 +16,8 @@ import { fetchProfileById } from "@/app/profile/actions";
 import ButtonRequestFriend from "./components/button-request-friend";
 import ButtonAcceptFriend from "./components/button-accept-friend";
 import { useMemo } from "react";
+import { TabHeader } from "./components/tab-header";
+import { ProfileList } from "./components/profile-list";
 
 type Props = {
   params: { slug: string };
@@ -23,7 +26,7 @@ type Props = {
 
 const baseMetadata: Metadata = {
   title: "위빙 프로필",
-  description: "너와 나의 연결 고리, 위빙",
+  description: "우리의 세계가 만나는 곳",
   applicationName: "위빙",
 };
 
@@ -51,6 +54,7 @@ export default async function PublicProfilePage({
 }: {
   params: { slug: string };
 }) {
+  "use cache";
   const { slug } = params;
   if (!slug) throw { message: "Slug not found" };
 
@@ -62,22 +66,18 @@ export default async function PublicProfilePage({
 
   const supabase = createClient();
 
+  let myProfile: Profile | null = null;
   const currentUser = await supabase.auth.getUser();
-  let myProfile: Profile = await fetchProfileById(
-    currentUser?.data?.user?.id as string
-  );
+
   let friendDataFromMe: Friend | null = null;
   let friendDataFromUser: Friend | null = null;
   let isFriend = false;
-  if (currentUser?.data.user) {
-    friendDataFromMe = await fetchExactFriendById(myProfile.id!, data.id!);
-    friendDataFromUser = await fetchExactFriendById(data.id!, myProfile.id!);
-    console.log("friendDataFromMe", friendDataFromMe);
-    console.log("friendDataFromUser", friendDataFromUser);
+  if (currentUser?.data.user?.id) {
+    myProfile = await fetchProfileById(currentUser?.data?.user?.id as string);
+    friendDataFromMe = await fetchExactFriendById(myProfile?.id!, data.id!);
+    friendDataFromUser = await fetchExactFriendById(data.id!, myProfile?.id!);
     isFriend = Boolean(friendDataFromMe || friendDataFromUser);
   }
-
-  console.log("isFriend", isFriend);
 
   const responseCharacters = await fetchCharactersByProfileId(data.id!);
 
@@ -89,34 +89,36 @@ export default async function PublicProfilePage({
 
   const isMine = currentUser?.data?.user?.id === data.user_id;
 
+  let favoriteCharacters: number[] = [];
+
+  favoriteCharacters = await fetchFavoriteCharactersByProfileId(data.id);
+
   return (
-    <div className="w-full">
-      <div className="w-full flex justify-between p-3">
-        <ButtonHome />
-        <ButtonShare />
-      </div>
-      <main className="flex flex-col justify-center items-center pt-10">
-        <Information profile={data} isEditable={isMine} />
-        {!isMine && myProfile && (
-          <ButtonRequestFriend
-            isFriend={isFriend}
-            isApproved={
-              !!(
-                Boolean(friendDataFromMe?.is_approved) ||
-                Boolean(friendDataFromUser?.is_approved)
-              )
-            }
-            from={myProfile}
-            to={data}
-          />
-        )}
-        <article className="flex flex-col gap-4 mt-5">
-          {responseCharacters.data.length > 0 && (
-            <ListCharacter characters={responseCharacters.data} slug={slug} />
-          )}
-          {isMine && <ButtonAddCharacter slug={slug} />}
-        </article>
-      </main>
-    </div>
+    <main className="flex flex-col justify-center items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto">
+      {isMine && myProfile && myProfile?.slug && (
+        <TabHeader slug={myProfile.slug} activeIndex={0} />
+      )}
+
+      {!isMine && myProfile && (
+        <ButtonRequestFriend
+          isFriend={isFriend}
+          isApproved={
+            !!(
+              Boolean(friendDataFromMe?.is_approved) ||
+              Boolean(friendDataFromUser?.is_approved)
+            )
+          }
+          from={myProfile}
+          to={data}
+        />
+      )}
+      <ProfileList
+        characters={responseCharacters?.data || []}
+        slug={slug}
+        isMine={isMine}
+        favoriteCharacters={favoriteCharacters}
+        profileId={myProfile?.id}
+      />
+    </main>
   );
 }

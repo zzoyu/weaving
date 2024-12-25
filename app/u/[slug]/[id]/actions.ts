@@ -90,3 +90,58 @@ export async function deleteRelationship(id: number) {
   revalidatePath("/u/[slug]/[id]", "page");
   return data;
 }
+
+export async function fetchIsFavoriteById(
+  character_id: number
+): Promise<boolean> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("character_favorite")
+    .select()
+    .eq("character_id", character_id)
+    .single();
+  if (error) {
+    throw error;
+  }
+
+  // if data exists, it means it's favorited. if not, it's not favorited.
+
+  return !!data;
+}
+
+export async function updateCharacterPassword(
+  character_id: number,
+  password: string
+) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("character")
+    .update({ password })
+    .eq("id", character_id);
+  if (error) {
+    throw error;
+  }
+  revalidatePath("/u/[slug]/[id]", "page");
+  return data;
+}
+
+export async function compareCharacterPassword(
+  character_id: number,
+  password?: string
+) {
+  if (!password) {
+    return false;
+  }
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("character")
+    .select()
+    .eq("id", character_id)
+    .eq("password", password)
+    .single();
+  if (error) {
+    return false;
+  }
+
+  return !!data;
+}

@@ -38,10 +38,9 @@ export default async function NotificationsPage() {
   );
 
   return (
-    <div>
-      <h1>Notifications</h1>
+    <div className="p-4">
+      <h2 className="mb-10">알림</h2>
       <div>
-        <h2>친구신청</h2>
         <ul>
           {requestedProfiles.map((requestedProfile) => (
             <FriendRequestItem
@@ -54,14 +53,17 @@ export default async function NotificationsPage() {
           ))}
         </ul>
 
-        <h2>안읽은알림</h2>
         <ul>
           <li>
-            {notifications.map((notification) => (
-              <div key={notification.id}>
-                <NotificationItem notification={notification} />
-              </div>
-            ))}
+            {notifications.length ? (
+              notifications.map((notification) => (
+                <div key={notification.id}>
+                  <NotificationItem notification={notification} />
+                </div>
+              ))
+            ) : (
+              <p>알림이 없습니다.</p>
+            )}
           </li>
         </ul>
       </div>

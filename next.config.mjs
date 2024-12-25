@@ -1,16 +1,26 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    domains: [
-      "abs.twimg.com",
-      "pbs.twimg.com",
-      process.env.SUPABASE_STORAGE_HOST,
-    ],
-  },
   env: {
     NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  },
+  images: {
+    remotePatterns: [
+      // change the domains into remotePatterns
+      {
+        hostname: "abs.twimg.com",
+        protocol: "https",
+      },
+      {
+        hostname: "pbs.twimg.com",
+        protocol: "https",
+      },
+      {
+        hostname: "*.supabase.co",
+        protocol: "https",
+      },
+    ],
   },
   webpack(config) {
     // Grab the existing rule that handles SVG imports
@@ -24,6 +34,7 @@ const nextConfig = {
         ...fileLoaderRule,
         test: /\.svg$/i,
         resourceQuery: /url/, // *.svg?url
+        // use: ["url-loader"],
       },
       // Convert all other *.svg imports to React components
       {

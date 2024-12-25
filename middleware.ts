@@ -1,7 +1,36 @@
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/utils/supabase/middleware";
+import { createClient } from "./utils/supabase/server";
+import { isGrantedUserByProfileSlug } from "./actions/is-granted-user";
+import { fetchProfileById } from "./app/profile/actions";
 
 export async function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname.startsWith("/profile")) {
+    console.log("profile");
+    const client = createClient();
+    const { data, error } = await client.auth?.getUser?.();
+    if (request.nextUrl.pathname === "/profile/edit" && data?.user?.id) {
+      const response = await client
+        .from("profile")
+        .select()
+        .eq("user_id", data.user.id)
+        .single();
+      if (response.error) return NextResponse.error();
+      if (!response.data)
+        return NextResponse.rewrite(new URL("/", request.url));
+      return NextResponse.rewrite(
+        new URL("/u/" + response.data.slug + "/edit", request.url)
+      );
+    }
+    if (!data?.user?.id) return NextResponse.rewrite(new URL("/", request.url));
+  }
+
+  if (request.nextUrl.pathname === "/") {
+    const client = createClient();
+    const { data, error } = await client.auth?.getUser?.();
+    if (data?.user?.id)
+      return NextResponse.rewrite(new URL("/profile", request.url));
+  }
   // update user's auth session
   return await updateSession(request);
 }
@@ -18,5 +47,6 @@ export const config = {
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
 
     "/profile",
+    "/profile/edit",
   ],
 };

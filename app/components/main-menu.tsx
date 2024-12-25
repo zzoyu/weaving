@@ -19,7 +19,6 @@ export default function MainMenu() {
       if (session) {
         setIsSignedIn(true);
         setUser(session.user);
-        console.log(session.user);
       } else {
         setIsSignedIn(false);
       }
@@ -27,7 +26,7 @@ export default function MainMenu() {
   }, []);
 
   return (
-    <div className="h-1/2 flex flex-col justify-center items-center gap-10">
+    <div className="h-1/2 flex flex-col justify-start items-center gap-10 pt-10">
       {isSignedIn === false && (
         <button onClick={signInWithTwitter}>트위터로 시작하기</button>
       )}
@@ -42,6 +41,17 @@ export default function MainMenu() {
           </button>
         </>
       )}
+      <ul className="flex items-center divide-x-2 gap-1 text-gray-400 divide-gray-300 underline underline-offset-2 font-thin text-sm">
+        <li>
+          <Link href="/term">이용약관</Link>
+        </li>
+        <li className="pl-1">
+          <Link href="/privacy">개인정보보호정책</Link>
+        </li>
+      </ul>
+      <div className="h-full flex flex-col justify-end pb-10">
+        <footer className="font-light text-gray-400">©weaving</footer>
+      </div>
     </div>
   );
 }

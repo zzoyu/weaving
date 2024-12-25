@@ -5,6 +5,7 @@ import Link from "next/link";
 import ProfileInformation from "./components/profile-information";
 import { Tab } from "../components/tab/tab";
 import { TabItem } from "../components/tab/tab-item";
+import { redirect } from "next/navigation";
 
 export default async function ProfilePage() {
   const supabase = createClient();
@@ -12,10 +13,10 @@ export default async function ProfilePage() {
   const metadata = data.user?.user_metadata as TwitterMetadata;
 
   const profileResponse = await fetchProfileById(data.user?.id as string);
+  if (profileResponse?.id !== undefined) {
+    redirect(`/u/${profileResponse.slug}`);
+  }
 
-  console.log(profileResponse);
-
-  console.log(metadata);
   return (
     <main className="flex flex-col justify-center items-center pt-16 gap-16">
       <ProfileTwitter metadata={metadata} />
@@ -32,10 +33,6 @@ export default async function ProfilePage() {
           ) : (
             <ProfileInformation profile={profileResponse} />
           )}
-        </TabItem>
-        <TabItem title="설정">
-          <p>설정</p>
-          <p>어쩌구</p>
         </TabItem>
       </Tab>
     </main>

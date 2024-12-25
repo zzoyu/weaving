@@ -20,7 +20,7 @@ export function LayerAddRelationship({
   relationships?: Relationship[];
 }) {
   return (
-    <div className="fixed top-0 left-0 w-10/12 h-5/6  bg-white dark:bg-black p-10 overflow-y-scroll">
+    <div className="fixed z-50 top-0 left-0 w-10/12 h-5/6  bg-white dark:bg-black p-10 overflow-y-scroll">
       <h1>LayerAddRelationship</h1>
 
       <LayerAddRelationshipList

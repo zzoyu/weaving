@@ -16,9 +16,19 @@ export async function fetchProfileBySlug(slug: string) {
   return { data, error };
 }
 
+export async function fetchProfileById(id: string) {
+  const supabase = createClient();
+  const { data, error } = (await supabase
+    .from("profile")
+    .select()
+    .eq("id", id)
+    .maybeSingle()) as { data: Profile; error: any };
+
+  return { data, error };
+}
+
 export async function fetchProfilesByIds(ids: number[]) {
   const supabase = createClient();
-  console.log("fetchProfilesByIds", ids);
   const { data, error } = await supabase.from("profile").select().in("id", ids);
 
   if (error) {
@@ -34,7 +44,11 @@ export async function fetchCharactersByProfileId(profileId: number) {
   const { data, error } = (await supabase
     .from("character")
     .select()
-    .eq("profile_id", profileId)) as { data: Character[]; error: any };
+    .eq("profile_id", profileId)
+    .order("created_at", { ascending: true })) as {
+    data: Character[];
+    error: any;
+  };
 
   return { data: data ?? [], error };
 }
@@ -120,7 +134,8 @@ export async function fetchExactFriendById(from: number, to: number) {
   return data;
 }
 
-export async function fetchIsFriendByIds(id1: number, id2: number) {
+export async function fetchIsFriendByIds(id1?: number, id2?: number) {
+  if (!id1 || !id2) return false;
   const supabase = createClient();
   const { data, error } = await supabase
     .from("profile_friend")
@@ -158,6 +173,60 @@ export async function deleteFriend(from: number, to: number) {
     .or(
       `and(from_profile_id.eq.${from},to_profile_id.eq.${to}),and(from_profile_id.eq.${to},to_profile_id.eq.${from})`
     );
+
+  revalidatePath("/u/[slug]", "page");
+
+  return { data, error };
+}
+
+export async function fetchFavoriteCharactersByProfileId(
+  profileId?: number
+): Promise<number[]> {
+  if (!profileId) {
+    return [];
+  }
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("character_favorite")
+    .select("character_id")
+    .eq("profile_id", profileId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw error;
+  }
+
+  return data?.map((item) => item.character_id) ?? [];
+}
+
+export async function addFavoriteCharacter(
+  profile_id: number,
+  character_id: number
+) {
+  console.log("addFavoriteCharacter", profile_id, character_id);
+  const supabase = createClient();
+  const { data, error } = await supabase.from("character_favorite").insert([
+    {
+      profile_id,
+      character_id,
+    },
+  ]);
+
+  revalidatePath("/u/[slug]", "page");
+
+  return { data, error };
+}
+
+export async function removeFavoriteCharacter(
+  profile_id: number,
+  character_id: number
+) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("character_favorite")
+    .delete()
+    .eq("profile_id", profile_id)
+    .eq("character_id", character_id);
 
   revalidatePath("/u/[slug]", "page");
 

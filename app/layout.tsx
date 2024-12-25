@@ -12,6 +12,7 @@ import clsx from "clsx";
 const fontTitle = Poiret_One({
   weight: "400",
   subsets: ["latin"],
+  display: "swap",
   variable: "--font-poiret-one",
 });
 
@@ -24,7 +25,7 @@ const fontBody = localFont({
 
 export const metadata: Metadata = {
   title: "위빙",
-  description: "너와 나의 연결 고리, 위빙",
+  description: "우리의 세계가 만나는 곳",
 };
 
 export default function RootLayout({
@@ -33,8 +34,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={clsx(fontTitle, fontBody.variable)}>
-      <body className={clsx(fontTitle.className, fontBody.className)}>
+    <html lang="ko">
+      <body className={clsx(fontTitle.variable, fontBody.variable)}>
         {children}
       </body>
     </html>

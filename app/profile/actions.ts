@@ -2,7 +2,9 @@
 
 import { createClient } from "@/utils/supabase/server";
 
-export async function fetchProfileById(user_id: string) {
+export async function fetchProfileById(
+  user_id: string
+): Promise<Profile | null> {
   if (!user_id) {
     return null;
   }
