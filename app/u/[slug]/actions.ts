@@ -16,6 +16,17 @@ export async function fetchProfileBySlug(slug: string) {
   return { data, error };
 }
 
+export async function fetchProfileById(id: string) {
+  const supabase = createClient();
+  const { data, error } = (await supabase
+    .from("profile")
+    .select()
+    .eq("id", id)
+    .maybeSingle()) as { data: Profile; error: any };
+
+  return { data, error };
+}
+
 export async function fetchProfilesByIds(ids: number[]) {
   const supabase = createClient();
   const { data, error } = await supabase.from("profile").select().in("id", ids);
@@ -123,7 +134,8 @@ export async function fetchExactFriendById(from: number, to: number) {
   return data;
 }
 
-export async function fetchIsFriendByIds(id1: number, id2: number) {
+export async function fetchIsFriendByIds(id1?: number, id2?: number) {
+  if (!id1 || !id2) return false;
   const supabase = createClient();
   const { data, error } = await supabase
     .from("profile_friend")

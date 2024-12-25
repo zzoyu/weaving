@@ -13,8 +13,10 @@ import { useState } from "react";
 
 export function ListRelationship({
   relationships,
+  isMine = false,
 }: {
   relationships: Relationship[];
+  isMine?: boolean;
 }) {
   const [isOpened, setIsOpened] = useState(false);
 
@@ -22,7 +24,7 @@ export function ListRelationship({
     <div className="flex flex-col">
       <h2 className="mb-6 font-bold">관계 인물</h2>
       <div className="grid grid-cols-3 gap-4">
-        {(isOpened ? relationships.slice(0, 3) : relationships).map(
+        {(!isOpened ? relationships.slice(0, 3) : relationships).map(
           (relationship) => {
             const character = relationship.character as Character;
             const relationshipType =
@@ -41,7 +43,7 @@ export function ListRelationship({
                   ] + " bg-opacity-50"
                 )}
               >
-                {relationshipType?.symbol && (
+                {isMine && relationshipType?.symbol && (
                   <div
                     className={clsx(
                       "absolute left-2 top-2 rounded-full text-white p-1",

@@ -8,6 +8,8 @@ import IconFavoriteFilled from "@/public/assets/icons/favorite_filled.svg";
 import clsx from "clsx";
 import { colorList } from "@/types/color";
 
+import IconLocked from "@/public/assets/icons/locked.svg";
+
 export default function ListCharacterItem({
   character,
   slug,
@@ -54,17 +56,24 @@ export default function ListCharacterItem({
               <IconFavorite className="text-primary-100" />
             </button>
           ))}
-        <div className="rounded-full overflow-hidden m-2">
+        <div className="rounded-full overflow-hidden m-2 relative">
+          {!isMine && character.password && (
+            <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center z-30 opacity-80">
+              <IconLocked width={48} height={48} />
+            </div>
+          )}
           <Image
             src={character.thumbnail || character?.image?.[0] || ""}
             alt={character.name}
             width={100}
             height={100}
             style={{
-              filter: character.password ? "grayscale(50%) blur(4px)" : "",
+              filter:
+                !isMine && character.password ? "grayscale(50%) blur(4px)" : "",
             }}
           />
         </div>
+
         <div
           className={clsx(
             character.password && "text-opacity-50",

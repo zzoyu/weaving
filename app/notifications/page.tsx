@@ -55,11 +55,15 @@ export default async function NotificationsPage() {
 
         <ul>
           <li>
-            {notifications.map((notification) => (
-              <div key={notification.id}>
-                <NotificationItem notification={notification} />
-              </div>
-            ))}
+            {notifications.length ? (
+              notifications.map((notification) => (
+                <div key={notification.id}>
+                  <NotificationItem notification={notification} />
+                </div>
+              ))
+            ) : (
+              <p>알림이 없습니다.</p>
+            )}
           </li>
         </ul>
       </div>

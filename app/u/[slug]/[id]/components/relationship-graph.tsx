@@ -17,9 +17,11 @@ import symbolHate from "@/public/assets/icons/relationship/hate.svg";
 export default function RelationshipGraph({
   character,
   relationships,
+  isMine,
 }: {
   character: Character;
   relationships: Relationship[];
+  isMine?: boolean;
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -142,28 +144,23 @@ export default function RelationshipGraph({
     target: d3.Selection<any, any, any, any>,
     node: { x: number; y: number; lineCenter: { x: number; y: number } },
     relationship: Relationship,
-    index: number
+    index: number,
+    isMine?: boolean
   ) {
     const r = radius[1];
 
-    target
-      .append("image")
-      .attr(
-        "xlink:href",
-        relationshipTypeData[relationship.name as ERelationshipType].url.src
-      )
-      .attr("width", xScale(5))
-      .attr("height", xScale(5))
-      .attr("x", node.lineCenter.x - xScale(2.5))
-      .attr("y", node.lineCenter.y - xScale(2.5));
-
-    // target
-    //   .append("text")
-    //   .attr("x", node.lineCenter.x)
-    //   .attr("y", node.lineCenter.y)
-    //   .text()
-    //   .attr("font-size", `${xScale(1.5)}px`)
-    //   .attr("fill", "black");
+    if (isMine) {
+      target
+        .append("image")
+        .attr(
+          "xlink:href",
+          relationshipTypeData[relationship.name as ERelationshipType].url.src
+        )
+        .attr("width", xScale(5))
+        .attr("height", xScale(5))
+        .attr("x", node.lineCenter.x - xScale(2.5))
+        .attr("y", node.lineCenter.y - xScale(2.5));
+    }
 
     target
       .append("text")
@@ -222,7 +219,7 @@ export default function RelationshipGraph({
       .attr("stroke-width", 3); // 테두리 두께
 
     nodes.forEach((node, index) => {
-      drawNodeText(svg, node, relationships[index], index);
+      drawNodeText(svg, node, relationships[index], index, isMine);
     });
   }, [width]);
   return (

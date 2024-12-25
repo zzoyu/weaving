@@ -1,15 +1,28 @@
-import { notFound } from "next/navigation";
-import { fetchCharacter, fetchRelationships } from "./actions";
+import { notFound, redirect } from "next/navigation";
+import {
+  compareCharacterPassword,
+  fetchCharacter,
+  fetchIsFavoriteById,
+  fetchRelationships,
+} from "./actions";
 import Image from "next/image";
 import { ListRelationship } from "./components/list-relationship";
 import ButtonAddRelationship from "./components/button-add-relationship";
 import RelationshipGraph from "./components/relationship-graph";
 import { createClient } from "@/utils/supabase/server";
-import { fetchProfileBySlug } from "../actions";
+import {
+  fetchIsFriendByIds,
+  fetchProfileById,
+  fetchProfileBySlug,
+} from "../actions";
 import { ProfileCard } from "./components/profile-card";
 import { ColorProperties } from "../add/components/properties/color-properties";
 import { RelationshipCard } from "./components/relationship-card";
 import { EPropertyType } from "@/types/character";
+import InputPassword from "./components/input-password";
+import TemplateProfile from "./components/template-profile";
+import { useState } from "react";
+import { cookies } from "next/headers";
 
 export default async function CharacterPage({
   params,
@@ -29,6 +42,17 @@ export default async function CharacterPage({
   const currentUser = await supabase.auth.getUser();
 
   const { data, error } = await fetchProfileBySlug(slug);
+  if (!data) notFound();
+
+  const myProfile = await fetchProfileById(
+    currentUser?.data.user?.id as string
+  );
+
+  const responseIsFriend = await fetchIsFriendByIds(
+    data?.id,
+    myProfile?.data?.id
+  );
+  // const isFavorite = await fetchIsFavoriteById(Number(id));
 
   if (error) {
     throw error;
@@ -44,33 +68,28 @@ export default async function CharacterPage({
     (property) => property.type === EPropertyType.COLOR
   );
 
+  const cookie = await cookies();
+  const responseIsPasswordCorrect = await compareCharacterPassword(
+    Number(id),
+    cookie?.get(`${slug}-${id}`)?.value
+  );
+  const isGranted =
+    isMyProfile || responseIsFriend || responseIsPasswordCorrect;
+
+  if (!isGranted) {
+    redirect(`/u/${slug}/${id}/not-granted`);
+  }
+
   return (
-    <div className="w-full p-4 md:max-w-[40rem] mx-auto flex flex-col gap-8">
-      <ProfileCard
-        character={characterData}
-        relationships={relationships || []}
-      />
-
-      {/* {isMyProfile && (
-        <ButtonAddRelationship
-          character={characterData}
-          relationships={relationships || []}
-          currentPath={`/u/${slug}/${id}`}
-        />
-      )} */}
-
-      <hr className="mt-10 p-0 w-full" />
-
-      <ColorProperties properties={colorProperties} />
-
-      <hr className="mt-0 p-0 w-full" />
-
-      {relationships && (
-        <RelationshipCard
-          character={characterData}
-          relationships={relationships}
-        />
-      )}
-    </div>
+    <TemplateProfile
+      {...{
+        characterData,
+        relationships: relationships || [],
+        colorProperties,
+        isMyProfile,
+        slug,
+        id,
+      }}
+    />
   );
 }

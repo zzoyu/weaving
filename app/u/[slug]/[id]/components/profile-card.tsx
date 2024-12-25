@@ -10,10 +10,12 @@ function PopupRelationshipGraph({
   character,
   relationships,
   onClose,
+  isMine = false,
 }: {
   character: Character;
   relationships: Relationship[];
   onClose: () => void;
+  isMine?: boolean;
 }) {
   return (
     <div className="fixed z-10 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
@@ -26,6 +28,7 @@ function PopupRelationshipGraph({
           <RelationshipGraph
             character={character}
             relationships={relationships}
+            isMine={isMine}
           />
         </div>
       </div>
@@ -36,9 +39,11 @@ function PopupRelationshipGraph({
 export function ProfileCard({
   character,
   relationships,
+  isMine,
 }: {
   character: Character;
   relationships: Relationship[];
+  isMine?: boolean;
 }) {
   const [isOpenRelationshipGraph, setIsOpenRelationshipGraph] = useState(false);
   const ColorProperties = character.properties?.filter((property) =>
@@ -55,6 +60,7 @@ export function ProfileCard({
           character={character}
           relationships={relationships}
           onClose={() => setIsOpenRelationshipGraph(false)}
+          isMine={isMine}
         />
       )}
       <Image
