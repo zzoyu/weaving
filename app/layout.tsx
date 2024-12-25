@@ -25,7 +25,7 @@ const fontBody = localFont({
 
 export const metadata: Metadata = {
   title: "위빙",
-  description: "너와 나의 연결 고리, 위빙",
+  description: "우리의 세계가 만나는 곳",
 };
 
 export default function RootLayout({

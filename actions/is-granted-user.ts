@@ -11,7 +11,7 @@ export async function isGrantedUserByProfileSlug(slug: string | null) {
 
   if (!currentUser?.data?.user?.id) return false;
 
-  const myProfile: Profile = await fetchProfileById(
+  const myProfile: Profile | null = await fetchProfileById(
     currentUser?.data?.user?.id as string
   );
 

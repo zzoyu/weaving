@@ -26,7 +26,7 @@ type Props = {
 
 const baseMetadata: Metadata = {
   title: "위빙 프로필",
-  description: "너와 나의 연결 고리, 위빙",
+  description: "우리의 세계가 만나는 곳",
   applicationName: "위빙",
 };
 
