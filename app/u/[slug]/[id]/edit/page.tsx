@@ -1,3 +1,4 @@
+import { createClient } from "@/utils/supabase/server";
 import { fetchCharacter } from "../actions";
 import EditForm from "./components/edit-form";
 
@@ -6,11 +7,16 @@ export default async function EditPage({
 }: {
   params: { slug: string; id: number };
 }) {
-  // fetch the data from path params. [id] is the id of the item to edit
+  const supabase = createClient();
+  const currentUser = await supabase.auth.getUser();
+  if (!currentUser?.data?.user) {
+    throw new Error("User not found");
+  }
+
   const data = await fetchCharacter(params.id);
 
   if (!data) {
-    throw { message: "Data not found" };
+    throw new Error("Character not found");
   }
 
   return (

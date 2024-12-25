@@ -3,11 +3,13 @@
 export default function InputHashtag({
   value,
   onChange,
+  onDelete,
   hashtags,
 }: {
   hashtags: string[];
   value: string;
   onChange: (value: string) => void;
+  onDelete: (index: number) => void;
 }) {
   return (
     <div className="flex flex-col gap-2 w-full">
@@ -26,10 +28,21 @@ export default function InputHashtag({
         {hashtags.length ? (
           hashtags.map((hashtag, index) => (
             <span
-              className="rounded-full px-8 py-1 bg-primary-100 border border-primary-300"
+              className="rounded-full px-8 py-1 bg-primary-100 border border-primary-300 relative"
               key={`hashtag-${index}-${hashtag}`}
             >
               #{hashtag}
+              <button
+                type="button"
+                className="absolute right-2 text-primary-300"
+                onClick={(e) => {
+                  onDelete?.(index);
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              >
+                ✕
+              </button>
             </span>
           ))
         ) : (

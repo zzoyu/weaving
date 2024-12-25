@@ -2,9 +2,11 @@
 
 import { createClient } from "@/utils/supabase/server";
 
-export async function fetchProfileById(user_id: string): Promise<Profile> {
+export async function fetchProfileById(
+  user_id: string
+): Promise<Profile | null> {
   if (!user_id) {
-    throw new Error("user_id is required");
+    return null;
   }
   const supabase = createClient();
 

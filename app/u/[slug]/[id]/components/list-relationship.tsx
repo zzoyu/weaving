@@ -2,7 +2,11 @@
 
 import { Character } from "@/types/character";
 import { colorList } from "@/types/color";
-import { Relationship } from "@/types/relationship";
+import {
+  ERelationshipType,
+  Relationship,
+  relationshipTypeData,
+} from "@/types/relationship";
 import clsx from "clsx";
 import Image from "next/image";
 import { useState } from "react";
@@ -21,6 +25,11 @@ export function ListRelationship({
         {(isOpened ? relationships.slice(0, 3) : relationships).map(
           (relationship) => {
             const character = relationship.character as Character;
+            const relationshipType =
+              relationshipTypeData[relationship.name as ERelationshipType];
+
+            console.log("relationshipType", relationshipType);
+
             return (
               <div
                 key={`relationship-${relationship.id}`}
@@ -32,9 +41,16 @@ export function ListRelationship({
                   ] + " bg-opacity-50"
                 )}
               >
-                <div className="absolute left-2 top-2 rounded-full bg-primary-100 text-white p-1">
-                  {relationship.name}
-                </div>
+                {relationshipType?.symbol && (
+                  <div
+                    className={clsx(
+                      "absolute left-2 top-2 rounded-full text-white p-1",
+                      relationshipType?.color
+                    )}
+                  >
+                    <relationshipType.symbol width={24} height={24} />
+                  </div>
+                )}
                 <div className="rounded-full overflow-hidden m-2">
                   <Image
                     src={character.thumbnail || character?.image?.[0] || ""}

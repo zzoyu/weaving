@@ -66,23 +66,18 @@ export default async function PublicProfilePage({
 
   const supabase = createClient();
 
+  let myProfile: Profile | null = null;
   const currentUser = await supabase.auth.getUser();
-  let myProfile: Profile = await fetchProfileById(
-    currentUser?.data?.user?.id as string
-  );
 
   let friendDataFromMe: Friend | null = null;
   let friendDataFromUser: Friend | null = null;
   let isFriend = false;
-  if (currentUser?.data.user) {
-    friendDataFromMe = await fetchExactFriendById(myProfile.id!, data.id!);
-    friendDataFromUser = await fetchExactFriendById(data.id!, myProfile.id!);
-    console.log("friendDataFromMe", friendDataFromMe);
-    console.log("friendDataFromUser", friendDataFromUser);
+  if (currentUser?.data.user?.id) {
+    myProfile = await fetchProfileById(currentUser?.data?.user?.id as string);
+    friendDataFromMe = await fetchExactFriendById(myProfile?.id!, data.id!);
+    friendDataFromUser = await fetchExactFriendById(data.id!, myProfile?.id!);
     isFriend = Boolean(friendDataFromMe || friendDataFromUser);
   }
-
-  console.log("isFriend", isFriend);
 
   const responseCharacters = await fetchCharactersByProfileId(data.id!);
 
@@ -100,7 +95,9 @@ export default async function PublicProfilePage({
 
   return (
     <main className="flex flex-col justify-center items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto">
-      {isMine && <TabHeader slug={myProfile.slug} activeIndex={0} />}
+      {isMine && myProfile && myProfile?.slug && (
+        <TabHeader slug={myProfile.slug} activeIndex={0} />
+      )}
 
       {!isMine && myProfile && (
         <ButtonRequestFriend

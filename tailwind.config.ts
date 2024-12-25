@@ -6,6 +6,7 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./types/color.ts",
+    "./types/relationship.ts",
   ],
   theme: {
     extend: {
@@ -31,6 +32,12 @@ const config: Config = {
           100: "#F4F4F4",
           200: "#EAEAEA",
           300: "#C1C1C1",
+        },
+        symbol: {
+          love: "#FF4C4C",
+          family: "#4B8B3B",
+          friend: "#FFD700",
+          hate: "#1A1A1A",
         },
       },
       fontFamily: {

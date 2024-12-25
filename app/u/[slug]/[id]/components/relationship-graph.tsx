@@ -1,9 +1,18 @@
 "use client";
 
 import { Character } from "@/types/character";
-import { Relationship } from "@/types/relationship";
+import {
+  ERelationshipType,
+  Relationship,
+  relationshipTypeData,
+} from "@/types/relationship";
 import { use, useEffect, useMemo, useRef, useState } from "react";
 import * as d3 from "d3";
+
+import symbolFamily from "@/public/assets/icons/relationship/family.svg";
+import symbolFriend from "@/public/assets/icons/relationship/friend.svg";
+import symbolLove from "@/public/assets/icons/relationship/love.svg";
+import symbolHate from "@/public/assets/icons/relationship/hate.svg";
 
 export default function RelationshipGraph({
   character,
@@ -138,12 +147,23 @@ export default function RelationshipGraph({
     const r = radius[1];
 
     target
-      .append("text")
-      .attr("x", node.lineCenter.x)
-      .attr("y", node.lineCenter.y)
-      .text(relationship.name)
-      .attr("font-size", `${xScale(1.5)}px`)
-      .attr("fill", "black");
+      .append("image")
+      .attr(
+        "xlink:href",
+        relationshipTypeData[relationship.name as ERelationshipType].url.src
+      )
+      .attr("width", xScale(5))
+      .attr("height", xScale(5))
+      .attr("x", node.lineCenter.x - xScale(2.5))
+      .attr("y", node.lineCenter.y - xScale(2.5));
+
+    // target
+    //   .append("text")
+    //   .attr("x", node.lineCenter.x)
+    //   .attr("y", node.lineCenter.y)
+    //   .text()
+    //   .attr("font-size", `${xScale(1.5)}px`)
+    //   .attr("fill", "black");
 
     target
       .append("text")

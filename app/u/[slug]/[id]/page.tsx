@@ -46,7 +46,10 @@ export default async function CharacterPage({
 
   return (
     <div className="w-full p-4 md:max-w-[40rem] mx-auto flex flex-col gap-8">
-      <ProfileCard character={characterData} />
+      <ProfileCard
+        character={characterData}
+        relationships={relationships || []}
+      />
 
       {/* {isMyProfile && (
         <ButtonAddRelationship

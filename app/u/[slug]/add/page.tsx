@@ -69,6 +69,15 @@ export default function NewCharacterPage({
               setCurrentHashtag("");
             } else setCurrentHashtag(newValue);
           }}
+          onDelete={(index) => {
+            setHashtags(
+              hashtags
+                .trim()
+                .split(" ")
+                .filter((_, i) => i !== index)
+                .join(" ")
+            );
+          }}
         />
 
         <button
