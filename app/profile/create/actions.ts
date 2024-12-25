@@ -27,20 +27,6 @@ export async function createProfile(payload: FormData) {
     throw new Error("Slug is required");
   }
 
-  const image = payload.get("profile_image") as File;
-
-  try {
-    const newProfileImage = await uploadImage(
-      image,
-      newProfile.user_id,
-      ImagePath.PROFILE
-    );
-    newProfile.profile_image = newProfileImage;
-  } catch (error) {
-    console.error(error);
-    throw new Error(error as string);
-  }
-
   const { data, error } = await supabase
     .from("profile")
     .insert({ ...newProfile });

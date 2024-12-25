@@ -42,8 +42,6 @@ export default async function ProfileCreatePage() {
         />
         <label htmlFor="slug">접근 주소</label>
         <input type="text" name="slug" required className="bg-transparent" />
-        <label htmlFor="profile_image">프로필 이미지</label>
-        <input type="file" name="profile_image" className="" />
         <button type="submit">작성하기</button>
       </form>
     </main>
