@@ -16,7 +16,8 @@ export async function fetchProfileBySlug(slug: string) {
   return { data, error };
 }
 
-export async function fetchProfileById(id: string) {
+export async function fetchProfileById(id?: string) {
+  if (!id) return null;
   const supabase = createClient();
   const { data, error } = (await supabase
     .from("profile")
@@ -27,7 +28,13 @@ export async function fetchProfileById(id: string) {
   return { data, error };
 }
 
-export async function fetchProfilesByIds(ids: number[]) {
+export async function fetchProfilesByIds(ids: number[]): Promise<{
+  requestedProfiles: Profile[];
+  error: any;
+}> {
+  if (!ids || ids.length === 0) {
+    return { requestedProfiles: [], error: null };
+  }
   const supabase = createClient();
   const { data, error } = await supabase.from("profile").select().in("id", ids);
 
