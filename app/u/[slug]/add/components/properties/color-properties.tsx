@@ -85,13 +85,13 @@ function ColorPicker({
         type="button"
         className={clsx(
           "relative w-10 h-10 border-primary-100 border",
-          colorList?.[property.value as string]
+          colorList?.[(property?.value as string) || "white"]
         )}
         onClick={() => {
           if (editable) setIsOpen(true);
         }}
       >
-        {property.value === null ||
+        {!property?.value ||
           (property.value === "" && (
             <>
               <div className="absolute w-full h-px bg-gray-300 rotate-45 top-1/2 left-0 transform -translate-y-1/2"></div>

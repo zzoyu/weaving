@@ -100,8 +100,8 @@ export function ProfileCard({
 const CharacterProfileField = ({ property }: { property: Property }) => {
   return (
     <div className="flex justify-between border-b py-2 w-full">
-      <span className="w-1/3 font-bold">{property.key}</span>
-      <span className="w-full">{property.value}</span>
+      <span className="w-1/3 font-bold">{property?.key}</span>
+      <span className="w-full">{property?.value}</span>
     </div>
   );
 };
