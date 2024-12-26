@@ -44,7 +44,7 @@ export async function generateMetadata(
 
   return {
     ...baseMetadata,
-    title: data.nickname + "의 프로필",
+    title: "위빙 :: " + data.nickname + "의 프로필",
     openGraph: { images: [data.profile_image!] },
   };
 }

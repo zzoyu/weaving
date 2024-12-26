@@ -1,4 +1,3 @@
-import Link from "next/link";
 import MainMenu from "./components/main-menu";
 import LogoColored from "@/public/assets/logos/logo_color.svg";
 

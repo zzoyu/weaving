@@ -23,6 +23,37 @@ import InputPassword from "./components/input-password";
 import TemplateProfile from "./components/template-profile";
 import { useState } from "react";
 import { cookies } from "next/headers";
+import { Metadata, ResolvingMetadata } from "next";
+
+interface Props {
+  params: { slug: string; id: number };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
+const baseMetadata: Metadata = {
+  title: "위빙 프로필",
+  description: "우리의 세계가 만나는 곳",
+  applicationName: "위빙",
+};
+
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { id } = params;
+
+  const characterData = await fetchCharacter(id);
+
+  if (!characterData) {
+    return baseMetadata;
+  }
+
+  return {
+    ...baseMetadata,
+    title: "위빙 :: " + characterData.name + " 관찰 중 🔍",
+    openGraph: { images: [characterData.thumbnail!] },
+  };
+}
 
 export default async function CharacterPage({
   params,
