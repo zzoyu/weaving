@@ -3,18 +3,28 @@ import Link from "next/link";
 import HeartIcon from "@/public/assets/icons/navigation/heart.svg";
 import UserIcon from "@/public/assets/icons/navigation/user.svg";
 import ProfileIcon from "@/public/assets/icons/navigation/profile.svg";
+import { fetchProfileById } from "@/app/profile/actions";
 
 export async function Navigation() {
+  const supabase = createClient();
+  const { data } = await supabase.auth.getUser();
+  const responseProfile = await fetchProfileById(data?.user?.id as string);
+
   const navItems = [
-    { label: "더보기", icon: HeartIcon, href: "/" },
-    { label: "내 프로필", icon: ProfileIcon, href: "/profile" },
+    {
+      label: "더보기",
+      icon: HeartIcon,
+      href: `/u/${responseProfile?.slug}/more`,
+    },
+    {
+      label: "내 프로필",
+      icon: ProfileIcon,
+      href: `/u/${responseProfile?.slug}`,
+    },
     { label: "마이페이지", icon: UserIcon, href: "/profile/edit" },
   ];
 
-  const supabase = createClient();
-  const response = await supabase.auth.getUser();
-
-  const isSignin = !!response.data.user?.id;
+  const isSignin = !!data?.user?.id;
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-primary-100 w-full text-primary-300">
