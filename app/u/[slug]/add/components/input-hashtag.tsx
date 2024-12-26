@@ -20,6 +20,13 @@ export default function InputHashtag({
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              onChange(value + " ");
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }}
           placeholder="해시태그 입력"
           className="w-full text-xl  border-primary-100 focus:outline-none pl-6 py-1"
         />
