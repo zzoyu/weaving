@@ -39,6 +39,7 @@ const config: Config = {
           friend: "#FFD700",
           hate: "#1A1A1A",
         },
+        brown: "#7A5128",
       },
       fontFamily: {
         "poiret-one": ["var(--font-poiret-one)", "cursive"],
