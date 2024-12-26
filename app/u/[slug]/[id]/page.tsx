@@ -74,7 +74,10 @@ export default async function CharacterPage({
     cookie?.get(`${slug}-${id}`)?.value
   );
   const isGranted =
-    isMyProfile || responseIsFriend || responseIsPasswordCorrect;
+    isMyProfile ||
+    responseIsFriend ||
+    responseIsPasswordCorrect ||
+    !characterData.password;
 
   if (!isGranted) {
     redirect(`/u/${slug}/${id}/not-granted`);
