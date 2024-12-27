@@ -5,6 +5,7 @@ import Image from "next/image";
 import ImageIcon from "@/public/assets/icons/image.svg";
 import { useRef, useState } from "react";
 import UploadImageCropLayer from "./upload-image-crop-layer";
+import { image } from "d3";
 
 export default function UploadImage({}) {
   const imageFileInput = useRef<HTMLInputElement>(null);
@@ -21,6 +22,7 @@ export default function UploadImage({}) {
     if (!file) return;
     setIsOpenedCropLayer(true);
     setImagePreviewSrc(URL.createObjectURL(file!));
+    imageFileInput.current!.value = "";
   }
 
   return (
@@ -60,7 +62,6 @@ export default function UploadImage({}) {
         <UploadImageCropLayer
           src={imagePreviewSrc}
           onCrop={(blob) => {
-            console.log(blob);
             const file = new File(
               [blob],
               "thumbnail." + blob.type.split("/")[0],
@@ -71,6 +72,8 @@ export default function UploadImage({}) {
             const dataTransfer = new DataTransfer();
             dataTransfer.items.add(file);
             thumbnailFileInput.current!.files = dataTransfer.files;
+            // change thumtail file into preview
+            setImagePreviewSrc(URL.createObjectURL(blob));
             setIsOpenedCropLayer(false);
           }}
           onClose={() => {

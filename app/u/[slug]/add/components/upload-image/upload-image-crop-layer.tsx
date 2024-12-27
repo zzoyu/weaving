@@ -34,15 +34,15 @@ export default function UploadImageCropLayer({
   useEffect(() => {}, []);
 
   const [crop, setCrop] = useState<Crop>({
-    unit: "px", // Can be 'px' or '%'
+    unit: "px",
+    width: 50,
+    height: 50,
     x: 25,
     y: 25,
-    width: 200,
-    height: 200,
   });
 
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen flex flex-col items-center justify-center gap-10 bg-background-200 z-10">
+    <div className="fixed top-0 left-0 w-screen h-screen max-h-full max-w-full flex flex-col items-center justify-center gap-10 bg-background-200 z-10">
       <small
         className="
       border-2 border-primary-100 rounded-lg p-1
@@ -53,23 +53,21 @@ export default function UploadImageCropLayer({
       >
         썸네일로 사용할 영역을 선택해주세요.
       </small>
-      <div>
-        <ReactCrop
-          crop={crop}
-          onChange={(c) => setCrop(c)}
-          keepSelection
-          circularCrop
-          aspect={1}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className="w-fit h-fit object-contain rounded-lg"
-            src={src}
-            alt="이미지"
-            ref={imageRef}
-          />
-        </ReactCrop>
-      </div>
+      <ReactCrop
+        crop={crop}
+        onChange={(c) => setCrop(c)}
+        keepSelection
+        circularCrop
+        aspect={1}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="max-w-full max-h-full"
+          src={src}
+          alt="이미지"
+          ref={imageRef}
+        />
+      </ReactCrop>
       <div className="flex flex-row gap-10 fixed bottom-10 left-1/2 transform -translate-x-1/2">
         <button
           type="button"
