@@ -7,6 +7,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import ProfileImage from "./profile-image";
 import { signInWithTwitter, signOut } from "@/lib/client-authentication";
+import { fetchProfileByIdAndCreateIfNotExists } from "../profile/actions";
+import { useRouter } from "next/router";
 
 export default function MainMenu() {
   const supabase = createClient();
@@ -19,6 +21,10 @@ export default function MainMenu() {
       if (session) {
         setIsSignedIn(true);
         setUser(session.user);
+        fetchProfileByIdAndCreateIfNotExists(session.user.id as string);
+        // redirect to profile Page
+        const router = useRouter();
+        router.push("/profile");
       } else {
         setIsSignedIn(false);
       }

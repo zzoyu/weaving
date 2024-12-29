@@ -79,7 +79,7 @@ export default async function PublicProfilePage({
     isFriend = Boolean(friendDataFromMe || friendDataFromUser);
   }
 
-  const responseCharacters = await fetchCharactersByProfileId(data.id!);
+  const responseCharacters = await fetchCharactersByProfileId(data?.id);
 
   if (responseCharacters.error) {
     if (responseCharacters.error?.code !== ErrorCode.NO_ITEM) {

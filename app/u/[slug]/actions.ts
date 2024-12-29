@@ -45,7 +45,10 @@ export async function fetchProfilesByIds(ids: number[]): Promise<{
   return { requestedProfiles: data, error };
 }
 
-export async function fetchCharactersByProfileId(profileId: number) {
+export async function fetchCharactersByProfileId(profileId?: number) {
+  if (!profileId) {
+    return { data: [], error: null };
+  }
   console.log("fetchCharactersByProfileId", profileId);
   const supabase = createClient();
   const { data, error } = (await supabase
