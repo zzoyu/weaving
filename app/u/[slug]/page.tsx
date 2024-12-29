@@ -94,7 +94,7 @@ export default async function PublicProfilePage({
   favoriteCharacters = await fetchFavoriteCharactersByProfileId(data.id);
 
   return (
-    <main className="flex flex-col justify-center items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto">
+    <main className="flex flex-col justify-center items-center pt-4 md:pt-10 w-full md:max-w-[40rem] mx-auto">
       {isMine && myProfile && myProfile?.slug && (
         <TabHeader slug={myProfile.slug} activeIndex={0} />
       )}

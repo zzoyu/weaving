@@ -32,7 +32,7 @@ export default function NewCharacterPage({
     { key: "hairColor", value: "", type: EPropertyType.COLOR },
   ]);
   return (
-    <main className="flex flex-col justify-center items-center pt-10 w-full md:max-w-[40rem] mx-auto gap-10">
+    <main className="flex flex-col justify-center items-center pt-4 md:pt-10 w-full md:max-w-[40rem] mx-auto gap-10">
       <TabHeader slug={params.slug} activeIndex={1} />
       <form
         className="flex flex-col gap-2 items-center w-full md:max-w-md p-4"
