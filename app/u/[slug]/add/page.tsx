@@ -65,7 +65,20 @@ export default function NewCharacterPage({
           hashtags={previewHashtags}
           onChange={(newValue) => {
             if (newValue[newValue.length - 1] === " ") {
-              setHashtags(hashtags + newValue);
+              if (hashtags.split(" ").includes(newValue.trim())) {
+                setHashtags(
+                  hashtags
+                    .trim()
+                    .split(" ")
+                    .filter((tag) => tag !== newValue.trim())
+                    .join(" ") +
+                    " " +
+                    newValue.trim()
+                );
+                setCurrentHashtag("");
+                return;
+              }
+              setHashtags(hashtags.trim() + " " + newValue.trim());
               setCurrentHashtag("");
             } else setCurrentHashtag(newValue);
           }}
