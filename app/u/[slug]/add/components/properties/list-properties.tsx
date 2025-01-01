@@ -18,12 +18,13 @@ export default function ListProperties({
     <div className="flex flex-col gap-2 w-full">
       {localProperties.map((property, index) => (
         <ListPropertiesItem
-          key={index + property.key}
+          key={`key-value-${index}`}
           property={property}
           onChange={(property) => {
-            const newProperties = [...localProperties];
-            newProperties[index] = property;
-            handler(newProperties);
+            const newValue = structuredClone(localProperties);
+            newValue[index] = property;
+            setLocalProperties(newValue);
+            handler(newValue);
           }}
           onDelete={(property) => {
             const newProperties = [...localProperties];
