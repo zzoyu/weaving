@@ -1,7 +1,7 @@
 "use client";
 
 import { Property } from "@/types/character";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import DeleteIcon from "@/public/assets/icons/delete.svg";
 
@@ -14,28 +14,28 @@ export default function ListPropertiesItem({
   onChange: (property: Property) => void;
   onDelete: (property: Property) => void;
 }) {
-  const [key, setKey] = useState(property.key);
-  const [value, setValue] = useState(property.value);
-
   return (
     <div className="w-full h-fit relative flex items-center justify-center group">
       <div className="w-full flex gap-4">
-        <input type="hidden" name="list-properties" value={`${key}:${value}`} />
+        <input
+          type="hidden"
+          name="list-properties"
+          value={`${property.key}:${property.value}`}
+        />
         <input
           className="w-1/3 text-center p-1  border-primary-100 focus:outline-none"
           type="text"
-          value={key}
+          value={property.key}
           onChange={(event) => {
-            setKey(event.target.value);
+            onChange({ ...property, key: event.target.value });
           }}
         />
         <input
           type="text"
           className="w-full text-center p-1 border-primary-100 focus:outline-none"
-          value={value}
+          value={property.value}
           onChange={(event) => {
-            setValue(event.target.value);
-            onChange({ ...property, key, value: event.target.value });
+            onChange({ ...property, value: event.target.value });
           }}
         />
       </div>
