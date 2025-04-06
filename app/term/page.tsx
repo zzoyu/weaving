@@ -1,10 +1,23 @@
+import Link from "next/link";
+
 export default function Term() {
   return (
-    <main className="h-full grid place-items-center">
-      <div>
-        <h1>이용약관</h1>
-        <p>위빙은 사용자의 이용약관을 중요하게 생각합니다. 어쩌구ㅜ</p>
-      </div>
-    </main>
+    <div className="flex flex-col justify-center h-full bg-white">
+      <header className="fixed top-0 flex h-10 md:h-14 w-full items-center justify-between px-2 md:px-8 bg-transparent">
+        <Link href="../">
+          <button className="p-1 rounded-full h-10 flex items-center justify-center text-3xl  bg-transparent">
+            <span className="text-primary-300">← 뒤로가기</span>
+          </button>
+        </Link>
+      </header>
+      <iframe
+        className="w-full h-full"
+        src="https://equinox-galley-25a.notion.site/ebd/977ff70e969b4543b1c38128650f267e"
+        width="100%"
+        height="600"
+        frameBorder="0"
+        allowFullScreen
+      />
+    </div>
   );
 }

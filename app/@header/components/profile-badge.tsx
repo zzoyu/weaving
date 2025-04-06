@@ -15,7 +15,7 @@ export default function ProfileBadge({
 }: ProfileBadgeProps) {
   console.log(profile);
   return (
-    <Link className="relative" href="/notifications">
+    <Link className="relative" href={`/notifications`}>
       <div className="relative w-10 h-10 dark:bg-slate-800 rounded-full overflow-hidden flex justify-center items-center border border-primary-100">
         <Image
           src={profile?.profile_image || ""}

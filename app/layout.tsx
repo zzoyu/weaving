@@ -30,13 +30,23 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  header,
+  navigation,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  header: React.ReactNode;
+  navigation: React.ReactNode;
+  params: { slug: string; id: string };
 }>) {
   return (
     <html lang="ko">
       <body className={clsx(fontTitle.variable, fontBody.variable)}>
-        {children}
+        <div className="flex flex-col h-full py-10 md:py-14">
+          {header}
+          <div className="w-full h-full overflow-y-auto pb-20">{children}</div>
+          {navigation}
+        </div>
       </body>
     </html>
   );

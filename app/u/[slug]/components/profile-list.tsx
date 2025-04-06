@@ -164,8 +164,10 @@ function FilterPopup({
             {/* 필터 옵션 */}
             <div className="space-y-4">
               <div>
-                <h3 className="font-semibold text-primary-300">테마색</h3>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 justify-between">
+                  <label htmlFor="theme-red" className="text-sm md:text-base">
+                    테마색
+                  </label>
                   <input
                     type="radio"
                     name="theme"
@@ -173,9 +175,11 @@ function FilterPopup({
                     checked={type === "themeColor"}
                     onChange={() => setType("themeColor")}
                   />
-                  <label htmlFor="theme-red">테마색</label>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 justify-between">
+                  <label htmlFor="theme-eye" className="text-sm md:text-base">
+                    눈동자색
+                  </label>
                   <input
                     type="radio"
                     name="theme"
@@ -183,9 +187,11 @@ function FilterPopup({
                     checked={type === "eyeColor"}
                     onChange={() => setType("eyeColor")}
                   />
-                  <label htmlFor="theme-eye">눈동자색</label>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 justify-between">
+                  <label htmlFor="theme-hair" className="text-sm md:text-base">
+                    머리색
+                  </label>
                   <input
                     type="radio"
                     name="theme"
@@ -193,7 +199,6 @@ function FilterPopup({
                     checked={type === "hairColor"}
                     onChange={() => setType("hairColor")}
                   />
-                  <label htmlFor="theme-hair">머리색</label>
                 </div>
               </div>
 

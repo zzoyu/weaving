@@ -1,7 +1,10 @@
 import { Notification } from "@/types/notification";
 import { createClient } from "@/utils/supabase/server";
 
-export async function fetchFriendRequestsByProfileId(id: number) {
+export async function fetchFriendRequestsByProfileId(id?: number) {
+  if (!id) {
+    throw new Error("id is required");
+  }
   const supabase = createClient();
 
   const { data: friendRequests, error } = await supabase
@@ -20,6 +23,25 @@ export async function fetchFriendRequestsByProfileId(id: number) {
   return { friendRequests };
 }
 
+export async function fetchHasNotificationsByProfileId(
+  profileId?: number
+): Promise<{ hasNotifications: boolean }> {
+  if (!profileId) return { hasNotifications: false };
+  const supabase = createClient();
+
+  const { data: notifications, error: notificationsError } = await supabase
+    .from("notification")
+    .select("id")
+    .eq("to_profile_id", profileId)
+    .limit(1);
+
+  if (notificationsError) {
+    throw notificationsError;
+  }
+
+  return { hasNotifications: Boolean(notifications?.length) };
+}
+
 export async function fetchNotificationsByProfileId(
   profileId?: number
 ): Promise<{ notifications: Notification[] }> {
@@ -29,7 +51,8 @@ export async function fetchNotificationsByProfileId(
   const { data: notifications, error: notificationsError } = await supabase
     .from("notification")
     .select("*")
-    .or(`from_profile_id.eq.${profileId},to_profile_id.eq.${profileId}`)
+    .eq("to_profile_id", profileId)
+    // .or(`from_profile_id.eq.${profileId},to_profile_id.eq.${profileId}`)
     .order("created_at", { ascending: false });
 
   if (notificationsError) {

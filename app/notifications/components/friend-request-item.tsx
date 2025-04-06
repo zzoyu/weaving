@@ -10,12 +10,18 @@ export default function FriendRequestItem({
   onReject,
 }: {
   profile: Profile;
-  to: number;
+  to?: number;
   onAccept: (from: number, to: number) => void;
   onReject: (from: number, to: number) => void;
 }) {
+  if (!profile) {
+    return null;
+  }
+  if (!to) {
+    return null;
+  }
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between p-4 border-b">
       <div className="flex items-center">
         <Image
           src={profile?.profile_image || ""}

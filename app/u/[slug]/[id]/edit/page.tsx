@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
-import { fetchCharacter } from "../actions";
+import { fetchCharacter, fetchRelationships } from "../actions";
 import EditForm from "./components/edit-form";
 
 export default async function EditPage({
@@ -15,6 +15,8 @@ export default async function EditPage({
 
   const data = await fetchCharacter(params.id);
 
+  const relationships = await fetchRelationships(params.id);
+
   if (!data) {
     throw new Error("Character not found");
   }
@@ -22,7 +24,9 @@ export default async function EditPage({
   return (
     <main>
       <h1>{data?.name}</h1>
-      <EditForm data={data} />
+      {data && (
+        <EditForm character={data} relationships={relationships || []} />
+      )}
     </main>
   );
 }

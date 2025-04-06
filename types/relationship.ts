@@ -13,7 +13,7 @@ import urlLove from "@/public/assets/icons/relationship/love.svg?url";
 import { url } from "inspector";
 
 export interface Relationship {
-  id: number;
+  id?: number;
   name: string;
   from_id: number;
   to_id: number;

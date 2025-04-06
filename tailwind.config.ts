@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+  darkMode: ["class"],
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -12,26 +13,26 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          100: "#97E6AB",
-          200: "#79C78E",
-          300: "#36834F",
+          "100": "#97E6AB",
+          "200": "#79C78E",
+          "300": "#36834F",
         },
         secondary: {
-          100: "#68E7FA",
-          200: "#008496",
+          "100": "#68E7FA",
+          "200": "#008496",
         },
         accent: {
-          100: "#F18D8D",
-          200: "#883036",
+          "100": "#F18D8D",
+          "200": "#883036",
         },
         text: {
-          100: "#333333",
-          200: "#5C5C5C",
+          "100": "#333333",
+          "200": "#5C5C5C",
         },
         background: {
-          100: "#F4F4F4",
-          200: "#EAEAEA",
-          300: "#C1C1C1",
+          "100": "#F4F4F4",
+          "200": "#EAEAEA",
+          "300": "#C1C1C1",
         },
         symbol: {
           love: "#FF4C4C",
@@ -50,8 +51,13 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 };
 export default config;

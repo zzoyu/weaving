@@ -6,7 +6,13 @@ import ImageIcon from "@/public/assets/icons/image.svg";
 import { useRef, useState } from "react";
 import UploadImageCropLayer from "./upload-image-crop-layer";
 
-export default function UploadImage({}) {
+export default function UploadImage({
+  name,
+  useThumbnail,
+}: {
+  name: string;
+  useThumbnail?: boolean;
+}) {
   const imageFileInput = useRef<HTMLInputElement>(null);
   const thumbnailFileInput = useRef<HTMLInputElement>(null);
   const [imagePreviewSrc, setImagePreviewSrc] = useState<string>("");
@@ -19,8 +25,17 @@ export default function UploadImage({}) {
     console.log(event);
     const file = event.target.files?.[0];
     if (!file) return;
-    setIsOpenedCropLayer(true);
     setImagePreviewSrc(URL.createObjectURL(file!));
+    if (useThumbnail) {
+      setIsOpenedCropLayer(true);
+    } else {
+      // Directly handle the file without opening the crop layer
+      if (thumbnailFileInput.current) {
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        thumbnailFileInput.current.files = dataTransfer.files;
+      }
+    }
   }
 
   return (
@@ -32,26 +47,29 @@ export default function UploadImage({}) {
       >
         <input
           type="file"
-          // except only image files without gif file
           accept="image/jpeg, image/jpg, image/png"
-          name="image"
+          name={`${name}-image`}
           className="hidden"
           ref={imageFileInput}
           onChange={handleChangeImage}
         />
-        <input
-          type="file"
-          name="thumbnail"
-          className="hidden"
-          ref={thumbnailFileInput}
-        />
-        {imagePreviewSrc && !isOpenedCropLayer ? (
-          <Image
-            width={240}
-            height={240}
-            alt={"캐릭터 이미지"}
-            src={imagePreviewSrc}
+        {useThumbnail && (
+          <input
+            type="file"
+            name={`${name}-thumbnail`}
+            className="hidden"
+            ref={thumbnailFileInput}
           />
+        )}
+        {imagePreviewSrc && !isOpenedCropLayer ? (
+          <div className="relative w-full h-full overflow-hidden">
+            <Image
+              className="object-contain w-full h-full"
+              alt={"캐릭터 이미지"}
+              src={imagePreviewSrc}
+              layout="fill"
+            />
+          </div>
         ) : (
           <ImageIcon width={32} height={32} />
         )}
@@ -61,16 +79,18 @@ export default function UploadImage({}) {
           src={imagePreviewSrc}
           onCrop={(blob) => {
             console.log(blob);
-            const file = new File(
-              [blob],
-              "thumbnail." + blob.type.split("/")[0],
-              {
-                type: blob.type,
-              }
-            );
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-            thumbnailFileInput.current!.files = dataTransfer.files;
+            if (useThumbnail && thumbnailFileInput.current) {
+              const file = new File(
+                [blob],
+                `${name}-thumbnail.` + blob.type.split("/")[0],
+                {
+                  type: blob.type,
+                }
+              );
+              const dataTransfer = new DataTransfer();
+              dataTransfer.items.add(file);
+              thumbnailFileInput.current.files = dataTransfer.files;
+            }
             setIsOpenedCropLayer(false);
           }}
           onClose={() => {

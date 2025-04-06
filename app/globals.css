@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* @plugin "tailwindcss/typography"; */
+
 @layer base {
   h1 {
     @apply text-4xl font-poiret-one;
@@ -11,6 +13,9 @@
   }
   input {
     @apply bg-background-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded border;
+  }
+  :root {
+    --radius: 0.5rem;
   }
 }
 
@@ -40,7 +45,6 @@ html {
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
   background: var(--background-hex);
   @apply antialiased h-full font-pretendard;
 }

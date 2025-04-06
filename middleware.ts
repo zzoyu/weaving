@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/utils/supabase/middleware";
 import { createClient } from "./utils/supabase/server";
 import { isGrantedUserByProfileSlug } from "./actions/is-granted-user";
-import { fetchProfileById } from "./app/profile/actions";
+import { fetchProfileByUserId } from "./app/profile/actions";
 
 export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith("/profile")) {

@@ -1,11 +1,16 @@
 "use client";
+import React, { ReactNode } from "react";
 
-import ShareIcon from "@/public/assets/icons/share.svg";
-
-interface ButtonShareProps {
+interface ButtonShareProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   shareData?: ShareData;
+  children?: ReactNode;
 }
-export default function ButtonShare({ shareData }: ButtonShareProps) {
+export default function ButtonShare({
+  shareData,
+  children,
+  ...props
+}: ButtonShareProps) {
   function handleShare() {
     if (!navigator.userAgent.includes("Mobile")) {
       navigator.clipboard.writeText(window.location.href);
@@ -18,9 +23,5 @@ export default function ButtonShare({ shareData }: ButtonShareProps) {
       }
     }
   }
-  return (
-    <button className="p-1">
-      <ShareIcon width={24} height={24} onClick={handleShare} />
-    </button>
-  );
+  return <button {...props}>{children}</button>;
 }

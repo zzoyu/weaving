@@ -12,7 +12,7 @@ import ListCharacter from "./components/list-character/list-character";
 import ButtonAddCharacter from "./components/button-add-character";
 import { ButtonHome } from "./components/button-home";
 import ButtonShare from "./components/button-share";
-import { fetchProfileById } from "@/app/profile/actions";
+import { fetchProfileByUserId } from "@/app/profile/actions";
 import ButtonRequestFriend from "./components/button-request-friend";
 import ButtonAcceptFriend from "./components/button-accept-friend";
 import { useMemo } from "react";
@@ -34,11 +34,11 @@ export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const { slug } = params;
+  const { slug } = await params;
 
   const { data, error } = await fetchProfileBySlug(slug);
 
-  if (error) {
+  if (!data) {
     return baseMetadata;
   }
 
@@ -73,8 +73,10 @@ export default async function PublicProfilePage({
   let friendDataFromUser: Friend | null = null;
   let isFriend = false;
   if (currentUser?.data.user?.id) {
-    myProfile = await fetchProfileById(currentUser?.data?.user?.id as string);
-    friendDataFromMe = await fetchExactFriendById(myProfile?.id!, data.id!);
+    myProfile = await fetchProfileByUserId(
+      currentUser?.data?.user?.id as string
+    );
+    friendDataFromMe = await fetchExactFriendById(myProfile?.id!, data?.id!);
     friendDataFromUser = await fetchExactFriendById(data.id!, myProfile?.id!);
     isFriend = Boolean(friendDataFromMe || friendDataFromUser);
   }
@@ -96,11 +98,24 @@ export default async function PublicProfilePage({
   return (
     <main className="flex flex-col justify-center items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto">
       {isMine && myProfile && myProfile?.slug && (
-        <TabHeader slug={myProfile.slug} activeIndex={0} />
+        <TabHeader
+          activeIndex={0}
+          data={[
+            {
+              title: "프로필 목록",
+              href: `/u/${myProfile.slug}`,
+            },
+            {
+              title: "캐릭터 추가",
+              href: `/u/${myProfile.slug}/add`,
+            },
+          ]}
+        />
       )}
 
       {!isMine && myProfile && (
         <ButtonRequestFriend
+          isMine={isMine}
           isFriend={isFriend}
           isApproved={
             !!(

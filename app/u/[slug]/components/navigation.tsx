@@ -3,12 +3,12 @@ import Link from "next/link";
 import HeartIcon from "@/public/assets/icons/navigation/heart.svg";
 import UserIcon from "@/public/assets/icons/navigation/user.svg";
 import ProfileIcon from "@/public/assets/icons/navigation/profile.svg";
-import { fetchProfileById } from "@/app/profile/actions";
+import { fetchProfileByUserId } from "@/app/profile/actions";
 
 export async function Navigation() {
   const supabase = createClient();
   const { data } = await supabase.auth.getUser();
-  const responseProfile = await fetchProfileById(data?.user?.id as string);
+  const responseProfile = await fetchProfileByUserId(data?.user?.id as string);
 
   const navItems = [
     {
