@@ -16,6 +16,8 @@ import {
   fetchCharacter,
   fetchIsFavoriteById,
 } from "@/app/u/[slug]/[id]/actions";
+import ButtonLock from "./components/button-lock";
+import { ButtonUnlock } from "./components/button-unlock";
 
 export default async function Header({
   params,
@@ -56,6 +58,12 @@ export default async function Header({
             </PopoverTrigger>
             <PopoverContent className="w-40" autoFocus={false} tabIndex={-1}>
               <div className="flex flex-col gap-2 p-4 justify-start items-start">
+                {character?.id && !character?.password && (
+                  <ButtonLock characterId={character.id} />
+                )}
+                {character?.id && character?.password?.length && (
+                  <ButtonUnlock characterId={character.id} />
+                )}
                 <Link
                   href={`${params.id}/edit`}
                   className="text-base text-gray-700 hover:text-primary-500"

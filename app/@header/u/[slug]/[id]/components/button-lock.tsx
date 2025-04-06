@@ -1,0 +1,70 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { setCharacterPassword } from "../actions";
+import { useState } from "react";
+
+export function DialogLock({ characterId }: { characterId: number }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <button
+          className="text-base text-gray-700 hover:text-primary-500"
+          onClick={() => setIsOpen(true)}
+        >
+          캐릭터 잠금
+        </button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <form
+          action={(formData) => setCharacterPassword(formData)}
+          onSubmit={() => setIsOpen(false)}
+        >
+          <input type="hidden" name="character_id" value={characterId} />
+          <DialogHeader>
+            <DialogTitle>캐릭터 잠금</DialogTitle>
+            <DialogDescription>
+              캐릭터를 잠그면 로그인 하지 않은 사용자는 비밀번호를 입력해야
+              열람이 가능합니다. 친구로 등록된 유저는 비밀번호를 입력하지 않고도
+              열람이 가능합니다.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="password" className="text-right">
+                비밀번호
+              </Label>
+              <Input
+                id="password"
+                name="password"
+                className="col-span-3"
+                type="password"
+                placeholder="비밀번호를 입력하세요."
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit">잠그기</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export default function ButtonLock({ characterId }: { characterId: number }) {
+  return <DialogLock characterId={characterId} />;
+}

@@ -31,7 +31,25 @@ export default function UploadImageCropLayer({
   }
   const imageRef = useRef<HTMLImageElement>(null);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (imageRef.current) {
+      const img = imageRef.current;
+      img.onload = () => {
+        const aspectRatio = img.naturalWidth / img.naturalHeight;
+        const containerWidth = window.innerWidth * 0.8;
+        const containerHeight = window.innerHeight * 0.8;
+        const containerAspectRatio = containerWidth / containerHeight;
+
+        if (aspectRatio > containerAspectRatio) {
+          img.style.width = `${containerWidth}px`;
+          img.style.height = "auto";
+        } else {
+          img.style.width = "auto";
+          img.style.height = `${containerHeight}px`;
+        }
+      };
+    }
+  }, [src]);
 
   const [crop, setCrop] = useState<Crop>({
     unit: "px", // Can be 'px' or '%'

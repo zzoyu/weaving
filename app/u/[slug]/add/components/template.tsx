@@ -75,7 +75,9 @@ export default function CharacterAddTemplate({
     >
       <input type="hidden" name="profile_slug" value={slug} />
 
-      <UploadImage />
+      <UploadImage name={"face"} useThumbnail />
+      <UploadImage name={"half"} />
+      <UploadImage name={"full"} />
       <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
         <input
           className=" text-2xl w-full max-w-72 text-center border-primary-100 focus:outline-none"
