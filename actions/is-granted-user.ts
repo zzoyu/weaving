@@ -1,6 +1,6 @@
 "use server";
 
-import { fetchProfileById } from "@/app/profile/actions";
+import { fetchProfileByUserId } from "@/app/profile/actions";
 import { createClient } from "@/utils/supabase/server";
 
 export async function isGrantedUserByProfileSlug(slug: string | null) {
@@ -11,7 +11,7 @@ export async function isGrantedUserByProfileSlug(slug: string | null) {
 
   if (!currentUser?.data?.user?.id) return false;
 
-  const myProfile: Profile | null = await fetchProfileById(
+  const myProfile: Profile | null = await fetchProfileByUserId(
     currentUser?.data?.user?.id as string
   );
 

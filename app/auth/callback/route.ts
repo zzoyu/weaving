@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 // The client you created from the Server-Side Auth instructions
 import { createClient } from "@/utils/supabase/server";
-import { fetchProfileById } from "@/app/profile/actions";
+import { fetchProfileByUserId } from "@/app/profile/actions";
 import { createProfile } from "@/app/profile/create/actions";
 
 export async function GET(request: Request) {
@@ -20,7 +20,7 @@ export async function GET(request: Request) {
       if (userError) {
         return NextResponse.error();
       }
-      const profile = await fetchProfileById(userData?.user?.id as string);
+      const profile = await fetchProfileByUserId(userData?.user?.id as string);
       if (!profile) {
         const payload = new FormData();
         payload.append("user_id", userData?.user?.id as string);

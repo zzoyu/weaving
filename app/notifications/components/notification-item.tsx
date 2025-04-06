@@ -13,6 +13,7 @@ export default function NotificationItem({
     <Link
       passHref={true}
       href={`notifications/${String(notification.id)}?to=${encodeURIComponent(String(notification?.landing_url))}`}
+      className="flex flex-col gap-2 p-4 border-b border-gray-200"
     >
       {notification.content}
     </Link>

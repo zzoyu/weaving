@@ -83,7 +83,6 @@ export default async function CharacterPage({
     data?.id,
     myProfile?.data?.id
   );
-  // const isFavorite = await fetchIsFavoriteById(Number(id));
 
   if (error) {
     throw error;

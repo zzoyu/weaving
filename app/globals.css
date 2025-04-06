@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* @plugin "tailwindcss/typography"; */
+
 @layer base {
   h1 {
     @apply text-4xl font-poiret-one;

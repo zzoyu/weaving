@@ -10,7 +10,7 @@ export async function fetchCharacter(id: number): Promise<Character | null> {
   const { data, error } = await supabase
     .from("character")
     .select()
-    .eq("id", id)
+    .eq("id", Number(id))
     .maybeSingle();
   if (error) {
     throw error;
@@ -92,16 +92,19 @@ export async function deleteRelationship(id: number) {
 }
 
 export async function fetchIsFavoriteById(
-  character_id: number
+  profile_id?: number,
+  character_id?: number
 ): Promise<boolean> {
+  if (!profile_id || !character_id) return false;
   const supabase = createClient();
   const { data, error } = await supabase
     .from("character_favorite")
     .select()
+    .eq("profile_id", profile_id)
     .eq("character_id", character_id)
     .single();
   if (error) {
-    throw error;
+    return false;
   }
 
   // if data exists, it means it's favorited. if not, it's not favorited.

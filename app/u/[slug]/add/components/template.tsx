@@ -9,8 +9,16 @@ import UploadImage from "./upload-image/upload-image";
 import ListProperties from "./properties/list-properties";
 import { ColorProperties } from "./properties/color-properties";
 import InputHashtag from "./input-hashtag";
+import { ButtonAddRelationship } from "./button-add-relationship";
+import { Relationship } from "@/types/relationship";
 
-export default function CharacterAddTemplate({ slug }: { slug: string }) {
+export default function CharacterAddTemplate({
+  slug,
+  profileId,
+}: {
+  slug: string;
+  profileId: number;
+}) {
   const [properties, setProperties] = useState([...baseProperties]);
   const [hashtags, setHashtags] = useState<string>("");
   const [currentHashtag, setCurrentHashtag] = useState<string>("");
@@ -27,6 +35,38 @@ export default function CharacterAddTemplate({ slug }: { slug: string }) {
     { key: "eyeColor", value: "", type: EPropertyType.COLOR },
     { key: "hairColor", value: "", type: EPropertyType.COLOR },
   ]);
+
+  const [relationships, setRelationships] = useState<
+    {
+      name: string;
+      characterName: string;
+      characterId: number;
+    }[]
+  >([]);
+  const handleRelationshipNameChange = ({
+    characterId,
+    name,
+    characterName,
+  }: {
+    characterId: number;
+    name: string;
+    characterName: string;
+  }) => {
+    const updatedRelationships = [...relationships];
+    const relationshipIndex = updatedRelationships.findIndex(
+      (relationship) => relationship.characterId === characterId
+    );
+    if (relationshipIndex !== -1) {
+      updatedRelationships[relationshipIndex].name = name;
+    } else {
+      updatedRelationships.push({
+        name,
+        characterName,
+        characterId,
+      });
+    }
+    setRelationships(updatedRelationships);
+  };
 
   return (
     <form
@@ -59,6 +99,13 @@ export default function CharacterAddTemplate({ slug }: { slug: string }) {
       />
       <hr className="mt-2 p-2 w-full" />
       <ColorProperties properties={colors} handler={setColors} editable />
+      <hr className="mt-2 p-2 w-full" />
+      <ButtonAddRelationship
+        relationships={relationships}
+        onChange={setRelationships}
+        editable
+        profileId={profileId}
+      />
       <hr className="mt-2 p-2 w-full" />
       <InputHashtag
         value={currentHashtag}

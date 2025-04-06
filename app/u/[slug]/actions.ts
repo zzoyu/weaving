@@ -29,14 +29,20 @@ export async function fetchProfileById(id?: string) {
 }
 
 export async function fetchProfilesByIds(ids: number[]): Promise<{
-  requestedProfiles: Profile[];
+  requestedProfiles: Pick<
+    Profile,
+    "nickname" | "profile_image" | "id" | "slug"
+  >[];
   error: any;
 }> {
   if (!ids || ids.length === 0) {
     return { requestedProfiles: [], error: null };
   }
   const supabase = createClient();
-  const { data, error } = await supabase.from("profile").select().in("id", ids);
+  const { data, error } = await supabase
+    .from("profile")
+    .select("nickname, profile_image, id, slug")
+    .in("id", ids);
 
   if (error) {
     throw error;
@@ -58,6 +64,40 @@ export async function fetchCharactersByProfileId(profileId: number) {
   };
 
   return { data: data ?? [], error };
+}
+
+export async function fetchCharactersFromFriendsByProfileId(
+  profileId: number
+): Promise<Character[]> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("profile_friend")
+    .select("to_profile_id,from_profile_id")
+    .eq("is_approved", true)
+    .or(`from_profile_id.eq.${profileId},to_profile_id.eq.${profileId}`);
+  if (error) {
+    throw error;
+  }
+  const friendIds = data.map((friend) =>
+    friend.to_profile_id === profileId
+      ? friend.from_profile_id
+      : friend.to_profile_id
+  );
+  if (friendIds.length === 0) {
+    return [];
+  }
+  const { data: characters, error: error2 } = (await supabase
+    .from("character")
+    .select()
+    .in("profile_id", friendIds)
+    .order("created_at", { ascending: true })) as {
+    data: Character[];
+    error: any;
+  };
+  if (error2) {
+    throw error2;
+  }
+  return characters;
 }
 
 export async function requestFriendByProfileId(
