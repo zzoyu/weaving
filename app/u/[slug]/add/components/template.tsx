@@ -3,7 +3,7 @@
 import { baseProperties } from "@/lib/base-properties";
 import { TabHeader } from "../../components/tab-header";
 import { useMemo, useState } from "react";
-import { EPropertyType, Property } from "@/types/character";
+import { EPropertyType, Property, Character } from "@/types/character";
 import { createCharacter } from "../actions";
 import UploadImage from "./upload-image/upload-image";
 import ListProperties from "./properties/list-properties";
@@ -15,9 +15,11 @@ import { Relationship } from "@/types/relationship";
 export default function CharacterAddTemplate({
   slug,
   profileId,
+  character,
 }: {
   slug: string;
   profileId: number;
+  character?: Character;
 }) {
   const [properties, setProperties] = useState([...baseProperties]);
   const [hashtags, setHashtags] = useState<string>("");
@@ -30,39 +32,43 @@ export default function CharacterAddTemplate({
       .map((tag) => tag.trim());
   }, [hashtags]);
 
-  const [colors, setColors] = useState<Property[]>([
-    { key: "themeColor", value: "", type: EPropertyType.COLOR },
-    { key: "eyeColor", value: "", type: EPropertyType.COLOR },
-    { key: "hairColor", value: "", type: EPropertyType.COLOR },
-  ]);
+  const [colors, setColors] = useState<Property[]>(
+    character?.properties?.filter((property) =>
+      ["themeColor", "eyeColor", "hairColor"].includes(property.key)
+    ) || [
+      { key: "themeColor", value: "", type: EPropertyType.COLOR },
+      { key: "eyeColor", value: "", type: EPropertyType.COLOR },
+      { key: "hairColor", value: "", type: EPropertyType.COLOR },
+    ]
+  );
+  const combinedProperties = useMemo(() => {
+    const colorProperties = colors.map((color) => ({
+      key: color.key,
+      value: color.value,
+      type: color.type,
+    }));
 
-  const [relationships, setRelationships] = useState<
-    {
-      name: string;
-      characterName: string;
-      characterId: number;
-    }[]
-  >([]);
-  const handleRelationshipNameChange = ({
-    characterId,
-    name,
-    characterName,
-  }: {
-    characterId: number;
-    name: string;
-    characterName: string;
-  }) => {
+    return [...properties, ...colorProperties];
+  }, [properties, colors]);
+
+  const [relationships, setRelationships] = useState<Relationship[]>([]);
+  const handleRelationshipNameChange = (character: Character) => {
     const updatedRelationships = [...relationships];
     const relationshipIndex = updatedRelationships.findIndex(
-      (relationship) => relationship.characterId === characterId
+      (relationship) => relationship.to_id === character.id
     );
     if (relationshipIndex !== -1) {
-      updatedRelationships[relationshipIndex].name = name;
+      updatedRelationships[relationshipIndex].name = character.name;
     } else {
       updatedRelationships.push({
-        name,
-        characterName,
-        characterId,
+        from_id: profileId,
+        to_id: character.id,
+        name: character.name,
+        character: {
+          id: character.id,
+          name: character.name,
+          thumbnail: character.thumbnail,
+        },
       });
     }
     setRelationships(updatedRelationships);
@@ -71,7 +77,7 @@ export default function CharacterAddTemplate({
   return (
     <form
       className="flex flex-col gap-2 items-center w-full md:max-w-md p-4"
-      action={(formData) => createCharacter(formData, properties)}
+      action={(formData) => createCharacter(formData, combinedProperties)}
     >
       <input type="hidden" name="profile_slug" value={slug} />
 

@@ -41,7 +41,7 @@ export default function ButtonAddRelationship({
             const exsisitingRelationship = relationships?.find(
               (relationship) => relationship.to_id === toId
             );
-            if (exsisitingRelationship) {
+            if (exsisitingRelationship?.id) {
               console.log("update", exsisitingRelationship);
               updateRelationship(exsisitingRelationship.id, type);
             } else {

@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Character } from "@/types/character";
+import { Relationship } from "@/types/relationship";
 import React, { useState } from "react";
 import {
   fetchCharactersByProfileId,
@@ -37,11 +38,7 @@ function RelationshipModal({
     characterId: number;
     characterName: string;
   }) => void;
-  relationships?: {
-    name: string;
-    characterName: string;
-    characterId: number;
-  }[];
+  relationships?: Relationship[];
   characters: Character[];
   isLoading?: boolean;
 }) {
@@ -56,9 +53,12 @@ function RelationshipModal({
         <div className="gap-2 p-4 flex flex-col">
           {!isLoading && characters.length > 0 ? (
             characters.map((character) => (
-              <div className="flex justify-between" key={character.id}>
+              <div
+                className="flex justify-between justify-center"
+                key={character.id}
+              >
                 <div
-                  className="flex items-center cursor-pointer gap-4"
+                  className="flex items-center justify-center cursor-pointer gap-4"
                   onClick={() => {}}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -132,27 +132,12 @@ export function ButtonAddRelationship({
   relationships,
 }: {
   profileId: number;
-  onChange: (
-    data: {
-      name: string;
-      characterId: number;
-      characterName: string;
-    }[]
-  ) => void;
+  onChange: (data: Relationship[]) => void;
   editable?: boolean;
-  relationships: {
-    name: string;
-    characterName: string;
-    characterId: number;
-  }[];
+  relationships: Relationship[];
 }) {
-  const [tempRelationships, setRelationships] = useState<
-    {
-      name: string;
-      characterName: string;
-      characterId: number;
-    }[]
-  >(relationships);
+  const [tempRelationships, setRelationships] =
+    useState<Relationship[]>(relationships);
 
   const handleTypeChange = (index: number, newType: string) => {
     const updatedRelationships = [...tempRelationships];
@@ -210,7 +195,7 @@ export function ButtonAddRelationship({
           }}
           addRelationship={(data) => {
             const existingItem = tempRelationships.find(
-              (rel) => rel.characterId === data.characterId
+              (rel) => rel.character?.id === data.characterId
             );
             if (existingItem) {
               existingItem.name = data.name;
@@ -222,17 +207,29 @@ export function ButtonAddRelationship({
             setRelationships((prev) => [
               ...prev,
               {
+                id: Date.now(), // Temporary ID for new relationships
                 name: data.name,
-                characterName: data.characterName,
-                characterId: data.characterId,
+                from_id: profileId,
+                to_id: data.characterId,
+                character: {
+                  id: data.characterId,
+                  name: data.characterName,
+                  thumbnail: "", // Placeholder for thumbnail
+                },
               },
             ]);
             onChange([
               ...tempRelationships,
               {
+                id: Date.now(),
                 name: data.name,
-                characterName: data.characterName,
-                characterId: data.characterId,
+                from_id: profileId,
+                to_id: data.characterId,
+                character: {
+                  id: data.characterId,
+                  name: data.characterName,
+                  thumbnail: "",
+                },
               },
             ]);
             setIsOpen(false);
@@ -244,6 +241,7 @@ export function ButtonAddRelationship({
           className="py-2 rounded bg-secondary-100 text-sm w-full"
           type="button"
           onClick={() => {
+            setIsLoading(true);
             setIsMine(true);
             openModal(true);
           }}
@@ -256,6 +254,7 @@ export function ButtonAddRelationship({
           className="py-2 rounded bg-secondary-100 text-sm w-full"
           type="button"
           onClick={() => {
+            setIsLoading(true);
             setIsMine(false);
             openModal(false);
           }}
@@ -269,10 +268,10 @@ export function ButtonAddRelationship({
         <div className="bg-gray-200 p-4 rounded">
           {tempRelationships.map((relationship, index) => (
             <div
-              key={index}
+              key={relationship.id}
               className="flex items-center justify-between py-2 border-b last:border-b-0"
             >
-              <span>{relationship.characterName}</span>
+              <span>{relationship.character?.name}</span>
               <div className="flex items-center gap-2">
                 <span
                   className={
