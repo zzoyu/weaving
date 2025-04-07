@@ -72,20 +72,23 @@ export function ProfileCard({
       )}
       <Carousel>
         <CarouselContent>
-          {character?.image?.map?.((image: string, index: number) => (
-            <CarouselItem
-              key={`image-${index}`}
-              className="relative flex justify-center items-center w-full"
-            >
-              <Image
-                src={image}
-                alt={character.name}
-                width={200}
-                height={200}
-                className="rounded-lg object-contain w-full h-full max-h-96"
-              />
-            </CarouselItem>
-          ))}
+          {character?.image?.map?.((image: string, index: number) => {
+            if (!image) return null;
+            return (
+              <CarouselItem
+                key={`image-${index}`}
+                className="relative flex justify-center items-center w-full"
+              >
+                <Image
+                  src={image}
+                  alt={character.name}
+                  width={200}
+                  height={200}
+                  className="rounded-lg object-contain w-full h-full max-h-96"
+                />
+              </CarouselItem>
+            );
+          })}
         </CarouselContent>
         <CarouselPrevious />
         <CarouselNext />
