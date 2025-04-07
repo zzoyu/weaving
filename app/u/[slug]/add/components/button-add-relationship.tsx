@@ -51,7 +51,7 @@ function RelationshipModal({
     >
       <div className="w-96 h-fit bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <h2 className="text-center text-xl my-4">캐릭터 선택</h2>
-        <div className="gap-2 p-4 flex flex-col w-full h-full overflow-y-auto h-96">
+        <div className="gap-2 p-4 flex flex-col w-full overflow-y-auto h-96">
           {isLoading ? (
             Array.from({ length: 5 }).map((_, index) => (
               <div
