@@ -10,6 +10,7 @@ import {
 import { Character } from "@/types/character";
 import { Relationship } from "@/types/relationship";
 import React, { useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   fetchCharactersByProfileId,
   fetchCharactersFromFriendsByProfileId,
@@ -50,11 +51,24 @@ function RelationshipModal({
     >
       <div className="w-96 h-fit bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <h2 className="text-center text-xl my-4">캐릭터 선택</h2>
-        <div className="gap-2 p-4 flex flex-col">
-          {!isLoading && characters.length > 0 ? (
+        <div className="gap-2 p-4 flex flex-col w-full h-full overflow-y-auto h-96">
+          {isLoading ? (
+            Array.from({ length: 5 }).map((_, index) => (
+              <div
+                className="flex justify-between items-center gap-2"
+                key={index}
+              >
+                <Skeleton
+                  key={index}
+                  className="w-16 h-16 rounded-full shrink-0"
+                />
+                <Skeleton key={index} className="h-16 w-full rounded" />
+              </div>
+            ))
+          ) : characters.length > 0 ? (
             characters.map((character) => (
               <div
-                className="flex justify-between justify-center"
+                className="flex justify-between items-center"
                 key={character.id}
               >
                 <div
@@ -108,7 +122,7 @@ function RelationshipModal({
               </div>
             ))
           ) : (
-            <div className="col-span-7 text-center">
+            <div className="col-span-7 text-center h-full flex items-center justify-center">
               <p>추가 할 수 있는 캐릭터가 없습니다.</p>
             </div>
           )}
@@ -236,6 +250,7 @@ export function ButtonAddRelationship({
           }}
           relationships={tempRelationships}
           characters={characters}
+          isLoading={isLoading}
         />
         <button
           className="py-2 rounded bg-secondary-100 text-sm w-full"
