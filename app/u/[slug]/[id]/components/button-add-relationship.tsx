@@ -8,8 +8,6 @@ import {
   deleteRelationship,
   updateRelationship,
 } from "../actions";
-import { revalidatePath } from "next/cache";
-import { on } from "events";
 import { Relationship } from "@/types/relationship";
 
 export default function ButtonAddRelationship({

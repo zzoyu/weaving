@@ -9,9 +9,11 @@ import UploadImageCropLayer from "./upload-image-crop-layer";
 export default function UploadImage({
   name,
   useThumbnail,
+  icon,
 }: {
   name: string;
   useThumbnail?: boolean;
+  icon?: JSX.Element;
 }) {
   const imageFileInput = useRef<HTMLInputElement>(null);
   const thumbnailFileInput = useRef<HTMLInputElement>(null);
@@ -62,14 +64,26 @@ export default function UploadImage({
           />
         )}
         {imagePreviewSrc && !isOpenedCropLayer ? (
-          <div className="relative w-full h-full overflow-hidden">
+          <div className="relative w-full h-full">
             <Image
-              className="object-contain w-full h-full"
+              className="object-contain w-full h-full overflow-hidden"
               alt={"캐릭터 이미지"}
               src={imagePreviewSrc}
               layout="fill"
             />
+            {useThumbnail && thumbnailFileInput.current?.files?.[0] && (
+              <div className="absolute z-10 -bottom-2 -right-2 w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
+                <Image
+                  className="object-cover w-full h-full"
+                  alt={"썸네일 이미지"}
+                  src={URL.createObjectURL(thumbnailFileInput.current.files[0])}
+                  layout="fill"
+                />
+              </div>
+            )}
           </div>
+        ) : icon ? (
+          icon
         ) : (
           <ImageIcon width={32} height={32} />
         )}

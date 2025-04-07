@@ -32,18 +32,20 @@ export async function createCharacter(
   console.log(properties);
   if (!name) throw new Error("Name is required");
 
+  // get hashtag
+  const hashtags = formData.get("hashtags") as string;
+
   const imageFiles = [
-    formData.get("face-image") as File,
     formData.get("half-image") as File,
     formData.get("full-image") as File,
   ];
 
-  const thumbnail = formData.get("face-thumbnail") as File;
+  const thumbnail = formData.get("half-thumbnail") as File;
   console.log(imageFiles);
   if (!imageFiles[0]) throw new Error("Image is required");
   if (!thumbnail) throw new Error("Thumbnail is required");
   if (imageFiles.length === 0) throw new Error("Image is required");
-  if (imageFiles.length > 3) throw new Error("Image is too many");
+  if (imageFiles.length > 2) throw new Error("Image is too many");
 
   const thumbnailUrl = await uploadImage(
     thumbnail,
@@ -71,6 +73,7 @@ export async function createCharacter(
       image: imageUrls,
       thumbnail: thumbnailUrl,
       properties,
+      hashtags,
     },
   ]);
 
@@ -110,12 +113,11 @@ export async function updateCharacter(
   if (!name) throw new Error("Name is required");
 
   const imageFiles = [
-    formData.get("face-image") as File,
     formData.get("half-image") as File,
     formData.get("full-image") as File,
   ];
 
-  const thumbnail = formData.get("face-thumbnail") as File;
+  const thumbnail = formData.get("half-thumbnail") as File;
   console.log(imageFiles);
   if (!imageFiles[0]) throw new Error("Image is required");
   if (!thumbnail) throw new Error("Thumbnail is required");

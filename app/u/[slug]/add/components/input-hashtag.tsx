@@ -15,6 +15,7 @@ export default function InputHashtag({
     <div className="flex flex-col gap-2 w-full">
       <h2 className="text-xl font-bold">해시태그</h2>
       <div className="w-full relative flex items-center">
+        <input type="hidden" name="hashtags" value={hashtags.join(" ")} />
         <span className="absolute ml-2 font-bold text-primary-200">#</span>
         <input
           type="text"
