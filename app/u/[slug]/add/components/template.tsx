@@ -11,6 +11,9 @@ import { ColorProperties } from "./properties/color-properties";
 import InputHashtag from "./input-hashtag";
 import { ButtonAddRelationship } from "./button-add-relationship";
 import { Relationship } from "@/types/relationship";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import IconHalf from "@/public/assets/icons/image/half.svg";
+import IconFull from "@/public/assets/icons/image/full.svg";
 
 export default function CharacterAddTemplate({
   slug,
@@ -81,9 +84,29 @@ export default function CharacterAddTemplate({
     >
       <input type="hidden" name="profile_slug" value={slug} />
 
-      <UploadImage name={"face"} useThumbnail />
-      <UploadImage name={"half"} />
-      <UploadImage name={"full"} />
+      <Tabs
+        defaultValue="half"
+        className="w-full flex flex-col justify-center items-center"
+      >
+        <TabsList>
+          <TabsTrigger value="half">상반신*</TabsTrigger>
+          <TabsTrigger value="full">전신</TabsTrigger>
+        </TabsList>
+        <TabsContent value="half" forceMount className="hidden data-[state=active]:block">
+          <UploadImage
+            name={"half"}
+            useThumbnail
+            icon={<IconHalf className="w-32 h-32" />}
+          />
+        </TabsContent>
+        <TabsContent value="full" forceMount className="hidden data-[state=active]:block">
+          <UploadImage
+            name={"full"}
+            icon={<IconFull className="w-32 h-32" />}
+          />
+        </TabsContent>
+      </Tabs>
+
       <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
         <input
           className=" text-2xl w-full max-w-72 text-center border-primary-100 focus:outline-none"

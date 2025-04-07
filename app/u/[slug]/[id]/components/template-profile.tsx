@@ -20,6 +20,9 @@ export default function TemplateProfile({
   slug: string;
   id: string;
 }) {
+  const hashtags = characterData.hashtags
+    ? characterData.hashtags.split(" ")
+    : [];
   return (
     <div className="w-full p-4 md:max-w-[40rem] mx-auto flex flex-col gap-8">
       {isMyProfile && (
@@ -34,14 +37,6 @@ export default function TemplateProfile({
         isMine={isMyProfile}
       />
 
-      {isMyProfile && (
-        <ButtonAddRelationship
-          character={characterData}
-          relationships={relationships || []}
-          currentPath={`/u/${slug}/${id}`}
-        />
-      )}
-
       <hr className="mt-10 p-0 w-full" />
 
       <ColorProperties properties={colorProperties} />
@@ -49,11 +44,27 @@ export default function TemplateProfile({
       <hr className="mt-0 p-0 w-full" />
 
       {relationships && (
-        <RelationshipCard
-          character={characterData}
-          relationships={relationships}
-          isMine={isMyProfile}
-        />
+        <>
+          <RelationshipCard
+            character={characterData}
+            relationships={relationships}
+            isMine={isMyProfile}
+          />
+          <hr className="mt-0 p-0 w-full" />
+        </>
+      )}
+
+      {hashtags && (
+        <div className=" inline-flex flex-wrap gap-2">
+          {hashtags.map((tag, index) => (
+            <span
+              key={index}
+              className="rounded-full px-8 py-1 bg-primary-100 border border-primary-300 relative"
+            >
+              #{tag}
+            </span>
+          ))}
+        </div>
       )}
     </div>
   );

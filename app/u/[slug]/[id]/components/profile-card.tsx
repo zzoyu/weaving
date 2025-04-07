@@ -5,6 +5,13 @@ import Image from "next/image";
 import { useState } from "react";
 import RelationshipGraph from "./relationship-graph";
 import { Relationship } from "@/types/relationship";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 function PopupRelationshipGraph({
   character,
@@ -63,12 +70,29 @@ export function ProfileCard({
           isMine={isMine}
         />
       )}
-      <Image
-        src={character?.image?.[0] || ""}
-        alt={character.name}
-        width={300}
-        height={300}
-      />
+      <Carousel>
+        <CarouselContent>
+          {character?.image?.map?.((image: string, index: number) => {
+            if (!image) return null;
+            return (
+              <CarouselItem
+                key={`image-${index}`}
+                className="relative flex justify-center items-center w-full"
+              >
+                <Image
+                  src={image}
+                  alt={character.name}
+                  width={200}
+                  height={200}
+                  className="rounded-lg object-contain w-full h-full max-h-96"
+                />
+              </CarouselItem>
+            );
+          })}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
       <div className="flex flex-col justify-center items-center gap-2 w-full">
         <h2 className="text-2xl font-bold">{character.name}</h2>
         <p className="text-sm text-primary-200">

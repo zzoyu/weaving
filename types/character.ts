@@ -13,7 +13,7 @@ type Property = {
 interface Character {
   id: number;
   name: string;
-  image?: string;
+  image?: string[];
   thumbnail?: string;
   properties: Property[];
   hashtags?: string;
