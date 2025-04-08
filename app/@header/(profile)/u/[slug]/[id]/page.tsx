@@ -35,7 +35,10 @@ export default async function Header({
   const isFavorite = await fetchIsFavoriteById(profile?.id, Number(params.id));
 
   return (
-    <header className="fixed top-0 flex w-full items-center justify-between py-4 px-2 md:px-8 bg-transparent">
+    <header
+      className="fixed top-0 flex w-full items-center justify-between py-4 px-2 md:px-8 bg-transparent"
+      key={params.id}
+    >
       <Link href="./">
         <button className="p-1 rounded-full h-10 flex items-center justify-center text-2xl  bg-transparent">
           <span className="text-primary-300">← 프로필</span>
