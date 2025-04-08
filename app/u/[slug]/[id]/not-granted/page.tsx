@@ -20,7 +20,7 @@ export default function Page({
         redirect(`/u/${params.slug}/${params.id}`);
       }}
     >
-      <InputPassword />;
+      <InputPassword />
     </form>
   );
 }

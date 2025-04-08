@@ -2,26 +2,16 @@ import { notFound, redirect } from "next/navigation";
 import {
   compareCharacterPassword,
   fetchCharacter,
-  fetchIsFavoriteById,
   fetchRelationships,
 } from "./actions";
-import Image from "next/image";
-import { ListRelationship } from "./components/list-relationship";
-import ButtonAddRelationship from "./components/button-add-relationship";
-import RelationshipGraph from "./components/relationship-graph";
 import { createClient } from "@/utils/supabase/server";
 import {
   fetchIsFriendByIds,
   fetchProfileById,
   fetchProfileBySlug,
 } from "../actions";
-import { ProfileCard } from "./components/profile-card";
-import { ColorProperties } from "../add/components/properties/color-properties";
-import { RelationshipCard } from "./components/relationship-card";
 import { EPropertyType } from "@/types/character";
-import InputPassword from "./components/input-password";
 import TemplateProfile from "./components/template-profile";
-import { useState } from "react";
 import { cookies } from "next/headers";
 import { Metadata, ResolvingMetadata } from "next";
 
