@@ -24,13 +24,6 @@ export async function middleware(request: NextRequest) {
     }
     if (!data?.user?.id) return NextResponse.rewrite(new URL("/", request.url));
   }
-
-  if (request.nextUrl.pathname === "/") {
-    const client = createClient();
-    const { data, error } = await client.auth?.getUser?.();
-    if (data?.user?.id)
-      return NextResponse.rewrite(new URL("/profile", request.url));
-  }
   // update user's auth session
   return await updateSession(request);
 }
