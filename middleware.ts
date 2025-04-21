@@ -18,10 +18,12 @@ export async function middleware(request: NextRequest) {
       if (response.error || !response?.data)
         return NextResponse.rewrite(new URL("/", request.url));
       return NextResponse.rewrite(
-        new URL("/u/" + response.data.slug + "/edit", request.url)
+        new URL("/u/" + response.data.slug, request.url)
       );
     }
+
     return NextResponse.rewrite(new URL("/", request.url));
+
   }
   // update user's auth session
   return await updateSession(request);
