@@ -7,9 +7,11 @@ import Link from "next/link";
 import { use, useEffect, useState } from "react";
 import ProfileImage from "./profile-image";
 import { signInWithTwitter, signOut } from "@/lib/client-authentication";
+import { useRouter } from "next/navigation";
 
 export default function MainMenu() {
   const supabase = createClient();
+  const router = useRouter();
 
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [user, setUser] = useState<User>();
@@ -18,9 +20,7 @@ export default function MainMenu() {
     const { data, error } = await signInWithTwitter();
     if (error) {
       console.error(error);
-    }
-    if (data) {
-      console.log(data);
+      throw error;
     }
   }
 
@@ -30,10 +30,15 @@ export default function MainMenu() {
         if (session) {
           setIsSignedIn(true);
           setUser(session.user);
-          console.log(session.user);
+          router.replace("/profile");
         } else {
           setIsSignedIn(false);
         }
+      }
+      if (event === "SIGNED_OUT") {
+        setIsSignedIn(false);
+        setUser(undefined);
+        router.refresh();
       }
     });
     return () => {
