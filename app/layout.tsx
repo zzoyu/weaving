@@ -42,7 +42,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={clsx(fontTitle.variable, fontBody.variable)}>
-        <div className="flex flex-col h-full py-10 md:py-14">
+        <div className="flex flex-col h-full py-14">
           {header}
           <div className="w-full h-full overflow-y-auto pb-20">{children}</div>
           {navigation}

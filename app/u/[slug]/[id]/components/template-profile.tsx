@@ -24,7 +24,7 @@ export default function TemplateProfile({
     ? characterData.hashtags.split(" ")
     : [];
   return (
-    <div className="w-screen h-screen p-4 mx-auto flex flex-col gap-8">
+    <div className="w-full max-w-4xl mx-auto flex flex-col gap-6">
       {isMyProfile && (
         <div className="flex items-center justify-end">
           {/* favorite icon */}
@@ -55,7 +55,7 @@ export default function TemplateProfile({
       )}
 
       {hashtags && (
-        <div className=" inline-flex flex-wrap gap-2">
+        <div className="inline-flex flex-wrap gap-2">
           {hashtags.map((tag, index) => (
             <span
               key={index}
