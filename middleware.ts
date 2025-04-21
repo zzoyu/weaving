@@ -9,20 +9,21 @@ export async function middleware(request: NextRequest) {
     console.log("profile");
     const client = createClient();
     const { data, error } = await client.auth?.getUser?.();
-    if (request.nextUrl.pathname === "/profile/edit" && data?.user?.id) {
+    if (data?.user?.id) {
       const response = await client
         .from("profile")
         .select()
         .eq("user_id", data.user.id)
         .single();
-      if (response.error) return NextResponse.error();
-      if (!response.data)
+      if (response.error || !response?.data)
         return NextResponse.rewrite(new URL("/", request.url));
       return NextResponse.rewrite(
-        new URL("/u/" + response.data.slug + "/edit", request.url)
+        new URL("/u/" + response.data.slug, request.url)
       );
     }
-    if (!data?.user?.id) return NextResponse.rewrite(new URL("/", request.url));
+
+    return NextResponse.rewrite(new URL("/", request.url));
+
   }
   // update user's auth session
   return await updateSession(request);
