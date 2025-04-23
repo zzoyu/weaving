@@ -18,6 +18,8 @@ import ButtonAcceptFriend from "./components/button-accept-friend";
 import { useMemo } from "react";
 import { TabHeader } from "./components/tab-header";
 import { ProfileList } from "./components/profile-list";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Props = {
   params: { slug: string };
@@ -96,44 +98,55 @@ export default async function PublicProfilePage({
   favoriteCharacters = await fetchFavoriteCharactersByProfileId(data.id);
 
   return (
-    <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
-      {isMine && myProfile && myProfile?.slug && (
-        <TabHeader
-          activeIndex={0}
-          data={[
-            {
-              title: "프로필 목록",
-              href: `/u/${myProfile.slug}`,
-            },
-            {
-              title: "캐릭터 추가",
-              href: `/u/${myProfile.slug}/add`,
-            },
-          ]}
-        />
-      )}
+    <Suspense
+      fallback={
+        <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
+          <Skeleton className="h-10 w-32 mb-4" />
+          <Skeleton className="h-10 w-32 mb-4" />
+          <Skeleton className="h-40 w-full mb-4" />
+          <Skeleton className="h-40 w-full mb-4" />
+        </main>
+      }
+    >
+      <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
+        {isMine && myProfile && myProfile?.slug && (
+          <TabHeader
+            activeIndex={0}
+            data={[
+              {
+                title: "프로필 목록",
+                href: `/u/${myProfile.slug}`,
+              },
+              {
+                title: "캐릭터 추가",
+                href: `/u/${myProfile.slug}/add`,
+              },
+            ]}
+          />
+        )}
 
-      {!isMine && myProfile && (
-        <ButtonRequestFriend
+        {!isMine && myProfile && (
+          <ButtonRequestFriend
+            isMine={isMine}
+            isFriend={isFriend}
+            isApproved={
+              !!(
+                Boolean(friendDataFromMe?.is_approved) ||
+                Boolean(friendDataFromUser?.is_approved)
+              )
+            }
+            from={myProfile}
+            to={data}
+          />
+        )}
+        <ProfileList
+          characters={responseCharacters?.data || []}
+          slug={slug}
           isMine={isMine}
-          isFriend={isFriend}
-          isApproved={
-            !!(
-              Boolean(friendDataFromMe?.is_approved) ||
-              Boolean(friendDataFromUser?.is_approved)
-            )
-          }
-          from={myProfile}
-          to={data}
+          favoriteCharacters={favoriteCharacters}
+          profileId={myProfile?.id}
         />
-      )}
-      <ProfileList
-        characters={responseCharacters?.data || []}
-        slug={slug}
-        isMine={isMine}
-        favoriteCharacters={favoriteCharacters}
-        profileId={myProfile?.id}
-      />
-    </main>
+      </main>
+    </Suspense>
   );
 }
