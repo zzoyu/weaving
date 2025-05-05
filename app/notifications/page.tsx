@@ -43,8 +43,6 @@ export default async function NotificationsPage({}: {}) {
     friendRequests.map((friendRequest) => friendRequest.from_profile_id)
   );
 
-  await new Promise((resolve) => setTimeout(resolve, 10000));
-
   return (
     <main className="flex flex-col justify-start pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full">
       <div className="fixed top-0 w-full flex p-4">

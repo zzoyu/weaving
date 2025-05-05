@@ -23,7 +23,6 @@ export default async function EditPage({
 
   return (
     <main>
-      <h1>{data?.name}</h1>
       {data && (
         <EditForm character={data} relationships={relationships || []} />
       )}
