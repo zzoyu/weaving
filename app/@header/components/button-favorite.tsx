@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { startTransition, useOptimistic, useState } from "react";
 
 import IconFavorite from "@/public/assets/icons/favorite.svg";
 import IconFavoriteFilled from "@/public/assets/icons/favorite_filled.svg";
@@ -20,16 +20,27 @@ export default function ButtonFavorite({
   characterId,
   profileId,
 }: ButtonFavoriteProps) {
-  const [isFavorite, setIsFavorite] = useState(initFavorite);
+  const [isFavorite, setIsFavorite] = useOptimistic(
+    initFavorite,
+    (state, newState: boolean) => newState
+  );
 
   const handleFavoriteClick = () => {
-    if (!isFavorite) {
-      addFavoriteCharacter(profileId, characterId);
-    } else {
-      removeFavoriteCharacter(profileId, characterId);
-    }
-
+    // 상태를 즉시 업데이트
     setIsFavorite(!isFavorite);
+
+    startTransition(async () => {
+      try {
+        if (isFavorite) {
+          await addFavoriteCharacter(profileId, characterId);
+        } else {
+          await removeFavoriteCharacter(profileId, characterId);
+        }
+      } catch (error) {
+        // 요청 실패 시 상태 롤백
+        setIsFavorite(!isFavorite);
+      }
+    });
   };
 
   return (
