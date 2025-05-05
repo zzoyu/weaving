@@ -5,8 +5,12 @@ import ProfileEditForm from "./profile-edit-form";
 import { AlertDialogConfirm } from "@/components/alert-dialog-confirm";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import { deleteAccount } from "../actions";
+import { useRouter } from "next/navigation";
 
 export default function MypageTemplate({ profile }: { profile: Profile }) {
+  const router = useRouter();
+
   function handleLogout() {
     const client = createClient();
     client.auth.signOut().then(() => {
@@ -27,7 +31,10 @@ export default function MypageTemplate({ profile }: { profile: Profile }) {
           </button>
           <Separator className="my-2" />
           <AlertDialogConfirm
-            onConfirm={() => {}}
+            onConfirm={async () => {
+              await deleteAccount(profile.user_id);
+              router.replace("/");
+            }}
             title="정말 탈퇴하시겠습니까?"
             description="탈퇴 후에는 모든 데이터가 삭제됩니다."
             actionText="탈퇴하기"
