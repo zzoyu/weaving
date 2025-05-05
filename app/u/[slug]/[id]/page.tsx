@@ -1,5 +1,3 @@
-import { lazy } from "react";
-
 import { notFound, redirect } from "next/navigation";
 import {
   compareCharacterPassword,
@@ -18,10 +16,8 @@ import { cookies } from "next/headers";
 import { Metadata, ResolvingMetadata } from "next";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-
-const TemplateProfile = dynamic(() => import("./components/template-profile"), {
-  suspense: true,
-});
+import TemplateProfile from "./components/template-profile";
+import Loading from "./loading";
 
 interface Props {
   params: { slug: string; id: number };
@@ -112,17 +108,8 @@ export default async function CharacterPage({
   }
 
   return (
-    <Suspense
-      fallback={
-        <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
-          <Skeleton className="h-10 w-32 mb-4" />
-          <Skeleton className="h-10 w-32 mb-4" />
-          <Skeleton className="h-40 w-full mb-4" />
-          <Skeleton className="h-40 w-full mb-4" />
-        </main>
-      }
-    >
-      <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
+    <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
+      <Suspense fallback={<Loading />}>
         <TemplateProfile
           {...{
             characterData,
@@ -133,7 +120,7 @@ export default async function CharacterPage({
             id,
           }}
         />
-      </main>
-    </Suspense>
+      </Suspense>
+    </main>
   );
 }
