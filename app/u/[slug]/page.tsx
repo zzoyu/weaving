@@ -6,18 +6,13 @@ import {
 } from "./actions";
 import { Metadata, ResolvingMetadata } from "next";
 import { createClient } from "@/utils/supabase/server";
-import Information from "./components/information";
 import { ErrorCode } from "@/types/error-code";
-import ListCharacter from "./components/list-character/list-character";
-import ButtonAddCharacter from "./components/button-add-character";
-import { ButtonHome } from "./components/button-home";
-import ButtonShare from "./components/button-share";
 import { fetchProfileByUserId } from "@/app/profile/actions";
 import ButtonRequestFriend from "./components/button-request-friend";
-import ButtonAcceptFriend from "./components/button-accept-friend";
-import { useMemo } from "react";
 import { TabHeader } from "./components/tab-header";
 import { ProfileList } from "./components/profile-list";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 type Props = {
   params: { slug: string };
@@ -96,7 +91,7 @@ export default async function PublicProfilePage({
   favoriteCharacters = await fetchFavoriteCharactersByProfileId(data.id);
 
   return (
-    <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
+    <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-10 min-h-fit relative">
       {isMine && myProfile && myProfile?.slug && (
         <TabHeader
           activeIndex={0}
@@ -127,13 +122,15 @@ export default async function PublicProfilePage({
           to={data}
         />
       )}
-      <ProfileList
-        characters={responseCharacters?.data || []}
-        slug={slug}
-        isMine={isMine}
-        favoriteCharacters={favoriteCharacters}
-        profileId={myProfile?.id}
-      />
+      <Suspense fallback={<Loading />}>
+        <ProfileList
+          characters={responseCharacters?.data || []}
+          slug={slug}
+          isMine={isMine}
+          favoriteCharacters={favoriteCharacters}
+          profileId={myProfile?.id}
+        />
+      </Suspense>
     </main>
   );
 }

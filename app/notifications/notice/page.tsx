@@ -5,6 +5,7 @@ import ButtonBack from "../components/button-back";
 import { TabHeader } from "@/app/u/[slug]/components/tab-header";
 import { fetchHasNotificationsByProfileId } from "../actions";
 import { fetchProfileByUserId } from "@/app/profile/actions";
+import { Suspense } from "react";
 
 export default async function NoticePage() {
   const noticeList = await fetchNoticeList();
@@ -14,6 +15,7 @@ export default async function NoticePage() {
   const { hasNotifications } = (await fetchHasNotificationsByProfileId(
     profileResponse?.id
   )) ?? { hasNotifications: false };
+
   return (
     <main className="flex flex-col justify-start pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto">
       <div className="fixed top-0 w-full flex p-4">

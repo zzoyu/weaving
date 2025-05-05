@@ -70,7 +70,7 @@ export function ProfileCard({
           isMine={isMine}
         />
       )}
-      <Carousel>
+      <Carousel className="w-full max-w-2xl">
         <CarouselContent>
           {character?.image?.map?.((image: string, index: number) => {
             if (!image) return null;

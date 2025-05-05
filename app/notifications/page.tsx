@@ -64,6 +64,7 @@ export default async function NotificationsPage({}: {}) {
               { title: "공지", href: "/notifications/notice", isNew: true },
             ]}
           />
+          <h2 className="text-xl font-bold mt-4 mb-2 ml-4">친구 요청</h2>
           <ul>
             {requestedProfiles.map((requestedProfile) => (
               <FriendRequestItem
@@ -76,6 +77,7 @@ export default async function NotificationsPage({}: {}) {
             ))}
           </ul>
 
+          <h2 className="text-xl font-bold mt-4 mb-2 ml-4">알림 목록</h2>
           <ul>
             <li>
               {notifications.length ? (

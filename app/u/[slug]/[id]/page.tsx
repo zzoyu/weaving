@@ -11,9 +11,13 @@ import {
   fetchProfileBySlug,
 } from "../actions";
 import { EPropertyType } from "@/types/character";
-import TemplateProfile from "./components/template-profile";
+import dynamic from "next/dynamic";
 import { cookies } from "next/headers";
 import { Metadata, ResolvingMetadata } from "next";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import TemplateProfile from "./components/template-profile";
+import Loading from "./loading";
 
 interface Props {
   params: { slug: string; id: number };
@@ -105,16 +109,18 @@ export default async function CharacterPage({
 
   return (
     <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
-      <TemplateProfile
-        {...{
-          characterData,
-          relationships: relationships || [],
-          colorProperties,
-          isMyProfile,
-          slug,
-          id,
-        }}
-      />
+      <Suspense fallback={<Loading />}>
+        <TemplateProfile
+          {...{
+            characterData,
+            relationships: relationships || [],
+            colorProperties,
+            isMyProfile,
+            slug,
+            id,
+          }}
+        />
+      </Suspense>
     </main>
   );
 }
