@@ -30,14 +30,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  header,
-  navigation,
-  params,
 }: Readonly<{
   children: React.ReactNode;
-  header: React.ReactNode;
-  navigation: React.ReactNode;
-  params: { slug: string; id: string };
 }>) {
   return (
     <html lang="ko">
