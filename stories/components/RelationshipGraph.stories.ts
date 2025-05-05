@@ -1,4 +1,4 @@
-import RelationshipGraph from "@/app/u/[slug]/[id]/components/relationship-graph";
+import RelationshipGraph from "@/app/(with-ui)/u/[slug]/[id]/components/relationship-graph";
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
 import ProfileDummy from "../assets/components/profile-dummy.png";
