@@ -18,6 +18,7 @@ import {
 } from "@/app/(with-ui)/u/[slug]/[id]/actions";
 import ButtonLock from "./components/button-lock";
 import { ButtonUnlock } from "./components/button-unlock";
+import { DialogShareButton } from "./components/dialog-share-button";
 
 export default async function Header({
   params,
@@ -73,9 +74,7 @@ export default async function Header({
                 >
                   프로필 수정
                 </Link>
-                <ButtonShare className="text-base text-gray-700 hover:text-primary-500">
-                  프로필 공유
-                </ButtonShare>
+                <DialogShareButton>프로필 공유</DialogShareButton>
                 <ButtonDelete className="text-base text-gray-700 hover:text-primary-500">
                   프로필 삭제
                 </ButtonDelete>
