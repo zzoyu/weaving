@@ -1,15 +1,20 @@
 "use client";
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { baseProperties } from "@/lib/base-properties";
-import { useMemo, useState, useEffect, Suspense } from "react";
-import { Character, EPropertyType, Property } from "@/types/character";
+import { Character, Property } from "@/types/character";
 import { Relationship } from "@/types/relationship";
-import ListProperties from "../../../add/components/properties/list-properties";
-import { ColorProperties } from "../../../add/components/properties/color-properties";
+import { Suspense, useMemo, useState } from "react";
+import { updateCharacter } from "../../../add/actions";
 import { ButtonAddRelationship } from "../../../add/components/button-add-relationship";
 import InputHashtag from "../../../add/components/input-hashtag";
-import { updateCharacter } from "../../../add/actions";
+import { ColorProperties } from "../../../add/components/properties/color-properties";
+import ListProperties from "../../../add/components/properties/list-properties";
+import UploadImage from "../../../add/components/upload-image/upload-image";
 import Loading from "../../loading";
+
+import IconFull from "@/public/assets/icons/image/full.svg";
+import IconHalf from "@/public/assets/icons/image/half.svg";
 
 export default function CharacterEditTemplate({
   character,
@@ -37,6 +42,18 @@ export default function CharacterEditTemplate({
 
   const [relationshipsState, setRelationships] = useState<Relationship[]>(
     relationships || []
+  );
+
+  const [currentThumbnail, setCurrentThumbnail] = useState<string>(
+    character.thumbnail || ""
+  );
+
+  const [currentHalfImage, setCurrentHalfImage] = useState<string>(
+    character.image?.[0] || ""
+  );
+
+  const [currentFullImage, setCurrentFullImage] = useState<string>(
+    character.image?.[1] || ""
   );
 
   const handleRelationshipNameChange = ({
@@ -73,8 +90,38 @@ export default function CharacterEditTemplate({
       <Suspense fallback={<Loading />}>
         <form
           className="flex flex-col gap-2 items-center w-full md:max-w-md p-4"
-          action={(formData) => updateCharacter(formData, properties)}
+          action={(formData) => updateCharacter(formData, [...properties, ...currentColors])}
         >
+          <input type="hidden" name="character_id" value={character.id} />
+          <input type="hidden" name="original_image" value={character.image?.[0]} />
+          <input type="hidden" name="original_image" value={character.image?.[1]} />
+          <input type="hidden" name="original_thumbnail" value={character.thumbnail} />
+
+          <Tabs
+            defaultValue="half"
+            className="w-full flex flex-col justify-center items-center"
+          >
+            <TabsList>
+              <TabsTrigger value="half">상반신*</TabsTrigger>
+              <TabsTrigger value="full">전신</TabsTrigger>
+            </TabsList>
+            <TabsContent value="half" forceMount className="hidden data-[state=active]:block">
+              <UploadImage
+                name={"half"}
+                useThumbnail
+                icon={<IconHalf className="w-32 h-32" />}
+                imageUrl={currentHalfImage}
+                thumbnailUrl={currentThumbnail}
+              />
+            </TabsContent>
+            <TabsContent value="full" forceMount className="hidden data-[state=active]:block">
+              <UploadImage
+                name={"full"}
+                icon={<IconFull className="w-32 h-32" />}
+                imageUrl={currentFullImage}
+              />
+            </TabsContent>
+          </Tabs>
           <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
             <input
               className="text-2xl w-full max-w-72 text-center border-primary-100 focus:outline-none"
@@ -106,6 +153,7 @@ export default function CharacterEditTemplate({
             onChange={setRelationships}
             editable
             profileId={character.profile_id}
+            character={character}
           />
           <hr className="mt-2 p-2 w-full" />
           <InputHashtag

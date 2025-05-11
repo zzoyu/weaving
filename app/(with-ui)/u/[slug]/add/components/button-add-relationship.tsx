@@ -7,10 +7,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Character } from "@/types/character";
 import { Relationship } from "@/types/relationship";
 import React, { useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
   fetchCharactersByProfileId,
   fetchCharactersFromFriendsByProfileId,
@@ -144,11 +144,13 @@ export function ButtonAddRelationship({
   onChange,
   editable = false,
   relationships,
+  character,
 }: {
   profileId: number;
   onChange: (data: Relationship[]) => void;
   editable?: boolean;
   relationships: Relationship[];
+  character?: Character;
 }) {
   const [tempRelationships, setRelationships] =
     useState<Relationship[]>(relationships);
@@ -183,7 +185,7 @@ export function ButtonAddRelationship({
       if (isMine) {
         const { data } = await fetchCharactersByProfileId(profileId);
         if (data) {
-          setCharacters(data);
+          setCharacters(data.filter((relatable) => relatable.id !== character?.id));
         }
       }
       if (!isMine) {
