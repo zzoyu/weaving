@@ -1,19 +1,18 @@
 "use client";
 
-import { baseProperties } from "@/lib/base-properties";
-import { TabHeader } from "../../components/tab-header";
-import { useMemo, useState } from "react";
-import { EPropertyType, Property, Character } from "@/types/character";
-import { createCharacter } from "../actions";
-import UploadImage from "./upload-image/upload-image";
-import ListProperties from "./properties/list-properties";
-import { ColorProperties } from "./properties/color-properties";
-import InputHashtag from "./input-hashtag";
-import { ButtonAddRelationship } from "./button-add-relationship";
-import { Relationship } from "@/types/relationship";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import IconHalf from "@/public/assets/icons/image/half.svg";
+import { baseProperties } from "@/lib/base-properties";
 import IconFull from "@/public/assets/icons/image/full.svg";
+import IconHalf from "@/public/assets/icons/image/half.svg";
+import { Character, EPropertyType, Property } from "@/types/character";
+import { Relationship } from "@/types/relationship";
+import { useMemo, useState } from "react";
+import { createCharacter } from "../actions";
+import { ButtonAddRelationship } from "./button-add-relationship";
+import InputHashtag from "./input-hashtag";
+import { ColorProperties } from "./properties/color-properties";
+import ListProperties from "./properties/list-properties";
+import UploadImage from "./upload-image/upload-image";
 
 export default function CharacterAddTemplate({
   slug,

@@ -10,15 +10,21 @@ export default function UploadImage({
   name,
   useThumbnail,
   icon,
+  imageUrl,
+  thumbnailUrl,
 }: {
   name: string;
   useThumbnail?: boolean;
   icon?: JSX.Element;
+  imageUrl?: string;
+  thumbnailUrl?: string;
 }) {
   const imageFileInput = useRef<HTMLInputElement>(null);
   const thumbnailFileInput = useRef<HTMLInputElement>(null);
-  const [imagePreviewSrc, setImagePreviewSrc] = useState<string>("");
+  const [imagePreviewSrc, setImagePreviewSrc] = useState<string>(imageUrl || "");
   const [isOpenedCropLayer, setIsOpenedCropLayer] = useState<boolean>(false);
+
+  const [isEdited, setIsEdited] = useState<boolean>(false);
 
   function handlePickImage() {
     imageFileInput.current?.click();
@@ -28,6 +34,7 @@ export default function UploadImage({
     const file = event.target.files?.[0];
     if (!file) return;
     setImagePreviewSrc(URL.createObjectURL(file!));
+    setIsEdited(true);
     if (useThumbnail) {
       setIsOpenedCropLayer(true);
     } else {
@@ -42,6 +49,12 @@ export default function UploadImage({
 
   return (
     <div className="relative">
+      <input type="hidden" name={`${name}-is-edited`} value={isEdited ? "true" : "false"} />
+      {isEdited && (
+        <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-sm">
+          *
+        </div>
+      )}
       <button
         className=" w-60 h-60 flex justify-center items-center bg-gray-200 dark:bg-gray-800 rounded-lg"
         onClick={handlePickImage}
@@ -71,12 +84,12 @@ export default function UploadImage({
               src={imagePreviewSrc}
               layout="fill"
             />
-            {useThumbnail && thumbnailFileInput.current?.files?.[0] && (
+            {useThumbnail && (thumbnailFileInput.current?.files?.[0] || thumbnailUrl) && (
               <div className="absolute z-10 -bottom-2 -right-2 w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
                 <Image
                   className="object-cover w-full h-full"
                   alt={"썸네일 이미지"}
-                  src={URL.createObjectURL(thumbnailFileInput.current.files[0])}
+                  src={thumbnailFileInput.current?.files?.[0] ? URL.createObjectURL(thumbnailFileInput.current.files[0]) : thumbnailUrl!}
                   layout="fill"
                 />
               </div>
