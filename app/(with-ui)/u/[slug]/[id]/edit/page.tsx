@@ -14,6 +14,16 @@ export default async function EditPage({
   }
 
   const data = await fetchCharacter(params.id);
+  if (!data) {
+    throw new Error("Character not found");
+  }
+  const colorProperties = data?.properties?.filter(
+    (property) => property.type === "color"
+  );
+
+  data.properties = data?.properties?.filter(
+    (property) => property.type !== "color"
+  );
 
   const relationships = await fetchRelationships(params.id);
 
@@ -24,7 +34,9 @@ export default async function EditPage({
   return (
     <main>
       {data && (
-        <EditForm character={data} relationships={relationships || []} />
+        <EditForm character={data} colors={
+          colorProperties
+        } relationships={relationships || []} />
       )}
     </main>
   );

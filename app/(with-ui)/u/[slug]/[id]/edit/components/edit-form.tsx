@@ -14,8 +14,10 @@ import Loading from "../../loading";
 export default function CharacterEditTemplate({
   character,
   relationships,
+  colors,
 }: {
   character: Character;
+  colors: Property[];
   relationships?: Relationship[];
 }) {
   const [properties, setProperties] = useState(
@@ -31,13 +33,7 @@ export default function CharacterEditTemplate({
       .map((tag) => tag.trim());
   }, [hashtags]);
 
-  const [colors, setColors] = useState<Property[]>(
-    character.properties || [
-      { key: "themeColor", value: "", type: EPropertyType.COLOR },
-      { key: "eyeColor", value: "", type: EPropertyType.COLOR },
-      { key: "hairColor", value: "", type: EPropertyType.COLOR },
-    ]
-  );
+  const [currentColors, setCurrentColors] = useState<Property[]>(colors);
 
   const [relationshipsState, setRelationships] = useState<Relationship[]>(
     relationships || []
@@ -103,7 +99,7 @@ export default function CharacterEditTemplate({
             }}
           />
           <hr className="mt-2 p-2 w-full" />
-          <ColorProperties properties={colors} handler={setColors} editable />
+          <ColorProperties properties={currentColors} handler={setCurrentColors} editable />
           <hr className="mt-2 p-2 w-full" />
           <ButtonAddRelationship
             relationships={relationships || []}
