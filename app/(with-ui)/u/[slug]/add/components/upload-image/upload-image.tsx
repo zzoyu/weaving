@@ -12,8 +12,10 @@ export default function UploadImage({
   icon,
   imageUrl,
   thumbnailUrl,
+  isEdit = false,
 }: {
   name: string;
+  isEdit?: boolean;
   useThumbnail?: boolean;
   icon?: JSX.Element;
   imageUrl?: string;
@@ -21,7 +23,9 @@ export default function UploadImage({
 }) {
   const imageFileInput = useRef<HTMLInputElement>(null);
   const thumbnailFileInput = useRef<HTMLInputElement>(null);
-  const [imagePreviewSrc, setImagePreviewSrc] = useState<string>(imageUrl || "");
+  const [imagePreviewSrc, setImagePreviewSrc] = useState<string>(
+    imageUrl || ""
+  );
   const [isOpenedCropLayer, setIsOpenedCropLayer] = useState<boolean>(false);
 
   const [isEdited, setIsEdited] = useState<boolean>(false);
@@ -49,8 +53,12 @@ export default function UploadImage({
 
   return (
     <div className="relative">
-      <input type="hidden" name={`${name}-is-edited`} value={isEdited ? "true" : "false"} />
-      {isEdited && (
+      <input
+        type="hidden"
+        name={`${name}-is-edited`}
+        value={isEdited ? "true" : "false"}
+      />
+      {isEdited && isEdit && (
         <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-sm">
           *
         </div>
@@ -84,16 +92,23 @@ export default function UploadImage({
               src={imagePreviewSrc}
               layout="fill"
             />
-            {useThumbnail && (thumbnailFileInput.current?.files?.[0] || thumbnailUrl) && (
-              <div className="absolute z-10 -bottom-2 -right-2 w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
-                <Image
-                  className="object-cover w-full h-full"
-                  alt={"썸네일 이미지"}
-                  src={thumbnailFileInput.current?.files?.[0] ? URL.createObjectURL(thumbnailFileInput.current.files[0]) : thumbnailUrl!}
-                  layout="fill"
-                />
-              </div>
-            )}
+            {useThumbnail &&
+              (thumbnailFileInput.current?.files?.[0] || thumbnailUrl) && (
+                <div className="absolute z-30 -bottom-2 -right-2 w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
+                  <Image
+                    className="object-cover w-full h-full"
+                    alt={"썸네일 이미지"}
+                    src={
+                      thumbnailFileInput.current?.files?.[0]
+                        ? URL.createObjectURL(
+                            thumbnailFileInput.current.files[0]
+                          )
+                        : thumbnailUrl!
+                    }
+                    layout="fill"
+                  />
+                </div>
+              )}
           </div>
         ) : icon ? (
           icon
