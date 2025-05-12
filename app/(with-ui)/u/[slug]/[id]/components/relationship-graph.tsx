@@ -6,13 +6,8 @@ import {
   Relationship,
   relationshipTypeData,
 } from "@/types/relationship";
-import { use, useEffect, useMemo, useRef, useState } from "react";
 import * as d3 from "d3";
-
-import symbolFamily from "@/public/assets/icons/relationship/family.svg";
-import symbolFriend from "@/public/assets/icons/relationship/friend.svg";
-import symbolLove from "@/public/assets/icons/relationship/love.svg";
-import symbolHate from "@/public/assets/icons/relationship/hate.svg";
+import { useEffect, useMemo, useRef } from "react";
 
 export default function RelationshipGraph({
   character,
@@ -150,11 +145,12 @@ export default function RelationshipGraph({
     const r = radius[1];
 
     if (isMine) {
+      console.log(relationship);
       target
         .append("image")
         .attr(
           "xlink:href",
-          relationshipTypeData[relationship.name as ERelationshipType].url.src
+          relationshipTypeData?.[relationship.name as ERelationshipType].url.src
         )
         .attr("width", xScale(5))
         .attr("height", xScale(5))
