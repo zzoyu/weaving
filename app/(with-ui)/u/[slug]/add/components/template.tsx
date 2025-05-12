@@ -97,13 +97,14 @@ export default function CharacterAddTemplate({
                 variant: "default",
               });
               router.push(`/u/${slug}`);
-            } else {
-              toast({
-                title: "캐릭터 생성 실패",
-                description: "다시 시도해 주세요.",
-                variant: "destructive",
-              });
             }
+          })
+          .catch((err) => {
+            toast({
+              title: "캐릭터 생성 실패",
+              description: "캐릭터 생성에 실패했습니다.",
+              variant: "destructive",
+            });
           })
           .finally(() => {
             setIsLoading(false);

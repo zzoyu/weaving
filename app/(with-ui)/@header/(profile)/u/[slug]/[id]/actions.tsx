@@ -2,7 +2,6 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 export async function setCharacterPassword(formData: FormData): Promise<void> {
   const password = formData.get("password") as string;
@@ -52,6 +51,6 @@ export async function deleteCharacterById(id: number) {
     .delete()
     .eq("id", id);
 
-  if (!error) redirect("/profile");
+  if (!error) return true;
   else throw new Error(`Failed to delete character: ${error.message}`);
 }

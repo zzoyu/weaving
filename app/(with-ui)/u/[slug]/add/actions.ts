@@ -4,7 +4,7 @@ import { uploadImage } from "@/actions/upload-image";
 import { Property } from "@/types/character";
 import { ImagePath } from "@/types/image";
 import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export async function createCharacter(
   formData: FormData,
@@ -80,9 +80,9 @@ export async function createCharacter(
     throw error;
   }
 
-  return true;
+  revalidatePath("/u/[slug]");
 
-  // redirect(`/u/${profile_slug}`);
+  return true;
 }
 
 export async function updateCharacter(
@@ -171,5 +171,6 @@ export async function updateCharacter(
     throw error;
   }
 
-  redirect(`/profile`);
+  revalidatePath("/u/[slug]");
+  return true;
 }
