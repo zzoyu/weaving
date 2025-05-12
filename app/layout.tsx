@@ -31,15 +31,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  header,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-  header: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="ko">
       <body className={clsx(fontTitle.variable, fontBody.variable)}>
-        <header />
         {children}
         <Toaster />
       </body>
