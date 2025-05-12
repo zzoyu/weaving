@@ -1,9 +1,9 @@
 "use server";
 
 import { Character } from "@/types/character";
+import { Notification } from "@/types/notification";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
-import { Notification } from "@/types/notification";
 
 export async function fetchProfileBySlug(slug: string) {
   const supabase = createClient();
@@ -155,9 +155,10 @@ export async function removeFriendByProfileId(from: number, to: number) {
   const { data, error } = await supabase
     .from("profile_friend")
     .delete()
-    .eq("from_profile_id", from)
-    .eq("to_profile_id", to);
-
+    .or(
+      `and(from_profile_id.eq.${from},to_profile_id.eq.${to}),and(from_profile_id.eq.${to},to_profile_id.eq.${from})`
+    )
+    .eq("is_approved", true);
   console.log("removeFriendByProfileId", data, error);
 
   revalidatePath("/u/[slug]", "page");
