@@ -43,6 +43,12 @@ function RelationshipModal({
   characters: Character[];
   isLoading?: boolean;
 }) {
+  const filteredCharacters = characters.filter((character) => {
+    const existingRelationship = relationships?.find(
+      (relationship) => relationship.character?.id === character.id
+    );
+    return !existingRelationship;
+  });
   return (
     <div
       className={`fixed inset-0 bg-black bg-opacity-50 z-10 ${
@@ -62,8 +68,8 @@ function RelationshipModal({
                 <Skeleton className="h-16 w-full rounded" />
               </div>
             ))
-          ) : characters.length > 0 ? (
-            characters.map((character) => (
+          ) : filteredCharacters.length > 0 ? (
+            filteredCharacters.map((character) => (
               <div
                 className="flex justify-between items-center"
                 key={character.id}
