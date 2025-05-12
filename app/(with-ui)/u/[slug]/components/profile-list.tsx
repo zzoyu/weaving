@@ -2,14 +2,16 @@
 
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import SearchIcon from "@/public/assets/icons/search.svg";
-import { Character } from "@/types/character";
+import { Character, ColorPropertyKey } from "@/types/character";
 import { colorList } from "@/types/color";
 import clsx from "clsx";
 import { useMemo, useState } from "react";
@@ -131,14 +133,9 @@ export function ProfileList({
 function FilterPopup({
   onUpdate,
 }: {
-  onUpdate: (
-    type: "themeColor" | "eyeColor" | "hairColor",
-    colors: string[]
-  ) => void;
+  onUpdate: (type: ColorPropertyKey, colors: string[]) => void;
 }) {
-  const [type, setType] = useState<"themeColor" | "eyeColor" | "hairColor">(
-    "themeColor"
-  );
+  const [type, setType] = useState<ColorPropertyKey>("themeColor");
   const [color, setColor] = useState<string[]>();
 
   return (
@@ -155,51 +152,42 @@ function FilterPopup({
             {/* 필터 옵션 */}
             <div className="space-y-4 flex flex-col">
               <div>
-                <div className="flex items-center space-x-2 justify-between">
-                  <label
-                    htmlFor="theme-red"
-                    className="text-lg w-full flex justify-between items-center md:text-base"
+                <ToggleGroup
+                  type="single"
+                  className="flex-col"
+                  onValueChange={(newValue) =>
+                    setType(newValue as ColorPropertyKey)
+                  }
+                  value={type}
+                >
+                  <ToggleGroupItem
+                    value="themeColor"
+                    aria-label="테마색"
+                    className="w-full"
                   >
-                    테마색
-                    <input
-                      type="radio"
-                      name="theme"
-                      id="theme-red"
-                      checked={type === "themeColor"}
-                      onChange={() => setType("themeColor")}
-                    />
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2 justify-between">
-                  <label
-                    htmlFor="theme-eye"
-                    className="text-lg w-full flex justify-between items-center md:text-base"
+                    <span className="text-lg w-full flex justify-between items-center md:text-base">
+                      테마색
+                    </span>
+                  </ToggleGroupItem>
+                  <ToggleGroupItem
+                    value="eyeColor"
+                    aria-label="눈동자색"
+                    className="w-full"
                   >
-                    눈동자색
-                    <input
-                      type="radio"
-                      name="theme"
-                      id="theme-eye"
-                      checked={type === "eyeColor"}
-                      onChange={() => setType("eyeColor")}
-                    />
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2 justify-between">
-                  <label
-                    htmlFor="theme-hair"
-                    className="text-lg w-full flex justify-between items-center md:text-base"
+                    <span className="text-lg w-full flex justify-between items-center md:text-base">
+                      눈동자색
+                    </span>
+                  </ToggleGroupItem>
+                  <ToggleGroupItem
+                    value="hairColor"
+                    aria-label="머리색"
+                    className="w-full"
                   >
-                    머리색
-                    <input
-                      type="radio"
-                      name="theme"
-                      id="theme-hair"
-                      checked={type === "hairColor"}
-                      onChange={() => setType("hairColor")}
-                    />
-                  </label>
-                </div>
+                    <span className="text-lg w-full flex justify-between items-center md:text-base">
+                      머리색
+                    </span>
+                  </ToggleGroupItem>
+                </ToggleGroup>
               </div>
 
               <hr />
@@ -233,15 +221,17 @@ function FilterPopup({
                 </div>
               </div>
 
-              <button
-                className="w-full p-4 md:py-2 text-white bg-primary-200 rounded-lg"
-                onClick={() => {
-                  // 필터 적용 로직 추가
-                  onUpdate(type, color || []);
-                }}
-              >
-                검색
-              </button>
+              <SheetClose>
+                <button
+                  className="w-full p-4 md:py-2 text-white bg-primary-200 rounded-lg"
+                  onClick={() => {
+                    // 필터 적용 로직 추가
+                    onUpdate(type, color || []);
+                  }}
+                >
+                  검색
+                </button>
+              </SheetClose>
             </div>
           </SheetDescription>
         </SheetHeader>
