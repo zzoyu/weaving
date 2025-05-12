@@ -140,7 +140,7 @@ function FilterPopup({
 
   return (
     <Sheet>
-      <SheetTrigger>
+      <SheetTrigger asChild>
         <button className="p-2 text-white bg-green-500 rounded-full w-10 h-10">
           ☰
         </button>
