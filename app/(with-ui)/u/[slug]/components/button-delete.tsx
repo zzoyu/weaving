@@ -11,20 +11,23 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Character } from "@/types/character";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
 
 interface ButtonDeleteProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  data: Character;
+  characterId: number;
 }
 
 export default function ButtonDelete({
-  data,
+  characterId,
   children,
   ...props
 }: ButtonDeleteProps) {
+  const router = useRouter();
+  const { toast } = useToast();
   return (
     <AlertDialog>
       <AlertDialogTrigger>
@@ -41,7 +44,24 @@ export default function ButtonDelete({
           <AlertDialogCancel>취소</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
-              deleteCharacterById(data.id);
+              deleteCharacterById(characterId)
+                .then((result) => {
+                  if (result) {
+                    toast({
+                      title: "캐릭터 삭제",
+                      description: "캐릭터가 삭제되었습니다.",
+                    });
+                    router.replace("/profile");
+                  }
+                })
+                .catch((error) => {
+                  toast({
+                    title: "캐릭터 삭제 실패",
+                    description: "잠시 후 다시 시도해주세요.",
+                    variant: "destructive",
+                  });
+                  console.error("Error deleting character:", error);
+                });
             }}
           >
             계속

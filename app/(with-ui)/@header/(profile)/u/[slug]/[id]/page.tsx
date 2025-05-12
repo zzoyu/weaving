@@ -52,7 +52,7 @@ export default async function Header({
             profileId={profile.id}
           />
         )}
-        {isMine && (
+        {isMine && character?.id && (
           <Popover>
             <PopoverTrigger asChild>
               <button className="p-1 border border-primary-100 rounded-full overflow-hidden w-10 h-10 flex items-center justify-center">
@@ -75,7 +75,7 @@ export default async function Header({
                 </Link>
                 <DialogShareButton>프로필 공유</DialogShareButton>
                 <ButtonDelete
-                  data={character}
+                  characterId={character.id}
                   className="text-base text-gray-700 hover:text-primary-500"
                 >
                   프로필 삭제
