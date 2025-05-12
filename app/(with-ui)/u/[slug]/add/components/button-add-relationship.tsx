@@ -58,11 +58,8 @@ function RelationshipModal({
                 className="flex justify-between items-center gap-2"
                 key={index}
               >
-                <Skeleton
-                  key={index}
-                  className="w-16 h-16 rounded-full shrink-0"
-                />
-                <Skeleton key={index} className="h-16 w-full rounded" />
+                <Skeleton className="w-16 h-16 rounded-full shrink-0" />
+                <Skeleton className="h-16 w-full rounded" />
               </div>
             ))
           ) : characters.length > 0 ? (
@@ -185,7 +182,9 @@ export function ButtonAddRelationship({
       if (isMine) {
         const { data } = await fetchCharactersByProfileId(profileId);
         if (data) {
-          setCharacters(data.filter((relatable) => relatable.id !== character?.id));
+          setCharacters(
+            data.filter((relatable) => relatable.id !== character?.id)
+          );
         }
       }
       if (!isMine) {
@@ -288,6 +287,16 @@ export function ButtonAddRelationship({
               key={relationship.id}
               className="flex items-center justify-between py-2 border-b last:border-b-0"
             >
+              <input
+                type="hidden"
+                name={`relationship_to`}
+                value={relationship.to_id}
+              />
+              <input
+                type="hidden"
+                name={`relationship_name`}
+                value={relationship.name}
+              />
               <span>{relationship.character?.name}</span>
               <div className="flex items-center gap-2">
                 <span

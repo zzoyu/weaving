@@ -5,6 +5,7 @@ import { Property } from "@/types/character";
 import { ImagePath } from "@/types/image";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
+import { createRelationship } from "../[id]/actions";
 
 export async function createCharacter(
   formData: FormData,
@@ -14,6 +15,8 @@ export async function createCharacter(
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
   const profile_slug = formData.get("profile_slug") as string;
+  const relationship_to = formData.getAll("relationship_to") as string[];
+  const relationship_name = formData.getAll("relationship_name") as string[];
 
   // print all of the formData
   for (const [key, value] of formData.entries()) {
@@ -64,21 +67,33 @@ export async function createCharacter(
     })
   );
 
-  const { data, error } = await supabase.from("character").insert([
-    {
-      profile_id,
-      name,
-      description,
-      image: imageUrls,
-      thumbnail: thumbnailUrl,
-      properties,
-      hashtags,
-    },
-  ]);
+  const { data, error } = await supabase
+    .from("character")
+    .insert([
+      {
+        profile_id,
+        name,
+        description,
+        image: imageUrls,
+        thumbnail: thumbnailUrl,
+        properties,
+        hashtags,
+      },
+    ])
+    .select()
+    .single();
 
-  if (error) {
+  if (error || !data) {
     throw error;
   }
+
+  console.log(data);
+  console.log("to_name", relationship_name);
+  console.log("to_id", relationship_to);
+
+  relationship_to.forEach(async (to_id, index) => {
+    await createRelationship(data?.id, Number(to_id), relationship_name[index]);
+  });
 
   revalidatePath("/u/[slug]");
 
