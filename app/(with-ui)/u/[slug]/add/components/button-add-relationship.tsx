@@ -89,11 +89,11 @@ function RelationshipModal({
                 <Select
                   onValueChange={(value) => {
                     const selectedType = relationshipTypes.find(
-                      (type) => type.label === value
+                      (type) => type.name === value
                     );
                     if (selectedType && addRelationship) {
                       addRelationship({
-                        name: selectedType.label,
+                        name: selectedType.name,
                         characterId: character.id,
                         characterName: character.name,
                       });
@@ -113,7 +113,7 @@ function RelationshipModal({
                     {relationshipTypes.map((type) => (
                       <SelectItem
                         key={type.label}
-                        value={type.label}
+                        value={type.name}
                         className="flex items-center gap-2"
                       >
                         <span className={type.color}>{type.icon}</span>
@@ -308,13 +308,13 @@ export function ButtonAddRelationship({
                 <span
                   className={
                     relationshipTypes.find(
-                      (type) => type.label === relationship.name
+                      (type) => type.name === relationship.name
                     )?.color
                   }
                 >
                   {
                     relationshipTypes.find(
-                      (type) => type.label === relationship.name
+                      (type) => type.name === relationship.name
                     )?.icon
                   }
                 </span>
@@ -327,11 +327,24 @@ export function ButtonAddRelationship({
                   }}
                 >
                   {relationshipTypes.map((type) => (
-                    <option key={type.label} value={type.label}>
+                    <option key={type.label} value={type.name}>
                       {type.label}
                     </option>
                   ))}
                 </select>
+                <button>
+                  <span
+                    onClick={() => {
+                      const updatedRelationships = tempRelationships.filter(
+                        (_, i) => i !== index
+                      );
+                      setRelationships(updatedRelationships);
+                      onChange(updatedRelationships);
+                    }}
+                  >
+                    X
+                  </span>
+                </button>
               </div>
             </div>
           ))}
