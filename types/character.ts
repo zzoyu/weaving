@@ -10,6 +10,8 @@ type Property = {
   type: EPropertyType;
 };
 
+type ColorPropertyKey = "themeColor" | "eyeColor" | "hairColor";
+
 interface Character {
   id: number;
   name: string;
@@ -25,4 +27,4 @@ interface Character {
 }
 
 export { EPropertyType };
-export type { Property, Character };
+export type { Character, ColorPropertyKey, Property };

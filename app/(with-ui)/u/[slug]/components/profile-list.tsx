@@ -1,11 +1,21 @@
 "use client";
 
-import { Character } from "@/types/character";
-import ListCharacter from "./list-character/list-character";
-import { useMemo, useState } from "react";
-import clsx from "clsx";
-import { colorList } from "@/types/color";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import SearchIcon from "@/public/assets/icons/search.svg";
+import { Character, ColorPropertyKey } from "@/types/character";
+import { colorList } from "@/types/color";
+import clsx from "clsx";
+import { useMemo, useState } from "react";
+import ListCharacter from "./list-character/list-character";
 
 export function ProfileList({
   characters,
@@ -123,94 +133,74 @@ export function ProfileList({
 function FilterPopup({
   onUpdate,
 }: {
-  onUpdate: (
-    type: "themeColor" | "eyeColor" | "hairColor",
-    colors: string[]
-  ) => void;
+  onUpdate: (type: ColorPropertyKey, colors: string[]) => void;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [type, setType] = useState<"themeColor" | "eyeColor" | "hairColor">(
-    "themeColor"
-  );
+  const [type, setType] = useState<ColorPropertyKey>("themeColor");
   const [color, setColor] = useState<string[]>();
 
   return (
-    <div>
-      {/* 필터 버튼 */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="p-2 text-white bg-green-500 rounded-full w-10 h-10"
-      >
-        ☰
-      </button>
-
-      {/* 필터 팝업 */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-gray-800 bg-opacity-50 flex justify-end"
-          onClick={() => setIsOpen(false)}
-        >
-          <div
-            className="w-64 h-full bg-white p-4 shadow-lg"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold">Filter</h2>
-              <button onClick={() => setIsOpen(false)} className="text-xl">
-                ✕
-              </button>
-            </div>
-
+    <Sheet>
+      <SheetTrigger asChild>
+        <button className="p-2 text-white bg-green-500 rounded-full w-10 h-10">
+          ☰
+        </button>
+      </SheetTrigger>
+      <SheetContent className="w-sm md:w-64">
+        <SheetHeader>
+          <SheetTitle>Filter</SheetTitle>
+          <SheetDescription>
             {/* 필터 옵션 */}
-            <div className="space-y-4">
+            <div className="space-y-4 flex flex-col">
               <div>
-                <div className="flex items-center space-x-2 justify-between">
-                  <label htmlFor="theme-red" className="text-sm md:text-base">
-                    테마색
-                  </label>
-                  <input
-                    type="radio"
-                    name="theme"
-                    id="theme-red"
-                    checked={type === "themeColor"}
-                    onChange={() => setType("themeColor")}
-                  />
-                </div>
-                <div className="flex items-center space-x-2 justify-between">
-                  <label htmlFor="theme-eye" className="text-sm md:text-base">
-                    눈동자색
-                  </label>
-                  <input
-                    type="radio"
-                    name="theme"
-                    id="theme-eye"
-                    checked={type === "eyeColor"}
-                    onChange={() => setType("eyeColor")}
-                  />
-                </div>
-                <div className="flex items-center space-x-2 justify-between">
-                  <label htmlFor="theme-hair" className="text-sm md:text-base">
-                    머리색
-                  </label>
-                  <input
-                    type="radio"
-                    name="theme"
-                    id="theme-hair"
-                    checked={type === "hairColor"}
-                    onChange={() => setType("hairColor")}
-                  />
-                </div>
+                <ToggleGroup
+                  type="single"
+                  className="flex-col"
+                  onValueChange={(newValue) =>
+                    setType(newValue as ColorPropertyKey)
+                  }
+                  value={type}
+                >
+                  <ToggleGroupItem
+                    value="themeColor"
+                    aria-label="테마색"
+                    className="w-full"
+                  >
+                    <span className="text-lg w-full flex justify-between items-center md:text-base">
+                      테마색
+                    </span>
+                  </ToggleGroupItem>
+                  <ToggleGroupItem
+                    value="eyeColor"
+                    aria-label="눈동자색"
+                    className="w-full"
+                  >
+                    <span className="text-lg w-full flex justify-between items-center md:text-base">
+                      눈동자색
+                    </span>
+                  </ToggleGroupItem>
+                  <ToggleGroupItem
+                    value="hairColor"
+                    aria-label="머리색"
+                    className="w-full"
+                  >
+                    <span className="text-lg w-full flex justify-between items-center md:text-base">
+                      머리색
+                    </span>
+                  </ToggleGroupItem>
+                </ToggleGroup>
               </div>
 
               <hr />
               <div>
-                <h3 className="font-semibold">색상</h3>
+                <h3 className="text-lg md:text-base mb-4 font-semibold">
+                  색상
+                </h3>
                 <div className="grid grid-cols-5 gap-2">
                   {Object.entries(colorList).map((item, index) => (
                     <button
                       key={index}
                       className={clsx(
-                        `w-8 h-8 rounded-full ${item[1]} border border-gray-300`,
+                        `w-full aspect-square rounded-md md:w-8 md:h-8 md:rounded-full ${item[1]} border border-gray-300`,
                         {
                           " ring-2 ring-primary-100": color?.includes(item[0]),
                         }
@@ -222,27 +212,30 @@ function FilterPopup({
                       }}
                     >
                       {color?.includes(item[0]) && (
-                        <span className="text-primary-100">✓</span>
+                        <span className="text-primary-100 text-xl md:text-base">
+                          ✓
+                        </span>
                       )}
                     </button>
                   ))}
                 </div>
               </div>
 
-              <button
-                className="w-full py-2 text-white bg-primary-200 rounded-lg"
-                onClick={() => {
-                  setIsOpen(false); // 선택 후 팝업 닫기
-                  // 필터 적용 로직 추가
-                  onUpdate(type, color || []);
-                }}
-              >
-                검색
-              </button>
+              <SheetClose>
+                <button
+                  className="w-full p-4 md:py-2 text-white bg-primary-200 rounded-lg"
+                  onClick={() => {
+                    // 필터 적용 로직 추가
+                    onUpdate(type, color || []);
+                  }}
+                >
+                  검색
+                </button>
+              </SheetClose>
             </div>
-          </div>
-        </div>
-      )}
-    </div>
+          </SheetDescription>
+        </SheetHeader>
+      </SheetContent>
+    </Sheet>
   );
 }
