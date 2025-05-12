@@ -13,8 +13,10 @@ import ListProperties from "../../../add/components/properties/list-properties";
 import UploadImage from "../../../add/components/upload-image/upload-image";
 import Loading from "../../loading";
 
+import { useToast } from "@/hooks/use-toast";
 import IconFull from "@/public/assets/icons/image/full.svg";
 import IconHalf from "@/public/assets/icons/image/half.svg";
+import { useRouter } from "next/navigation";
 
 export default function CharacterEditTemplate({
   character,
@@ -85,17 +87,51 @@ export default function CharacterEditTemplate({
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const { toast } = useToast();
+  const router = useRouter();
+
   return (
     <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
       <Suspense fallback={<Loading />}>
         <form
           className="flex flex-col gap-2 items-center w-full md:max-w-md p-4"
-          action={(formData) => updateCharacter(formData, [...properties, ...currentColors])}
+          action={(formData) => {
+            updateCharacter(formData, [...properties, ...currentColors]).then(
+              (result) => {
+                if (result) {
+                  toast({
+                    title: "캐릭터 수정",
+                    description: "캐릭터가 수정되었습니다.",
+                    variant: "default",
+                  });
+                  router.push(`/u/${character.profile_id}`);
+                } else {
+                  toast({
+                    title: "캐릭터 수정 실패",
+                    description: "캐릭터 수정에 실패했습니다.",
+                    variant: "destructive",
+                  });
+                }
+              }
+            );
+          }}
         >
           <input type="hidden" name="character_id" value={character.id} />
-          <input type="hidden" name="original_image" value={character.image?.[0]} />
-          <input type="hidden" name="original_image" value={character.image?.[1]} />
-          <input type="hidden" name="original_thumbnail" value={character.thumbnail} />
+          <input
+            type="hidden"
+            name="original_image"
+            value={character.image?.[0]}
+          />
+          <input
+            type="hidden"
+            name="original_image"
+            value={character.image?.[1]}
+          />
+          <input
+            type="hidden"
+            name="original_thumbnail"
+            value={character.thumbnail}
+          />
 
           <Tabs
             defaultValue="half"
@@ -105,7 +141,11 @@ export default function CharacterEditTemplate({
               <TabsTrigger value="half">상반신*</TabsTrigger>
               <TabsTrigger value="full">전신</TabsTrigger>
             </TabsList>
-            <TabsContent value="half" forceMount className="hidden data-[state=active]:block">
+            <TabsContent
+              value="half"
+              forceMount
+              className="hidden data-[state=active]:block"
+            >
               <UploadImage
                 name={"half"}
                 useThumbnail
@@ -114,7 +154,11 @@ export default function CharacterEditTemplate({
                 thumbnailUrl={currentThumbnail}
               />
             </TabsContent>
-            <TabsContent value="full" forceMount className="hidden data-[state=active]:block">
+            <TabsContent
+              value="full"
+              forceMount
+              className="hidden data-[state=active]:block"
+            >
               <UploadImage
                 name={"full"}
                 icon={<IconFull className="w-32 h-32" />}
@@ -146,7 +190,11 @@ export default function CharacterEditTemplate({
             }}
           />
           <hr className="mt-2 p-2 w-full" />
-          <ColorProperties properties={currentColors} handler={setCurrentColors} editable />
+          <ColorProperties
+            properties={currentColors}
+            handler={setCurrentColors}
+            editable
+          />
           <hr className="mt-2 p-2 w-full" />
           <ButtonAddRelationship
             relationships={relationships || []}
