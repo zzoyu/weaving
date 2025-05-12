@@ -31,6 +31,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  header,
 }: {
   children: React.ReactNode;
   header: React.ReactNode;
@@ -38,6 +39,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={clsx(fontTitle.variable, fontBody.variable)}>
+        <header />
         {children}
         <Toaster />
       </body>
