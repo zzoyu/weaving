@@ -1,11 +1,13 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 import { baseProperties } from "@/lib/base-properties";
 import IconFull from "@/public/assets/icons/image/full.svg";
 import IconHalf from "@/public/assets/icons/image/half.svg";
 import { Character, EPropertyType, Property } from "@/types/character";
 import { Relationship } from "@/types/relationship";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { createCharacter } from "../actions";
 import { ButtonAddRelationship } from "./button-add-relationship";
@@ -76,10 +78,37 @@ export default function CharacterAddTemplate({
     setRelationships(updatedRelationships);
   };
 
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(false);
+
   return (
     <form
       className="flex flex-col gap-2 items-center w-full md:max-w-md p-4"
-      action={(formData) => createCharacter(formData, combinedProperties)}
+      action={(formData) => {
+        setIsLoading(true);
+        createCharacter(formData, combinedProperties)
+          .then((res) => {
+            if (res) {
+              toast({
+                title: "캐릭터 생성",
+                description: "캐릭터가 생성되었습니다.",
+                variant: "default",
+              });
+              router.push(`/u/${slug}`);
+            } else {
+              toast({
+                title: "캐릭터 생성 실패",
+                description: "다시 시도해 주세요.",
+                variant: "destructive",
+              });
+            }
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      }}
     >
       <input type="hidden" name="profile_slug" value={slug} />
 
@@ -91,14 +120,22 @@ export default function CharacterAddTemplate({
           <TabsTrigger value="half">상반신*</TabsTrigger>
           <TabsTrigger value="full">전신</TabsTrigger>
         </TabsList>
-        <TabsContent value="half" forceMount className="hidden data-[state=active]:block">
+        <TabsContent
+          value="half"
+          forceMount
+          className="hidden data-[state=active]:block"
+        >
           <UploadImage
             name={"half"}
             useThumbnail
             icon={<IconHalf className="w-32 h-32" />}
           />
         </TabsContent>
-        <TabsContent value="full" forceMount className="hidden data-[state=active]:block">
+        <TabsContent
+          value="full"
+          forceMount
+          className="hidden data-[state=active]:block"
+        >
           <UploadImage
             name={"full"}
             icon={<IconFull className="w-32 h-32" />}
@@ -159,6 +196,7 @@ export default function CharacterAddTemplate({
 
       <button
         type="submit"
+        disabled={isLoading}
         className="bg-primary-200 text-white rounded w-full text-xl p-2"
       >
         저장하기
