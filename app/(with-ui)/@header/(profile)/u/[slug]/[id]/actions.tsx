@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function setCharacterPassword(formData: FormData): Promise<void> {
   const password = formData.get("password") as string;
@@ -40,4 +41,17 @@ export async function clearCharacterPassword(
   }
 
   revalidatePath("/u/[slug]/[id]", "layout"); // Revalidate the path to update the UI
+}
+
+export async function deleteCharacterById(id: number) {
+  if (!id) throw new Error("Character ID is required");
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("character")
+    .delete()
+    .eq("id", id);
+
+  if (!error) redirect("/profile");
+  else throw new Error(`Failed to delete character: ${error.message}`);
 }
