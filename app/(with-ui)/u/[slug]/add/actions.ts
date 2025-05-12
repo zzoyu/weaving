@@ -94,7 +94,7 @@ export async function updateCharacter(
   const description = formData.get("description") as string;
   const profile_slug = formData.get("profile_slug") as string;
 
-  const characterId = formData.get("character_id") as string;
+  const characterId = Number(formData.get("character_id") as string);
   if (!characterId) throw new Error("Character ID is required");
 
   const isHalfEdited = formData.get("half-image-is-edited") as string;
@@ -136,7 +136,7 @@ export async function updateCharacter(
 
   const imageUrls = await Promise.all(
     imageFiles.map(async (image, index) => {
-      if (imageFlag[index]) return originalImages[index];
+      if (!imageFlag[index]) return originalImages[index];
       // pass if the image has no file
       if (!image) return "";
 
@@ -155,6 +155,7 @@ export async function updateCharacter(
 
   console.log("Uploaded image URLs:", imageUrls);
   console.log("Thumbnail URL:", thumbnailUrl);
+  console.log(characterId);
 
   const { data, error } = await supabase
     .from("character")
@@ -171,6 +172,6 @@ export async function updateCharacter(
     throw error;
   }
 
-  revalidatePath("/u/[slug]");
+  revalidatePath("/u/" + profile_slug);
   return true;
 }

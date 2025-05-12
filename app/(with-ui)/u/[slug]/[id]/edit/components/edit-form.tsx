@@ -104,7 +104,7 @@ export default function CharacterEditTemplate({
                     description: "캐릭터가 수정되었습니다.",
                     variant: "default",
                   });
-                  router.push(`/u/${character.profile_id}`);
+                  router.push(`./`);
                 } else {
                   toast({
                     title: "캐릭터 수정 실패",
