@@ -12,11 +12,14 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { setCharacterPassword } from "../actions";
+import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { setCharacterPassword } from "../actions";
 
 export function DialogLock({ characterId }: { characterId: number }) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { toast } = useToast();
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -30,8 +33,18 @@ export function DialogLock({ characterId }: { characterId: number }) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form
-          action={(formData) => setCharacterPassword(formData)}
-          onSubmit={() => setIsOpen(false)}
+          action={(formData) => {
+            setCharacterPassword(formData)
+              .then(() => {
+                toast({
+                  title: "캐릭터 잠금",
+                  description: "캐릭터가 잠금 처리되었습니다.",
+                });
+              })
+              .finally(() => {
+                setIsOpen(false);
+              });
+          }}
         >
           <input type="hidden" name="character_id" value={characterId} />
           <DialogHeader>
