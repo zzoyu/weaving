@@ -1,6 +1,5 @@
 "use client";
 
-import FriendRequestItem from "@/app/(with-ui)/notifications/components/friend-request-item";
 import { removeFriendByProfileId, requestFriendByProfileId } from "../actions";
 
 export default function ButtonRequestFriend({
@@ -41,7 +40,7 @@ export default function ButtonRequestFriend({
         >
           친구신청
         </button>
-      ) : isMine ? (
+      ) : !isMine ? (
         <button
           className="bg-gray-300 text-white px-4 py-2 rounded-md mt-5"
           onClick={() => {

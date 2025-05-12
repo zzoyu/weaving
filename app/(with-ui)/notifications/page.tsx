@@ -1,19 +1,19 @@
 import { createClient } from "@/utils/supabase/server";
-import {
-  fetchFriendRequestsByProfileId,
-  fetchNotificationsByProfileId,
-} from "./actions";
-import NotificationItem from "./components/notification-item";
+import { redirect } from "next/navigation";
+import { fetchProfileByUserId } from "../../profile/actions";
 import {
   deleteFriend,
   fetchProfilesByIds,
   updateFriendAccepted,
 } from "../u/[slug]/actions";
-import FriendRequestItem from "./components/friend-request-item";
-import { fetchProfileByUserId } from "../../profile/actions";
-import ButtonBack from "./components/button-back";
 import { TabHeader } from "../u/[slug]/components/tab-header";
-import { redirect } from "next/navigation";
+import {
+  fetchFriendRequestsByProfileId,
+  fetchNotificationsByProfileId,
+} from "./actions";
+import ButtonBack from "./components/button-back";
+import FriendRequestItem from "./components/friend-request-item";
+import NotificationItem from "./components/notification-item";
 
 export default async function NotificationsPage({}: {}) {
   const supabase = await createClient();
@@ -64,18 +64,22 @@ export default async function NotificationsPage({}: {}) {
               { title: "공지", href: "/notifications/notice", isNew: true },
             ]}
           />
-          <h2 className="text-xl font-bold mt-4 mb-2 ml-4">친구 요청</h2>
-          <ul>
-            {requestedProfiles.map((requestedProfile) => (
-              <FriendRequestItem
-                key={requestedProfile.id}
-                profile={requestedProfile as Profile}
-                onAccept={updateFriendAccepted}
-                onReject={deleteFriend}
-                to={profile.id}
-              />
-            ))}
-          </ul>
+          {requestedProfiles.length > 0 && (
+            <>
+              <h2 className="text-xl font-bold mt-4 mb-2 ml-4">친구 요청</h2>
+              <ul>
+                {requestedProfiles.map((requestedProfile) => (
+                  <FriendRequestItem
+                    key={requestedProfile.id}
+                    profile={requestedProfile as Profile}
+                    onAccept={updateFriendAccepted}
+                    onReject={deleteFriend}
+                    to={profile.id}
+                  />
+                ))}
+              </ul>
+            </>
+          )}
 
           <h2 className="text-xl font-bold mt-4 mb-2 ml-4">알림 목록</h2>
           <ul>
