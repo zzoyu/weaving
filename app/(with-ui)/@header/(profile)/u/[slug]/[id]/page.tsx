@@ -1,21 +1,20 @@
 export const dynamic = "force-dynamic";
 
+import ButtonFavorite from "@/app/(with-ui)/@header/components/button-favorite";
+import {
+  fetchCharacter,
+  fetchIsFavoriteById,
+} from "@/app/(with-ui)/u/[slug]/[id]/actions";
+import ButtonDelete from "@/app/(with-ui)/u/[slug]/components/button-delete";
 import { fetchProfileByUserId } from "@/app/profile/actions";
-import { createClient } from "@/utils/supabase/server";
-import Link from "next/link";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import MoreIcon from "@/public/assets/icons/more.svg";
-import ButtonShare from "@/app/(with-ui)/u/[slug]/components/button-share";
-import ButtonDelete from "@/app/(with-ui)/u/[slug]/components/button-delete";
-import ButtonFavorite from "@/app/(with-ui)/@header/components/button-favorite";
-import {
-  fetchCharacter,
-  fetchIsFavoriteById,
-} from "@/app/(with-ui)/u/[slug]/[id]/actions";
+import { createClient } from "@/utils/supabase/server";
+import Link from "next/link";
 import ButtonLock from "./components/button-lock";
 import { ButtonUnlock } from "./components/button-unlock";
 import { DialogShareButton } from "./components/dialog-share-button";
@@ -75,7 +74,10 @@ export default async function Header({
                   프로필 수정
                 </Link>
                 <DialogShareButton>프로필 공유</DialogShareButton>
-                <ButtonDelete className="text-base text-gray-700 hover:text-primary-500">
+                <ButtonDelete
+                  data={character}
+                  className="text-base text-gray-700 hover:text-primary-500"
+                >
                   프로필 삭제
                 </ButtonDelete>
               </div>

@@ -1,4 +1,5 @@
 "use client";
+import { deleteCharacterById } from "@/app/(with-ui)/@header/(profile)/u/[slug]/[id]/actions";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,30 +11,20 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import React, { ReactNode } from "react";
+import { Character } from "@/types/character";
+import { ReactNode } from "react";
 
-interface ButtonShareProps
+interface ButtonDeleteProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  shareData?: ShareData;
-  children?: ReactNode;
+  children: ReactNode;
+  data: Character;
 }
+
 export default function ButtonDelete({
-  shareData,
+  data,
   children,
   ...props
-}: ButtonShareProps) {
-  function handleShare() {
-    if (!navigator.userAgent.includes("Mobile")) {
-      navigator.clipboard.writeText(window.location.href);
-      alert("Link copied to clipboard!");
-    } else {
-      try {
-        navigator.share({ ...shareData, url: window.location.href });
-      } catch (error) {
-        console.error("Error sharing:", error);
-      }
-    }
-  }
+}: ButtonDeleteProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger>
@@ -41,15 +32,20 @@ export default function ButtonDelete({
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>캐릭터를 삭제하시겠습니까?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            캐릭터를 삭제하면 복구할 수 없습니다. 정말 삭제하시겠습니까?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogCancel>취소</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={() => {
+              deleteCharacterById(data.id);
+            }}
+          >
+            계속
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
