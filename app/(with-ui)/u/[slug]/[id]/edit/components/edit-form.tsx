@@ -148,6 +148,7 @@ export default function CharacterEditTemplate({
             >
               <UploadImage
                 name={"half"}
+                isEdit
                 useThumbnail
                 icon={<IconHalf className="w-32 h-32" />}
                 imageUrl={currentHalfImage}
@@ -161,6 +162,7 @@ export default function CharacterEditTemplate({
             >
               <UploadImage
                 name={"full"}
+                isEdit
                 icon={<IconFull className="w-32 h-32" />}
                 imageUrl={currentFullImage}
               />
