@@ -51,6 +51,7 @@ export async function deleteCharacterById(id: number) {
     .delete()
     .eq("id", id);
 
+  revalidatePath("/u/[slug]", "page");
   if (!error) return true;
   else throw new Error(`Failed to delete character: ${error.message}`);
 }

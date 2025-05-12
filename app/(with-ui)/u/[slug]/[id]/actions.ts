@@ -40,19 +40,40 @@ export async function fetchRelationships(
   return (data as unknown as Relationship[]) || null;
 }
 
+export async function createBulkRelationships(
+  from_id: number,
+  relationships: {
+    to_id: number;
+    name: string;
+  }[]
+) {
+  console.log("createBulkRelationships", from_id, relationships);
+  const supabase = createClient();
+  const { data, error } = await supabase.from("relationship").insert(
+    relationships.map((relationship) => ({
+      from_id,
+      to_id: relationship.to_id,
+      name: relationship.name || "friend",
+    }))
+  );
+  if (error) {
+    throw error;
+  }
+  revalidatePath("/u/[slug]", "page");
+  return data;
+}
+
 export async function createRelationship(
   from_id: number,
   to_id: number,
   name: string
 ) {
   const supabase = createClient();
-  const { data, error } = await supabase.from("relationship").insert([
-    {
-      from_id,
-      to_id,
-      name: name || "friend",
-    },
-  ]);
+  const { data, error } = await supabase.from("relationship").insert({
+    from_id,
+    to_id,
+    name: name || "friend",
+  });
   if (error) {
     throw error;
   }

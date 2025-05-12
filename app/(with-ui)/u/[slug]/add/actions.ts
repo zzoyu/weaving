@@ -5,7 +5,7 @@ import { Property } from "@/types/character";
 import { ImagePath } from "@/types/image";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
-import { createRelationship } from "../[id]/actions";
+import { createBulkRelationships } from "../[id]/actions";
 
 export async function createCharacter(
   formData: FormData,
@@ -88,14 +88,21 @@ export async function createCharacter(
   }
 
   console.log(data);
-  console.log("to_name", relationship_name);
-  console.log("to_id", relationship_to);
 
-  relationship_to.forEach(async (to_id, index) => {
-    await createRelationship(data?.id, Number(to_id), relationship_name[index]);
+  const relationships = relationship_to.map((to, index) => {
+    const name = relationship_name[index];
+    const to_id = Number(to);
+    if (!to_id) throw new Error("To ID is required");
+    return {
+      to_id,
+      name,
+    };
   });
 
-  revalidatePath("/u/[slug]");
+  if ((relationships?.length || 0) > 0)
+    await createBulkRelationships(data.id, relationships);
+
+  revalidatePath("/u/[slug]", "page");
 
   return true;
 }
