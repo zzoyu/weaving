@@ -80,7 +80,9 @@ export async function createCharacter(
     throw error;
   }
 
-  redirect(`/u/${profile_slug}`);
+  return true;
+
+  // redirect(`/u/${profile_slug}`);
 }
 
 export async function updateCharacter(
@@ -97,7 +99,6 @@ export async function updateCharacter(
 
   const isHalfEdited = formData.get("half-image-is-edited") as string;
   const isFullEdited = formData.get("full-image-is-edited") as string;
-
 
   // print all of the formData
   for (const [key, value] of formData.entries()) {
@@ -122,11 +123,13 @@ export async function updateCharacter(
   if (imageFiles.length === 0) throw new Error("Image is required");
   if (imageFiles.length > 3) throw new Error("Image is too many");
 
-  const thumbnailUrl = isHalfEdited ? await uploadImage(
-    thumbnail,
-    Math.floor(Math.random() * 10000).toString(),
-    ImagePath.CHARACTER_THUMBNAIL
-  ) : formData.get("original_thumbnail") as string;
+  const thumbnailUrl = isHalfEdited
+    ? await uploadImage(
+        thumbnail,
+        Math.floor(Math.random() * 10000).toString(),
+        ImagePath.CHARACTER_THUMBNAIL
+      )
+    : (formData.get("original_thumbnail") as string);
 
   const imageFlag = [isHalfEdited, isFullEdited];
   const originalImages = formData.getAll("original_image") as string[];
@@ -136,7 +139,7 @@ export async function updateCharacter(
       if (imageFlag[index]) return originalImages[index];
       // pass if the image has no file
       if (!image) return "";
-      
+
       try {
         return await uploadImage(
           image,

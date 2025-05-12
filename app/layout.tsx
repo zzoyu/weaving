@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import { Poiret_One } from "next/font/google";
-import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 import clsx from "clsx";
+import type { Metadata } from "next";
+import { Poiret_One } from "next/font/google";
+import localFont from "next/font/local";
+import "./globals.css";
 
 // const fontTitle = localFont({
 //   src: "../public/assets/fonts/playwrite/PlaywritePL-ExtraLight.ttf",
@@ -37,6 +38,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className={clsx(fontTitle.variable, fontBody.variable)}>
         {children}
+        <Toaster />
       </body>
     </html>
   );
