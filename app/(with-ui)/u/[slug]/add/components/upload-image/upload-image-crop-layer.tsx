@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import "react-image-crop/dist/ReactCrop.css";
 import ReactCrop, { Crop } from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
 interface UploadImageCropLayerProps {
   src: string;
@@ -85,12 +85,12 @@ export default function UploadImageCropLayer({
   });
 
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen flex flex-col items-center justify-center gap-10 bg-background-200 z-10">
+    <div className="fixed top-0 left-0 w-screen h-screen flex flex-col items-center justify-center gap-10 bg-background-default z-10">
       <small
         className="
-      border-2 border-primary-100 rounded-lg p-1
+      border-2 border-primary rounded-lg p-1
       fixed top-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2
-      bg-background-100 z-10
+      bg-background-default z-10
       opacity-80
       "
       >
@@ -124,7 +124,7 @@ export default function UploadImageCropLayer({
         <button
           type="button"
           onClick={onClose}
-          className="bg-background-100 text-primary-200 px-4 py-2 rounded-lg"
+          className="bg-background-default text-primary-200 px-4 py-2 rounded-lg"
         >
           취소
         </button>

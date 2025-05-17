@@ -1,9 +1,8 @@
 import { Character, Property } from "@/types/character";
+import { Relationship } from "@/types/relationship";
 import { ColorProperties } from "../../add/components/properties/color-properties";
-import ButtonAddRelationship from "./button-add-relationship";
 import { ProfileCard } from "./profile-card";
 import { RelationshipCard } from "./relationship-card";
-import { Relationship } from "@/types/relationship";
 
 export default function TemplateProfile({
   characterData,
@@ -59,7 +58,7 @@ export default function TemplateProfile({
           {hashtags.map((tag, index) => (
             <span
               key={index}
-              className="rounded-full px-8 py-1 bg-primary-100 border border-primary-300 relative"
+              className="rounded-full px-8 py-1 bg-primary border border-primary-300 relative"
             >
               #{tag}
             </span>

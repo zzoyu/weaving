@@ -18,7 +18,7 @@ export default function InputPassword() {
       />
       <button
         type="submit"
-        className="w-full max-w-sm p-2 text-white bg-primary-100 rounded hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-200"
+        className="w-full max-w-sm p-2 text-white bg-primary rounded hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-200"
         style={{ marginTop: "1rem" }}
       >
         확인

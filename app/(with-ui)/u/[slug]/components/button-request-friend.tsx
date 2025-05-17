@@ -19,7 +19,7 @@ export default function ButtonRequestFriend({
     <>
       {isApproved ? (
         <button
-          className="bg-green-500 text-white px-4 py-2 rounded-md mt-5"
+          className="bg-green-500 button-request-friend"
           onClick={() => {
             if (confirm("친구를 삭제하시겠습니까?")) {
               removeFriendByProfileId(from.id!, to.id!);

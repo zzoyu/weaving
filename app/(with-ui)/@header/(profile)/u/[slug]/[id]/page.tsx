@@ -55,7 +55,7 @@ export default async function Header({
         {isMine && character?.id && (
           <Popover>
             <PopoverTrigger asChild>
-              <button className="p-1 border border-primary-100 rounded-full overflow-hidden w-10 h-10 flex items-center justify-center">
+              <button className="p-1 border border-primary rounded-full overflow-hidden w-10 h-10 flex items-center justify-center">
                 <MoreIcon width={24} height={24} className="text-primary-300" />
               </button>
             </PopoverTrigger>

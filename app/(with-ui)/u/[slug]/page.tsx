@@ -1,17 +1,17 @@
+import { fetchProfileByUserId } from "@/app/profile/actions";
+import { ErrorCode } from "@/types/error-code";
+import { createClient } from "@/utils/supabase/server";
+import { Metadata, ResolvingMetadata } from "next";
+import { Suspense } from "react";
 import {
   fetchCharactersByProfileId,
   fetchExactFriendById,
   fetchFavoriteCharactersByProfileId,
   fetchProfileBySlug,
 } from "./actions";
-import { Metadata, ResolvingMetadata } from "next";
-import { createClient } from "@/utils/supabase/server";
-import { ErrorCode } from "@/types/error-code";
-import { fetchProfileByUserId } from "@/app/profile/actions";
+import ButtonAddProfile from "./components/button-add-profile";
 import ButtonRequestFriend from "./components/button-request-friend";
-import { TabHeader } from "./components/tab-header";
 import { ProfileList } from "./components/profile-list";
-import { Suspense } from "react";
 import Loading from "./loading";
 
 type Props = {
@@ -91,37 +91,31 @@ export default async function PublicProfilePage({
   favoriteCharacters = await fetchFavoriteCharactersByProfileId(data.id);
 
   return (
-    <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-10 min-h-fit relative">
+    <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-[3.75rem] min-h-fit relative">
+      <div className="flex flex-col items-center justify-start my-10 ">
+        {!isMine && myProfile && (
+          <ButtonRequestFriend
+            isMine={isMine}
+            isFriend={isFriend}
+            isApproved={
+              !!(
+                Boolean(friendDataFromMe?.is_approved) ||
+                Boolean(friendDataFromUser?.is_approved)
+              )
+            }
+            from={myProfile}
+            to={data}
+          />
+        )}
+        <h2 className="text-2xl mb-2.5">{data?.nickname}의 프로필</h2>
+        <span className=" text-gray-600">
+          {responseCharacters?.data.length || 0}개의 캐릭터
+        </span>
+      </div>
       {isMine && myProfile && myProfile?.slug && (
-        <TabHeader
-          activeIndex={0}
-          data={[
-            {
-              title: "프로필 목록",
-              href: `/u/${myProfile.slug}`,
-            },
-            {
-              title: "캐릭터 추가",
-              href: `/u/${myProfile.slug}/add`,
-            },
-          ]}
-        />
+        <ButtonAddProfile href={`/u/${myProfile.slug}/add`} />
       )}
 
-      {!isMine && myProfile && (
-        <ButtonRequestFriend
-          isMine={isMine}
-          isFriend={isFriend}
-          isApproved={
-            !!(
-              Boolean(friendDataFromMe?.is_approved) ||
-              Boolean(friendDataFromUser?.is_approved)
-            )
-          }
-          from={myProfile}
-          to={data}
-        />
-      )}
       <Suspense fallback={<Loading />}>
         <ProfileList
           characters={responseCharacters?.data || []}

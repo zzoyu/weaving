@@ -146,7 +146,7 @@ export default function CharacterAddTemplate({
 
       <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
         <input
-          className=" text-2xl w-full max-w-72 text-center border-primary-100 focus:outline-none"
+          className=" text-2xl w-full max-w-72 text-center border-primary focus:outline-none"
           type="text"
           name="name"
           placeholder="이름"
@@ -154,7 +154,7 @@ export default function CharacterAddTemplate({
         <input
           type="text"
           name="description"
-          className="text-xl w-full max-w-72 text-center border-primary-100  focus:outline-none mb-4"
+          className="text-xl w-full max-w-72 text-center border-primary  focus:outline-none mb-4"
           placeholder="캐릭터의 한 마디"
         />
       </div>

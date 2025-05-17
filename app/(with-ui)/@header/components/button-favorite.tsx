@@ -1,13 +1,13 @@
 "use client";
 
-import { startTransition, useOptimistic, useState } from "react";
+import { startTransition, useOptimistic } from "react";
 
-import IconFavorite from "@/public/assets/icons/favorite.svg";
-import IconFavoriteFilled from "@/public/assets/icons/favorite_filled.svg";
 import {
   addFavoriteCharacter,
   removeFavoriteCharacter,
 } from "@/app/(with-ui)/u/[slug]/actions";
+import IconFavorite from "@/public/assets/icons/favorite.svg";
+import IconFavoriteFilled from "@/public/assets/icons/favorite_filled.svg";
 
 interface ButtonFavoriteProps {
   isFavorite: boolean;
@@ -46,9 +46,9 @@ export default function ButtonFavorite({
   return (
     <button onClick={handleFavoriteClick} className={`p-2 rounded`}>
       {isFavorite ? (
-        <IconFavoriteFilled className="text-primary-100" />
+        <IconFavoriteFilled className="text-primary" />
       ) : (
-        <IconFavorite className="text-primary-100" />
+        <IconFavorite className="text-primary" />
       )}
     </button>
   );

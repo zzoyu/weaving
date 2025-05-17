@@ -65,8 +65,8 @@ export function ListRelationship({
                   className={clsx(
                     character.password && "text-opacity-50",
                     character.isFavorite
-                      ? "bg-primary-100"
-                      : "bg-background-200",
+                      ? "bg-primary"
+                      : "bg-background-default",
                     "w-full h-fit flex justify-center items-center p-2"
                   )}
                 >

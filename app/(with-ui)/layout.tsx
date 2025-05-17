@@ -1,4 +1,3 @@
-import clsx from "clsx";
 
 export default function UILayout({
   children,
@@ -14,7 +13,7 @@ export default function UILayout({
   return (
     <div className="flex flex-col h-full pt-14">
       {header}
-      <div className="w-full h-full overflow-y-auto pb-20">{children}</div>
+      <div className="w-full h-full overflow-y-auto pb-[3.75rem]">{children}</div>
       {navigation}
     </div>
   );

@@ -1,9 +1,9 @@
 "use client";
 
 import { Property } from "@/types/character";
-import { useState } from "react";
 import { colorList } from "@/types/color";
 import clsx from "clsx";
+import { useState } from "react";
 
 function ColorModal({
   isOpen,
@@ -84,7 +84,7 @@ function ColorPicker({
       <button
         type="button"
         className={clsx(
-          "relative w-10 h-10 border-primary-100 border",
+          "relative w-10 h-10 border-primary border",
           colorList?.[(property?.value as string) || "white"]
         )}
         onClick={() => {
@@ -114,9 +114,9 @@ export function ColorProperties({
 }) {
   return (
     <div className="w-full grid grid-cols-3">
-      <div className="bg-primary-100 text-center py-1">테마색</div>
-      <div className="bg-primary-100 text-center py-1">눈동자색</div>
-      <div className="bg-primary-100 text-center py-1">머리색</div>
+      <div className="bg-primary text-center py-1">테마색</div>
+      <div className="bg-primary text-center py-1">눈동자색</div>
+      <div className="bg-primary text-center py-1">머리색</div>
 
       <ColorPicker
         editable={editable}

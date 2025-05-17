@@ -1,6 +1,6 @@
 import { Character } from "@/types/character";
-import ListCharacterItem from "./list-character-item";
 import { addFavoriteCharacter, removeFavoriteCharacter } from "../../actions";
+import ListCharacterItem from "./list-character-item";
 
 interface ListCharacterProps {
   characters: Character[];
@@ -16,7 +16,7 @@ export default function ListCharacter({
   profileId,
 }: ListCharacterProps) {
   return (
-    <div className="grid grid-cols-3 gap-2 md:gap-4 ">
+    <div className="grid grid-cols-3 gap-4 px-2 md:gap-4 ">
       {characters.map((character) => (
         <ListCharacterItem
           key={`character-${character.id}`}
