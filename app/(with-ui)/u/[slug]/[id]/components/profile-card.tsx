@@ -1,10 +1,5 @@
 "use client";
 
-import { Character, Property } from "@/types/character";
-import Image from "next/image";
-import { useState } from "react";
-import RelationshipGraph from "./relationship-graph";
-import { Relationship } from "@/types/relationship";
 import {
   Carousel,
   CarouselContent,
@@ -12,6 +7,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Character, Property } from "@/types/character";
+import { Relationship } from "@/types/relationship";
+import Image from "next/image";
+import { useState } from "react";
+import RelationshipGraph from "./relationship-graph";
 
 function PopupRelationshipGraph({
   character,
@@ -93,7 +93,7 @@ export function ProfileCard({
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
-      <div className="flex flex-col justify-center items-center gap-2 w-full">
+      <div className="flex flex-col justify-center items-center gap-2 w-full mt-10">
         <h2 className="text-2xl font-bold">{character.name}</h2>
         <p className="text-sm text-primary-200">
           {'"' + character.description + '"'}
@@ -101,14 +101,14 @@ export function ProfileCard({
       </div>
       <div className="flex flex-col justify-center items-center gap-2 w-full">
         <button
-          className="w-full bg-green-200 text-green-700 px-4 py-2 rounded-lg hover:bg-green-300 md:max-w-40"
+          className="bg-green-500 text-background-default rounded-l-full rounded-r-full px-4 py-2 text-sm rounded-lg w-1/3 md:max-w-40 mb-12"
           onClick={() => setIsOpenRelationshipGraph(true)}
         >
           관계도 보기
         </button>
       </div>
       <div className="flex flex-col justify-center items-center gap-2 w-full">
-        <div className="text-gray-700 w-full">
+        <div className="text-gray-700 w-full px-10">
           {otherProperties?.map?.((property: Property, index) => (
             <CharacterProfileField
               key={`property-${index}`}

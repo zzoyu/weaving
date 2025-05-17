@@ -38,13 +38,13 @@ export default function FriendRequestItem({
       </div>
       <div className="flex gap-2">
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-md"
+          className="bg-green-500 text-white px-4 py-2 rounded-full text-sm"
           onClick={() => onAccept(profile.id!, to)}
         >
           수락
         </button>
         <button
-          className="bg-gray-500 text-white px-4 py-2 rounded-md"
+          className="bg-gray-400 text-white px-4 py-2 rounded-full text-sm"
           onClick={() => onReject(profile.id!, to)}
         >
           거절

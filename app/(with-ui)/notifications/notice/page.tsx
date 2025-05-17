@@ -1,11 +1,10 @@
+import { TabHeader } from "@/app/(with-ui)/u/[slug]/components/tab-header";
+import { fetchProfileByUserId } from "@/app/profile/actions";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
-import { fetchNoticeList } from "./actions";
-import ButtonBack from "../components/button-back";
-import { TabHeader } from "@/app/(with-ui)/u/[slug]/components/tab-header";
 import { fetchHasNotificationsByProfileId } from "../actions";
-import { fetchProfileByUserId } from "@/app/profile/actions";
-import { Suspense } from "react";
+import ButtonBack from "../components/button-back";
+import { fetchNoticeList } from "./actions";
 
 export default async function NoticePage() {
   const noticeList = await fetchNoticeList();
@@ -47,7 +46,7 @@ export default async function NoticePage() {
                   href={`/notifications/notice/${notice.id}`}
                   className="flex flex-col gap-2"
                 >
-                  <div className="p-4 border border-gray-200 rounded-md">
+                  <div className="p-4 border-b border-gray-200">
                     <h3 className="text-lg font-semibold">{notice.title}</h3>
                     <p className="text-gray-500">
                       {new Date(notice.created_at).toLocaleDateString("ko-KR", {

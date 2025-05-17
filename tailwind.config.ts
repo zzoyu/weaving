@@ -18,6 +18,8 @@ const config: Config = {
         background: {
           default: "#FAF9FA",
           muted: "#DADCE0",
+          light: "#E8EAED",
+          dark: "#BDC1C6",
         },
         primary: {
           DEFAULT: "#97E6AB",
@@ -39,6 +41,12 @@ const config: Config = {
         accent: {
           fill: "#E4E6E9",
         },
+        symbol: {
+          friend: "#F5B84C",
+          family: "#4AAE7A",
+          love: "#7D9AE5",
+          hate: "#E15A5A",
+        },
       },
       fontFamily: {
         "poiret-one": ["var(--font-poiret-one)", "cursive"],
@@ -57,5 +65,11 @@ const config: Config = {
     },
   },
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  safelist: [
+    "bg-symbol-friend",
+    "bg-symbol-family",
+    "bg-symbol-love",
+    "bg-symbol-hate",
+  ],
 };
 export default config;

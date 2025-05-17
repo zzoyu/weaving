@@ -1,4 +1,3 @@
-import { symbol } from "d3";
 import { Character } from "./character";
 
 import SymbolFamily from "@/public/assets/icons/relationship/family.svg";
@@ -10,7 +9,6 @@ import urlFamily from "@/public/assets/icons/relationship/family.svg?url";
 import urlFriend from "@/public/assets/icons/relationship/friend.svg?url";
 import urlHate from "@/public/assets/icons/relationship/hate.svg?url";
 import urlLove from "@/public/assets/icons/relationship/love.svg?url";
-import { url } from "inspector";
 
 export interface Relationship {
   id?: number;

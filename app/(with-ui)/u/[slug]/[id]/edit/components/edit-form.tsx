@@ -170,7 +170,7 @@ export default function CharacterEditTemplate({
           </Tabs>
           <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
             <input
-              className="text-2xl w-full max-w-72 text-center border-primary focus:outline-none"
+              className="text-2xl w-full max-w-72 text-center border-background-muted focus:outline-none"
               type="text"
               name="name"
               placeholder="이름"
@@ -179,7 +179,7 @@ export default function CharacterEditTemplate({
             <input
               type="text"
               name="description"
-              className="text-xl w-full max-w-72 text-center border-primary focus:outline-none mb-4"
+              className="text-xl w-full max-w-72 text-center border-background-muted focus:outline-none mb-4"
               placeholder="캐릭터의 한 마디"
               defaultValue={character.description}
             />
@@ -191,13 +191,11 @@ export default function CharacterEditTemplate({
               setProperties(newValue);
             }}
           />
-          <hr className="mt-2 p-2 w-full" />
           <ColorProperties
             properties={currentColors}
             handler={setCurrentColors}
             editable
           />
-          <hr className="mt-2 p-2 w-full" />
           <ButtonAddRelationship
             relationships={relationships || []}
             onChange={setRelationships}
@@ -205,7 +203,6 @@ export default function CharacterEditTemplate({
             profileId={character.profile_id}
             character={character}
           />
-          <hr className="mt-2 p-2 w-full" />
           <InputHashtag
             value={currentHashtag}
             hashtags={previewHashtags}
@@ -228,7 +225,7 @@ export default function CharacterEditTemplate({
 
           <button
             type="submit"
-            className="bg-primary-200 text-white rounded w-full text-xl p-2"
+            className="text-background-default bg-text-black rounded w-full text-xl p-2 mt-6"
           >
             저장하기
           </button>
