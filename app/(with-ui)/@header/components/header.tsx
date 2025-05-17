@@ -13,7 +13,7 @@ export default async function Header() {
   const { notifications } = await fetchNotificationsByProfileId(profile?.id);
 
   return (
-    <header className="fixed top-0 flex h-14 w-full items-center justify-between px-2 md:px-8 bg-background-100">
+    <header className="fixed top-0 flex h-14 w-full items-center justify-between px-2 md:px-8 bg-background-default">
       <div className="flex items-center justify-center">
         <Link href="/">
           <Logo height={30} />

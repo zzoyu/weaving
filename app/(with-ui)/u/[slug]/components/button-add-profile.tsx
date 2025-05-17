@@ -9,7 +9,7 @@ interface ButtonAddProfileProps extends LinkProps {
 
 export default function ButtonAddProfile({ href, ...props }: ButtonAddProfileProps) {
   return (
-    <Link className="w-14 h-14 bg-primary-100 rounded-full flex items-center justify-center fixed bottom-20 right-4 z-20" href={href}>
+    <Link className="w-14 h-14 bg-primary rounded-full flex items-center justify-center fixed bottom-20 right-4 z-20" href={href}>
       <PlusIcon className="w-6 h-6" />
     </Link>
   );

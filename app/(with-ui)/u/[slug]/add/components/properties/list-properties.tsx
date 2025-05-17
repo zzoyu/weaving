@@ -1,9 +1,9 @@
 "use client";
 
-import { EPropertyType, Property } from "@/types/character";
-import ListPropertiesItem from "./list-properties-item";
 import AddIcon from "@/public/assets/icons/add.svg";
+import { EPropertyType, Property } from "@/types/character";
 import { useState } from "react";
+import ListPropertiesItem from "./list-properties-item";
 
 export default function ListProperties({
   properties,
@@ -45,7 +45,7 @@ export default function ListProperties({
           }
         >
           <AddIcon
-            className="text-primary-200 hover:text-primary-100"
+            className="text-primary-200 hover:text-primary"
             width={28}
             height={28}
           />

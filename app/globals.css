@@ -12,7 +12,7 @@
     @apply text-3xl font-pretendard;
   }
   input {
-    @apply bg-background-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded border;
+    @apply bg-background-default dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded border;
   }
   :root {
     --radius: 0.5rem;
@@ -23,11 +23,15 @@
   .text-profile-twitter {
     @apply text-gray-500 dark:text-gray-500 font-light text-sm;
   }
+
+  .button-request-friend {
+    @apply text-white px-3 py-1 mb-2 text-sm rounded-l-full rounded-r-full;
+  }
 }
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-hex: #f4f4f4;
+  --background-hex: #faf9fa;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 }
@@ -46,7 +50,7 @@ html {
 
 body {
   background: var(--background-hex);
-  @apply antialiased h-full font-pretendard;
+  @apply antialiased h-full font-pretendard text-black;
 }
 
 svg > text {

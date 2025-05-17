@@ -1,4 +1,3 @@
-
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import ButtonDelete from "./button-delete";
@@ -22,7 +21,6 @@ export default function MypageTemplate({ profile }: { profile: Profile }) {
           <ButtonDelete userId={profile.user_id} />
         </div>
       </section>
-
 
       <div className="flex flex-row items-center justify-center w-full max-w-md p-4">
         <Link href="/term" className="text-sm text-gray-500">

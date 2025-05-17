@@ -3,7 +3,6 @@
 import { Notification } from "@/types/notification";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
 interface ProfileBadgeProps {
   profile: Profile;
   notifications?: Notification[];
@@ -16,7 +15,7 @@ export default function ProfileBadge({
   console.log(profile);
   return (
     <Link className="relative" href="/notifications">
-      <div className="relative w-10 h-10 dark:bg-slate-800 rounded-full overflow-hidden flex justify-center items-center border border-primary-100">
+      <div className="relative w-10 h-10 dark:bg-slate-800 rounded-full overflow-hidden flex justify-center items-center border border-primary">
         <Image
           src={profile?.profile_image || ""}
           alt="프로필 이미지"

@@ -12,35 +12,33 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: {
-          "100": "#97E6AB",
-          "200": "#79C78E",
-          "300": "#36834F",
-        },
-        secondary: {
-          "100": "#68E7FA",
-          "200": "#008496",
-        },
-        accent: {
-          "100": "#F18D8D",
-          "200": "#883036",
-        },
         text: {
-          "100": "#333333",
-          "200": "#5C5C5C",
+          black: "#0E1013",
         },
         background: {
-          "100": "#F4F4F4",
-          "200": "#EAEAEA",
-          "300": "#C1C1C1",
+          default: "#FAF9FA",
+          muted: "#DADCE0",
         },
-        symbol: {
-          love: "#FF4C4C",
-          family: "#4B8B3B",
-          friend: "#FFD700",
-          hate: "#1A1A1A",
+        primary: {
+          DEFAULT: "#97E6AB",
+          secondary: "#79C78E",
         },
-        brown: "#7A5128",
+        state: {
+          success: "#4AAE7A",
+          warning: "#F5B84C",
+          info: "#7D9AE5",
+          error: "#E15A5A",
+        },
+        border: {
+          default: "#D1D5DB",
+        },
+        icon: {
+          default: "#FAF9FA",
+          muted: "#6C727C",
+        },
+        accent: {
+          fill: "#E4E6E9",
+        },
       },
       fontFamily: {
         "poiret-one": ["var(--font-poiret-one)", "cursive"],

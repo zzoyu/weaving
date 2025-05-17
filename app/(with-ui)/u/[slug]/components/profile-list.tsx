@@ -69,17 +69,17 @@ export function ProfileList({
   }, [characters, searchKeyword, filteredColor, favoriteCharacters]);
   return (
     <article className="flex flex-col gap-2 md:gap-4 mt-2 md:mt-5 w-full md:w-fit px-2 md:px-0">
-      <div className="px-2 py-0 md:px-4 md:py-2 flex flex-row gap-2 md:gap-4 justify-center items-center">
+      <div className="px-10 py-0 md:px-4 md:py-2 flex flex-row gap-2 md:gap-4 justify-center items-center mb-10">
         <div className="flex items-center rounded-full relative w-full h-fit">
           <input
             type="text"
             placeholder="검색"
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
-            className="flex-1 px-8 py-2 w-[20rem] rounded-md border-primary-100 border-2 bg-white focus:outline-none"
+            className="flex-shrink px-8 py-2 w-full rounded-md border-text-black border-2 bg-white focus:outline-none"
           />
           <button className="p-2 text-white rounded-full absolute pointer-events-none">
-            <SearchIcon className="text-primary-200" />
+            <SearchIcon className="text-text-black" />
           </button>
           {searchKeyword && (
             <button
@@ -97,11 +97,6 @@ export function ProfileList({
         </div>
       </div>
 
-      <div className="w-auto text-right">
-        <span className="text-sm text-gray-500">
-          전체: {filteredList.length}
-        </span>
-      </div>
       {characters.length > 0 && (
         <ListCharacter
           characters={filteredList}
@@ -141,7 +136,7 @@ function FilterPopup({
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button className="p-2 text-white bg-green-500 rounded-full w-10 h-10">
+        <button className="p-2 text-white bg-text-black rounded-full w-10 h-10">
           ☰
         </button>
       </SheetTrigger>
@@ -202,7 +197,7 @@ function FilterPopup({
                       className={clsx(
                         `w-full aspect-square rounded-md md:w-8 md:h-8 md:rounded-full ${item[1]} border border-gray-300`,
                         {
-                          " ring-2 ring-primary-100": color?.includes(item[0]),
+                          " ring-2 ring-primary": color?.includes(item[0]),
                         }
                       )}
                       onClick={() => {
@@ -212,7 +207,7 @@ function FilterPopup({
                       }}
                     >
                       {color?.includes(item[0]) && (
-                        <span className="text-primary-100 text-xl md:text-base">
+                        <span className="text-primary text-xl md:text-base">
                           ✓
                         </span>
                       )}
