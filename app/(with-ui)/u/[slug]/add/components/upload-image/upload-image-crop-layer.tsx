@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import "react-image-crop/dist/ReactCrop.css";
 import ReactCrop, { Crop } from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
 interface UploadImageCropLayerProps {
   src: string;

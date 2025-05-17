@@ -18,7 +18,7 @@ export default function ProfileEditForm({ profile }: { profile: Profile }) {
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 p-4 bg-gray-100 rounded-lg">
+    <div className="flex flex-col items-center gap-4 p-4 rounded-lg">
       <form
         onSubmit={handleSubmit}
         className="flex flex-col gap-4 w-full max-w-md"

@@ -1,7 +1,6 @@
-import { createClient } from "@/utils/supabase/server";
-import { TabHeader } from "../components/tab-header";
-import CharacterAddTemplate from "./components/template";
 import { fetchProfileByUserId } from "@/app/profile/actions";
+import { createClient } from "@/utils/supabase/server";
+import CharacterAddTemplate from "./components/template";
 
 export default async function NewCharacterPage({
   params,
@@ -26,19 +25,6 @@ export default async function NewCharacterPage({
 
   return (
     <main className="flex flex-col justify-center items-center pt-10 w-full md:max-w-[40rem] mx-auto gap-10">
-      <TabHeader
-        activeIndex={1}
-        data={[
-          {
-            title: "프로필 목록",
-            href: `/u/${myProfile.slug}`,
-          },
-          {
-            title: "캐릭터 추가",
-            href: `/u/${myProfile.slug}/add`,
-          },
-        ]}
-      />
       {myProfile.id && (
         <CharacterAddTemplate slug={params.slug} profileId={myProfile.id} />
       )}

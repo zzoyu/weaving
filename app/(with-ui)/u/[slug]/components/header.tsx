@@ -1,9 +1,9 @@
-import ProfileBadge from "../../../@header/components/profile-badge";
-import { fetchProfileByUserId } from "@/app/profile/actions";
-import { createClient } from "@/utils/supabase/server";
 import { fetchNotificationsByProfileId } from "@/app/(with-ui)/notifications/actions";
+import { fetchProfileByUserId } from "@/app/profile/actions";
 import Logo from "@/public/assets/logos/logo_text_horizontal_color.svg";
+import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
+import ProfileBadge from "../../../@header/components/profile-badge";
 
 export async function Header() {
   const supabase = createClient();
@@ -13,7 +13,7 @@ export async function Header() {
   const { notifications } = await fetchNotificationsByProfileId(profile?.id);
 
   return (
-    <header className="fixed top-0 flex h-10 md:h-14 w-full items-center justify-between px-2 md:px-8 bg-[#F4F4F4]">
+    <header className="fixed top-0 flex h-10 md:h-14 w-full items-center justify-between px-2 md:px-8 bg-background-100">
       <div className="flex items-center justify-center">
         <Link href="/">
           <Logo height={30} />

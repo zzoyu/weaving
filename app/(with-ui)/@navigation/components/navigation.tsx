@@ -1,9 +1,9 @@
+import { fetchProfileByUserId } from "@/app/profile/actions";
+import HeartIcon from "@/public/assets/icons/navigation/heart.svg";
+import ProfileIcon from "@/public/assets/icons/navigation/profile.svg";
+import UserIcon from "@/public/assets/icons/navigation/user.svg";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
-import HeartIcon from "@/public/assets/icons/navigation/heart.svg";
-import UserIcon from "@/public/assets/icons/navigation/user.svg";
-import ProfileIcon from "@/public/assets/icons/navigation/profile.svg";
-import { fetchProfileByUserId } from "@/app/profile/actions";
 
 export default async function Navigation() {
   const supabase = createClient();
@@ -17,7 +17,7 @@ export default async function Navigation() {
       href: `/u/${responseProfile?.slug}/more`,
     },
     {
-      label: "내 프로필",
+      label: "홈",
       icon: ProfileIcon,
       href: `/u/${responseProfile?.slug}`,
     },
