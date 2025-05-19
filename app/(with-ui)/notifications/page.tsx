@@ -20,12 +20,12 @@ export default async function NotificationsPage({}: {}) {
 
   const { data: currentUser, error: authError } = await supabase.auth.getUser();
   if (authError) {
-    throw authError;
+    redirect("/");
   }
 
   const profile = await fetchProfileByUserId(currentUser?.user?.id as string);
   if (!profile) {
-    throw new Error(`해당하는 프로필을 찾을 수 없습니다.`);
+    redirect("/");
   }
 
   if (currentUser?.user?.id !== profile?.user_id) {

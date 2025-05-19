@@ -1,4 +1,5 @@
 import { marked } from "marked";
+import { notFound } from "next/navigation";
 import ButtonBack from "../../components/button-back";
 import { fetchNoticeItem } from "../actions";
 
@@ -11,7 +12,7 @@ export default async function NoticePage({
   const { id } = params;
   const noticeItem = await fetchNoticeItem(Number(id));
   if (!noticeItem) {
-    throw new Error("Notice not found");
+    notFound();
   }
 
   const markdown = `

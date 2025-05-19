@@ -2,6 +2,7 @@ import { fetchProfileByUserId } from "@/app/profile/actions";
 import { ErrorCode } from "@/types/error-code";
 import { createClient } from "@/utils/supabase/server";
 import { Metadata, ResolvingMetadata } from "next";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import {
   fetchCharactersByProfileId,
@@ -51,7 +52,7 @@ export default async function PublicProfilePage({
 }) {
   "use cache";
   const { slug } = params;
-  if (!slug) throw { message: "Slug not found" };
+  if (!slug) notFound();
 
   const { data, error } = await fetchProfileBySlug(slug);
 
