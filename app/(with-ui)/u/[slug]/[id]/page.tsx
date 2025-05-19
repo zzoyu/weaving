@@ -1,21 +1,16 @@
+import { fetchProfileByUserId } from "@/app/profile/actions";
+import { EPropertyType } from "@/types/character";
+import { createClient } from "@/utils/supabase/server";
+import { Metadata, ResolvingMetadata } from "next";
+import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
+import { Suspense } from "react";
+import { fetchIsFriendByIds, fetchProfileBySlug } from "../actions";
 import {
   compareCharacterPassword,
   fetchCharacter,
   fetchRelationships,
 } from "./actions";
-import { createClient } from "@/utils/supabase/server";
-import {
-  fetchIsFriendByIds,
-  fetchProfileById,
-  fetchProfileBySlug,
-} from "../actions";
-import { EPropertyType } from "@/types/character";
-import dynamic from "next/dynamic";
-import { cookies } from "next/headers";
-import { Metadata, ResolvingMetadata } from "next";
-import { Suspense } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
 import TemplateProfile from "./components/template-profile";
 import Loading from "./loading";
 
@@ -69,7 +64,7 @@ export default async function CharacterPage({
   const { data, error } = await fetchProfileBySlug(slug);
   if (!data) notFound();
 
-  const myProfile = await fetchProfileById(
+  const myProfile = await fetchProfileByUserId(
     currentUser?.data.user?.id as string
   );
 

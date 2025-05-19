@@ -9,6 +9,7 @@ import {
 } from "@/types/relationship";
 import clsx from "clsx";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 export function ListRelationship({
@@ -31,46 +32,51 @@ export function ListRelationship({
               relationshipTypeData[relationship.name as ERelationshipType];
 
             return (
-              <div
+              <Link
+                href={`/character/${relationship.character?.id}`}
                 key={`relationship-${relationship.id}`}
-                className={clsx(
-                  "flex flex-col items-center justify-center gap-1 overflow-hidden rounded-md relative group focus-within:ring-2",
-                  colorList?.[
-                    character?.properties?.find?.((i) => i.key === "themeColor")
-                      ?.value || "white"
-                  ] + " bg-opacity-50"
-                )}
               >
-                {isMine && relationshipType?.symbol && (
-                  <div
-                    className={clsx(
-                      "absolute left-2 top-2 rounded-full text-white p-1",
-                      relationshipType?.color
-                    )}
-                  >
-                    <relationshipType.symbol width={24} height={24} />
-                  </div>
-                )}
-                <div className="rounded-full overflow-hidden m-2">
-                  <Image
-                    src={character.thumbnail || character?.image?.[0] || ""}
-                    alt={character.name}
-                    width={100}
-                    height={100}
-                  />
-                </div>
                 <div
                   className={clsx(
-                    character.password && "text-opacity-50",
-                    character.isFavorite
-                      ? "bg-primary"
-                      : "bg-background-default",
-                    "w-full h-fit flex justify-center items-center p-2"
+                    "flex flex-col items-center justify-center gap-1 overflow-hidden rounded-md relative group focus-within:ring-2",
+                    colorList?.[
+                      character?.properties?.find?.(
+                        (i) => i.key === "themeColor"
+                      )?.value || "white"
+                    ] + " bg-opacity-50"
                   )}
                 >
-                  <p>{character.name}</p>
+                  {isMine && relationshipType?.symbol && (
+                    <div
+                      className={clsx(
+                        "absolute left-2 top-2 rounded-full text-white p-1",
+                        relationshipType?.color
+                      )}
+                    >
+                      <relationshipType.symbol width={24} height={24} />
+                    </div>
+                  )}
+                  <div className="rounded-full overflow-hidden m-2">
+                    <Image
+                      src={character.thumbnail || character?.image?.[0] || ""}
+                      alt={character.name}
+                      width={100}
+                      height={100}
+                    />
+                  </div>
+                  <div
+                    className={clsx(
+                      character.password && "text-opacity-50",
+                      character.isFavorite
+                        ? "bg-primary"
+                        : "bg-background-default",
+                      "w-full h-fit flex justify-center items-center p-2"
+                    )}
+                  >
+                    <p>{character.name}</p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             );
           }
         )}

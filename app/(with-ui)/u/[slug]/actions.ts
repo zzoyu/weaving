@@ -16,7 +16,7 @@ export async function fetchProfileBySlug(slug: string) {
   return { data, error };
 }
 
-export async function fetchProfileById(id?: string) {
+export async function fetchProfileById(id?: number) {
   if (!id) return null;
   const supabase = createClient();
   const { data, error } = (await supabase
