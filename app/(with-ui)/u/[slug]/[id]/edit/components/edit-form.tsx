@@ -30,7 +30,9 @@ export default function CharacterEditTemplate({
   const [properties, setProperties] = useState(
     character?.properties || [...baseProperties]
   );
-  const [hashtags, setHashtags] = useState<string>(character.hashtags || "");
+  const [hashtags, setHashtags] = useState<string>(
+    character.hashtags + " " || ""
+  );
   const [currentHashtag, setCurrentHashtag] = useState<string>("");
   const previewHashtags = useMemo(() => {
     if (!hashtags) return [];
