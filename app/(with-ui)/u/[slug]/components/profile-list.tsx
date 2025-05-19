@@ -160,7 +160,7 @@ function FilterPopup({
                     aria-label="테마색"
                     className="w-full"
                   >
-                    <span className="text-lg w-full flex justify-between items-center md:text-base">
+                    <span className="w-full flex justify-between items-center text-sm md:text-base">
                       테마색
                     </span>
                   </ToggleGroupItem>
@@ -169,7 +169,7 @@ function FilterPopup({
                     aria-label="눈동자색"
                     className="w-full"
                   >
-                    <span className="text-lg w-full flex justify-between items-center md:text-base">
+                    <span className="w-full flex justify-between items-center text-sm md:text-base">
                       눈동자색
                     </span>
                   </ToggleGroupItem>
@@ -178,7 +178,7 @@ function FilterPopup({
                     aria-label="머리색"
                     className="w-full"
                   >
-                    <span className="text-lg w-full flex justify-between items-center md:text-base">
+                    <span className="w-full flex justify-between items-center text-sm md:text-base">
                       머리색
                     </span>
                   </ToggleGroupItem>

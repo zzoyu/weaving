@@ -30,8 +30,6 @@ export function ListRelationship({
             const relationshipType =
               relationshipTypeData[relationship.name as ERelationshipType];
 
-            console.log("relationshipType", relationshipType);
-
             return (
               <div
                 key={`relationship-${relationship.id}`}

@@ -45,7 +45,7 @@ export default function ListProperties({
           }
         >
           <AddIcon
-            className="text-primary-200 hover:text-primary"
+            className="text-primary-200 text-background-dark"
             width={28}
             height={28}
           />

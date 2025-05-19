@@ -1,5 +1,7 @@
 import { fetchNotificationsByProfileId } from "@/app/(with-ui)/notifications/actions";
 import { fetchProfileByUserId } from "@/app/profile/actions";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Logo from "@/public/assets/logos/logo_text_horizontal_color.svg";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
@@ -21,7 +23,49 @@ export default async function Header() {
       </div>
       <div className="flex items-center gap-2">
         {profile && (
-          <ProfileBadge profile={profile} notifications={notifications} />
+          <Dialog>
+            <DialogTrigger className="focus:outline-none">
+              <ProfileBadge profile={profile} notifications={notifications} />
+            </DialogTrigger>
+            <DialogContent className="w-full h-full flex flex-col items-start justify-start gap-4 p-4 pt-8 md:max-h-fit">
+              <Link href={"/notifications"} passHref legacyBehavior>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-lg"
+                  size={"lg"}
+                >
+                  알림
+                </Button>
+              </Link>
+              <Link href={"/notifications/notice"} passHref legacyBehavior>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-lg"
+                  size={"lg"}
+                >
+                  공지
+                </Button>
+              </Link>
+              <Link href={"/mypage/friend"} passHref legacyBehavior>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-lg"
+                  size={"lg"}
+                >
+                  친구
+                </Button>
+              </Link>
+              <Link href={"/logout"} passHref legacyBehavior>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-lg"
+                  size={"lg"}
+                >
+                  로그아웃
+                </Button>
+              </Link>
+            </DialogContent>
+          </Dialog>
         )}
       </div>
     </header>

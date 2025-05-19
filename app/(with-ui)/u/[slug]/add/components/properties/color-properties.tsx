@@ -48,7 +48,7 @@ function ColorModal({
         </div>
         <button
           type="button"
-          className="w-full p-2 mt-4 bg-primary-200 text-white"
+          className="w-full p-2 mt-4  bg-text-black text-background-default"
           onClick={() => onClose()}
         >
           닫기
@@ -84,7 +84,7 @@ function ColorPicker({
       <button
         type="button"
         className={clsx(
-          "relative w-10 h-10 border-primary border",
+          "relative w-10 h-10 border-background-muted border",
           colorList?.[(property?.value as string) || "white"]
         )}
         onClick={() => {
@@ -114,9 +114,15 @@ export function ColorProperties({
 }) {
   return (
     <div className="w-full grid grid-cols-3">
-      <div className="bg-primary text-center py-1">테마색</div>
-      <div className="bg-primary text-center py-1">눈동자색</div>
-      <div className="bg-primary text-center py-1">머리색</div>
+      <div className="text-text-black bg-background-muted text-center py-1">
+        테마색
+      </div>
+      <div className="text-text-black bg-background-muted text-center py-1">
+        눈동자색
+      </div>
+      <div className="text-text-black bg-background-muted text-center py-1">
+        머리색
+      </div>
 
       <ColorPicker
         editable={editable}

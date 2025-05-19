@@ -165,16 +165,15 @@ export default function CharacterAddTemplate({
           setProperties(newValue);
         }}
       />
-      <hr className="mt-2 p-2 w-full" />
-      <ColorProperties properties={colors} handler={setColors} editable />
-      <hr className="mt-2 p-2 w-full" />
+      <div className=" px-10 w-full">
+        <ColorProperties properties={colors} handler={setColors} editable />
+      </div>
       <ButtonAddRelationship
         relationships={relationships}
         onChange={setRelationships}
         editable
         profileId={profileId}
       />
-      <hr className="mt-2 p-2 w-full" />
       <InputHashtag
         value={currentHashtag}
         hashtags={previewHashtags}
@@ -198,7 +197,7 @@ export default function CharacterAddTemplate({
       <button
         type="submit"
         disabled={isLoading}
-        className="bg-primary-200 text-white rounded w-full text-xl p-2"
+        className="text-background-default bg-text-black rounded w-full text-xl p-2"
       >
         저장하기
       </button>

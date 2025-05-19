@@ -68,7 +68,7 @@ export default function ButtonRequestFriend({
               수락
             </button>
             <button
-              className="bg-gray-500 text-white px-4 py-2 rounded-md"
+              className="bg-gray-400 text-white px-4 py-2 rounded-md"
               onClick={() => {
                 if (confirm("친구 신청을 거절하시겠습니까?")) {
                   removeFriendByProfileId(from.id!, to.id!);

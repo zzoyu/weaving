@@ -29,16 +29,13 @@ export default function InputHashtag({
             }
           }}
           placeholder="해시태그 입력"
-          className="w-full text-xl  border-primary focus:outline-none pl-6 py-1"
+          className="w-full text-xl  border-background-muted focus:outline-none pl-6 py-1"
         />
       </div>
       <div className=" inline-flex flex-wrap gap-2">
         {hashtags.length ? (
           hashtags.map((hashtag, index) => (
-            <span
-              className="rounded-full px-8 py-1 bg-primary border border-primary-300 relative"
-              key={`hashtag-${index}-${hashtag}`}
-            >
+            <span className="item-hashtag" key={`hashtag-${index}-${hashtag}`}>
               #{hashtag}
               <button
                 type="button"

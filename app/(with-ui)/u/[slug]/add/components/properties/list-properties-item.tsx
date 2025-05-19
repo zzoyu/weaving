@@ -22,7 +22,7 @@ export default function ListPropertiesItem({
           value={`${property.key}:${property.value}`}
         />
         <input
-          className="w-1/3 text-center p-1  border-primary focus:outline-none"
+          className="w-1/3 text-center p-1  border-background-muted focus:outline-none"
           type="text"
           value={property.key}
           onChange={(event) => {
@@ -31,7 +31,7 @@ export default function ListPropertiesItem({
         />
         <input
           type="text"
-          className="w-full text-center p-1 border-primary focus:outline-none"
+          className="w-full text-center p-1 border-background-muted focus:outline-none"
           value={property.value}
           onChange={(event) => {
             onChange({ ...property, value: event.target.value });
@@ -45,7 +45,7 @@ export default function ListPropertiesItem({
           onDelete(property);
         }}
       >
-        <DeleteIcon className="text-primary-200" width={28} height={28} />
+        <DeleteIcon className=" text-background-dark" width={28} height={28} />
       </button>
     </div>
   );

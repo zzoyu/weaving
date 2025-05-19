@@ -23,7 +23,7 @@ export default function TemplateProfile({
     ? characterData.hashtags.split(" ")
     : [];
   return (
-    <div className="w-full max-w-4xl mx-auto flex flex-col gap-6">
+    <div className="w-full max-w-4xl mx-auto flex flex-col gap-6 pb-20">
       {isMyProfile && (
         <div className="flex items-center justify-end">
           {/* favorite icon */}
@@ -36,11 +36,9 @@ export default function TemplateProfile({
         isMine={isMyProfile}
       />
 
-      <hr className="mt-10 p-0 w-full" />
-
-      <ColorProperties properties={colorProperties} />
-
-      <hr className="mt-0 p-0 w-full" />
+      <div className="w-full px-10">
+        <ColorProperties properties={colorProperties} />
+      </div>
 
       {relationships && (
         <>
@@ -49,17 +47,13 @@ export default function TemplateProfile({
             relationships={relationships}
             isMine={isMyProfile}
           />
-          <hr className="mt-0 p-0 w-full" />
         </>
       )}
 
       {hashtags && (
-        <div className="inline-flex flex-wrap gap-2">
+        <div className="inline-flex flex-wrap gap-2 px-10">
           {hashtags.map((tag, index) => (
-            <span
-              key={index}
-              className="rounded-full px-8 py-1 bg-primary border border-primary-300 relative"
-            >
+            <span key={index} className="item-hashtag">
               #{tag}
             </span>
           ))}
