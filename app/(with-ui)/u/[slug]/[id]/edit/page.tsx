@@ -1,4 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
+import { notFound, redirect } from "next/navigation";
 import { fetchCharacter, fetchRelationships } from "../actions";
 import EditForm from "./components/edit-form";
 
@@ -10,12 +11,12 @@ export default async function EditPage({
   const supabase = createClient();
   const currentUser = await supabase.auth.getUser();
   if (!currentUser?.data?.user) {
-    throw new Error("User not found");
+    redirect("/");
   }
 
   const data = await fetchCharacter(params.id);
   if (!data) {
-    throw new Error("Character not found");
+    notFound();
   }
   const colorProperties = data?.properties?.filter(
     (property) => property.type === "color"
@@ -27,16 +28,14 @@ export default async function EditPage({
 
   const relationships = await fetchRelationships(params.id);
 
-  if (!data) {
-    throw new Error("Character not found");
-  }
-
   return (
     <main>
       {data && (
-        <EditForm character={data} colors={
-          colorProperties
-        } relationships={relationships || []} />
+        <EditForm
+          character={data}
+          colors={colorProperties}
+          relationships={relationships || []}
+        />
       )}
     </main>
   );
