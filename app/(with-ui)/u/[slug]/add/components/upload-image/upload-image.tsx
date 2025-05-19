@@ -55,7 +55,7 @@ export default function UploadImage({
     <div className="relative">
       <input
         type="hidden"
-        name={`${name}-is-edited`}
+        name={`${name}-image-is-edited`}
         value={isEdited ? "true" : "false"}
       />
       {isEdited && isEdit && (
