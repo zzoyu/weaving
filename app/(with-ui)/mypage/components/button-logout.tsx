@@ -14,7 +14,7 @@ export default function ButtonLogout() {
         title: "로그아웃",
         description: "로그아웃 되었습니다.",
       });
-      router.replace("/");
+      router.refresh();
     });
   }
 

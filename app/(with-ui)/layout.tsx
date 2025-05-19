@@ -1,4 +1,3 @@
-
 export default function UILayout({
   children,
   header,
@@ -13,7 +12,7 @@ export default function UILayout({
   return (
     <div className="flex flex-col h-full pt-14">
       {header}
-      <div className="w-full h-full overflow-y-auto pb-[3.75rem]">{children}</div>
+      <div className="w-full h-full overflow-y-auto">{children}</div>
       {navigation}
     </div>
   );

@@ -70,7 +70,7 @@ export function ProfileCard({
           isMine={isMine}
         />
       )}
-      <Carousel className="w-full max-w-2xl">
+      <Carousel className="w-full">
         <CarouselContent>
           {character?.image?.map?.((image: string, index: number) => {
             if (!image) return null;
@@ -90,8 +90,8 @@ export function ProfileCard({
             );
           })}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        <CarouselPrevious className="left-2" />
+        <CarouselNext className="right-2" />
       </Carousel>
       <div className="flex flex-col justify-center items-center gap-2 w-full mt-10">
         <h2 className="text-2xl font-bold">{character.name}</h2>

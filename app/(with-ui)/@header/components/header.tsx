@@ -27,7 +27,7 @@ export default async function Header() {
             <DialogTrigger className="focus:outline-none">
               <ProfileBadge profile={profile} notifications={notifications} />
             </DialogTrigger>
-            <DialogContent className="w-full h-full flex flex-col items-start justify-start gap-4 p-4 pt-8 md:max-h-fit">
+            <DialogContent className="w-full h-full flex flex-col items-start justify-start gap-4 p-4 pt-8 md:max-h-fit max-w-full md:max-w-lg">
               <Link href={"/notifications"} passHref legacyBehavior>
                 <Button
                   variant="ghost"
