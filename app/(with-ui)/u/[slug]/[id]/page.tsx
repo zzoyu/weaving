@@ -68,10 +68,7 @@ export default async function CharacterPage({
     currentUser?.data.user?.id as string
   );
 
-  const responseIsFriend = await fetchIsFriendByIds(
-    data?.id,
-    myProfile?.data?.id
-  );
+  const responseIsFriend = await fetchIsFriendByIds(data?.id, myProfile?.id);
 
   if (error) {
     throw error;
