@@ -26,14 +26,13 @@ export default function ButtonFavorite({
   );
 
   const handleFavoriteClick = () => {
-    // 상태를 즉시 업데이트
-    setIsFavorite(!isFavorite);
-
     startTransition(async () => {
       try {
-        if (isFavorite) {
+        if (!isFavorite) {
+          setIsFavorite(isFavorite);
           await addFavoriteCharacter(profileId, characterId);
         } else {
+          setIsFavorite(!isFavorite);
           await removeFavoriteCharacter(profileId, characterId);
         }
       } catch (error) {
@@ -44,7 +43,11 @@ export default function ButtonFavorite({
   };
 
   return (
-    <button onClick={handleFavoriteClick} className={`p-2 rounded`}>
+    <button
+      onClick={handleFavoriteClick}
+      className={`p-2 rounded`}
+      type="button"
+    >
       {isFavorite ? (
         <IconFavoriteFilled className="text-primary" />
       ) : (
