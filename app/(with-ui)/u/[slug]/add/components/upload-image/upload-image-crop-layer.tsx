@@ -85,7 +85,7 @@ export default function UploadImageCropLayer({
   });
 
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen flex flex-col items-center justify-center gap-10 bg-background-default z-10">
+    <div className="fixed -top-10 left-0 w-full h-full flex flex-col items-center justify-center gap-10 bg-background-default z-10">
       <small
         className="
       border-2 border-primary rounded-lg p-1
@@ -113,18 +113,18 @@ export default function UploadImageCropLayer({
           />
         </ReactCrop>
       </div>
-      <div className="flex flex-row gap-10 fixed bottom-10 left-1/2 transform -translate-x-1/2">
+      <div className="flex flex-row gap-2 fixed bottom-16 justify-stretch md:justify-center w-full md:w-auto md:bottom-24 left-1/2 transform -translate-x-1/2 px-2">
         <button
           type="button"
           onClick={handleSave}
-          className="bg-primary-200 text-white px-4 py-2 rounded-lg"
+          className="bg-primary hover:bg-primary hover:opacity-90 text-white px-10 py-4 rounded-lg w-full md:w-auto"
         >
           저장
         </button>
         <button
           type="button"
           onClick={onClose}
-          className="bg-background-default text-primary-200 px-4 py-2 rounded-lg"
+          className="bg-background-dark hover:bg-background-dark hover:opacity-90 text-primary-200 px-10 py-4 rounded-lg w-full md:w-auto"
         >
           취소
         </button>
