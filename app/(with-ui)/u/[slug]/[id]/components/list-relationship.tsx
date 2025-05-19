@@ -49,11 +49,11 @@ export function ListRelationship({
                   {isMine && relationshipType?.symbol && (
                     <div
                       className={clsx(
-                        "absolute left-2 top-2 rounded-full text-white p-1",
+                        "absolute left-2 top-2 rounded-full text-white p-1.5",
                         relationshipType?.color
                       )}
                     >
-                      <relationshipType.symbol width={24} height={24} />
+                      <relationshipType.symbol width={20} height={20} />
                     </div>
                   )}
                   <div className="rounded-full overflow-hidden m-2">
