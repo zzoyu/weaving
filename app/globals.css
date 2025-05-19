@@ -29,7 +29,7 @@
   }
 
   .item-hashtag {
-    @apply rounded-full px-8 py-1 text-gray-500 bg-background-light relative;
+    @apply rounded-full pl-6 pr-8 py-1 text-gray-500 bg-background-light relative;
   }
 }
 
