@@ -31,7 +31,7 @@ export default function CharacterEditTemplate({
     character?.properties || [...baseProperties]
   );
   const [hashtags, setHashtags] = useState<string>(
-    character.hashtags + " " || ""
+    character.hashtags?.length || 0 > 0 ? character.hashtags + " " : ""
   );
   const [currentHashtag, setCurrentHashtag] = useState<string>("");
   const previewHashtags = useMemo(() => {

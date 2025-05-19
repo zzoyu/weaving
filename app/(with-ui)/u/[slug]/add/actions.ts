@@ -119,8 +119,8 @@ export async function updateCharacter(
   const characterId = Number(formData.get("character_id") as string);
   if (!characterId) throw new Error("Character ID is required");
 
-  const isHalfEdited = formData.get("half-image-is-edited") as string;
-  const isFullEdited = formData.get("full-image-is-edited") as string;
+  const isHalfEdited = Boolean(formData.get("half-image-is-edited") as string);
+  const isFullEdited = Boolean(formData.get("full-image-is-edited") as string);
 
   // print all of the formData
   for (const [key, value] of formData.entries()) {
@@ -158,11 +158,14 @@ export async function updateCharacter(
 
   const imageUrls = await Promise.all(
     imageFiles.map(async (image, index) => {
+      console.log("imageFlag", imageFlag);
+      console.log("current image", image, index);
       if (!imageFlag[index]) return originalImages[index];
       // pass if the image has no file
       if (!image) return "";
 
       try {
+        console.log("Uploading image:", image);
         return await uploadImage(
           image,
           Math.floor(Math.random() * 10000).toString(),
@@ -176,17 +179,16 @@ export async function updateCharacter(
   );
 
   console.log("Uploaded image URLs:", imageUrls);
-  console.log("Thumbnail URL:", thumbnailUrl);
-  console.log(characterId);
 
   const { data, error } = await supabase
     .from("character")
     .update({
       name,
       description,
-      image: imageUrls,
+      image: imageUrls || [],
       thumbnail: thumbnailUrl,
       properties,
+      hashtags: formData.get("hashtags") as string,
     })
     .eq("id", characterId);
 

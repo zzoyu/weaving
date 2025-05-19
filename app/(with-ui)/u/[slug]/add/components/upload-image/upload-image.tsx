@@ -55,11 +55,11 @@ export default function UploadImage({
     <div className="relative">
       <input
         type="hidden"
-        name={`${name}-is-edited`}
+        name={`${name}-image-is-edited`}
         value={isEdited ? "true" : "false"}
       />
       {isEdited && isEdit && (
-        <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-sm">
+        <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-sm z-10">
           *
         </div>
       )}
