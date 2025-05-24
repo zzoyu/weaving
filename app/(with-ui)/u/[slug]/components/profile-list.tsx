@@ -4,7 +4,6 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -140,10 +139,10 @@ function FilterPopup({
           ☰
         </button>
       </SheetTrigger>
-      <SheetContent className="w-sm md:w-64">
+      <SheetContent className="w-sm md:w-64" aria-description="필터 옵션">
         <SheetHeader>
           <SheetTitle>Filter</SheetTitle>
-          <SheetDescription>
+          <SheetContent>
             {/* 필터 옵션 */}
             <div className="space-y-4 flex flex-col">
               <div>
@@ -216,9 +215,9 @@ function FilterPopup({
                 </div>
               </div>
 
-              <SheetClose>
+              <SheetClose asChild>
                 <button
-                  className="w-full p-4 md:py-2 text-white bg-primary-200 rounded-lg"
+                  className="w-full p-4 md:py-2 text-white bg-primary rounded-lg"
                   onClick={() => {
                     // 필터 적용 로직 추가
                     onUpdate(type, color || []);
@@ -228,7 +227,7 @@ function FilterPopup({
                 </button>
               </SheetClose>
             </div>
-          </SheetDescription>
+          </SheetContent>
         </SheetHeader>
       </SheetContent>
     </Sheet>
