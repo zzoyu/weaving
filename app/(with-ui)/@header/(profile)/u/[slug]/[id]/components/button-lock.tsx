@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -48,12 +47,12 @@ export function DialogLock({ characterId }: { characterId: number }) {
         >
           <input type="hidden" name="character_id" value={characterId} />
           <DialogHeader>
-            <DialogTitle>캐릭터 잠금</DialogTitle>
-            <DialogDescription>
+            <DialogContent>
+              <DialogTitle>캐릭터 잠금</DialogTitle>
               캐릭터를 잠그면 로그인 하지 않은 사용자는 비밀번호를 입력해야
               열람이 가능합니다. 친구로 등록된 유저는 비밀번호를 입력하지 않고도
               열람이 가능합니다.
-            </DialogDescription>
+            </DialogContent>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">

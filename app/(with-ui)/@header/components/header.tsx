@@ -1,7 +1,12 @@
 import { fetchNotificationsByProfileId } from "@/app/(with-ui)/notifications/actions";
 import { fetchProfileByUserId } from "@/app/profile/actions";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import Logo from "@/public/assets/logos/logo_text_horizontal_color.svg";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
@@ -28,6 +33,7 @@ export default async function Header() {
               <ProfileBadge profile={profile} notifications={notifications} />
             </DialogTrigger>
             <DialogContent className="w-full h-full flex flex-col items-start justify-start gap-4 p-4 pt-8 md:max-h-fit max-w-full md:max-w-lg">
+              <DialogTitle className="hidden">메뉴</DialogTitle>
               <Link href={"/notifications"} passHref legacyBehavior>
                 <Button
                   variant="ghost"
