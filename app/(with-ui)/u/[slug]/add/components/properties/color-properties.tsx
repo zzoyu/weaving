@@ -91,13 +91,12 @@ function ColorPicker({
           if (editable) setIsOpen(true);
         }}
       >
-        {!property?.value ||
-          (property.value === "" && (
-            <>
-              <div className="absolute w-full h-px bg-gray-300 rotate-45 top-1/2 left-0 transform -translate-y-1/2"></div>
-              <div className="absolute w-full h-px bg-gray-300 -rotate-45 top-1/2 left-0 transform -translate-y-1/2"></div>
-            </>
-          ))}
+        {(!property?.value || property.value === "") && (
+          <>
+            <div className="absolute w-full h-px bg-gray-300 rotate-45 top-1/2 left-0 transform -translate-y-1/2"></div>
+            <div className="absolute w-full h-px bg-gray-300 -rotate-45 top-1/2 left-0 transform -translate-y-1/2"></div>
+          </>
+        )}
       </button>
     </div>
   );

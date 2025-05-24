@@ -94,7 +94,7 @@ export default function UploadImage({
             />
             {useThumbnail &&
               (thumbnailFileInput.current?.files?.[0] || thumbnailUrl) && (
-                <div className="absolute z-20 -bottom-2 -right-2 w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
+                <div className="absolute z-10 -bottom-2 -right-2 w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
                   <Image
                     className="object-cover w-full h-full"
                     alt={"썸네일 이미지"}
