@@ -5,7 +5,7 @@ export const colorList: {
   white: "bg-white",
   yellow: "bg-yellow-400",
   gray: "bg-gray-200",
-  brown: "bg-brown",
+  brown: "bg-yellow-700",
   red: "bg-red-500",
   pink: "bg-pink-300",
   orange: "bg-orange-400",
