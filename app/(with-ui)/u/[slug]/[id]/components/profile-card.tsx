@@ -100,12 +100,14 @@ export function ProfileCard({
         </p>
       </div>
       <div className="flex flex-col justify-center items-center gap-2 w-full">
-        <button
-          className="bg-green-500 text-background-default rounded-l-full rounded-r-full px-4 py-2 text-sm rounded-lg w-1/3 md:max-w-40 mb-12"
-          onClick={() => setIsOpenRelationshipGraph(true)}
-        >
-          관계도 보기
-        </button>
+        {relationships.length > 0 && (
+          <button
+            className="bg-green-500 text-background-default rounded-l-full rounded-r-full px-4 py-2 text-sm rounded-lg w-1/3 md:max-w-40 mb-12"
+            onClick={() => setIsOpenRelationshipGraph(true)}
+          >
+            관계도 보기
+          </button>
+        )}
       </div>
       <div className="flex flex-col justify-center items-center gap-2 w-full">
         <div className="text-gray-700 w-full px-10">
