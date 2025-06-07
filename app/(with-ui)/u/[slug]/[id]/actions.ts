@@ -169,3 +169,41 @@ export async function compareCharacterPassword(
 
   return !!data;
 }
+
+export async function updateBulkRelationships(
+  from_id: number,
+  relationships: {
+    to_id: number;
+    name: string;
+  }[]
+) {
+  const supabase = createClient();
+
+  // 트랜잭션 시작
+  const { error: deleteError } = await supabase
+    .from("relationship")
+    .delete()
+    .eq("from_id", from_id);
+
+  if (deleteError) {
+    throw deleteError;
+  }
+
+  // 새로운 관계 생성
+  const { data, error: insertError } = await supabase
+    .from("relationship")
+    .insert(
+      relationships.map((relationship) => ({
+        from_id,
+        to_id: relationship.to_id,
+        name: relationship.name || "friend",
+      }))
+    );
+
+  if (insertError) {
+    throw insertError;
+  }
+
+  revalidatePath("/u/[slug]", "page");
+  return data;
+}
