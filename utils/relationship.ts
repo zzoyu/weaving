@@ -11,14 +11,13 @@ export function buildRelationshipTree(
 
   // 먼저 모든 관계를 Map에 저장
   relationships.forEach((rel) => {
-    // characterId와 to_id가 같은 경우는 건너뛰지 않고, relationship_in으로 사용될 수 있도록 처리
     const node: RelationshipNode = {
       id: rel.id,
       from_id: rel.from_id,
       to_id: rel.to_id,
       name: rel.name,
       relationship_out: rel.relationship,
-      relationship_in: undefined, // 나중에 설정
+      relationship_in: undefined,
       thumbnail: rel.thumbnail,
       depth: rel.depth,
       children: [],
@@ -47,15 +46,23 @@ export function buildRelationshipTree(
     }
 
     // 트리 구조 구성
-    // characterId와 to_id가 같은 경우는 children으로 추가하지 않음
-    // characterId와 from_id가 같은 경우는 루트 노드로 추가
     if (rel.to_id !== characterId) {
       if (rel.from_id === characterId) {
+        // 루트 노드로 추가
         rootNodes.push(node);
       } else {
+        // 부모 노드 찾기
         const parentNode = relationshipMap.get(rel.from_id);
         if (parentNode) {
-          parentNode.children?.push(node);
+          // 이미 children에 있는지 확인
+          const isAlreadyChild = parentNode.children?.some(
+            (child) => child.to_id === node.to_id
+          );
+
+          // children에 없고, relationship_out이 있는 경우에만 추가
+          if (!isAlreadyChild && node.relationship_out) {
+            parentNode.children?.push(node);
+          }
         }
       }
     }

@@ -137,6 +137,118 @@ export default function RelationshipGraph2({
       .attr("stroke-width", 2);
   }
 
+  function drawNodeWithRelationshipIn(
+    target: d3.Selection<any, any, any, any>,
+    node: {
+      x: number;
+      y: number;
+      lineCenter: { x: number; y: number };
+    },
+    relationship: RelationshipNode,
+    index: number
+  ) {
+    const r = radius[1];
+    const parallelOffset = 12;
+
+    // 중심선의 각도 계산
+    const angle = Math.atan2(node.y - originY, node.x - originX);
+    const perpendicularAngle = angle + Math.PI / 2;
+
+    // 평행 이동된 점들의 좌표 계산
+    const offsetX = parallelOffset * Math.cos(perpendicularAngle);
+    const offsetY = parallelOffset * Math.sin(perpendicularAngle);
+
+    // 원에 외접하는 점 계산
+    const startX1 = originX + offsetX + r * Math.cos(angle);
+    const startY1 = originY + offsetY + r * Math.sin(angle);
+    const endX1 = node.x + offsetX - r * Math.cos(angle);
+    const endY1 = node.y + offsetY - r * Math.sin(angle);
+
+    const startX2 = originX - offsetX + r * Math.cos(angle);
+    const startY2 = originY - offsetY + r * Math.sin(angle);
+    const endX2 = node.x - offsetX - r * Math.cos(angle);
+    const endY2 = node.y - offsetY - r * Math.sin(angle);
+
+    // 화살표 마커 정의 - out 방향
+    target
+      .append("defs")
+      .append("marker")
+      .attr("id", `arrowhead-out-${index}`)
+      .attr("viewBox", "-10 -5 10 10")
+      .attr("refX", 0)
+      .attr("refY", 0)
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 6)
+      .attr("orient", "auto")
+      .append("path")
+      .attr("d", "M0,-5L-10,0L0,5")
+      .attr("fill", "gray");
+
+    // 화살표 마커 정의 - in 방향
+    target
+      .append("defs")
+      .append("marker")
+      .attr("id", `arrowhead-in-${index}`)
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 10)
+      .attr("refY", 0)
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 6)
+      .attr("orient", "auto")
+      .append("path")
+      .attr("d", "M0,-5L10,0L0,5")
+      .attr("fill", "gray");
+
+    // 첫 번째 평행선 (out 방향)
+    target
+      .append("line")
+      .attr("x1", startX1)
+      .attr("y1", startY1)
+      .attr("x2", endX1)
+      .attr("y2", endY1)
+      .attr("stroke", "gray")
+      .attr("stroke-width", 2)
+      .attr("marker-end", `url(#arrowhead-out-${index})`);
+
+    // 두 번째 평행선 (in 방향)
+    target
+      .append("line")
+      .attr("x1", startX2)
+      .attr("y1", startY2)
+      .attr("x2", endX2)
+      .attr("y2", endY2)
+      .attr("stroke", "gray")
+      .attr("stroke-width", 2)
+      .attr("marker-end", `url(#arrowhead-in-${index})`);
+
+    target
+      .append("defs")
+      .append("clipPath")
+      .attr("id", `round-clip-in-${index}`)
+      .append("circle")
+      .attr("cx", node.x)
+      .attr("cy", node.y)
+      .attr("r", r);
+
+    target
+      .append("image")
+      .attr("xlink:href", relationship.thumbnail || "")
+      .attr("width", r * 2)
+      .attr("height", r * 2)
+      .attr("x", node.x - r)
+      .attr("y", node.y - r)
+      .attr("clip-path", `url(#round-clip-in-${index})`);
+
+    target
+      .append("circle")
+      .attr("cx", node.x)
+      .attr("cy", node.y)
+      .attr("r", r)
+      .attr("fill", "none")
+      .attr("stroke", "gray")
+      .attr("stroke-width", 2);
+  }
+
   function drawNodeText(
     target: d3.Selection<any, any, any, any>,
     node: { x: number; y: number; lineCenter: { x: number; y: number } },
@@ -145,29 +257,98 @@ export default function RelationshipGraph2({
     isMine?: boolean
   ) {
     const r = radius[1];
+    const parallelOffset = 12;
 
-    if (isMine && relationship.relationship) {
-      const relationshipType =
-        relationship.relationship.toLowerCase() as ERelationshipType;
-      const relationshipData = relationshipTypeData[relationshipType];
+    if (isMine) {
+      // 양방향 관계 표시
+      const relationshipTypes = [];
+      const hasIn = !!relationship.relationship_in;
 
-      if (relationshipData?.url?.src) {
-        target
-          .append("circle")
-          .attr("cx", node.lineCenter.x)
-          .attr("cy", node.lineCenter.y)
-          .attr("r", xScale(1.7))
-          .attr("fill", "white")
-          .attr("stroke-width", 2);
+      if (relationship.relationship_out) {
+        if (hasIn) {
+          // relationship_in이 있는 경우, 평행선 간격에 맞게 반대쪽에 배치
+          const angle = Math.atan2(node.y - originY, node.x - originX);
+          const perpendicularAngle = angle + Math.PI / 2;
+          const offsetX = parallelOffset * Math.cos(perpendicularAngle);
+          const offsetY = parallelOffset * Math.sin(perpendicularAngle);
 
-        target
-          .append("image")
-          .attr("xlink:href", relationshipData.url.src)
-          .attr("width", xScale(3))
-          .attr("height", xScale(3))
-          .attr("x", node.lineCenter.x - xScale(1.5))
-          .attr("y", node.lineCenter.y - xScale(1.5));
+          relationshipTypes.push({
+            type: relationship.relationship_out.toLowerCase() as ERelationshipType,
+            position: {
+              x: node.lineCenter.x - offsetX,
+              y: node.lineCenter.y - offsetY,
+            },
+          });
+        } else {
+          // relationship_in이 없는 경우 기존 위치 유지
+          relationshipTypes.push({
+            type: relationship.relationship_out.toLowerCase() as ERelationshipType,
+            position: {
+              x: node.lineCenter.x - xScale(1.5),
+              y: node.lineCenter.y - xScale(1.5),
+            },
+          });
+        }
       }
+
+      if (relationship.relationship_in) {
+        // relationship_in이 있는 경우 평행선 위에 심볼 배치
+        const angle = Math.atan2(node.y - originY, node.x - originX);
+        const perpendicularAngle = angle + Math.PI / 2;
+        const offsetX = parallelOffset * Math.cos(perpendicularAngle);
+        const offsetY = parallelOffset * Math.sin(perpendicularAngle);
+
+        relationshipTypes.push({
+          type: relationship.relationship_in.toLowerCase() as ERelationshipType,
+          position: {
+            x: node.lineCenter.x + offsetX,
+            y: node.lineCenter.y + offsetY,
+          },
+        });
+      }
+
+      relationshipTypes.forEach(({ type, position }) => {
+        const relationshipData = relationshipTypeData[type];
+        if (relationshipData?.url?.src) {
+          const isIn = type === relationship.relationship_in?.toLowerCase();
+
+          if (hasIn) {
+            // relationship_in이 있는 경우, 모든 심볼을 평행선 위에 배치
+            target
+              .append("circle")
+              .attr("cx", position.x)
+              .attr("cy", position.y)
+              .attr("r", xScale(1.7))
+              .attr("fill", "white")
+              .attr("stroke-width", 2);
+
+            target
+              .append("image")
+              .attr("xlink:href", relationshipData.url.src)
+              .attr("width", xScale(3))
+              .attr("height", xScale(3))
+              .attr("x", position.x - xScale(1.5))
+              .attr("y", position.y - xScale(1.5));
+          } else {
+            // relationship_in이 없는 경우 기존 위치 유지
+            target
+              .append("circle")
+              .attr("cx", position.x + xScale(1.5))
+              .attr("cy", position.y + xScale(1.5))
+              .attr("r", xScale(1.7))
+              .attr("fill", "white")
+              .attr("stroke-width", 2);
+
+            target
+              .append("image")
+              .attr("xlink:href", relationshipData.url.src)
+              .attr("width", xScale(3))
+              .attr("height", xScale(3))
+              .attr("x", position.x)
+              .attr("y", position.y);
+          }
+        }
+      });
     }
 
     target
@@ -205,20 +386,28 @@ export default function RelationshipGraph2({
       const r2 = radius[1];
       const x2 = node.x - r2 * Math.cos(angle);
       const y2 = node.y - r2 * Math.sin(angle);
-      svg
-        .append("line")
-        .attr("x1", originX)
-        .attr("y1", originY)
-        .attr("x2", x2)
-        .attr("y2", y2)
-        .attr("stroke", "gray")
-        .attr("stroke-width", 2)
-        .attr("marker-end", "url(#arrowhead)");
+
+      // relationship_in이 없는 경우에만 기본 선을 그림
+      if (!relationships[index].relationship_in) {
+        svg
+          .append("line")
+          .attr("x1", originX)
+          .attr("y1", originY)
+          .attr("x2", x2)
+          .attr("y2", y2)
+          .attr("stroke", "gray")
+          .attr("stroke-width", 2)
+          .attr("marker-end", "url(#arrowhead)");
+      }
     });
 
     // 기존 drawNode, drawNodeText 등은 그대로 유지
     nodes.forEach((node, index) => {
-      drawNode(svg, node, relationships[index], index);
+      if (relationships[index].relationship_in) {
+        drawNodeWithRelationshipIn(svg, node, relationships[index], index);
+      } else {
+        drawNode(svg, node, relationships[index], index);
+      }
     });
 
     const r = radius[0];
