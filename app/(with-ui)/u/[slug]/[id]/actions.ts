@@ -1,7 +1,8 @@
 "use server";
 
 import { Character } from "@/types/character";
-import { Relationship } from "@/types/relationship";
+import { Relationship, RelationshipNode } from "@/types/relationship";
+import { buildRelationshipTree } from "@/utils/relationship";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath, revalidateTag } from "next/cache";
 
@@ -38,6 +39,51 @@ export async function fetchRelationships(
 
   revalidateTag("relationships");
   return (data as unknown as Relationship[]) || null;
+}
+
+export async function fetchRelationshipsWithDepth(
+  id: number
+): Promise<RelationshipNode[] | null> {
+  const supabase = createClient();
+  const { data, error } = await supabase.rpc("relationship_with_depth", {
+    start_id: id,
+    max_depth: 3,
+  });
+
+  if (error) {
+    console.error(error?.message);
+    throw error;
+  }
+
+  // 데이터를 트리 구조로 변환
+  const treeData = buildRelationshipTree(id, data);
+
+  revalidateTag("relationships");
+  return treeData;
+}
+
+export async function fetchRelationshipsWithDepthExtended(
+  id: number
+): Promise<RelationshipNode[] | null> {
+  const supabase = createClient();
+  const { data, error } = await supabase.rpc(
+    "relationship_with_depth_extended",
+    {
+      start_id: id,
+      max_depth: 3,
+    }
+  );
+
+  if (error) {
+    console.error(error?.message);
+    throw error;
+  }
+  console.log("fetchRelationshipsWithDepthExtended", data);
+  // 데이터를 트리 구조로 변환
+  const treeData = buildRelationshipTree(id, data);
+
+  revalidateTag("relationships");
+  return treeData;
 }
 
 export async function createBulkRelationships(

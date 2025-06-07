@@ -8,10 +8,14 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Character, Property } from "@/types/character";
-import { Relationship } from "@/types/relationship";
+import { Relationship, RelationshipNode } from "@/types/relationship";
 import Image from "next/image";
-import { useState } from "react";
-import RelationshipGraph from "./relationship-graph";
+import { useEffect, useState } from "react";
+import {
+  fetchRelationshipsWithDepth,
+  fetchRelationshipsWithDepthExtended,
+} from "../actions";
+import RelationshipGraphVariants from "./relationship-graph-variants";
 
 function PopupRelationshipGraph({
   character,
@@ -24,6 +28,37 @@ function PopupRelationshipGraph({
   onClose: () => void;
   isMine?: boolean;
 }) {
+  const [deepRelationships, setDeepRelationships] = useState<
+    RelationshipNode[] | null
+  >(null);
+  const [deepRelationshipsExtended, setDeepRelationshipsExtended] = useState<
+    RelationshipNode[] | null
+  >(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadDeepRelationships = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const [data, dataExtended] = await Promise.all([
+          fetchRelationshipsWithDepth(character.id),
+          fetchRelationshipsWithDepthExtended(character.id),
+        ]);
+        setDeepRelationships(data);
+        setDeepRelationshipsExtended(dataExtended);
+      } catch (error) {
+        console.error("Failed to fetch deep relationships");
+        setError("관계 데이터를 불러오는데 실패했습니다.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadDeepRelationships();
+  }, [character.id]);
+
   return (
     <div className="fixed z-10 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white w-5/6 h-5/6 p-4 rounded-lg relative">
@@ -32,11 +67,20 @@ function PopupRelationshipGraph({
         </button>
         <h2 className="text-2xl font-bold">관계도</h2>
         <div className="flex justify-center items-center w-full h-full overflow-auto">
-          <RelationshipGraph
-            character={character}
-            relationships={relationships}
-            isMine={isMine}
-          />
+          {isLoading ? (
+            <div>로딩 중...</div>
+          ) : error ? (
+            <div className="text-red-500">{error}</div>
+          ) : !deepRelationships || deepRelationships.length === 0 ? (
+            <div>관계 데이터가 없습니다.</div>
+          ) : (
+            <RelationshipGraphVariants
+              character={character}
+              relationships={deepRelationships}
+              relationshipsExtended={deepRelationshipsExtended}
+              isMine={isMine}
+            />
+          )}
         </div>
       </div>
     </div>

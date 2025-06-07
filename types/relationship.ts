@@ -16,7 +16,27 @@ export interface Relationship {
   from_id: number;
   to_id: number;
   character?: Pick<Character, "id" | "name" | "thumbnail">;
+  relationship?: string;
+  thumbnail?: string;
+  depth?: number;
 }
+
+export type RelationshipNode = {
+  id?: number;
+  from_id: number;
+  to_id: number;
+  name: string;
+  character?: {
+    id?: number;
+    name?: string;
+    thumbnail: string;
+  };
+  relationship_in?: string;
+  relationship_out?: string;
+  thumbnail?: string;
+  depth?: number;
+  children?: RelationshipNode[];
+};
 
 export enum ERelationshipType {
   FRIEND = "friend",
@@ -39,6 +59,7 @@ export const relationshipTypeData = {
     symbol: SymbolFriend,
     color: "bg-symbol-friend",
     url: urlFriend,
+    hexColor: "#F5B84C",
   },
   [ERelationshipType.FAMILY]: {
     label: "Family",
@@ -46,6 +67,7 @@ export const relationshipTypeData = {
     symbol: SymbolFamily,
     color: "bg-symbol-family",
     url: urlFamily,
+    hexColor: "#4AAE7A",
   },
   [ERelationshipType.LOVE]: {
     label: "Love",
@@ -53,6 +75,7 @@ export const relationshipTypeData = {
     symbol: SymbolLove,
     color: "bg-symbol-love",
     url: urlLove,
+    hexColor: "#7D9AE5",
   },
   [ERelationshipType.HATE]: {
     label: "Hate",
@@ -60,5 +83,6 @@ export const relationshipTypeData = {
     symbol: SymbolHate,
     color: "bg-symbol-hate",
     url: urlHate,
+    hexColor: "#E15A5A",
   },
 };

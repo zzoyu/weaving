@@ -9,7 +9,7 @@ import {
 import * as d3 from "d3";
 import { useEffect, useMemo, useRef } from "react";
 
-export default function RelationshipGraph({
+export default function RelationshipGraph1({
   character,
   relationships,
   isMine,

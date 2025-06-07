@@ -10,7 +10,8 @@ export const colorList: {
   pink: "bg-pink-300",
   orange: "bg-orange-400",
   purple: "bg-purple-400",
-  blue: "bg-blue-400",
+  blue: "bg-preset-blue",
+  skyblue: "bg-preset-skyblue",
   green: "bg-green-500",
 };
 
