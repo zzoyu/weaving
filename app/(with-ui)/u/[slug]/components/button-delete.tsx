@@ -48,7 +48,6 @@ export default function ButtonDelete({
                 .then((result) => {
                   if (result) {
                     toast({
-                      title: "캐릭터 삭제",
                       description: "캐릭터가 삭제되었습니다.",
                     });
                     router.replace("/profile");
@@ -56,7 +55,6 @@ export default function ButtonDelete({
                 })
                 .catch((error) => {
                   toast({
-                    title: "캐릭터 삭제 실패",
                     description: "잠시 후 다시 시도해주세요.",
                     variant: "destructive",
                   });
