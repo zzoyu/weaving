@@ -16,20 +16,26 @@ export interface Relationship {
   from_id: number;
   to_id: number;
   character?: Pick<Character, "id" | "name" | "thumbnail">;
+  relationship?: string;
+  thumbnail?: string;
+  depth?: number;
 }
 
-export interface RelationshipNode {
-  id: number;
+export type RelationshipNode = {
+  id?: number;
   from_id: number;
   to_id: number;
   name: string;
-  character: {
-    id: number;
-    name: string;
+  character?: {
+    id?: number;
+    name?: string;
     thumbnail: string;
   };
+  relationship?: string;
+  thumbnail?: string;
+  depth?: number;
   children?: RelationshipNode[];
-}
+};
 
 export enum ERelationshipType {
   FRIEND = "friend",

@@ -26,19 +26,21 @@ function PopupRelationshipGraph({
   isMine?: boolean;
 }) {
   const [deepRelationships, setDeepRelationships] = useState<
-    RelationshipNode[]
-  >([]);
+    RelationshipNode[] | null
+  >(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadDeepRelationships = async () => {
       try {
+        setIsLoading(true);
+        setError(null);
         const data = await fetchRelationshipsWithDepth(character.id);
-        if (data) {
-          setDeepRelationships(data);
-        }
+        setDeepRelationships(data);
       } catch (error) {
         console.error("Failed to fetch deep relationships");
+        setError("관계 데이터를 불러오는데 실패했습니다.");
       } finally {
         setIsLoading(false);
       }
@@ -57,6 +59,10 @@ function PopupRelationshipGraph({
         <div className="flex justify-center items-center w-full h-full overflow-auto">
           {isLoading ? (
             <div>로딩 중...</div>
+          ) : error ? (
+            <div className="text-red-500">{error}</div>
+          ) : !deepRelationships || deepRelationships.length === 0 ? (
+            <div>관계 데이터가 없습니다.</div>
           ) : (
             <RelationshipGraph
               character={character}

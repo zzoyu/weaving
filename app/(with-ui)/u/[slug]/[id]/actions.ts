@@ -2,6 +2,7 @@
 
 import { Character } from "@/types/character";
 import { Relationship, RelationshipNode } from "@/types/relationship";
+import { buildRelationshipTree } from "@/utils/relationship";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath, revalidateTag } from "next/cache";
 
@@ -40,53 +41,6 @@ export async function fetchRelationships(
   return (data as unknown as Relationship[]) || null;
 }
 
-function buildRelationshipTree(
-  relationships: Relationship[]
-): RelationshipNode[] {
-  const relationshipMap = new Map<number, RelationshipNode>();
-  const rootNodes: RelationshipNode[] = [];
-
-  // 먼저 모든 관계를 Map에 저장
-  relationships.forEach((rel) => {
-    if (!rel.id || !rel.character) return;
-
-    relationshipMap.set(rel.to_id, {
-      id: rel.id,
-      from_id: rel.from_id,
-      to_id: rel.to_id,
-      name: rel.name,
-      character: {
-        id: rel.character.id,
-        name: rel.character.name,
-        thumbnail: rel.character.thumbnail || "",
-      },
-      children: [],
-    });
-  });
-
-  // 트리 구조 구성
-  relationships.forEach((rel) => {
-    if (!rel.id || !rel.character) return;
-
-    const node = relationshipMap.get(rel.to_id);
-    if (!node) return;
-
-    // from_id가 다른 노드의 to_id인 경우 children으로 추가
-    const parentNode = relationshipMap.get(rel.from_id);
-    if (parentNode) {
-      if (!parentNode.children) {
-        parentNode.children = [];
-      }
-      parentNode.children.push(node);
-    } else {
-      // 부모가 없는 경우 루트 노드로 추가
-      rootNodes.push(node);
-    }
-  });
-
-  return rootNodes;
-}
-
 export async function fetchRelationshipsWithDepth(
   id: number
 ): Promise<RelationshipNode[] | null> {
@@ -102,7 +56,9 @@ export async function fetchRelationshipsWithDepth(
   }
 
   // 데이터를 트리 구조로 변환
-  const treeData = buildRelationshipTree(data || []);
+  const treeData = buildRelationshipTree(data);
+
+  console.log("treeData", treeData);
 
   revalidateTag("relationships");
   return treeData;

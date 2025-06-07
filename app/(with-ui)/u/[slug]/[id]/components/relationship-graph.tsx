@@ -3,7 +3,7 @@
 import { Character } from "@/types/character";
 import {
   ERelationshipType,
-  Relationship,
+  RelationshipNode,
   relationshipTypeData,
 } from "@/types/relationship";
 import * as d3 from "d3";
@@ -15,9 +15,11 @@ export default function RelationshipGraph({
   isMine,
 }: {
   character: Character;
-  relationships: Relationship[];
+  relationships: RelationshipNode[];
   isMine?: boolean;
 }) {
+  console.log(relationships);
+
   const svgRef = useRef<SVGSVGElement>(null);
 
   const width = 600;
@@ -93,7 +95,7 @@ export default function RelationshipGraph({
       y: number;
       lineCenter: { x: number; y: number };
     },
-    relationship: Relationship,
+    relationship: RelationshipNode,
     index: number
   ) {
     const r = radius[1];
@@ -118,7 +120,7 @@ export default function RelationshipGraph({
 
     target
       .append("image")
-      .attr("xlink:href", relationship?.character?.thumbnail || "")
+      .attr("xlink:href", relationship.thumbnail || "")
       .attr("width", r * 2)
       .attr("height", r * 2)
       .attr("x", node.x - r)
@@ -130,27 +132,27 @@ export default function RelationshipGraph({
       .attr("cx", node.x)
       .attr("cy", node.y)
       .attr("r", r)
-      .attr("fill", "none") // 원 안을 채우지 않음
-      .attr("stroke", "gray") // 테두리 색상
-      .attr("stroke-width", 2); // 테두리 두께
+      .attr("fill", "none")
+      .attr("stroke", "gray")
+      .attr("stroke-width", 2);
   }
 
   function drawNodeText(
     target: d3.Selection<any, any, any, any>,
     node: { x: number; y: number; lineCenter: { x: number; y: number } },
-    relationship: Relationship,
+    relationship: RelationshipNode,
     index: number,
     isMine?: boolean
   ) {
     const r = radius[1];
 
     if (isMine) {
-      console.log(relationship);
       target
         .append("image")
         .attr(
           "xlink:href",
-          relationshipTypeData?.[relationship.name as ERelationshipType].url.src
+          relationshipTypeData?.[relationship.relationship as ERelationshipType]
+            ?.url.src
         )
         .attr("width", xScale(5))
         .attr("height", xScale(5))
@@ -163,7 +165,7 @@ export default function RelationshipGraph({
       .attr("x", node.x)
       .attr("y", node.y + r * 1.4)
       .attr("font-size", `${xScale(2)}px`)
-      .text(relationship.character?.name || "");
+      .text(relationship.name || "");
   }
 
   useEffect(() => {
