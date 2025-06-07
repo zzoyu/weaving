@@ -21,7 +21,7 @@
 
 @layer components {
   .text-profile-twitter {
-    @apply text-gray-500 dark:text-gray-500 font-light text-sm;
+    @apply text-gray-500 dark:text-gray-400 font-light text-sm;
   }
 
   .button-request-friend {
@@ -29,7 +29,7 @@
   }
 
   .item-hashtag {
-    @apply rounded-full pl-6 pr-8 py-1 text-gray-500 bg-background-light relative;
+    @apply rounded-full pl-6 pr-8 py-1 text-gray-500 dark:text-gray-400 bg-background-light dark:bg-gray-800 relative;
   }
 }
 
@@ -43,6 +43,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
+    --background-hex: #1a1a1a;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
@@ -54,12 +55,12 @@ html {
 
 body {
   background: var(--background-hex);
-  @apply antialiased h-full font-pretendard text-black;
+  @apply antialiased h-full font-pretendard text-black dark:text-white;
 }
 
 svg > text {
   @apply font-black fill-gray-900 dark:fill-gray-100;
-  @apply stroke-2 stroke-white dark:stroke-orange-300;
+  @apply stroke-2 stroke-white dark:stroke-gray-800;
   @apply font-pretendard antialiased;
 }
 
