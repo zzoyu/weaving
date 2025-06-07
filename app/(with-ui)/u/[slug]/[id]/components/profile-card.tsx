@@ -11,8 +11,11 @@ import { Character, Property } from "@/types/character";
 import { Relationship, RelationshipNode } from "@/types/relationship";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { fetchRelationshipsWithDepth } from "../actions";
-import RelationshipGraph from "./relationship-graph";
+import {
+  fetchRelationshipsWithDepth,
+  fetchRelationshipsWithDepthExtended,
+} from "../actions";
+import RelationshipGraphVariants from "./relationship-graph-variants";
 
 function PopupRelationshipGraph({
   character,
@@ -28,6 +31,9 @@ function PopupRelationshipGraph({
   const [deepRelationships, setDeepRelationships] = useState<
     RelationshipNode[] | null
   >(null);
+  const [deepRelationshipsExtended, setDeepRelationshipsExtended] = useState<
+    RelationshipNode[] | null
+  >(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,8 +42,12 @@ function PopupRelationshipGraph({
       try {
         setIsLoading(true);
         setError(null);
-        const data = await fetchRelationshipsWithDepth(character.id);
+        const [data, dataExtended] = await Promise.all([
+          fetchRelationshipsWithDepth(character.id),
+          fetchRelationshipsWithDepthExtended(character.id),
+        ]);
         setDeepRelationships(data);
+        setDeepRelationshipsExtended(dataExtended);
       } catch (error) {
         console.error("Failed to fetch deep relationships");
         setError("관계 데이터를 불러오는데 실패했습니다.");
@@ -64,9 +74,10 @@ function PopupRelationshipGraph({
           ) : !deepRelationships || deepRelationships.length === 0 ? (
             <div>관계 데이터가 없습니다.</div>
           ) : (
-            <RelationshipGraph
+            <RelationshipGraphVariants
               character={character}
               relationships={deepRelationships}
+              relationshipsExtended={deepRelationshipsExtended}
               isMine={isMine}
             />
           )}

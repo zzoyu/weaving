@@ -58,7 +58,29 @@ export async function fetchRelationshipsWithDepth(
   // 데이터를 트리 구조로 변환
   const treeData = buildRelationshipTree(data);
 
-  console.log("treeData", treeData);
+  revalidateTag("relationships");
+  return treeData;
+}
+
+export async function fetchRelationshipsWithDepthExtended(
+  id: number
+): Promise<RelationshipNode[] | null> {
+  const supabase = createClient();
+  const { data, error } = await supabase.rpc(
+    "relationship_with_depth_extended",
+    {
+      start_id: id,
+      max_depth: 3,
+    }
+  );
+  console.log("fetchRelationshipsWithDepthExtended", data);
+
+  if (error) {
+    console.error(error?.message);
+    throw error;
+  }
+  // 데이터를 트리 구조로 변환
+  const treeData = buildRelationshipTree(data);
 
   revalidateTag("relationships");
   return treeData;
