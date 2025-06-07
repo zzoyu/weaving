@@ -119,8 +119,8 @@ export async function updateCharacter(
   const characterId = Number(formData.get("character_id") as string);
   if (!characterId) throw new Error("Character ID is required");
 
-  const isHalfEdited = Boolean(formData.get("half-image-is-edited") as string);
-  const isFullEdited = Boolean(formData.get("full-image-is-edited") as string);
+  const isHalfEdited = formData.get("half-image-is-edited") === "true";
+  const isFullEdited = formData.get("full-image-is-edited") === "true";
 
   // print all of the formData
   for (const [key, value] of formData.entries()) {
@@ -131,6 +131,7 @@ export async function updateCharacter(
   if (!name) throw new Error("Name is required");
 
   const thumbnail = formData.get("half-thumbnail") as File;
+  const originalThumbnail = formData.get("original_thumbnail") as string;
 
   console.log(thumbnail);
 
@@ -140,8 +141,9 @@ export async function updateCharacter(
   ];
 
   console.log(imageFiles);
-  if (!imageFiles[0]) throw new Error("Image is required");
-  if (!thumbnail) throw new Error("Thumbnail is required");
+  if (!imageFiles[0] && !isHalfEdited) throw new Error("Image is required");
+  if (!thumbnail && !originalThumbnail)
+    throw new Error("Thumbnail is required");
   if (imageFiles.length === 0) throw new Error("Image is required");
   if (imageFiles.length > 3) throw new Error("Image is too many");
 
@@ -151,21 +153,34 @@ export async function updateCharacter(
         Math.floor(Math.random() * 10000).toString(),
         ImagePath.CHARACTER_THUMBNAIL
       )
-    : (formData.get("original_thumbnail") as string);
+    : originalThumbnail;
 
   const imageFlag = [isHalfEdited, isFullEdited];
-  const originalImages = formData.getAll("original_image") as string[];
+  const originalImages = formData.getAll("original_image[]") as string[];
+
+  console.log("Original images:", originalImages);
+  console.log("Image flags:", imageFlag);
 
   const imageUrls = await Promise.all(
     imageFiles.map(async (image, index) => {
-      console.log("imageFlag", imageFlag);
-      console.log("current image", image, index);
-      if (!imageFlag[index]) return originalImages[index];
-      // pass if the image has no file
-      if (!image) return "";
+      console.log("Processing image", index);
+      console.log("Image flag:", imageFlag[index]);
+      console.log("Original image:", originalImages[index]);
+      console.log("New image:", image);
+
+      // 이미지가 변경되지 않았으면 원본 이미지 URL 사용
+      if (!imageFlag[index]) {
+        console.log("Using original image:", originalImages[index]);
+        return originalImages[index];
+      }
+      // 이미지가 변경되었지만 파일이 없으면 원본 이미지 URL 사용
+      if (!image) {
+        console.log("No new image, using original:", originalImages[index]);
+        return originalImages[index];
+      }
 
       try {
-        console.log("Uploading image:", image);
+        console.log("Uploading new image:", image);
         return await uploadImage(
           image,
           Math.floor(Math.random() * 10000).toString(),
@@ -173,7 +188,7 @@ export async function updateCharacter(
         );
       } catch (error) {
         console.error(`Failed to upload image ${index}:`, error);
-        return originalImages[index] || ""; // 실패시 기존 이미지 URL 유지
+        return originalImages[index]; // 실패시 기존 이미지 URL 유지
       }
     })
   );

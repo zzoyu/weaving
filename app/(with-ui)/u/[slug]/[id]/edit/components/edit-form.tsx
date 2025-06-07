@@ -102,7 +102,6 @@ export default function CharacterEditTemplate({
               (result) => {
                 if (result) {
                   toast({
-                    title: "캐릭터 수정",
                     description: "캐릭터가 수정되었습니다.",
                     variant: "default",
                   });
@@ -121,13 +120,13 @@ export default function CharacterEditTemplate({
           <input type="hidden" name="character_id" value={character.id} />
           <input
             type="hidden"
-            name="original_image"
-            value={character.image?.[0]}
+            name="original_image[]"
+            value={character.image?.[0] || ""}
           />
           <input
             type="hidden"
-            name="original_image"
-            value={character.image?.[1]}
+            name="original_image[]"
+            value={character.image?.[1] || ""}
           />
           <input
             type="hidden"

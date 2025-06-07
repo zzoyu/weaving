@@ -36,7 +36,11 @@ export default function UploadImage({
   function handleChangeImage(event: React.ChangeEvent<HTMLInputElement>) {
     console.log(event);
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      setIsEdited(false);
+      setImagePreviewSrc(isEdit ? imageUrl || "" : "");
+      return;
+    }
     setImagePreviewSrc(URL.createObjectURL(file!));
     setIsEdited(true);
     if (useThumbnail) {
@@ -137,7 +141,8 @@ export default function UploadImage({
           }}
           onClose={() => {
             imageFileInput.current!.value = "";
-            setImagePreviewSrc("");
+            setImagePreviewSrc(isEdit ? imageUrl || "" : "");
+            setIsEdited(false);
             setIsOpenedCropLayer(false);
           }}
         />
