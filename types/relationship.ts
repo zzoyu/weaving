@@ -18,6 +18,19 @@ export interface Relationship {
   character?: Pick<Character, "id" | "name" | "thumbnail">;
 }
 
+export interface RelationshipNode {
+  id: number;
+  from_id: number;
+  to_id: number;
+  name: string;
+  character: {
+    id: number;
+    name: string;
+    thumbnail: string;
+  };
+  children?: RelationshipNode[];
+}
+
 export enum ERelationshipType {
   FRIEND = "friend",
   FAMILY = "family",

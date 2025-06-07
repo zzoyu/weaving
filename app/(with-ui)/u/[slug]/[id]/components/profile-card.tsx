@@ -8,9 +8,10 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Character, Property } from "@/types/character";
-import { Relationship } from "@/types/relationship";
+import { Relationship, RelationshipNode } from "@/types/relationship";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchRelationshipsWithDepth } from "../actions";
 import RelationshipGraph from "./relationship-graph";
 
 function PopupRelationshipGraph({
@@ -24,6 +25,28 @@ function PopupRelationshipGraph({
   onClose: () => void;
   isMine?: boolean;
 }) {
+  const [deepRelationships, setDeepRelationships] = useState<
+    RelationshipNode[]
+  >([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadDeepRelationships = async () => {
+      try {
+        const data = await fetchRelationshipsWithDepth(character.id);
+        if (data) {
+          setDeepRelationships(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch deep relationships");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadDeepRelationships();
+  }, [character.id]);
+
   return (
     <div className="fixed z-10 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white w-5/6 h-5/6 p-4 rounded-lg relative">
@@ -32,11 +55,15 @@ function PopupRelationshipGraph({
         </button>
         <h2 className="text-2xl font-bold">관계도</h2>
         <div className="flex justify-center items-center w-full h-full overflow-auto">
-          <RelationshipGraph
-            character={character}
-            relationships={relationships}
-            isMine={isMine}
-          />
+          {isLoading ? (
+            <div>로딩 중...</div>
+          ) : (
+            <RelationshipGraph
+              character={character}
+              relationships={deepRelationships}
+              isMine={isMine}
+            />
+          )}
         </div>
       </div>
     </div>
