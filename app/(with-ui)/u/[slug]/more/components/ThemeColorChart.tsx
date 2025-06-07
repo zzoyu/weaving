@@ -3,7 +3,18 @@
 import { Character } from "@/types/character";
 import { colorHexMap, colorNameMap } from "@/types/color";
 import { useState } from "react";
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import {
+  Bar,
+  BarChart,
+  Cell,
+  LabelList,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 interface ChartData {
   name: string;
@@ -22,34 +33,6 @@ interface LabelProps {
 
 interface ThemeColorChartProps {
   characters: Character[];
-}
-
-function CustomLegend({ payload }: { payload?: any[] }) {
-  if (!payload) return null;
-  return (
-    <ul className="flex flex-wrap gap-2 justify-center mt-4 px-1">
-      {payload.map((entry) => (
-        <li
-          key={entry.value}
-          className="flex items-center gap-1 bg-white rounded-lg px-2 py-0.5 hover:scale-105 transition-transform"
-        >
-          <span
-            style={{
-              display: "inline-block",
-              width: 14,
-              height: 14,
-              background: entry.color,
-              borderRadius: 5,
-              border: "1.5px solid #e5e7eb",
-            }}
-          />
-          <span className="text-sm text-gray-900">
-            {colorNameMap[entry.value] || entry.value}
-          </span>
-        </li>
-      ))}
-    </ul>
-  );
 }
 
 export default function ThemeColorChart({ characters }: ThemeColorChartProps) {
@@ -83,6 +66,18 @@ export default function ThemeColorChart({ characters }: ThemeColorChartProps) {
     name,
     value,
   }));
+
+  // 누적형 BarChart용 데이터 생성
+  const stackedBarData = [
+    chartData.reduce((acc, cur) => {
+      acc[cur.name] = cur.value;
+      return acc;
+    }, {} as Record<string, number>),
+  ];
+
+  const colorKeys = chartData.map((d) => d.name);
+
+  const totalValue = chartData.reduce((sum, cur) => sum + cur.value, 0);
 
   if (chartData.length === 0) {
     return (
@@ -202,12 +197,84 @@ export default function ThemeColorChart({ characters }: ThemeColorChartProps) {
           </PieChart>
         </ResponsiveContainer>
       </div>
-      <CustomLegend
-        payload={chartData.map((entry) => ({
-          value: entry.name,
-          color: colorHexMap[entry.name] || "#e5e7eb",
-        }))}
-      />
+      <div className="w-full h-[80px] mt-4">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={stackedBarData}
+            layout="vertical"
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
+            <XAxis type="number" hide domain={[0, totalValue]} />
+            <YAxis type="category" dataKey={() => ""} hide />
+            <Tooltip
+              formatter={(value, name) => [
+                `${value}명`,
+                colorNameMap[name as string] || name,
+              ]}
+              contentStyle={{
+                borderRadius: 12,
+                fontWeight: 500,
+                backgroundColor: "#fff",
+                border: "none",
+                boxShadow: "none",
+              }}
+              wrapperStyle={{
+                backgroundColor: "transparent",
+                boxShadow: "none",
+                border: "none",
+              }}
+              cursor={false}
+            />
+            {colorKeys.map((key, idx) => {
+              // hex 색상값에서 밝기 계산 (YIQ 공식)
+              const hex = colorHexMap[key] || "#e5e7eb";
+              const rgb = hex
+                .replace("#", "")
+                .match(/.{1,2}/g)
+                ?.map((x) => parseInt(x, 16)) || [229, 231, 235];
+              const yiq = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
+              const textColor = yiq >= 180 ? "#222" : "#fff";
+              return (
+                <Bar
+                  key={key}
+                  dataKey={key}
+                  stackId="a"
+                  fill={hex}
+                  radius={
+                    idx === 0
+                      ? [4, 0, 0, 4]
+                      : idx === colorKeys.length - 1
+                      ? [0, 4, 4, 0]
+                      : 0
+                  }
+                  isAnimationActive={true}
+                  animationDuration={900}
+                >
+                  <LabelList
+                    dataKey={key}
+                    position="center"
+                    formatter={(value: number) => {
+                      if (!value || totalValue === 0) return "";
+                      const percent = Math.round((value / totalValue) * 100);
+                      return `${percent}%`;
+                    }}
+                    style={{
+                      fill: textColor,
+                      fontSize: 13,
+                      fontWeight: 700,
+                      fontFamily: "inherit",
+                      textShadow:
+                        textColor === "#fff"
+                          ? "0 1px 2px #222, 0 0 2px #222"
+                          : "0 1px 2px #fff, 0 0 2px #fff",
+                    }}
+                  />
+                </Bar>
+              );
+            })}
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </section>
   );
 }
