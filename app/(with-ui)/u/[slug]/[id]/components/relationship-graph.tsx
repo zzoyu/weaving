@@ -146,18 +146,28 @@ export default function RelationshipGraph({
   ) {
     const r = radius[1];
 
-    if (isMine) {
-      target
-        .append("image")
-        .attr(
-          "xlink:href",
-          relationshipTypeData?.[relationship.relationship as ERelationshipType]
-            ?.url.src
-        )
-        .attr("width", xScale(5))
-        .attr("height", xScale(5))
-        .attr("x", node.lineCenter.x - xScale(2.5))
-        .attr("y", node.lineCenter.y - xScale(2.5));
+    if (isMine && relationship.relationship) {
+      const relationshipType =
+        relationship.relationship.toLowerCase() as ERelationshipType;
+      const relationshipData = relationshipTypeData[relationshipType];
+
+      if (relationshipData?.url?.src) {
+        target
+          .append("circle")
+          .attr("cx", node.lineCenter.x)
+          .attr("cy", node.lineCenter.y)
+          .attr("r", xScale(1.7))
+          .attr("fill", "white")
+          .attr("stroke-width", 2);
+
+        target
+          .append("image")
+          .attr("xlink:href", relationshipData.url.src)
+          .attr("width", xScale(3))
+          .attr("height", xScale(3))
+          .attr("x", node.lineCenter.x - xScale(1.5))
+          .attr("y", node.lineCenter.y - xScale(1.5));
+      }
     }
 
     target

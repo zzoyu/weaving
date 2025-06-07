@@ -58,6 +58,7 @@ export const relationshipTypeData = {
     symbol: SymbolFriend,
     color: "bg-symbol-friend",
     url: urlFriend,
+    hexColor: "#F5B84C",
   },
   [ERelationshipType.FAMILY]: {
     label: "Family",
@@ -65,6 +66,7 @@ export const relationshipTypeData = {
     symbol: SymbolFamily,
     color: "bg-symbol-family",
     url: urlFamily,
+    hexColor: "#4AAE7A",
   },
   [ERelationshipType.LOVE]: {
     label: "Love",
@@ -72,6 +74,7 @@ export const relationshipTypeData = {
     symbol: SymbolLove,
     color: "bg-symbol-love",
     url: urlLove,
+    hexColor: "#7D9AE5",
   },
   [ERelationshipType.HATE]: {
     label: "Hate",
@@ -79,5 +82,6 @@ export const relationshipTypeData = {
     symbol: SymbolHate,
     color: "bg-symbol-hate",
     url: urlHate,
+    hexColor: "#E15A5A",
   },
 };

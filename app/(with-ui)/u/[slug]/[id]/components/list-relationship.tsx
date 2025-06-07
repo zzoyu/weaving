@@ -50,7 +50,7 @@ export function ListRelationship({
                     <div
                       className={clsx(
                         "absolute left-2 top-2 rounded-full text-white p-1.5",
-                        relationshipType?.color
+                        relationshipType?.color || "bg-primary"
                       )}
                     >
                       <relationshipType.symbol width={20} height={20} />
