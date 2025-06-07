@@ -15,6 +15,10 @@ const config: Config = {
         text: {
           black: "#0E1013",
         },
+        preset: {
+          skyblue: "#B8EBFE",
+          blue: "#0000FE",
+        },
         background: {
           default: "#FAF9FA",
           muted: "#DADCE0",
