@@ -2,16 +2,13 @@
 
 import { Character } from "@/types/character";
 import { colorHexMap, colorNameMap } from "@/types/color";
+import Image from "next/image";
 import { useState } from "react";
 import {
   Bar,
   BarChart,
-  Cell,
   LabelList,
-  Pie,
-  PieChart,
   ResponsiveContainer,
-  Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
@@ -160,71 +157,51 @@ export default function ThemeColorChart({ characters }: ThemeColorChartProps) {
     );
   };
 
+  const mainColor = Object.keys(colorCounts).sort(
+    (a, b) => colorCounts[b] - colorCounts[a]
+  )[0];
+  const listColorDescription = {
+    black: "맨인블랙",
+    white: "휘핑크림 많이 주세요",
+    yellow: "생각이 많을 땐 레몬사탕",
+    silver: "고품격 실버타운",
+    brown: "초콜릿 공장장",
+    red: "빨간맛 궁금해 허니",
+    pink: "복숭아 당도최고",
+    orange: "감귤 자연발생설",
+    purple: "좋은 건 크게 보라고 배웠어요",
+    blue: "파란 나라를 보았니",
+    sky: "힘이 들 땐 하늘을 봐",
+    green: "리틀 포레스트",
+  };
+
   return (
-    <section className="w-full flex flex-col items-center bg-white rounded-2xl p-4 md:p-6">
-      <h1 className="text-2xl md:text-3xl font-pretendard mb-5 text-gray-900">
-        캐릭터 테마 컬러 분포
+    <section className="w-full flex flex-col items-center bg-white rounded-2xl p-4 md:p-6 mb-10">
+      <h1 className="text-2xl md:text-3xl font-pretendard mb-5 text-gray-900 mt-10">
+        당신의 테마 컬러는?
       </h1>
-      <div className="w-full h-[280px] md:h-[320px] flex items-center justify-center">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={chartData}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              label={renderCustomizedLabel}
-              outerRadius={110}
-              fill="#8884d8"
-              dataKey="value"
-              stroke="#fff"
-              strokeWidth={2}
-              isAnimationActive={true}
-              animationDuration={900}
-              onAnimationEnd={() => setLabelVisible(true)}
-            >
-              {chartData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={colorHexMap[entry.name] || "#e5e7eb"}
-                />
-              ))}
-            </Pie>
-            <Tooltip
-              formatter={(_, name) => `${colorNameMap[name as string] || name}`}
-              contentStyle={{ borderRadius: 12, fontWeight: 500 }}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+      <div className="w-full flex flex-col items-center justify-center py-10">
+        <Image
+          src={`/assets/images/more/theme-color-biased/${mainColor}.png`}
+          alt="theme-color-chart"
+          width={300}
+          height={300}
+        />
+        <h1 className="font-pretendard mt-10 font-extrabold text-4xl antialiased">
+          {listColorDescription[mainColor as keyof typeof listColorDescription]}
+        </h1>
       </div>
-      <div className="w-full h-[80px] mt-4">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="w-full mt-4 mb-10">
+        <ResponsiveContainer width="100%" height={80}>
           <BarChart
             data={stackedBarData}
             layout="vertical"
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+            height={80}
           >
             <XAxis type="number" hide domain={[0, totalValue]} />
             <YAxis type="category" dataKey={() => ""} hide />
-            <Tooltip
-              formatter={(value, name) => [
-                `${value}명`,
-                colorNameMap[name as string] || name,
-              ]}
-              contentStyle={{
-                borderRadius: 12,
-                fontWeight: 500,
-                backgroundColor: "#fff",
-                border: "none",
-                boxShadow: "none",
-              }}
-              wrapperStyle={{
-                backgroundColor: "transparent",
-                boxShadow: "none",
-                border: "none",
-              }}
-              cursor={false}
-            />
+
             {colorKeys.map((key, idx) => {
               // hex 색상값에서 밝기 계산 (YIQ 공식)
               const hex = colorHexMap[key] || "#e5e7eb";
