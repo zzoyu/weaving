@@ -5,7 +5,10 @@ import { Property } from "@/types/character";
 import { ImagePath } from "@/types/image";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
-import { createBulkRelationships } from "../[id]/actions";
+import {
+  createBulkRelationships,
+  updateBulkRelationships,
+} from "../[id]/actions";
 
 export async function createCharacter(
   formData: FormData,
@@ -225,7 +228,7 @@ export async function updateCharacter(
   });
 
   if ((relationships?.length || 0) > 0)
-    await createBulkRelationships(characterId, relationships);
+    await updateBulkRelationships(characterId, relationships);
 
   revalidatePath("/u/" + profile_slug);
   return true;
