@@ -11,7 +11,6 @@ export default function ButtonLogout() {
     const client = createClient();
     client.auth.signOut().then(() => {
       toast({
-        title: "로그아웃",
         description: "로그아웃 되었습니다.",
       });
       router.refresh();

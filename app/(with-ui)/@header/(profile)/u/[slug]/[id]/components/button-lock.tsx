@@ -36,7 +36,6 @@ export function DialogLock({ characterId }: { characterId: number }) {
             setCharacterPassword(formData)
               .then(() => {
                 toast({
-                  title: "캐릭터 잠금",
                   description: "캐릭터가 잠금 처리되었습니다.",
                 });
               })
