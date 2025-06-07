@@ -196,6 +196,22 @@ export async function updateCharacter(
     throw error;
   }
 
+  const relationship_to = formData.getAll("relationship_to") as string[];
+  const relationship_name = formData.getAll("relationship_name") as string[];
+
+  const relationships = relationship_to.map((to, index) => {
+    const name = relationship_name[index];
+    const to_id = Number(to);
+    if (!to_id) throw new Error("To ID is required");
+    return {
+      to_id,
+      name,
+    };
+  });
+
+  if ((relationships?.length || 0) > 0)
+    await createBulkRelationships(characterId, relationships);
+
   revalidatePath("/u/" + profile_slug);
   return true;
 }
