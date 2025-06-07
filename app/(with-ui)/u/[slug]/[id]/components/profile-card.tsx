@@ -77,7 +77,7 @@ function PopupRelationshipGraph({
             <RelationshipGraphVariants
               character={character}
               relationships={deepRelationships}
-              relationshipsExtended={deepRelationshipsExtended}
+              relationshipsExtended={deepRelationshipsExtended || []}
               isMine={isMine}
             />
           )}
