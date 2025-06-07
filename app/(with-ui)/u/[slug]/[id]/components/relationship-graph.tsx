@@ -146,9 +146,9 @@ export default function RelationshipGraph({
   ) {
     const r = radius[1];
 
-    if (isMine && relationship.relationship) {
+    if (isMine && relationship.relationship_out) {
       const relationshipType =
-        relationship.relationship.toLowerCase() as ERelationshipType;
+        relationship.relationship_out.toLowerCase() as ERelationshipType;
       const relationshipData = relationshipTypeData[relationshipType];
 
       if (relationshipData?.url?.src) {

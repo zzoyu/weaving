@@ -31,7 +31,8 @@ export type RelationshipNode = {
     name?: string;
     thumbnail: string;
   };
-  relationship?: string;
+  relationship_in?: string;
+  relationship_out?: string;
   thumbnail?: string;
   depth?: number;
   children?: RelationshipNode[];

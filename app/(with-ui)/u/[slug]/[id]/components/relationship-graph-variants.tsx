@@ -1,7 +1,7 @@
 import { Character } from "@/types/character";
 import { RelationshipNode } from "@/types/relationship";
 import { useState } from "react";
-import RelationshipGraph from "./relationship-graph";
+import RelationshipGraph1 from "./relationship-graph/1";
 import RelationshipGraph2 from "./relationship-graph/2";
 import RelationshipGraph3 from "./relationship-graph/3";
 
@@ -12,7 +12,13 @@ function RelationshipGraphVariant1(props: {
   relationshipsExtended: RelationshipNode[];
   isMine?: boolean;
 }) {
-  return <RelationshipGraph {...props} />;
+  return (
+    <RelationshipGraph1
+      character={props.character}
+      relationships={props.relationshipsExtended}
+      isMine={props.isMine}
+    />
+  );
 }
 
 function RelationshipGraphVariant2(props: {
@@ -22,7 +28,13 @@ function RelationshipGraphVariant2(props: {
   isMine?: boolean;
 }) {
   // 추후 다른 스타일/로직 적용 가능
-  return <RelationshipGraph2 {...props} />;
+  return (
+    <RelationshipGraph2
+      character={props.character}
+      relationships={props.relationshipsExtended}
+      isMine={props.isMine}
+    />
+  );
 }
 
 function RelationshipGraphVariant3(props: {

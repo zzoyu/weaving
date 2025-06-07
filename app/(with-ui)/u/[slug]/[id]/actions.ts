@@ -56,7 +56,7 @@ export async function fetchRelationshipsWithDepth(
   }
 
   // 데이터를 트리 구조로 변환
-  const treeData = buildRelationshipTree(data);
+  const treeData = buildRelationshipTree(id, data);
 
   revalidateTag("relationships");
   return treeData;
@@ -73,14 +73,14 @@ export async function fetchRelationshipsWithDepthExtended(
       max_depth: 3,
     }
   );
-  console.log("fetchRelationshipsWithDepthExtended", data);
 
   if (error) {
     console.error(error?.message);
     throw error;
   }
+  console.log("fetchRelationshipsWithDepthExtended", data);
   // 데이터를 트리 구조로 변환
-  const treeData = buildRelationshipTree(data);
+  const treeData = buildRelationshipTree(id, data);
 
   revalidateTag("relationships");
   return treeData;
