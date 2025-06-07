@@ -159,7 +159,19 @@ export default function RelationshipGraph2({
           (r) => r.to_id === childRelationship.to_id
         );
 
-        if (existingNodeIndex === -1) {
+        if (existingNodeIndex !== -1) {
+          // 이미 존재하는 노드로 선 연결
+          const existingNode = nodes[existingNodeIndex];
+          target
+            .append("line")
+            .attr("x1", node.x)
+            .attr("y1", node.y)
+            .attr("x2", existingNode.x)
+            .attr("y2", existingNode.y)
+            .attr("stroke", "gray")
+            .attr("stroke-width", 1)
+            .attr("stroke-dasharray", "4,4"); // 점선으로 표시
+        } else {
           // 새로운 children 노드 그리기
           const childR = radius[2];
 
@@ -484,33 +496,6 @@ export default function RelationshipGraph2({
       .append("path")
       .attr("d", "M0,-5L10,0L0,5")
       .attr("fill", "gray");
-
-    // 먼저 모든 점선 연결을 그립니다
-    nodes.forEach((node, index) => {
-      if (node.children && relationships[index].children) {
-        node.children.forEach((child, childIndex) => {
-          const childRelationship = relationships[index].children?.[childIndex];
-          if (!childRelationship) return;
-
-          const existingNodeIndex = relationships.findIndex(
-            (r) => r.to_id === childRelationship.to_id
-          );
-
-          if (existingNodeIndex !== -1) {
-            const existingNode = nodes[existingNodeIndex];
-            svg
-              .append("line")
-              .attr("x1", node.x)
-              .attr("y1", node.y)
-              .attr("x2", existingNode.x)
-              .attr("y2", existingNode.y)
-              .attr("stroke", "gray")
-              .attr("stroke-width", 1)
-              .attr("stroke-dasharray", "4,4");
-          }
-        });
-      }
-    });
 
     // 라인(화살표) 그리기 - 원 테두리에 맞게 끝점 조정
     nodes.forEach((node, index) => {
