@@ -2,6 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import ButtonDelete from "./button-delete";
 import ButtonLogout from "./button-logout";
+import FeedbackButton from "./feedback-button";
 import ListFriend from "./list-friend";
 import ProfileEditForm from "./profile-edit-form";
 
@@ -31,6 +32,8 @@ export default function MypageTemplate({ profile }: { profile: Profile }) {
           개인정보처리방침
         </Link>
       </div>
+
+      <FeedbackButton />
     </main>
   );
 }
