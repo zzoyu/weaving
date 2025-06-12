@@ -1,4 +1,5 @@
 import { Toaster } from "@/components/ui/toaster";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import clsx from "clsx";
 import type { Metadata } from "next";
 import { Poiret_One } from "next/font/google";
@@ -34,11 +35,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaId = process.env.NEXT_PUBLIC_GA_ID;
   return (
     <html lang="ko">
       <body className={clsx(fontTitle.variable, fontBody.variable)}>
         {children}
         <Toaster />
+        {gaId && <GoogleAnalytics gaId={gaId} />}
       </body>
     </html>
   );
