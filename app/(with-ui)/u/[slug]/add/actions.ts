@@ -1,6 +1,7 @@
 "use server";
 
 import { uploadImage } from "@/actions/upload-image";
+import { fetchPlanByProfileId } from "@/app/actions/plan";
 import { Property } from "@/types/character";
 import { ImagePath } from "@/types/image";
 import { createClient } from "@/utils/supabase/server";
@@ -34,16 +35,41 @@ export async function createCharacter(
   const profile_id = responseProfile?.data?.id;
   if (!profile_id) throw new Error("Profile not found");
 
+  // Get user's plan and check character limit
+  const userPlan = await fetchPlanByProfileId(profile_id);
+  if (!userPlan) throw new Error("Plan not found");
+
+  // Check current character count
+  const { count, error: countError } = await supabase
+    .from("character")
+    .select("*", { count: "exact", head: true })
+    .eq("profile_id", profile_id);
+
+  if (countError) throw countError;
+  if (!count || count >= userPlan.limit.maxCharacterSlots) {
+    throw new Error(`캐릭터 생성 한도(${userPlan.limit.maxCharacterSlots}개)를 초과했습니다.`);
+  }
+
+  // Check relationship count
+  if (relationship_to.length > userPlan.limit.maxRelationshipsPerCharacter) {
+    throw new Error(`캐릭터당 관계 한도(${userPlan.limit.maxRelationshipsPerCharacter}개)를 초과했습니다.`);
+  }
+
   console.log(properties);
   if (!name) throw new Error("Name is required");
 
   // get hashtag
   const hashtags = formData.get("hashtags") as string;
 
+  // Check image count
   const imageFiles = [
     formData.get("half-image") as File,
     formData.get("full-image") as File,
-  ];
+  ].filter(Boolean);
+
+  if (imageFiles.length > userPlan.limit.maxImagesPerCharacter) {
+    throw new Error(`캐릭터당 이미지 한도(${userPlan.limit.maxImagesPerCharacter}개)를 초과했습니다.`);
+  }
 
   const thumbnail = formData.get("half-thumbnail") as File;
   console.log(imageFiles);
