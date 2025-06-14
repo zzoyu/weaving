@@ -6,10 +6,14 @@ import { baseProperties } from "@/lib/base-properties";
 import IconFull from "@/public/assets/icons/image/full.svg";
 import IconHalf from "@/public/assets/icons/image/half.svg";
 import { Character, EPropertyType, Property } from "@/types/character";
+import { PlanLimit } from "@/types/plan";
 import { Relationship } from "@/types/relationship";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
 import { createCharacter } from "../actions";
+import { createCharacterSchema } from "../schema";
 import { ButtonAddRelationship } from "./button-add-relationship";
 import InputHashtag from "./input-hashtag";
 import { ColorProperties } from "./properties/color-properties";
@@ -20,10 +24,12 @@ export default function CharacterAddTemplate({
   slug,
   profileId,
   character,
+  planLimit,
 }: {
   slug: string;
   profileId: number;
   character?: Character;
+  planLimit: PlanLimit;
 }) {
   const [properties, setProperties] = useState([...baseProperties]);
   const [hashtags, setHashtags] = useState<string>("");
@@ -83,35 +89,83 @@ export default function CharacterAddTemplate({
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+  } = useForm({
+    resolver: zodResolver(createCharacterSchema(planLimit)),
+    defaultValues: {
+      profile_slug: slug,
+      properties: combinedProperties,
+      relationships,
+      hashtags: "",
+    },
+  });
+
   return (
     <form
       className="flex flex-col gap-2 items-center w-full md:max-w-md p-4"
-      action={(formData) => {
+      onSubmit={handleSubmit(async (data) => {
         setIsLoading(true);
-        createCharacter(formData, combinedProperties)
-          .then((res) => {
-            if (res) {
-              toast({
-                title: "캐릭터 생성",
-                description: "캐릭터가 생성되었습니다.",
-                variant: "default",
-              });
-              router.push(`/u/${slug}`);
+        try {
+          const formData = new FormData();
+          Object.entries(data).forEach(([key, value]) => {
+            if (value instanceof File) {
+              console.log(`Adding file to FormData: ${key}`, value.name, value.type);
+              formData.append(key, value);
+            } else if (typeof value === "string") {
+              formData.append(key, value);
+            } else if (Array.isArray(value)) {
+              formData.append(key, JSON.stringify(value));
             }
-          })
-          .catch((err) => {
-            toast({
-              title: "캐릭터 생성 실패",
-              description: "캐릭터 생성에 실패했습니다.",
-              variant: "destructive",
-            });
-          })
-          .finally(() => {
-            setIsLoading(false);
           });
-      }}
+
+          // Add image files from UploadImage component
+          const halfImageInput = document.querySelector('input[name="half-image"]') as HTMLInputElement;
+          const fullImageInput = document.querySelector('input[name="full-image"]') as HTMLInputElement;
+          const halfThumbnailInput = document.querySelector('input[name="half-thumbnail"]') as HTMLInputElement;
+
+          if (halfImageInput?.files?.[0]) {
+            console.log("Adding half-image from input:", halfImageInput.files[0].name);
+            formData.append("half-image", halfImageInput.files[0]);
+          }
+          if (fullImageInput?.files?.[0]) {
+            console.log("Adding full-image from input:", fullImageInput.files[0].name);
+            formData.append("full-image", fullImageInput.files[0]);
+          }
+          if (halfThumbnailInput?.files?.[0]) {
+            console.log("Adding half-thumbnail from input:", halfThumbnailInput.files[0].name);
+            formData.append("half-thumbnail", halfThumbnailInput.files[0]);
+          }
+
+          console.log("FormData before submit:");
+          for (const [key, value] of formData.entries()) {
+            console.log(`${key}:`, value instanceof File ? `File: ${value.name} (${value.type})` : value);
+          }
+
+          const res = await createCharacter(formData, combinedProperties);
+          if (res) {
+            toast({
+              title: "캐릭터 생성",
+              description: "캐릭터가 생성되었습니다.",
+              variant: "default",
+            });
+            router.push(`/u/${slug}`);
+          }
+        } catch (err) {
+          toast({
+            description: err instanceof Error ? err.message : "캐릭터 생성에 실패했습니다.",
+            variant: "destructive",
+          });
+        } finally {
+          setIsLoading(false);
+        }
+      })}
     >
-      <input type="hidden" name="profile_slug" value={slug} />
+      <input type="hidden" {...register("profile_slug")} />
 
       <Tabs
         defaultValue="half"
@@ -146,17 +200,23 @@ export default function CharacterAddTemplate({
 
       <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
         <input
-          className=" text-2xl w-full max-w-72 text-center border-primary focus:outline-none"
+          className="text-2xl w-full max-w-72 text-center border-primary focus:outline-none"
           type="text"
-          name="name"
+          {...register("name")}
           placeholder="이름"
         />
+        {errors.name && (
+          <span className="text-red-500 text-sm">{errors.name.message}</span>
+        )}
         <input
           type="text"
-          name="description"
-          className="text-xl w-full max-w-72 text-center border-primary  focus:outline-none mb-4"
+          {...register("description")}
+          className="text-xl w-full max-w-72 text-center border-primary focus:outline-none mb-4"
           placeholder="캐릭터의 한 마디"
         />
+        {errors.description && (
+          <span className="text-red-500 text-sm">{errors.description.message}</span>
+        )}
       </div>
 
       <ListProperties
@@ -193,6 +253,10 @@ export default function CharacterAddTemplate({
           );
         }}
       />
+
+      <input type="hidden" {...register("properties")} value={JSON.stringify(combinedProperties)} />
+      <input type="hidden" {...register("relationships")} value={JSON.stringify(relationships)} />
+      <input type="hidden" {...register("hashtags")} value={hashtags} />
 
       <button
         type="submit"

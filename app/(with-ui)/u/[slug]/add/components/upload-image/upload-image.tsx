@@ -94,7 +94,8 @@ export default function UploadImage({
               className="object-contain w-full h-full overflow-hidden"
               alt={"캐릭터 이미지"}
               src={imagePreviewSrc}
-              layout="fill"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
             {useThumbnail &&
               (thumbnailFileInput.current?.files?.[0] || thumbnailUrl) && (
@@ -109,7 +110,8 @@ export default function UploadImage({
                           )
                         : thumbnailUrl!
                     }
-                    layout="fill"
+                    fill
+                    sizes="96px"
                   />
                 </div>
               )}

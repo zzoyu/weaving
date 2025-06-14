@@ -23,8 +23,9 @@ export async function createCharacter(
   const relationship_name = formData.getAll("relationship_name") as string[];
 
   // print all of the formData
+  console.log("FormData entries:");
   for (const [key, value] of formData.entries()) {
-    console.log(key, value);
+    console.log(`${key}:`, value instanceof File ? `File: ${value.name} (${value.type})` : value);
   }
 
   const responseProfile = await supabase
@@ -62,21 +63,22 @@ export async function createCharacter(
   const hashtags = formData.get("hashtags") as string;
 
   // Check image count
-  const imageFiles = [
-    formData.get("half-image") as File,
-    formData.get("full-image") as File,
-  ].filter(Boolean);
+  const halfImage = formData.get("half-image") as File | null;
+  const fullImage = formData.get("full-image") as File | null;
+  const thumbnail = formData.get("half-thumbnail") as File | null;
+
+  console.log("Half image:", halfImage instanceof File ? `File: ${halfImage.name} (${halfImage.type})` : halfImage);
+  console.log("Full image:", fullImage instanceof File ? `File: ${fullImage.name} (${fullImage.type})` : fullImage);
+  console.log("Thumbnail:", thumbnail instanceof File ? `File: ${thumbnail.name} (${thumbnail.type})` : thumbnail);
+
+  const imageFiles = [halfImage, fullImage].filter((file): file is File => file instanceof File);
 
   if (imageFiles.length > userPlan.limit.maxImagesPerCharacter) {
     throw new Error(`캐릭터당 이미지 한도(${userPlan.limit.maxImagesPerCharacter}개)를 초과했습니다.`);
   }
 
-  const thumbnail = formData.get("half-thumbnail") as File;
-  console.log(imageFiles);
-  if (!imageFiles[0]) throw new Error("Image is required");
-  if (!thumbnail) throw new Error("Thumbnail is required");
-  if (imageFiles.length === 0) throw new Error("Image is required");
-  if (imageFiles.length > 2) throw new Error("Image is too many");
+  if (!halfImage || !(halfImage instanceof File)) throw new Error("상반신 이미지는 필수입니다");
+  if (!thumbnail || !(thumbnail instanceof File)) throw new Error("썸네일은 필수입니다");
 
   const thumbnailUrl = await uploadImage(
     thumbnail,
@@ -84,10 +86,7 @@ export async function createCharacter(
     ImagePath.CHARACTER_THUMBNAIL
   );
   const imageUrls = await Promise.all(
-    imageFiles.map(async (image, index) => {
-      // pass if the image has no file
-      if (!image) return "";
-      // const optimizedImage = await optimizeImage(image, 0.8); // 화질 최적화
+    imageFiles.map(async (image) => {
       return uploadImage(
         image,
         Math.floor(Math.random() * 10000).toString(),
@@ -152,8 +151,9 @@ export async function updateCharacter(
   const isFullEdited = formData.get("full-image-is-edited") === "true";
 
   // print all of the formData
+  console.log("FormData entries:");
   for (const [key, value] of formData.entries()) {
-    console.log(key, value);
+    console.log(`${key}:`, value instanceof File ? `File: ${value.name} (${value.type})` : value);
   }
 
   console.log(properties);
