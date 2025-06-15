@@ -22,6 +22,10 @@ const nextConfig = {
         hostname: "*.supabase.co",
         protocol: "https",
       },
+      {
+        hostname: "*.oraclecloud.com",
+        protocol: "https",
+      },
     ],
   },
   webpack(config) {
