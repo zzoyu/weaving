@@ -49,6 +49,85 @@ function RelationshipModal({
     );
     return !existingRelationship;
   });
+
+  const renderContent = () => {
+    if (isLoading) {
+      return Array.from({ length: 5 }).map((_, index) => (
+        <div
+          className="flex justify-between items-center gap-2"
+          key={index}
+        >
+          <Skeleton className="w-16 h-16 rounded-full shrink-0" />
+          <Skeleton className="h-16 w-full rounded" />
+        </div>
+      ));
+    }
+
+    if (filteredCharacters.length === 0) {
+      return (
+        <div className="col-span-7 text-center h-full flex items-center justify-center">
+          <p>추가 할 수 있는 캐릭터가 없습니다.</p>
+        </div>
+      );
+    }
+
+    return filteredCharacters.map((character) => (
+      <div
+        className="flex justify-between items-center"
+        key={character.id}
+      >
+        <div
+          className="flex items-center justify-center cursor-pointer gap-4"
+          onClick={() => {}}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={character.thumbnail}
+            alt={character.name}
+            className="w-16 h-16 rounded-full mb-2"
+          />
+          <span>{character.name}</span>
+        </div>
+        <Select
+          onValueChange={(value) => {
+            const selectedType = relationshipTypes.find(
+              (type) => type.name === value
+            );
+            if (selectedType && addRelationship) {
+              addRelationship({
+                name: selectedType.name,
+                characterId: character.id,
+                characterName: character.name,
+              });
+            }
+          }}
+        >
+          <SelectTrigger className="w-32">
+            <SelectValue placeholder="관계" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem
+              value="관계"
+              className="flex items-center gap-2"
+            >
+              <span className="text-gray-400">관계</span>
+            </SelectItem>
+            {relationshipTypes.map((type) => (
+              <SelectItem
+                key={type.label}
+                value={type.name}
+                className="flex items-center gap-2"
+              >
+                <span className={type.color}>{type.icon}</span>
+                {type.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    ));
+  };
+
   return (
     <div
       className={`fixed inset-0 bg-black bg-opacity-50 z-30 ${
@@ -58,77 +137,7 @@ function RelationshipModal({
       <div className="w-96 h-fit bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <h2 className="text-center text-xl my-4">캐릭터 선택</h2>
         <div className="gap-2 p-4 flex flex-col w-full overflow-y-auto h-96">
-          {isLoading ? (
-            Array.from({ length: 5 }).map((_, index) => (
-              <div
-                className="flex justify-between items-center gap-2"
-                key={index}
-              >
-                <Skeleton className="w-16 h-16 rounded-full shrink-0" />
-                <Skeleton className="h-16 w-full rounded" />
-              </div>
-            ))
-          ) : filteredCharacters.length > 0 ? (
-            filteredCharacters.map((character) => (
-              <div
-                className="flex justify-between items-center"
-                key={character.id}
-              >
-                <div
-                  className="flex items-center justify-center cursor-pointer gap-4"
-                  onClick={() => {}}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={character.thumbnail}
-                    alt={character.name}
-                    className="w-16 h-16 rounded-full mb-2"
-                  />
-                  <span>{character.name}</span>
-                </div>
-                <Select
-                  onValueChange={(value) => {
-                    const selectedType = relationshipTypes.find(
-                      (type) => type.name === value
-                    );
-                    if (selectedType && addRelationship) {
-                      addRelationship({
-                        name: selectedType.name,
-                        characterId: character.id,
-                        characterName: character.name,
-                      });
-                    }
-                  }}
-                >
-                  <SelectTrigger className="w-32">
-                    <SelectValue placeholder="관계" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem
-                      value="관계"
-                      className="flex items-center gap-2"
-                    >
-                      <span className="text-gray-400">관계</span>
-                    </SelectItem>
-                    {relationshipTypes.map((type) => (
-                      <SelectItem
-                        key={type.label}
-                        value={type.name}
-                        className="flex items-center gap-2"
-                      >
-                        <span className={type.color}>{type.icon}</span>
-                        {type.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            ))
-          ) : (
-            <div className="col-span-7 text-center h-full flex items-center justify-center">
-              <p>추가 할 수 있는 캐릭터가 없습니다.</p>
-            </div>
-          )}
+          {renderContent()}
         </div>
         <button
           type="button"
@@ -167,42 +176,58 @@ export function ButtonAddRelationship({
 
   const [isOpen, setIsOpen] = useState(false);
   const [isMine, setIsMine] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [myCharacters, setMyCharacters] = useState<Character[]>([]);
+  const [friendCharacters, setFriendCharacters] = useState<Character[]>([]);
+  const [isMyCharactersLoading, setIsMyCharactersLoading] = useState(true);
+  const [isFriendCharactersLoading, setIsFriendCharactersLoading] = useState(true);
+
+  // 컴포넌트 마운트 시 한 번만 데이터 로드
+  React.useEffect(() => {
+    let isMounted = true;
+
+    const loadCharacters = async () => {
+      try {
+        // 내 프로필 캐릭터 가져오기
+        const { data: myData } = await fetchCharactersByProfileId(profileId);
+        if (!isMounted) return;
+        
+        if (myData) {
+          const filteredMyData = myData.filter((relatable) => relatable.id !== character?.id);
+          setMyCharacters(filteredMyData);
+        }
+        setIsMyCharactersLoading(false);
+
+        // 친구 프로필 캐릭터 가져오기
+        const friendData = await fetchCharactersFromFriendsByProfileId(profileId);
+        if (!isMounted) return;
+        
+        if (friendData) {
+          setFriendCharacters(friendData);
+        }
+        setIsFriendCharactersLoading(false);
+      } catch (error) {
+        console.error('Failed to fetch characters:', error);
+        if (isMounted) {
+          setIsMyCharactersLoading(false);
+          setIsFriendCharactersLoading(false);
+        }
+      }
+    };
+
+    loadCharacters();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [profileId, character?.id]);
 
   const openModal = (isMine: boolean) => {
-    if (isMine) {
-      setIsMine(true);
-      setIsOpen(true);
-    } else {
-      setIsMine(false);
-      setIsOpen(true);
-    }
+    setIsMine(isMine);
+    setIsOpen(true);
   };
 
-  const [characters, setCharacters] = useState<Character[]>([]);
-  React.useEffect(() => {
-    if (!isOpen) return;
-
-    const fetchCharacters = async () => {
-      setIsLoading(true);
-      if (isMine) {
-        const { data } = await fetchCharactersByProfileId(profileId);
-        if (data) {
-          setCharacters(
-            data.filter((relatable) => relatable.id !== character?.id)
-          );
-        }
-      }
-      if (!isMine) {
-        const data = await fetchCharactersFromFriendsByProfileId(profileId);
-        if (data) {
-          setCharacters(data);
-        }
-      }
-      setIsLoading(false);
-    };
-    fetchCharacters();
-  }, [isOpen]);
+  const characters = isMine ? myCharacters : friendCharacters;
+  const isLoading = isMine ? isMyCharactersLoading : isFriendCharactersLoading;
 
   return (
     <div className="p-4 w-full">
@@ -228,14 +253,14 @@ export function ButtonAddRelationship({
             setRelationships((prev) => [
               ...prev,
               {
-                id: Date.now(), // Temporary ID for new relationships
+                id: Date.now(),
                 name: data.name,
                 from_id: profileId,
                 to_id: data.characterId,
                 character: {
                   id: data.characterId,
                   name: data.characterName,
-                  thumbnail: "", // Placeholder for thumbnail
+                  thumbnail: "",
                 },
               },
             ]);
@@ -263,7 +288,6 @@ export function ButtonAddRelationship({
           className="py-2 rounded bg-background-muted text-sm w-full"
           type="button"
           onClick={() => {
-            setIsLoading(true);
             setIsMine(true);
             openModal(true);
           }}
@@ -276,7 +300,6 @@ export function ButtonAddRelationship({
           className="py-2 rounded bg-background-muted text-sm w-full"
           type="button"
           onClick={() => {
-            setIsLoading(true);
             setIsMine(false);
             openModal(false);
           }}
