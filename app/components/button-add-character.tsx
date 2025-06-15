@@ -88,7 +88,7 @@ export function ButtonAddCharacter({ characters, onAdd }: ButtonAddCharacterProp
                   >
                     <div className="aspect-square relative">
                       {character.thumbnail ? (
-                        <Image
+                        <Image unoptimized 
                           src={character.thumbnail}
                           alt={character.name}
                           fill

@@ -1,19 +1,19 @@
 "use client";
 
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Character, Property } from "@/types/character";
 import { Relationship, RelationshipNode } from "@/types/relationship";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import {
-  fetchRelationshipsWithDepth,
-  fetchRelationshipsWithDepthExtended,
+    fetchRelationshipsWithDepth,
+    fetchRelationshipsWithDepthExtended,
 } from "../actions";
 import RelationshipGraphVariants from "./relationship-graph-variants";
 
@@ -123,7 +123,7 @@ export function ProfileCard({
                 key={`image-${index}`}
                 className="relative flex justify-center items-center w-full"
               >
-                <Image
+                <Image unoptimized 
                   src={image}
                   alt={character.name}
                   width={200}

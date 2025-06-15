@@ -34,7 +34,7 @@ export default async function FriendPage() {
                   href={`/u/${friend.slug}`}
                   className="flex flex-row items-center gap-4"
                 >
-                  <Image
+                  <Image unoptimized 
                     src={friend.profile_image}
                     alt={friend.nickname}
                     width={100}

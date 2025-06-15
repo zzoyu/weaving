@@ -61,7 +61,7 @@ export default function CharacterList({ characters, isMyProfile }: CharacterList
                   {/* 왼쪽: 썸네일 */}
                   <div className="relative aspect-square w-full h-full bg-muted">
                     {character.thumbnail ? (
-                      <Image
+                      <Image unoptimized 
                         src={character.thumbnail}
                         alt={character.name}
                         fill

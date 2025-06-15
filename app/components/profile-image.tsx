@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function ProfileImage({ src }: { src: string }) {
   return (
-    <Image
+    <Image unoptimized 
       className="rounded-full"
       src={src}
       width={100}

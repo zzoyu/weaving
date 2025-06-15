@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 
+import { changeProfileImage } from "@/actions/change-profile";
 import EditIcon from "@/public/assets/icons/edit.svg";
 import { useRef } from "react";
-import { changeProfileImage } from "@/actions/change-profile";
 interface ProfileImageProps {
   src: string;
   isEditable?: boolean;
@@ -34,7 +34,7 @@ export default function ProfileImage({
   return (
     <div className="relative">
       <div className="relative w-20 h-20 dark:bg-slate-800 rounded-full overflow-hidden mb-2 flex justify-center items-center">
-        <Image
+        <Image unoptimized 
           src={src}
           alt="프로필 이미지"
           width={0}

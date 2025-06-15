@@ -23,7 +23,7 @@ export default function FriendRequestItem({
   return (
     <div className="flex items-center justify-between p-4 border-b">
       <div className="flex items-center">
-        <Image
+        <Image unoptimized 
           src={profile?.profile_image || ""}
           alt={profile.nickname}
           width={40}

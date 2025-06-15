@@ -22,7 +22,7 @@ export default function ListUniverseItem({
         )}
       >
         <div className="w-full aspect-[16/9] relative">
-          <Image
+          <Image unoptimized 
             src={universe.thumbnail || universe?.image?.[0] || ""}
             alt={universe.name}
             fill

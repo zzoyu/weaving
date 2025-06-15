@@ -1,10 +1,9 @@
 "use client";
 
-import Image from "next/image";
-import { fetchCharactersByProfileId } from "../../actions";
 import { Character } from "@/types/character";
-import { Suspense, useState } from "react";
 import { ERelationshipType, Relationship } from "@/types/relationship";
+import Image from "next/image";
+import { useState } from "react";
 
 export function LayerAddRelationshipItem({
   character,
@@ -30,7 +29,7 @@ export function LayerAddRelationshipItem({
   return (
     <div className="flex justify-between items-center gap-2 w-full">
       <div className="flex items-center gap-4 relative">
-        <Image
+        <Image unoptimized 
           src={character.thumbnail || ""}
           alt={character.name}
           width={100}

@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 
-import ImageIcon from "@/public/assets/icons/image.svg";
 import { useRef, useState } from "react";
 import UploadImageCropLayer from "./upload-image-crop-layer";
 
@@ -92,7 +91,7 @@ export default function UploadImage({
         )}
         {imagePreviewSrc && !isOpenedCropLayer ? (
           <div className="relative w-full h-full">
-            <Image
+            <Image unoptimized 
               className="object-contain w-full h-full overflow-hidden"
               alt={"유니버스 이미지"}
               src={imagePreviewSrc}
@@ -102,7 +101,7 @@ export default function UploadImage({
             {useThumbnail &&
               (thumbnailFileInput.current?.files?.[0] || thumbnailUrl) && (
                 <div className="absolute z-10 -bottom-2 -right-2 w-32 h-[72px] rounded-lg overflow-hidden border-4 border-white shadow-md">
-                  <Image
+                  <Image unoptimized 
                     className="object-cover w-full h-full"
                     alt={"썸네일 이미지"}
                     src={
@@ -121,7 +120,7 @@ export default function UploadImage({
         ) : icon ? (
           icon
         ) : (
-          <ImageIcon width={32} height={32} />
+          <Image unoptimized Icon width={32} height={32} />
         )}
       </button>
       {isOpenedCropLayer && (

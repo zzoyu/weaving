@@ -8,7 +8,7 @@ export default function ProfileInformation({ profile }: { profile: Profile }) {
         <h2>{profile.nickname}</h2>
         <p>{profile.slug}</p>
         {profile.profile_image && (
-          <Image
+          <Image unoptimized 
             src={profile.profile_image}
             alt={profile.nickname}
             width={200}
