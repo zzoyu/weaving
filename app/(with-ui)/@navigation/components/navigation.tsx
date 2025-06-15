@@ -1,4 +1,4 @@
-import HeartIcon from "@/public/assets/icons/navigation/heart.svg";
+import AdditionalIcon from "@/public/assets/icons/navigation/additional.svg";
 import ProfileIcon from "@/public/assets/icons/navigation/profile.svg";
 import UserIcon from "@/public/assets/icons/navigation/user.svg";
 import Link from "next/link";
@@ -20,7 +20,7 @@ export function NavigationSignIn({ slug }: { slug?: string }) {
   const navItems = [
     {
       label: "더보기",
-      icon: HeartIcon,
+      icon: AdditionalIcon,
       href: `/u/${slug}/more`,
     },
     {

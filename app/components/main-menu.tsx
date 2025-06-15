@@ -4,13 +4,15 @@ import { signInWithTwitter, signOut } from "@/lib/client-authentication";
 import { createClient } from "@/utils/supabase/client";
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ProfileImage from "./profile-image";
 
 export default function MainMenu() {
   const supabase = createClient();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams.get("redirect");
 
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [user, setUser] = useState<User>();
@@ -24,14 +26,25 @@ export default function MainMenu() {
   }
 
   useEffect(() => {
-    const { data } = supabase.auth.onAuthStateChange((event, session) => {
+    // 초기 세션 상태 확인
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        setIsSignedIn(true);
+        setUser(session.user);
+      }
+    });
+
+    // 세션 상태 변경 구독
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN" || event === "USER_UPDATED") {
         if (session) {
           setIsSignedIn(true);
           setUser(session.user);
-          router.replace("/profile");
+          // 리다이렉트 경로가 있으면 해당 경로로, 없으면 프로필 페이지로
+          router.replace(redirectPath || "/profile");
         } else {
           setIsSignedIn(false);
+          setUser(undefined);
         }
       }
       if (event === "SIGNED_OUT") {
@@ -39,11 +52,16 @@ export default function MainMenu() {
         setUser(undefined);
         router.refresh();
       }
+      if (event === "TOKEN_REFRESHED") {
+        // 토큰이 갱신되면 현재 페이지 새로고침
+        router.refresh();
+      }
     });
+
     return () => {
-      data?.subscription?.unsubscribe?.();
+      subscription.unsubscribe();
     };
-  }, []);
+  }, [redirectPath]);
 
   return (
     <div className="h-1/2 flex flex-col justify-start items-center gap-10 pt-10">
