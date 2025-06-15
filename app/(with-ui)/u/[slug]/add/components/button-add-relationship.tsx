@@ -285,7 +285,7 @@ export function ButtonAddRelationship({
           isLoading={isLoading}
         />
         <button
-          className="py-2 rounded bg-background-muted text-sm w-full"
+          className="py-2 rounded bg-background-muted dark:bg-text-black text-sm w-full dark:text-white"
           type="button"
           onClick={() => {
             setIsMine(true);
@@ -297,7 +297,7 @@ export function ButtonAddRelationship({
           선택하기
         </button>
         <button
-          className="py-2 rounded bg-background-muted text-sm w-full"
+          className="py-2 rounded bg-background-muted dark:bg-text-black text-sm w-full dark:text-white"
           type="button"
           onClick={() => {
             setIsMine(false);
