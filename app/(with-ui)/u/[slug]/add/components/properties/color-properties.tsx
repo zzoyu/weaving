@@ -20,7 +20,7 @@ function ColorModal({
         isOpen ? "visible" : "invisible"
       }`}
     >
-      <div className="w-96 h-fit bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      <div className="w-96 h-fit bg-white dark:bg-neutral-950 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <h2 className="text-center text-xl my-4">색상 선택</h2>
         <div className="grid place-items-center grid-flow-dense grid-cols-7 gap-2 p-4">
           {Object.entries(colorList).map(([key, color]) => (
@@ -48,7 +48,7 @@ function ColorModal({
         </div>
         <button
           type="button"
-          className="w-full p-2 mt-4  bg-text-black text-background-default"
+          className="w-full p-2 mt-4 bg-text-black text-background-default"
           onClick={() => onClose()}
         >
           닫기
@@ -84,7 +84,7 @@ function ColorPicker({
       <button
         type="button"
         className={clsx(
-          "relative w-10 h-10 border-background-muted border",
+          "relative w-10 h-10 border-background-muted border dark:bg-neutral-900",
           colorList?.[(property?.value as string) || "white"]
         )}
         onClick={() => {
@@ -113,13 +113,13 @@ export function ColorProperties({
 }) {
   return (
     <div className="w-full grid grid-cols-3">
-      <div className="text-text-black bg-background-muted text-center py-1">
+      <div className="text-text-black dark:text-white bg-background-muted dark:bg-neutral-800 text-center py-1">
         테마색
       </div>
-      <div className="text-text-black bg-background-muted text-center py-1">
+      <div className="text-text-black dark:text-white bg-background-muted dark:bg-neutral-800 text-center py-1">
         눈동자색
       </div>
-      <div className="text-text-black bg-background-muted text-center py-1">
+      <div className="text-text-black dark:text-white bg-background-muted dark:bg-neutral-800 text-center py-1">
         머리색
       </div>
 

@@ -120,7 +120,7 @@ export default function ThemeColorChart({ characters }: ThemeColorChartProps) {
           width={boxWidth}
           height={boxHeight}
           rx={10}
-          fill="rgba(255,255,255,0.96)"
+          fill={typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? '#18181b' : 'rgba(255,255,255,0.96)'}
           style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.13))" }}
         />
         <text
@@ -176,8 +176,8 @@ export default function ThemeColorChart({ characters }: ThemeColorChartProps) {
   };
 
   return (
-    <section className="w-full flex flex-col items-center bg-white rounded-2xl p-4 md:p-6 mb-10">
-      <h1 className="text-2xl md:text-3xl font-pretendard mb-5 text-gray-900 mt-10">
+    <section className="w-full flex flex-col items-center bg-white dark:bg-neutral-950 rounded-2xl p-4 md:p-6 mb-10">
+      <h1 className="text-2xl md:text-3xl font-pretendard mb-5 text-gray-900 dark:text-white mt-10">
         당신의 테마 컬러는?
       </h1>
       <div className="w-full flex flex-col items-center justify-center py-10">

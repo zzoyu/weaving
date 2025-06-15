@@ -2,7 +2,7 @@ export const colorList: {
   [key: string]: string;
 } = {
   black: "bg-black",
-  white: "bg-white",
+  white: "bg-white dark:bg-neutral-950",
   yellow: "bg-yellow-400",
   gray: "bg-gray-200",
   brown: "bg-yellow-700",

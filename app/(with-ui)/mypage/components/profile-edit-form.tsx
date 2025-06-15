@@ -33,13 +33,13 @@ export default function ProfileEditForm({ profile }: { profile: Profile }) {
           />
           <div className="flex flex-col gap-2">
             <div>
-              <label className="text-sm font-medium text-gray-700">
+              <label className="text-sm font-medium text-gray-700 dark:text-white">
                 계정명
               </label>
               <p className="py-2">{name}</p>
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-700">
+              <label className="text-sm font-medium text-gray-700 dark:text-white">
                 접근 코드
               </label>
               <p className="py-2">{bio}</p>
