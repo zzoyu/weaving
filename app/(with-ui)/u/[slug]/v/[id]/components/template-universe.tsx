@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { CharacterWithProfile } from "@/types/character";
 import { Universe } from "@/types/universe";
-import { Edit, Hash } from "lucide-react";
+import { Edit, Hash, ImageIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import CharacterList from "./character-list";

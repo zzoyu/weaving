@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 
+import { ImageIcon } from "lucide-react";
 import { useRef, useState } from "react";
 import UploadImageCropLayer from "./upload-image-crop-layer";
 
