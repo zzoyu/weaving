@@ -9,6 +9,16 @@ export async function GET(request: Request) {
     const description = searchParams.get('description');
     const thumbnail = searchParams.get('thumbnail');
 
+    if (!thumbnail) {
+      return new Response('Thumbnail is required', { status: 400 });
+    }
+
+    const imageRes = await fetch(thumbnail);
+    if (!imageRes.ok) {
+      return new Response('Failed to load thumbnail', { status: 400 });
+    }
+    const imageBuffer = await imageRes.arrayBuffer();
+
     return new ImageResponse(
       (
         <div
@@ -32,18 +42,16 @@ export async function GET(request: Request) {
               gap: '24px',
             }}
           >
-            {thumbnail && (
-              <img
-                src={thumbnail}
-                alt={name || ''}
-                style={{
-                  width: '240px',
-                  height: '240px',
-                  objectFit: 'cover',
-                  borderRadius: '8px',
-                }}
-              />
-            )}
+            <img
+              src={imageBuffer as any}
+              alt={name || ''}
+              style={{
+                width: '240px',
+                height: '240px',
+                objectFit: 'cover',
+                borderRadius: '8px',
+              }}
+            />
             <div
               style={{
                 display: 'flex',
