@@ -13,6 +13,7 @@ export default function UploadImage({
   imageUrl,
   thumbnailUrl,
   isEdit = false,
+  aspectRatio,
 }: {
   name: string;
   isEdit?: boolean;
@@ -20,6 +21,7 @@ export default function UploadImage({
   icon?: JSX.Element;
   imageUrl?: string;
   thumbnailUrl?: string;
+  aspectRatio?: number;
 }) {
   const imageFileInput = useRef<HTMLInputElement>(null);
   const thumbnailFileInput = useRef<HTMLInputElement>(null);
@@ -92,14 +94,14 @@ export default function UploadImage({
           <div className="relative w-full h-full">
             <Image
               className="object-contain w-full h-full overflow-hidden"
-              alt={"캐릭터 이미지"}
+              alt={"유니버스 이미지"}
               src={imagePreviewSrc}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
             {useThumbnail &&
               (thumbnailFileInput.current?.files?.[0] || thumbnailUrl) && (
-                <div className="absolute z-10 -bottom-2 -right-2 w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
+                <div className="absolute z-10 -bottom-2 -right-2 w-32 h-[72px] rounded-lg overflow-hidden border-4 border-white shadow-md">
                   <Image
                     className="object-cover w-full h-full"
                     alt={"썸네일 이미지"}
@@ -111,7 +113,7 @@ export default function UploadImage({
                         : thumbnailUrl!
                     }
                     fill
-                    sizes="96px"
+                    sizes="128px"
                   />
                 </div>
               )}
@@ -147,6 +149,7 @@ export default function UploadImage({
             setIsEdited(false);
             setIsOpenedCropLayer(false);
           }}
+          aspectRatio={aspectRatio}
         />
       )}
     </div>

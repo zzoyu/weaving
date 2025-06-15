@@ -8,12 +8,14 @@ interface UploadImageCropLayerProps {
   src: string;
   onCrop: (blob: Blob) => void;
   onClose: () => void;
+  aspectRatio?: number;
 }
 
 export default function UploadImageCropLayer({
   src,
   onCrop,
   onClose,
+  aspectRatio,
 }: UploadImageCropLayerProps) {
   async function handleSave() {
     try {
@@ -77,11 +79,11 @@ export default function UploadImageCropLayer({
   }, [src]);
 
   const [crop, setCrop] = useState<Crop>({
-    unit: "px", // Can be 'px' or '%'
+    unit: "px",
     x: 25,
     y: 25,
-    width: 200,
-    height: 200,
+    width: 320,
+    height: 180, // 16:9 비율
   });
 
   return (
@@ -94,15 +96,14 @@ export default function UploadImageCropLayer({
       opacity-80
       "
       >
-        썸네일로 사용할 영역을 선택해주세요.
+        유니버스 이미지로 사용할 영역을 선택해주세요.
       </small>
       <div>
         <ReactCrop
           crop={crop}
           onChange={(c) => setCrop(c)}
           keepSelection
-          circularCrop
-          aspect={1}
+          aspect={aspectRatio || 16/9}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img

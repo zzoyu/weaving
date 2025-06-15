@@ -1,39 +1,41 @@
 "use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ButtonAddCharacter } from "@/app/components/button-add-character";
+import InputHashtag from "@/app/components/input-hashtag";
+import ListProperties from "@/app/components/properties/list-properties";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { baseProperties } from "@/lib/base-properties";
-import IconFull from "@/public/assets/icons/image/full.svg";
-import IconHalf from "@/public/assets/icons/image/half.svg";
 import { Character, EPropertyType, Property } from "@/types/character";
-import { PlanLimit } from "@/types/plan";
-import { Relationship } from "@/types/relationship";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
-import { createCharacter } from "../actions";
-import { createCharacterSchema } from "../schema";
-import { ButtonAddRelationship } from "./button-add-relationship";
-import InputHashtag from "./input-hashtag";
-import { ColorProperties } from "./properties/color-properties";
-import ListProperties from "./properties/list-properties";
+import { CharacterUniverse } from "../../../../../../../types/character-universe";
+import { createUniverseAction } from "../actions";
 import UploadImage from "./upload-image/upload-image";
 
-export default function CharacterAddTemplate({
-  slug,
-  profileId,
-  character,
-  planLimit,
-}: {
+interface UniverseAddTemplateProps {
   slug: string;
   profileId: number;
-  character?: Character;
-  planLimit: PlanLimit;
-}) {
-  const [properties, setProperties] = useState([...baseProperties]);
+  characters: Character[];
+}
+
+export default function UniverseAddTemplate({
+  slug,
+  profileId,
+  characters,
+}: UniverseAddTemplateProps) {
+  const { toast } = useToast();
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [hashtags, setHashtags] = useState<string>("");
   const [currentHashtag, setCurrentHashtag] = useState<string>("");
+  const [listProperties, setListProperties] = useState<Property[]>([
+    { key: "장르", value: "", type: EPropertyType.STRING },
+    { key: "사회구조", value: "", type: EPropertyType.STRING },
+    { key: "주요 사건", value: "", type: EPropertyType.STRING },
+    { key: "규칙", value: "", type: EPropertyType.STRING },
+  ]);
+  const [characterUniverses, setCharacterUniverses] = useState<CharacterUniverse[]>([]);
+
   const previewHashtags = useMemo(() => {
     if (!hashtags) return [];
     return hashtags
@@ -42,229 +44,140 @@ export default function CharacterAddTemplate({
       .map((tag) => tag.trim());
   }, [hashtags]);
 
-  const [colors, setColors] = useState<Property[]>(
-    character?.properties?.filter((property) =>
-      ["themeColor", "eyeColor", "hairColor"].includes(property.key)
-    ) || [
-      { key: "themeColor", value: "", type: EPropertyType.COLOR },
-      { key: "eyeColor", value: "", type: EPropertyType.COLOR },
-      { key: "hairColor", value: "", type: EPropertyType.COLOR },
-    ]
-  );
-  const combinedProperties = useMemo(() => {
-    const colorProperties = colors.map((color) => ({
-      key: color.key,
-      value: color.value,
-      type: color.type,
-    }));
-
-    return [...properties, ...colorProperties];
-  }, [properties, colors]);
-
-  const [relationships, setRelationships] = useState<Relationship[]>([]);
-  const handleRelationshipNameChange = (character: Character) => {
-    const updatedRelationships = [...relationships];
-    const relationshipIndex = updatedRelationships.findIndex(
-      (relationship) => relationship.to_id === character.id
-    );
-    if (relationshipIndex !== -1) {
-      updatedRelationships[relationshipIndex].name = character.name;
-    } else {
-      updatedRelationships.push({
-        from_id: profileId,
-        to_id: character.id,
-        name: character.name,
-        character: {
-          id: character.id,
-          name: character.name,
-          thumbnail: character.thumbnail,
-        },
-      });
-    }
-    setRelationships(updatedRelationships);
+  const handleAddCharacter = (characterId: number) => {
+    setCharacterUniverses(prev => [
+      ...prev,
+      {
+        character_id: Number(characterId),
+        universe_id: 0, // 임시값, 서버에서 실제 universe_id로 업데이트
+        created_at: new Date().toISOString(),
+        id: 0, // 임시값, 서버에서 실제 id로 업데이트
+      },
+    ]);
   };
 
-  const { toast } = useToast();
-  const router = useRouter();
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsSubmitting(true);
 
-  const [isLoading, setIsLoading] = useState(false);
+    try {
+      const formData = new FormData(event.currentTarget);
+      formData.append("profile_id", profileId.toString());
+      formData.append("hashtags", hashtags);
+      formData.append("list_properties", JSON.stringify(listProperties));
+      formData.append("character_universes", JSON.stringify(characterUniverses));
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    watch,
-  } = useForm({
-    resolver: zodResolver(createCharacterSchema(planLimit)),
-    defaultValues: {
-      profile_slug: slug,
-      properties: combinedProperties,
-      relationships,
-      hashtags: "",
-    },
-  });
+      await createUniverseAction(formData);
+
+      toast({
+        description: "유니버스가 생성되었습니다.",
+      });
+
+      router.push(`/u/${slug}/v`);
+      router.refresh();
+    } catch (error) {
+      console.error("Error creating universe:", error);
+      toast({
+        description: error instanceof Error ? error.message : "잠시 후 다시 시도해주세요.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
-    <form
-      className="flex flex-col gap-2 items-center w-full md:max-w-md p-4"
-      onSubmit={handleSubmit(async (data) => {
-        setIsLoading(true);
-        try {
-          const formData = new FormData();
-          Object.entries(data).forEach(([key, value]) => {
-            if (value instanceof File) {
-              console.log(`Adding file to FormData: ${key}`, value.name, value.type);
-              formData.append(key, value);
-            } else if (typeof value === "string") {
-              formData.append(key, value);
-            } else if (Array.isArray(value)) {
-              formData.append(key, JSON.stringify(value));
-            }
-          });
-
-          // Add image files from UploadImage component
-          const halfImageInput = document.querySelector('input[name="half-image"]') as HTMLInputElement;
-          const fullImageInput = document.querySelector('input[name="full-image"]') as HTMLInputElement;
-          const halfThumbnailInput = document.querySelector('input[name="half-thumbnail"]') as HTMLInputElement;
-
-          if (halfImageInput?.files?.[0]) {
-            console.log("Adding half-image from input:", halfImageInput.files[0].name);
-            formData.append("half-image", halfImageInput.files[0]);
-          }
-          if (fullImageInput?.files?.[0]) {
-            console.log("Adding full-image from input:", fullImageInput.files[0].name);
-            formData.append("full-image", fullImageInput.files[0]);
-          }
-          if (halfThumbnailInput?.files?.[0]) {
-            console.log("Adding half-thumbnail from input:", halfThumbnailInput.files[0].name);
-            formData.append("half-thumbnail", halfThumbnailInput.files[0]);
-          }
-
-          console.log("FormData before submit:");
-          for (const [key, value] of formData.entries()) {
-            console.log(`${key}:`, value instanceof File ? `File: ${value.name} (${value.type})` : value);
-          }
-
-          const res = await createCharacter(formData, combinedProperties);
-          if (res) {
-            toast({
-              title: "캐릭터 생성",
-              description: "캐릭터가 생성되었습니다.",
-              variant: "default",
-            });
-            router.push(`/u/${slug}`);
-          }
-        } catch (err) {
-          toast({
-            description: err instanceof Error ? err.message : "캐릭터 생성에 실패했습니다.",
-            variant: "destructive",
-          });
-        } finally {
-          setIsLoading(false);
-        }
-      })}
-    >
-      <input type="hidden" {...register("profile_slug")} />
-
-      <Tabs
-        defaultValue="half"
-        className="w-full flex flex-col justify-center items-center"
-      >
-        <TabsList>
-          <TabsTrigger value="half">상반신*</TabsTrigger>
-          <TabsTrigger value="full">전신</TabsTrigger>
-        </TabsList>
-        <TabsContent
-          value="half"
-          forceMount
-          className="hidden data-[state=active]:block"
-        >
-          <UploadImage
-            name={"half"}
-            useThumbnail
-            icon={<IconHalf className="w-32 h-32" />}
-          />
-        </TabsContent>
-        <TabsContent
-          value="full"
-          forceMount
-          className="hidden data-[state=active]:block"
-        >
-          <UploadImage
-            name={"full"}
-            icon={<IconFull className="w-32 h-32" />}
-          />
-        </TabsContent>
-      </Tabs>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center w-full md:max-w-md p-4">
+      <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
+        <UploadImage name="universe" useThumbnail aspectRatio={16/9} />
+      </div>
 
       <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
         <input
           className="text-2xl w-full max-w-72 text-center border-primary focus:outline-none"
           type="text"
-          {...register("name")}
+          name="name"
           placeholder="이름"
+          required
         />
-        {errors.name && (
-          <span className="text-red-500 text-sm">{errors.name.message}</span>
-        )}
         <input
           type="text"
-          {...register("description")}
+          name="description"
           className="text-xl w-full max-w-72 text-center border-primary focus:outline-none mb-4"
-          placeholder="캐릭터의 한 마디"
+          placeholder="세계관에 대한 설명"
         />
-        {errors.description && (
-          <span className="text-red-500 text-sm">{errors.description.message}</span>
-        )}
       </div>
 
-      <ListProperties
-        properties={properties}
-        handler={(newValue) => {
-          setProperties(newValue);
-        }}
-      />
-      <div className=" px-10 w-full">
-        <ColorProperties properties={colors} handler={setColors} editable />
+      <div className="w-full px-4">
+        <h2 className="text-xl font-bold mb-2">속성</h2>
+        <ListProperties
+          properties={listProperties}
+          handler={setListProperties}
+        />
       </div>
-      <ButtonAddRelationship
-        relationships={relationships}
-        onChange={setRelationships}
-        editable
-        profileId={profileId}
-      />
-      <InputHashtag
-        value={currentHashtag}
-        hashtags={previewHashtags}
-        onChange={(newValue) => {
-          if (newValue[newValue.length - 1] === " ") {
-            setHashtags(hashtags + newValue);
-            setCurrentHashtag("");
-          } else setCurrentHashtag(newValue);
-        }}
-        onDelete={(index) => {
-          setHashtags(
-            hashtags
-              .trim()
-              .split(" ")
-              .filter((_, i) => i !== index)
-              .join(" ")
-          );
-        }}
-      />
 
-      <input type="hidden" {...register("properties")} value={JSON.stringify(combinedProperties)} />
-      <input type="hidden" {...register("relationships")} value={JSON.stringify(relationships)} />
-      <input type="hidden" {...register("hashtags")} value={hashtags} />
+      <div className="w-full px-4">
+        <h2 className="text-xl font-bold mb-2">소속 캐릭터</h2>
+        <div className="flex flex-col gap-2">
+          {characterUniverses.length === 0 && (
+            <div className="text-muted-foreground text-sm text-center py-4">아직 추가된 캐릭터가 없습니다.</div>
+          )}
+          {characterUniverses.map((cu) => {
+            const character = characters.find((c) => Number(c.id) === Number(cu.character_id));
+            return (
+              <div key={cu.character_id} className="flex items-center justify-between p-2 bg-background-muted rounded">
+                <span>{character ? character.name : `ID: ${cu.character_id}`}</span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  type="button"
+                  onClick={() => {
+                    setCharacterUniverses(characterUniverses.filter((c) => c.character_id !== cu.character_id));
+                  }}
+                >
+                  ✕
+                </Button>
+              </div>
+            );
+          })}
+          <ButtonAddCharacter
+            characters={characters.filter(
+              (c) => !characterUniverses.some((cu) => cu.character_id === c.id)
+            )}
+            onAdd={handleAddCharacter}
+          />
+        </div>
+      </div>
 
-      <button
-        type="submit"
-        disabled={isLoading}
+      <div className="w-full px-4">
+        <InputHashtag
+          value={currentHashtag}
+          hashtags={previewHashtags}
+          onChange={(newValue: string) => {
+            if (newValue[newValue.length - 1] === " ") {
+              setHashtags(hashtags + newValue);
+              setCurrentHashtag("");
+            } else setCurrentHashtag(newValue);
+          }}
+          onDelete={(index: number) => {
+            setHashtags(
+              hashtags
+                .trim()
+                .split(" ")
+                .filter((_, i) => i !== index)
+                .join(" ")
+            );
+          }}
+        />
+      </div>
+
+      <Button 
+        type="submit" 
+        disabled={isSubmitting}
         className="text-background-default bg-text-black rounded w-full text-xl p-2"
       >
-        저장하기
-      </button>
+        {isSubmitting ? "생성 중..." : "유니버스 생성"}
+      </Button>
     </form>
   );
 }

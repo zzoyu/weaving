@@ -236,3 +236,52 @@ export async function updateCharacter(
   revalidatePath("/u/" + profile_slug);
   return true;
 }
+
+export async function createUniverseAction(formData: FormData) {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("로그인이 필요합니다.");
+
+  const name = formData.get("name") as string;
+  const description = formData.get("description") as string;
+  const hashtags = formData.get("hashtags") as string;
+  const profileId = Number(formData.get("profile_id"));
+  const image = formData.get("universe-image") as File;
+  const thumbnail = formData.get("universe-thumbnail") as File;
+
+  if (!name) throw new Error("이름을 입력해주세요.");
+  if (!image || !(image instanceof File)) throw new Error("이미지를 업로드해주세요.");
+  if (!thumbnail || !(thumbnail instanceof File)) throw new Error("썸네일을 업로드해주세요.");
+  if (!profileId) throw new Error("프로필 정보가 없습니다.");
+
+  // 이미지 업로드
+  const imageUrl = await uploadImage(
+    image,
+    `${profileId}_${Math.floor(Math.random() * 10000).toString()}`,
+    ImagePath.UNIVERSE,
+    true
+  );
+
+  const thumbnailUrl = await uploadImage(
+    thumbnail,
+    `${profileId}_${Math.floor(Math.random() * 10000).toString()}`,
+    ImagePath.UNIVERSE,
+    true
+  );
+
+  // 유니버스 생성
+  const { error } = await supabase.from("universes").insert({
+    profile_id: profileId,
+    name,
+    description,
+    image: [imageUrl],
+    thumbnail: thumbnailUrl,
+    properties: [],
+    hashtags,
+  });
+
+  if (error) throw error;
+
+  revalidatePath("/u/[slug]/v", "page");
+  return true;
+}

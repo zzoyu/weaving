@@ -53,4 +53,4 @@ export default function ListProperties({
       </div>
     </div>
   );
-}
+} 

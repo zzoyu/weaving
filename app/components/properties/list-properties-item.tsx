@@ -1,8 +1,7 @@
 "use client";
 
-import { Property } from "@/types/character";
-
 import DeleteIcon from "@/public/assets/icons/delete.svg";
+import { Property } from "@/types/character";
 
 export default function ListPropertiesItem({
   property,
@@ -49,4 +48,4 @@ export default function ListPropertiesItem({
       </button>
     </div>
   );
-}
+} 

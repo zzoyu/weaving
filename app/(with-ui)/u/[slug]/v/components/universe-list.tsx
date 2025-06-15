@@ -84,8 +84,8 @@ export function UniverseList({
         <div className="flex justify-center items-center h-20">
           <span className="text-gray-500">
             {isMine
-              ? "등록된 유니버스가 없습니다. 추가해보세요!"
-              : "등록된 유니버스가 없습니다."}
+              ? "등록된 세계관이 없습니다. 추가해보세요!"
+              : "등록된 세계관이 없습니다."}
           </span>
         </div>
       )}

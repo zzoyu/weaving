@@ -1,5 +1,8 @@
 "use client";
 
+import InputHashtag from "@/app/components/input-hashtag";
+import { ColorProperties } from "@/app/components/properties/color-properties";
+import ListProperties from "@/app/components/properties/list-properties";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { baseProperties } from "@/lib/base-properties";
@@ -15,9 +18,6 @@ import { useForm } from "react-hook-form";
 import { createCharacter } from "../actions";
 import { createCharacterSchema } from "../schema";
 import { ButtonAddRelationship } from "./button-add-relationship";
-import InputHashtag from "./input-hashtag";
-import { ColorProperties } from "./properties/color-properties";
-import ListProperties from "./properties/list-properties";
 import UploadImage from "./upload-image/upload-image";
 
 export default function CharacterAddTemplate({

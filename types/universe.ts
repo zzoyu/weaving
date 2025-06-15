@@ -12,6 +12,7 @@ type Property = {
 
 interface Universe {
   id: number;
+  profile_id: number;
   name: string;
   image?: string[];
   thumbnail?: string;
