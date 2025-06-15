@@ -1,4 +1,5 @@
 import AdditionalIcon from "@/public/assets/icons/navigation/additional.svg";
+import EarthIcon from "@/public/assets/icons/navigation/earth.svg";
 import ProfileIcon from "@/public/assets/icons/navigation/profile.svg";
 import UserIcon from "@/public/assets/icons/navigation/user.svg";
 import Link from "next/link";
@@ -27,6 +28,11 @@ export function NavigationSignIn({ slug }: { slug?: string }) {
       label: "홈",
       icon: ProfileIcon,
       href: `/u/${slug}`,
+    },
+    {
+      label: "세계관",
+      icon: EarthIcon,
+      href: `/u/${slug}/v`,
     },
     { label: "마이페이지", icon: UserIcon, href: "/mypage" },
   ];

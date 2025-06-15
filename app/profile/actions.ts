@@ -18,3 +18,14 @@ export async function fetchProfileByUserId(
 
   return data;
 }
+
+export async function fetchProfileBySlug(slug: string) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("profile")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+  if (error) throw error;
+  return data;
+}
