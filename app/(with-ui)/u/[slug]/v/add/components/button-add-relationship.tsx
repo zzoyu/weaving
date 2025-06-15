@@ -11,10 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Character } from "@/types/character";
 import { Relationship } from "@/types/relationship";
 import React, { useState } from "react";
-import {
-  fetchCharactersByProfileId,
-  fetchCharactersFromFriendsByProfileId,
-} from "../../actions";
+import { fetchCharactersByProfileId, fetchCharactersFromFriendsByProfileId } from "../../../actions";
 
 const relationshipTypes = [
   { label: "LOVE", name: "love", icon: "❤️", color: "text-red-500" },

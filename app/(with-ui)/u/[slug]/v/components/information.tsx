@@ -1,4 +1,4 @@
-import ProfileImage from "../../../@header/components/profile-image";
+import ProfileImage from "@/app/(with-ui)/@header/components/profile-image";
 
 interface InformationProps {
   profile: Profile;

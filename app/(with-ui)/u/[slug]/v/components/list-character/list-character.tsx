@@ -1,5 +1,5 @@
 import { Character } from "@/types/character";
-import { addFavoriteCharacter, removeFavoriteCharacter } from "../../actions";
+import { addFavoriteCharacter, removeFavoriteCharacter } from "../../../actions";
 import ListCharacterItem from "./list-character-item";
 
 interface ListCharacterProps {

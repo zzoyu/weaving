@@ -1,9 +1,9 @@
+import ProfileBadge from "@/app/(with-ui)/@header/components/profile-badge";
 import { fetchNotificationsByProfileId } from "@/app/(with-ui)/notifications/actions";
 import { fetchProfileByUserId } from "@/app/profile/actions";
 import Logo from "@/public/assets/logos/logo_text_horizontal_color.svg";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
-import ProfileBadge from "../../../@header/components/profile-badge";
 
 export async function Header() {
   const supabase = createClient();
