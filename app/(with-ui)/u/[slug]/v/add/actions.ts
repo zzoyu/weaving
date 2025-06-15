@@ -1,246 +1,21 @@
 "use server";
 
 import { uploadImage } from "@/actions/upload-image";
-import { fetchPlanByProfileId } from "@/app/actions/plan";
 import { Property } from "@/types/character";
 import { ImagePath } from "@/types/image";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
-import {
-  createBulkRelationships,
-  updateBulkRelationships,
-} from "../[id]/actions";
 
-export async function createCharacter(
-  formData: FormData,
-  properties: Property[]
-) {
-  const supabase = createClient();
-  const name = formData.get("name") as string;
-  const description = formData.get("description") as string;
-  const profile_slug = formData.get("profile_slug") as string;
-  const relationship_to = formData.getAll("relationship_to") as string[];
-  const relationship_name = formData.getAll("relationship_name") as string[];
-
-  const responseProfile = await supabase
-    .from("profile")
-    .select("id")
-    .eq("slug", profile_slug)
-    .maybeSingle();
-  const profile_id = responseProfile?.data?.id;
-  if (!profile_id) throw new Error("Profile not found");
-
-  // Get user's plan and check character limit
-  const userPlan = await fetchPlanByProfileId(profile_id);
-  if (!userPlan) throw new Error("Plan not found");
-
-  // Check current character count
-  const { count, error: countError } = await supabase
-    .from("character")
-    .select("*", { count: "exact", head: true })
-    .eq("profile_id", profile_id);
-
-  if (countError) throw countError;
-  if (!count || count >= userPlan.limit.maxCharacterSlots) {
-    throw new Error(`캐릭터 생성 한도(${userPlan.limit.maxCharacterSlots}개)를 초과했습니다.`);
-  }
-
-  // Check relationship count
-  if (relationship_to.length > userPlan.limit.maxRelationshipsPerCharacter) {
-    throw new Error(`캐릭터당 관계 한도(${userPlan.limit.maxRelationshipsPerCharacter}개)를 초과했습니다.`);
-  }
-
-  if (!name) throw new Error("Name is required");
-
-  // get hashtag
-  const hashtags = formData.get("hashtags") as string;
-
-  // Check image count
-  const halfImage = formData.get("half-image") as File | null;
-  const fullImage = formData.get("full-image") as File | null;
-  const thumbnail = formData.get("half-thumbnail") as File | null;
-
-  const imageFiles = [halfImage, fullImage].filter((file): file is File => file instanceof File);
-
-  if (imageFiles.length > userPlan.limit.maxImagesPerCharacter) {
-    throw new Error(`캐릭터당 이미지 한도(${userPlan.limit.maxImagesPerCharacter}개)를 초과했습니다.`);
-  }
-
-  if (!halfImage || !(halfImage instanceof File)) throw new Error("상반신 이미지는 필수입니다");
-  if (!thumbnail || !(thumbnail instanceof File)) throw new Error("썸네일은 필수입니다");
-
-  const thumbnailUrl = await uploadImage(
-    thumbnail,
-    `${profile_id}_${Math.floor(Math.random() * 10000).toString()}`,
-    ImagePath.CHARACTER_THUMBNAIL,
-    true
-  );
-  const imageUrls = await Promise.all(
-    imageFiles.map(async (image) => {
-      return uploadImage(
-        image,
-        `${profile_id}_${Math.floor(Math.random() * 10000).toString()}`,
-        ImagePath.CHARACTER,
-        true
-      );
-    })
-  );
-
-  const { data, error } = await supabase
-    .from("character")
-    .insert([
-      {
-        profile_id,
-        name,
-        description,
-        image: imageUrls,
-        thumbnail: thumbnailUrl,
-        properties,
-        hashtags,
-      },
-    ])
-    .select()
-    .single();
-
-  if (error || !data) {
-    throw error;
-  }
-
-  const relationships = relationship_to.map((to, index) => {
-    const name = relationship_name[index];
-    const to_id = Number(to);
-    if (!to_id) throw new Error("To ID is required");
-    return {
-      to_id,
-      name,
-    };
-  });
-
-  if ((relationships?.length || 0) > 0)
-    await createBulkRelationships(data.id, relationships);
-
-  revalidatePath("/u/[slug]", "page");
-
-  return true;
-}
-
-export async function updateCharacter(
-  formData: FormData,
-  properties: Property[]
-) {
-  const supabase = createClient();
-  const name = formData.get("name") as string;
-  const description = formData.get("description") as string;
-  const profile_slug = formData.get("profile_slug") as string;
-
-  const characterId = Number(formData.get("character_id") as string);
-  if (!characterId) throw new Error("Character ID is required");
-
-  // Get profile_id
-  const responseProfile = await supabase
-    .from("profile")
-    .select("id")
-    .eq("slug", profile_slug)
-    .maybeSingle();
-  const profile_id = responseProfile?.data?.id;
-  if (!profile_id) throw new Error("Profile not found");
-
-  const isHalfEdited = formData.get("half-image-is-edited") === "true";
-  const isFullEdited = formData.get("full-image-is-edited") === "true";
-
-  if (!name) throw new Error("Name is required");
-
-  const thumbnail = formData.get("half-thumbnail") as File;
-  const originalThumbnail = formData.get("original_thumbnail") as string;
-
-  const imageFiles = [
-    formData.get("half-image") as File,
-    formData.get("full-image") as File,
-  ];
-
-  if (!imageFiles[0] && !isHalfEdited) throw new Error("Image is required");
-  if (!thumbnail && !originalThumbnail)
-    throw new Error("Thumbnail is required");
-  if (imageFiles.length === 0) throw new Error("Image is required");
-  if (imageFiles.length > 3) throw new Error("Image is too many");
-
-  const thumbnailUrl = isHalfEdited
-    ? await uploadImage(
-        thumbnail,
-        `${profile_id}_${Math.floor(Math.random() * 10000).toString()}`,
-        ImagePath.CHARACTER_THUMBNAIL,
-        true
-      )
-    : originalThumbnail;
-
-  const imageFlag = [isHalfEdited, isFullEdited];
-  const originalImages = formData.getAll("original_image[]") as string[];
-
-  const imageUrls = await Promise.all(
-    imageFiles.map(async (image, index) => {
-      // 이미지가 변경되지 않았으면 원본 이미지 URL 사용
-      if (!imageFlag[index]) {
-        return originalImages[index];
-      }
-      // 이미지가 변경되었지만 파일이 없으면 원본 이미지 URL 사용
-      if (!image) {
-        return originalImages[index];
-      }
-
-      try {
-        return await uploadImage(
-          image,
-          `${profile_id}_${Math.floor(Math.random() * 10000).toString()}`,
-          ImagePath.CHARACTER,
-          true
-        );
-      } catch (error) {
-        console.error(`Failed to upload image ${index}:`, error);
-        return originalImages[index]; // 실패시 기존 이미지 URL 유지
-      }
-    })
-  );
-
-  const { data, error } = await supabase
-    .from("character")
-    .update({
-      name,
-      description,
-      image: imageUrls || [],
-      thumbnail: thumbnailUrl,
-      properties,
-      hashtags: formData.get("hashtags") as string,
-    })
-    .eq("id", characterId);
-
-  if (error) {
-    throw error;
-  }
-
-  const relationship_to = formData.getAll("relationship_to") as string[];
-  const relationship_name = formData.getAll("relationship_name") as string[];
-
-  const relationships = relationship_to.map((to, index) => {
-    const name = relationship_name[index];
-    const to_id = Number(to);
-    if (!to_id) throw new Error("To ID is required");
-    return {
-      to_id,
-      name,
-    };
-  });
-
-  if ((relationships?.length || 0) > 0)
-    await updateBulkRelationships(characterId, relationships);
-
-  revalidatePath("/u/" + profile_slug);
-  return true;
-}
-
-export async function createUniverseAction(formData: FormData) {
+export async function createUniverse(formData: FormData) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("로그인이 필요합니다.");
+
+  // 디버깅을 위한 로깅
+  console.log("FormData contents:");
+  for (const [key, value] of formData.entries()) {
+    console.log(`${key}:`, value instanceof File ? `File: ${value.name}` : value);
+  }
 
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
@@ -248,11 +23,12 @@ export async function createUniverseAction(formData: FormData) {
   const profileId = Number(formData.get("profile_id"));
   const image = formData.get("universe-image") as File;
   const thumbnail = formData.get("universe-thumbnail") as File;
+  const listProperties = JSON.parse(formData.get("list_properties") as string) as Property[];
+  const characterUniverses = JSON.parse(formData.get("universes_characters") as string) as { character_id: number }[];
 
-  if (!name) throw new Error("이름을 입력해주세요.");
-  if (!image || !(image instanceof File)) throw new Error("이미지를 업로드해주세요.");
-  if (!thumbnail || !(thumbnail instanceof File)) throw new Error("썸네일을 업로드해주세요.");
-  if (!profileId) throw new Error("프로필 정보가 없습니다.");
+  if (!name) throw new Error("이름은 필수입니다.");
+  if (!image || !(image instanceof File)) throw new Error("이미지는 필수입니다.");
+  if (!thumbnail || !(thumbnail instanceof File)) throw new Error("썸네일은 필수입니다.");
 
   // 이미지 업로드
   const imageUrl = await uploadImage(
@@ -265,23 +41,47 @@ export async function createUniverseAction(formData: FormData) {
   const thumbnailUrl = await uploadImage(
     thumbnail,
     `${profileId}_${Math.floor(Math.random() * 10000).toString()}`,
-    ImagePath.UNIVERSE,
+    ImagePath.UNIVERSE_THUMBNAIL,
     true
   );
 
   // 유니버스 생성
-  const { error } = await supabase.from("universes").insert({
-    profile_id: profileId,
-    name,
-    description,
-    image: [imageUrl],
-    thumbnail: thumbnailUrl,
-    properties: [],
-    hashtags,
-  });
+  const { data: universe, error: universeError } = await supabase
+    .from("universes")
+    .insert([{
+      profile_id: profileId,
+      name,
+      description,
+      image: [imageUrl],
+      thumbnail: thumbnailUrl,
+      properties: listProperties,
+      hashtags,
+    }])
+    .select()
+    .single();
 
-  if (error) throw error;
+  if (universeError || !universe) {
+    throw universeError || new Error("유니버스 생성에 실패했습니다.");
+  }
 
-  revalidatePath("/u/[slug]/v", "page");
+  console.log("universe", universe);
+
+  // 캐릭터-유니버스 관계 생성
+  if (characterUniverses.length > 0) {
+    const { error: relationError } = await supabase
+      .from("universes_characters")
+      .insert(
+        characterUniverses.map((cu) => ({
+          character_id: cu.character_id,
+          universe_id: universe.id
+        }))
+      );
+
+    if (relationError) {
+      throw relationError;
+    }
+  }
+
+  revalidatePath(`/u/[slug]/v`, "page");
   return true;
 }

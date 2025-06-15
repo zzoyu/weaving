@@ -15,7 +15,7 @@ export default function ListUniverseItem({
   isMine?: boolean;
 }) {
   return (
-    <Link href={`/u/${slug}/${universe.id}`}>
+    <Link href={`/u/${slug}/v/${universe.id}`}>
       <div
         className={clsx(
           "flex flex-col items-center justify-center gap-1 overflow-hidden rounded-md relative group focus-within:ring-2"

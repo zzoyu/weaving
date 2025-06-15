@@ -8,8 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Character, EPropertyType, Property } from "@/types/character";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { CharacterUniverse } from "../../../../../../../types/character-universe";
-import { createUniverseAction } from "../actions";
+import { createUniverse } from "../actions";
 import UploadImage from "./upload-image/upload-image";
 
 interface UniverseAddTemplateProps {
@@ -34,7 +33,7 @@ export default function UniverseAddTemplate({
     { key: "주요 사건", value: "", type: EPropertyType.STRING },
     { key: "규칙", value: "", type: EPropertyType.STRING },
   ]);
-  const [characterUniverses, setCharacterUniverses] = useState<CharacterUniverse[]>([]);
+  const [characterUniverses, setCharacterUniverses] = useState<{ character_id: number }[]>([]);
 
   const previewHashtags = useMemo(() => {
     if (!hashtags) return [];
@@ -47,12 +46,7 @@ export default function UniverseAddTemplate({
   const handleAddCharacter = (characterId: number) => {
     setCharacterUniverses(prev => [
       ...prev,
-      {
-        character_id: Number(characterId),
-        universe_id: 0, // 임시값, 서버에서 실제 universe_id로 업데이트
-        created_at: new Date().toISOString(),
-        id: 0, // 임시값, 서버에서 실제 id로 업데이트
-      },
+      { character_id: Number(characterId) }
     ]);
   };
 
@@ -61,13 +55,33 @@ export default function UniverseAddTemplate({
     setIsSubmitting(true);
 
     try {
-      const formData = new FormData(event.currentTarget);
+      // 기존 formData를 새로 생성하여 중복 방지
+      const form = event.currentTarget;
+      const formData = new FormData();
+      
+      // 기본 필드 추가
       formData.append("profile_id", profileId.toString());
-      formData.append("hashtags", hashtags);
+      const nameInput = form.querySelector('input[name="name"]') as HTMLInputElement;
+      const descriptionInput = form.querySelector('input[name="description"]') as HTMLInputElement;
+      formData.append("name", nameInput?.value || "");
+      formData.append("description", descriptionInput?.value || "");
+      
+      // 이미지 관련 필드는 UploadImage 컴포넌트에서 자동으로 추가됨
+      const imageFile = form["universe-image"] as HTMLInputElement;
+      const thumbnailFile = form["universe-thumbnail"] as HTMLInputElement;
+      if (imageFile?.files?.[0]) {
+        formData.append("universe-image", imageFile.files[0]);
+      }
+      if (thumbnailFile?.files?.[0]) {
+        formData.append("universe-thumbnail", thumbnailFile.files[0]);
+      }
+      
+      // JSON 데이터 추가
       formData.append("list_properties", JSON.stringify(listProperties));
-      formData.append("character_universes", JSON.stringify(characterUniverses));
+      formData.append("universes_characters", JSON.stringify(characterUniverses));
+      formData.append("hashtags", hashtags);
 
-      await createUniverseAction(formData);
+      await createUniverse(formData);
 
       toast({
         description: "유니버스가 생성되었습니다.",
