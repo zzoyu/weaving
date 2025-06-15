@@ -23,7 +23,7 @@ export function ListRelationship({
 
   return (
     <div className="flex flex-col">
-      <h2 className="mb-6 font-bold">관계 인물</h2>
+      <h2 className="mb-6 font-bold px-10">관계 인물</h2>
       <div className="grid grid-cols-3 gap-4">
         {(!isOpened ? relationships.slice(0, 3) : relationships).map(
           (relationship) => {

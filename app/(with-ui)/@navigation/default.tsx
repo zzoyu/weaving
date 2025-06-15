@@ -10,7 +10,7 @@ export default async function NavigationPage() {
   const isSignin = !!data?.user?.id;
 
   if (!isSignin || !responseProfile || !responseProfile?.slug) {
-    <NavigationSignOut />;
+    return <NavigationSignOut />;
   }
 
   return <NavigationSignIn slug={responseProfile?.slug} />;

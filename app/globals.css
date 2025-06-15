@@ -73,3 +73,36 @@ svg > path {
     text-wrap: balance;
   }
 }
+
+/* ===== Scrollbar Custom ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-thumb {
+    background: #666;
+  }
+  ::-webkit-scrollbar-track {
+    background: #222;
+  }
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #bbb #f0f0f0;
+}
+@media (prefers-color-scheme: dark) {
+  * {
+    scrollbar-color: #666 #222;
+  }
+}

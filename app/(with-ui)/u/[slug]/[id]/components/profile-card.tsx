@@ -61,12 +61,12 @@ function PopupRelationshipGraph({
 
   return (
     <div className="fixed z-10 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white w-5/6 h-5/6 p-4 rounded-lg relative">
-        <button className="absolute top-2 right-2" onClick={() => onClose()}>
+      <div className="bg-white w-full h-full md:w-5/6 md:h-5/6 p-4 rounded-lg relative">
+        <button className="absolute top-2 right-2 z-20" onClick={() => onClose()}>
           닫기
         </button>
         <h2 className="text-2xl font-bold">관계도</h2>
-        <div className="flex justify-center items-center w-full h-full overflow-auto">
+        <div className="flex justify-center items-center w-full h-[calc(100%-3rem)] overflow-auto">
           {isLoading ? (
             <div>로딩 중...</div>
           ) : error ? (
