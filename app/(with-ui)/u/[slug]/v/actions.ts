@@ -1,5 +1,6 @@
 "use server";
 
+import { CharacterWithProfile } from "@/types/character";
 import { Universe } from "@/types/universe";
 import { createClient } from "@/utils/supabase/server";
 
@@ -81,4 +82,60 @@ export async function createUniverse(data: Omit<Universe, "id" | "created_at">) 
   const { error } = await supabase.from("universes").insert(data);
   if (error) throw error;
   return true;
+}
+
+export async function fetchCharacterUniversesByUniverseId(universeId: number) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("universes_characters")
+    .select("*")
+    .eq("universe_id", universeId);
+
+  if (error) {
+    console.error("Error fetching character universes:", error);
+    return [];
+  }
+
+  return data || [];
+}
+
+export async function fetchCharactersByUniverseId(universeId: number): Promise<{ characters: CharacterWithProfile[], error: any }> {
+  const supabase = createClient();
+  
+  // 1. 먼저 universe_id로 universes_characters 테이블에서 character_id 목록을 가져옴
+  const { data: characterUniverses, error: cuError } = await supabase
+    .from("universes_characters")
+    .select("character_id")
+    .eq("universe_id", universeId);
+
+  if (cuError) {
+    console.error("Error fetching character universes:", cuError);
+    return { characters: [], error: cuError };
+  }
+
+  if (!characterUniverses || characterUniverses.length === 0) {
+    return { characters: [], error: null };
+  }
+
+  // 2. 가져온 character_id 목록으로 character 테이블에서 상세 정보를 조회
+  const characterIds = characterUniverses.map(cu => cu.character_id);
+  const { data: characters, error: cError } = await supabase
+    .from("character")
+    .select(`
+      *,
+      profile:profile_id (
+        id,
+        slug,
+        nickname
+      )
+    `)
+    .in("id", characterIds)
+    .order("created_at", { ascending: false });
+
+  if (cError) {
+    console.error("Error fetching characters:", cError);
+    return { characters: [], error: cError };
+  }
+
+  return { characters: (characters || []) as CharacterWithProfile[], error: null };
 } 

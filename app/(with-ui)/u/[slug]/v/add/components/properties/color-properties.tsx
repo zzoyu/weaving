@@ -84,8 +84,8 @@ function ColorPicker({
       <button
         type="button"
         className={clsx(
-          "relative w-10 h-10 border-background-muted border dark:bg-neutral-900",
-          colorList?.[(property?.value as string) || "white"]
+          "relative w-10 h-10 border-background-muted border",
+          colorList?.[(property?.value as string) || "white dark:bg-neutral-900"],
         )}
         onClick={() => {
           if (editable) setIsOpen(true);

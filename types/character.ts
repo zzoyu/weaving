@@ -26,5 +26,14 @@ interface Character {
   description?: string;
 }
 
+export interface CharacterWithProfile extends Character {
+  profile: {
+    id: number;
+    slug: string;
+    nickname: string;
+  };
+}
+
 export { EPropertyType };
 export type { Character, ColorPropertyKey, Property };
+

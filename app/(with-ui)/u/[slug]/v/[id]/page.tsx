@@ -1,17 +1,10 @@
-import { fetchProfileByUserId } from "@/app/profile/actions";
-import { EPropertyType } from "@/types/character";
+import { fetchProfileBySlug } from "@/app/profile/actions";
 import { createClient } from "@/utils/supabase/server";
 import { Metadata, ResolvingMetadata } from "next";
-import { cookies } from "next/headers";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { fetchIsFriendByIds, fetchProfileBySlug } from "../actions";
-import {
-  compareCharacterPassword,
-  fetchCharacter,
-  fetchRelationships,
-} from "./actions";
-import TemplateProfile from "./components/template-profile";
+import { fetchCharactersByUniverseId, fetchUniverseById } from "../actions";
+import TemplateUniverse from "./components/template-universe";
 import Loading from "./loading";
 
 interface Props {
@@ -20,7 +13,7 @@ interface Props {
 }
 
 const baseMetadata: Metadata = {
-  title: "위빙 프로필",
+  title: "위빙 세계관",
   description: "우리의 세계가 만나는 곳",
   applicationName: "위빙",
 };
@@ -31,86 +24,51 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { id } = params;
 
-  const characterData = await fetchCharacter(id);
+  const universeData = await fetchUniverseById(Number(id));
 
-  if (!characterData) {
+  if (!universeData) {
     return baseMetadata;
   }
 
   return {
     ...baseMetadata,
-    title: "위빙 :: " + characterData.name + " 관찰 중 🔍",
-    openGraph: { images: [characterData.thumbnail!] },
+    title: "위빙 :: " + universeData.name,
+    description: universeData.description || baseMetadata.description,
+    openGraph: universeData.thumbnail ? { images: [universeData.thumbnail] } : undefined,
   };
 }
 
-export default async function CharacterPage({
+export default async function UniversePage({
   params,
 }: {
   params: { slug: string; id: string };
 }) {
   const { slug, id } = params;
 
-  const characterData = await fetchCharacter(Number(id));
-  if (!characterData) notFound();
+  const universeData = await fetchUniverseById(Number(id));
+  if (!universeData) notFound();
 
-  const relationships = await fetchRelationships(Number(id));
-  console.log(relationships);
+  const { characters, error: charactersError } = await fetchCharactersByUniverseId(Number(id));
+  if (charactersError) {
+    console.error("Error fetching characters:", charactersError);
+  }
 
   const supabase = createClient();
-
   const currentUser = await supabase.auth.getUser();
+  const profile = await fetchProfileBySlug(slug);
+  
+  if (!profile) notFound();
 
-  const { data, error } = await fetchProfileBySlug(slug);
-  if (!data) notFound();
-
-  const myProfile = await fetchProfileByUserId(
-    currentUser?.data.user?.id as string
-  );
-
-  const responseIsFriend = await fetchIsFriendByIds(data?.id, myProfile?.id);
-
-  if (error) {
-    throw error;
-  }
-
-  let isMyProfile = false;
-
-  if (data.user_id === currentUser?.data.user?.id) {
-    isMyProfile = true;
-  }
-
-  const colorProperties = characterData.properties.filter(
-    (property) => property.type === EPropertyType.COLOR
-  );
-
-  const cookie = await cookies();
-  const responseIsPasswordCorrect = await compareCharacterPassword(
-    Number(id),
-    cookie?.get(`${slug}-${id}`)?.value
-  );
-  const isGranted =
-    isMyProfile ||
-    responseIsFriend ||
-    responseIsPasswordCorrect ||
-    !characterData.password;
-
-  if (!isGranted) {
-    redirect(`/u/${slug}/${id}/not-granted`);
-  }
+  const isMyProfile = profile.user_id === currentUser?.data.user?.id;
 
   return (
     <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
       <Suspense fallback={<Loading />}>
-        <TemplateProfile
-          {...{
-            characterData,
-            relationships: relationships || [],
-            colorProperties,
-            isMyProfile,
-            slug,
-            id,
-          }}
+        <TemplateUniverse
+          universe={universeData}
+          characters={characters}
+          isMyProfile={isMyProfile}
+          slug={slug}
         />
       </Suspense>
     </main>
