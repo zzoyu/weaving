@@ -41,7 +41,7 @@ export default function TemplateUniverse({
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <Image unoptimized Icon className="w-12 h-12 text-muted-foreground" />
+              <ImageIcon className="w-12 h-12 text-muted-foreground" />
             </div>
           )}
         </div>

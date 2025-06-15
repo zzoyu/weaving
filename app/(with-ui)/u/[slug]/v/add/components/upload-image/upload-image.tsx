@@ -120,7 +120,7 @@ export default function UploadImage({
         ) : icon ? (
           icon
         ) : (
-          <Image unoptimized Icon width={32} height={32} />
+          <ImageIcon width={32} height={32} />
         )}
       </button>
       {isOpenedCropLayer && (
