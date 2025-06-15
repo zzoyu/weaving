@@ -75,10 +75,10 @@ export function ProfileList({
             placeholder="검색"
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
-            className="flex-shrink px-8 py-2 w-full rounded-md border-text-black border-2 bg-white focus:outline-none"
+            className="flex-shrink w-full pl-8 pr-2 py-3 rounded-xl border border-gray-200 dark:border-neutral-700 bg-gray-50 dark:bg-neutral-900 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-gray-400 dark:focus:border-neutral-500 focus:bg-white dark:focus:bg-neutral-800 focus:outline-none transition"
           />
-          <button className="p-2 text-white rounded-full absolute pointer-events-none">
-            <SearchIcon className="text-text-black" />
+          <button className="p-2 rounded-full absolute pointer-events-none">
+            <SearchIcon className="text-gray-400 dark:text-gray-500" />
           </button>
           {searchKeyword && (
             <button

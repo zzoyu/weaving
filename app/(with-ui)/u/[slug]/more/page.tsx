@@ -55,7 +55,7 @@ export default async function Page({ params }: PageProps) {
   ];
 
   return (
-    <main className="flex flex-col h-full pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto">
+    <main className="flex flex-col h-full pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto px-10">
       <h1 className="text-2xl font-bold font-pretendard mb-6">추가 기능</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {features.map((feature) => (
