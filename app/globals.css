@@ -106,3 +106,8 @@ svg > path {
     scrollbar-color: #666 #222;
   }
 }
+
+button:focus, button:focus-visible, button:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
