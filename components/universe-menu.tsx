@@ -1,9 +1,14 @@
 "use client";
 
-import { DialogShareButton } from "@/app/(with-ui)/@header/(profile)/u/[slug]/[id]/components/dialog-share-button";
+import ButtonDeleteUniverse from "@/components/button-delete-universe";
+import ButtonShareUniverse from "@/components/button-share-universe";
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Copy, Edit, MoreVertical, Trash2 } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import MoreIcon from "@/public/assets/icons/more.svg";
 import { useRouter } from "next/navigation";
 
 interface UniverseMenuProps {
@@ -13,36 +18,28 @@ interface UniverseMenuProps {
 
 export default function UniverseMenu({ universeId, onDelete }: UniverseMenuProps) {
   const router = useRouter();
-  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="text-muted-foreground">
-          <MoreVertical className="w-5 h-5" />
-        </Button>
+        <button
+          className="p-1 rounded-full overflow-hidden w-10 h-10 flex items-center justify-center"
+          aria-label="메뉴 열기"
+        >
+          <MoreIcon width={24} height={24} className="text-primary-300" />
+        </button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-40 p-1">
+      <PopoverContent align="end" className="w-48 p-4 flex flex-col gap-2">
         <Button
           variant="ghost"
           size="sm"
-          className="w-full justify-start gap-2"
+          className="w-full justify-start text-base text-gray-700 hover:text-primary-500"
           onClick={() => router.push(`/u/${universeId}/v/${universeId}/edit`)}
         >
-          <Edit className="w-4 h-4" />세계관 수정
+          세계관 수정
         </Button>
-        <DialogShareButton>
-          <Button variant="ghost" size="sm" className="w-full justify-start gap-2">
-            <Copy className="w-4 h-4" />세계관 공유
-          </Button>
-        </DialogShareButton>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="w-full justify-start gap-2 text-destructive"
-          onClick={onDelete}
-        >
-          <Trash2 className="w-4 h-4" />세계관 삭제
-        </Button>
+        <ButtonShareUniverse universeId={universeId} />
+        <ButtonDeleteUniverse universeId={universeId}>세계관 삭제</ButtonDeleteUniverse>
       </PopoverContent>
     </Popover>
   );

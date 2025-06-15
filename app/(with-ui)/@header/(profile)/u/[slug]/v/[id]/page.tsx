@@ -2,13 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { fetchUniverseById } from "@/app/(with-ui)/u/[slug]/v/actions";
 import { fetchProfileByUserId } from "@/app/profile/actions";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import UniverseMenu from "@/components/universe-menu";
-import MoreIcon from "@/public/assets/icons/more.svg";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 
@@ -28,6 +22,8 @@ export default async function Header({
 
   if (!universe) return null;
 
+  // 클라이언트 상태로 메뉴 토글
+  // (실제 적용 시 아래 부분을 client 컴포넌트로 분리하는 것이 best practice)
   return (
     <header
       className="fixed top-0 flex w-full items-center justify-between py-4 px-2 md:px-8 bg-transparent"
@@ -40,24 +36,7 @@ export default async function Header({
       </Link>
       <div className="flex items-center gap-2">
         {isMine && (
-          <Popover>
-            <PopoverTrigger asChild>
-              <button className="p-1 rounded-full overflow-hidden w-10 h-10 flex items-center justify-center">
-                <MoreIcon width={24} height={24} className="text-primary-300" />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent className="w-48" autoFocus={false} tabIndex={-1} align="end">
-              <div className="flex flex-col gap-2 p-4 justify-start items-start">
-                <Link
-                  href={`/u/${params.slug}/v/${params.id}/edit`}
-                  className="text-base text-gray-700 hover:text-primary-500"
-                >
-                  세계관 수정
-                </Link>
-                <UniverseMenu universeId={universe.id} />
-              </div>
-            </PopoverContent>
-          </Popover>
+          <UniverseMenu universeId={universe.id} />
         )}
       </div>
     </header>

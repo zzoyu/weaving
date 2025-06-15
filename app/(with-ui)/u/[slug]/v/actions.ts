@@ -43,14 +43,19 @@ export async function fetchUniversesByProfileId(profileId: number) {
   return data;
 }
 
-export async function fetchUniverseById(universeId: number) {
+export async function fetchUniverseById(id: number): Promise<Universe | null> {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("universes")
     .select("*")
-    .eq("id", universeId)
+    .eq("id", id)
     .single();
-  if (error) throw error;
+
+  if (error) {
+    console.error("Error fetching universe:", error);
+    return null;
+  }
+
   return data;
 }
 
