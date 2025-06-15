@@ -1,6 +1,7 @@
-import { fetchPlanByProfileId } from "@/app/actions/plan";
+import { fetchPlanById } from "@/app/actions/plan";
 import { fetchProfileByUserId } from "@/app/profile/actions";
 import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 import CharacterAddTemplate from "./components/template";
 
 export default async function NewCharacterPage({
@@ -16,17 +17,19 @@ export default async function NewCharacterPage({
   // if not my profile, redirect to profile page
   const myProfile = await fetchProfileByUserId(user?.user?.id as string);
 
+  console.log(myProfile);
+
   if (!myProfile) {
-    throw new Error("로그인된 사용자가 아닙니다.");
+    redirect("/");
   }
 
   if (myProfile.slug !== params.slug) {
-    throw new Error("자신의 프로필이 아닙니다.");
+    redirect("/");
   }
 
-  const userPlan = await fetchPlanByProfileId(myProfile.id as number);
+  const userPlan = await fetchPlanById(myProfile.plan_id as number);
   if (!userPlan) {
-    throw new Error("플랜 정보를 찾을 수 없습니다.");
+    redirect("/");
   }
 
   return (

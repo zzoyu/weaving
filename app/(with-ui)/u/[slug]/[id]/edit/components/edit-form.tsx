@@ -1,5 +1,6 @@
 "use client";
 
+import { ColorProperties } from "@/app/components/properties/color-properties";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { baseProperties } from "@/lib/base-properties";
 import { Character, Property } from "@/types/character";
@@ -7,12 +8,11 @@ import { Relationship } from "@/types/relationship";
 import { Suspense, useMemo, useState } from "react";
 import { updateCharacter } from "../../../add/actions";
 import { ButtonAddRelationship } from "../../../add/components/button-add-relationship";
-import InputHashtag from "../../../add/components/input-hashtag";
-import { ColorProperties } from "../../../add/components/properties/color-properties";
-import ListProperties from "../../../add/components/properties/list-properties";
 import UploadImage from "../../../add/components/upload-image/upload-image";
 import Loading from "../../loading";
 
+import InputHashtag from "@/app/components/input-hashtag";
+import ListProperties from "@/app/components/properties/list-properties";
 import { useToast } from "@/hooks/use-toast";
 import IconFull from "@/public/assets/icons/image/full.svg";
 import IconHalf from "@/public/assets/icons/image/half.svg";
@@ -97,6 +97,8 @@ export default function CharacterEditTemplate({
       <Suspense fallback={<Loading />}>
         <form
           className="flex flex-col gap-2 items-center w-full md:max-w-md p-4"
+          
+            
           action={(formData) => {
             updateCharacter(formData, [...properties, ...currentColors]).then(
               (result) => {
@@ -108,7 +110,6 @@ export default function CharacterEditTemplate({
                   router.push(`./`);
                 } else {
                   toast({
-                    title: "캐릭터 수정 실패",
                     description: "캐릭터 수정에 실패했습니다.",
                     variant: "destructive",
                   });
@@ -117,6 +118,7 @@ export default function CharacterEditTemplate({
             );
           }}
         >
+          <input type="hidden" name="profile_id" value={character.profile_id} />
           <input type="hidden" name="character_id" value={character.id} />
           <input
             type="hidden"

@@ -1,5 +1,5 @@
 "use client";
-import { deleteCharacterById } from "@/app/(with-ui)/@header/(profile)/u/[slug]/[id]/actions";
+import { deleteUniverseById } from "@/app/(with-ui)/u/[slug]/v/actions";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,40 +13,42 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
+import { Button } from "./ui/button";
 
-interface ButtonDeleteProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonDeleteUniverseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  characterId: number;
+  universeId: number;
 }
 
-export default function ButtonDelete({
-  characterId,
+export default function ButtonDeleteUniverse({
+  universeId,
   children,
   ...props
-}: ButtonDeleteProps) {
+}: ButtonDeleteUniverseProps) {
   const router = useRouter();
   const { toast } = useToast();
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
-        <button {...props}>{children}</button>
+      <AlertDialogTrigger asChild>
+        <Button variant="ghost" size="sm" className="w-full justify-start text-base text-gray-700 hover:text-destructive">
+          {children || "세계관 삭제"}
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>캐릭터를 삭제하시겠습니까?</AlertDialogTitle>
+          <AlertDialogTitle>세계관을 삭제하시겠습니까?</AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>취소</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
-              deleteCharacterById(characterId)
+              deleteUniverseById(universeId)
                 .then((result) => {
                   if (result) {
                     toast({
-                      description: "캐릭터가 삭제되었습니다.",
+                      description: "세계관이 삭제되었습니다.",
                     });
-                    router.replace("/profile");
+                    router.replace("./");
                   }
                 })
                 .catch((error) => {
@@ -54,7 +56,7 @@ export default function ButtonDelete({
                     description: "잠시 후 다시 시도해주세요.",
                     variant: "destructive",
                   });
-                  console.error("Error deleting character:", error);
+                  console.error("Error deleting universe:", error);
                 });
             }}
           >
@@ -64,4 +66,4 @@ export default function ButtonDelete({
       </AlertDialogContent>
     </AlertDialog>
   );
-}
+} 

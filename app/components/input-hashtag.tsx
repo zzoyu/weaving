@@ -29,10 +29,10 @@ export default function InputHashtag({
             }
           }}
           placeholder="해시태그 입력"
-          className="w-full text-xl  border-background-muted focus:outline-none pl-6 py-1 dark:bg-neutral-900 dark:text-gray-100"
+          className="w-full text-xl border-background-muted focus:outline-none pl-6 py-1 dark:bg-neutral-900 dark:text-gray-100"
         />
       </div>
-      <div className=" inline-flex flex-wrap gap-2">
+      <div className="inline-flex flex-wrap gap-2">
         {hashtags.length ? (
           hashtags.map((hashtag, index) => (
             <span className="item-hashtag" key={`hashtag-${index}-${hashtag}`}>
@@ -56,4 +56,4 @@ export default function InputHashtag({
       </div>
     </div>
   );
-}
+} 

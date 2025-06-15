@@ -18,18 +18,10 @@ export async function createCharacter(
   const supabase = createClient();
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
-  const profile_slug = formData.get("profile_slug") as string;
+  const profile_id = Number(formData.get("profile_id") as string);
   const relationship_to = formData.getAll("relationship_to") as string[];
   const relationship_name = formData.getAll("relationship_name") as string[];
-
-  const responseProfile = await supabase
-    .from("profile")
-    .select("id")
-    .eq("slug", profile_slug)
-    .maybeSingle();
-  const profile_id = responseProfile?.data?.id;
-  if (!profile_id) throw new Error("Profile not found");
-
+  
   // Get user's plan and check character limit
   const userPlan = await fetchPlanByProfileId(profile_id);
   if (!userPlan) throw new Error("Plan not found");
@@ -131,18 +123,11 @@ export async function updateCharacter(
   const supabase = createClient();
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
-  const profile_slug = formData.get("profile_slug") as string;
+  const profile_id = Number(formData.get("profile_id") as string);
 
   const characterId = Number(formData.get("character_id") as string);
   if (!characterId) throw new Error("Character ID is required");
 
-  // Get profile_id
-  const responseProfile = await supabase
-    .from("profile")
-    .select("id")
-    .eq("slug", profile_slug)
-    .maybeSingle();
-  const profile_id = responseProfile?.data?.id;
   if (!profile_id) throw new Error("Profile not found");
 
   const isHalfEdited = formData.get("half-image-is-edited") === "true";
@@ -233,6 +218,6 @@ export async function updateCharacter(
   if ((relationships?.length || 0) > 0)
     await updateBulkRelationships(characterId, relationships);
 
-  revalidatePath("/u/" + profile_slug);
+  revalidatePath("/u/[slug]", "page");
   return true;
 }

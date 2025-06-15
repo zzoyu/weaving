@@ -1,5 +1,8 @@
 "use client";
 
+import InputHashtag from "@/app/components/input-hashtag";
+import { ColorProperties } from "@/app/components/properties/color-properties";
+import ListProperties from "@/app/components/properties/list-properties";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { baseProperties } from "@/lib/base-properties";
@@ -15,9 +18,6 @@ import { useForm } from "react-hook-form";
 import { createCharacter } from "../actions";
 import { createCharacterSchema } from "../schema";
 import { ButtonAddRelationship } from "./button-add-relationship";
-import InputHashtag from "./input-hashtag";
-import { ColorProperties } from "./properties/color-properties";
-import ListProperties from "./properties/list-properties";
 import UploadImage from "./upload-image/upload-image";
 
 export default function CharacterAddTemplate({
@@ -123,6 +123,9 @@ export default function CharacterAddTemplate({
             }
           });
 
+          // Add profile_id to FormData
+          formData.append("profile_id", profileId.toString());
+
           // Add image files from UploadImage component
           const halfImageInput = document.querySelector('input[name="half-image"]') as HTMLInputElement;
           const fullImageInput = document.querySelector('input[name="full-image"]') as HTMLInputElement;
@@ -149,7 +152,6 @@ export default function CharacterAddTemplate({
           const res = await createCharacter(formData, combinedProperties);
           if (res) {
             toast({
-              title: "캐릭터 생성",
               description: "캐릭터가 생성되었습니다.",
               variant: "default",
             });
@@ -165,7 +167,7 @@ export default function CharacterAddTemplate({
         }
       })}
     >
-      <input type="hidden" {...register("profile_slug")} />
+      <input type="hidden" name="profile_id" value={profileId} />
 
       <Tabs
         defaultValue="half"

@@ -1,6 +1,6 @@
+import { ColorProperties } from "@/app/components/properties/color-properties";
 import { Character, Property } from "@/types/character";
 import { Relationship } from "@/types/relationship";
-import { ColorProperties } from "../../add/components/properties/color-properties";
 import { ProfileCard } from "./profile-card";
 import { RelationshipCard } from "./relationship-card";
 

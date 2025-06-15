@@ -27,6 +27,10 @@ const nextConfig = {
         protocol: "https",
         pathname: "**/images/**",
       },
+      {
+        hostname: "picsum.photos",
+        protocol: "https",
+      },
     ],
   },
   webpack(config) {
