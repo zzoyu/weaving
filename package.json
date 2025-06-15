@@ -43,10 +43,10 @@
     "react-hook-form": "^7.57.0",
     "react-image-crop": "^11.0.5",
     "recharts": "^2.15.3",
+    "sharp": "^0.34.2",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "url-loader": "^4.1.1",
-    "webp-converter": "^2.3.3",
     "zod": "^3.25.64"
   },
   "devDependencies": {
