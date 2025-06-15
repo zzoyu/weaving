@@ -1,5 +1,5 @@
 export enum ImagePath {
-  PROFILE = "profiles",
-  CHARACTER = "portraits",
-  CHARACTER_THUMBNAIL = "portraits/thumbnails",
+  PROFILE = "images/profiles",
+  CHARACTER = "images/portraits",
+  CHARACTER_THUMBNAIL = "images/portraits/thumbnails",
 }
