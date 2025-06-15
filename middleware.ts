@@ -1,34 +1,63 @@
-import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/utils/supabase/middleware";
+import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "./utils/supabase/server";
-import { isGrantedUserByProfileSlug } from "./actions/is-granted-user";
-import { fetchProfileByUserId } from "./app/profile/actions";
+
+// 인증이 필요한 라우트 패턴
+const protectedRoutes = [
+  "/profile",
+  "/mypage",
+  "/u",
+  // 추가 보호 라우트...
+];
+
+// 공개 라우트 패턴
+const publicRoutes = [
+  "/",
+  "/auth",
+  "/login",
+  // 추가 공개 라우트...
+];
 
 export async function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname.startsWith("/profile")) {
-    console.log("profile");
-    const client = createClient();
-    const { data, error } = await client.auth?.getUser?.();
-    if (data?.user?.id) {
-      const response = await client
-        .from("profile")
-        .select()
-        .eq("user_id", data.user.id)
-        .single();
-      if (response.error || !response?.data)
-        return NextResponse.rewrite(new URL("/", request.url));
-      return NextResponse.rewrite(
-        new URL("/u/" + response.data.slug, request.url)
-      );
+  const path = request.nextUrl.pathname;
+  
+  // 공개 라우트는 세션 업데이트만 수행
+  if (publicRoutes.some(route => path.startsWith(route))) {
+    return await updateSession(request);
+  }
+
+  // 보호된 라우트에 대한 인증 체크
+  if (protectedRoutes.some(route => path.startsWith(route))) {
+    const supabase = createClient();
+    const { data: { user }, error } = await supabase.auth.getUser();
+
+    // 인증되지 않은 사용자 또는 세션 만료
+    if (!user || error) {
+      const redirectUrl = new URL("/", request.url);
+      redirectUrl.searchParams.set("redirect", path);
+      return NextResponse.redirect(redirectUrl);
     }
 
-    return NextResponse.rewrite(new URL("/", request.url));
-
+    // 프로필 라우트 특별 처리
+    if (path.startsWith("/profile")) {
+      const response = await supabase
+        .from("profile")
+        .select()
+        .eq("user_id", user.id)
+        .single();
+      
+      if (response.error || !response?.data) {
+        return NextResponse.redirect(new URL("/", request.url));
+      }
+      return NextResponse.redirect(new URL("/u/" + response.data.slug, request.url));
+    }
   }
-  // update user's auth session
+
+  // 세션 업데이트 수행
   return await updateSession(request);
 }
 
+// 미들웨어가 실행될 경로 설정
 export const config = {
   matcher: [
     /*
@@ -36,11 +65,8 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * Feel free to modify this pattern to include more paths.
+     * - public folder
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-
-    "/profile",
-    "/profile/edit",
+    "/((?!_next/static|_next/image|favicon.ico|public/).*)",
   ],
 };
