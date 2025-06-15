@@ -1,5 +1,6 @@
 "use client";
 
+import InputHashtag from "@/app/components/input-hashtag";
 import { ColorProperties } from "@/app/components/properties/color-properties";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { baseProperties } from "@/lib/base-properties";
@@ -8,7 +9,6 @@ import { Relationship } from "@/types/relationship";
 import { Suspense, useMemo, useState } from "react";
 import { updateCharacter } from "../../../add/actions";
 import { ButtonAddRelationship } from "../../../add/components/button-add-relationship";
-import InputHashtag from "../../../add/components/input-hashtag";
 import ListProperties from "../../../add/components/properties/list-properties";
 import UploadImage from "../../../add/components/upload-image/upload-image";
 import Loading from "../../loading";

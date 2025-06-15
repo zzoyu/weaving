@@ -28,15 +28,16 @@ export default function TemplateUniverse({
   return (
     <div className="w-full flex flex-col gap-6">
       {/* 헤더 섹션 */}
-      <div className="flex flex-col md:flex-row gap-6 items-start">
-        {/* 썸네일 */}
-        <div className="relative w-full md:w-64 h-64 rounded-lg overflow-hidden bg-muted">
-          {universe.thumbnail ? (
+      <div className="relative flex flex-col md:flex-row gap-6 items-start">
+        {/* 대표 이미지 */}
+        <div className="relative w-full md:w-64 aspect-[4/3] rounded-none md:rounded-xl overflow-hidden shadow-lg border border-white/10 bg-muted flex items-center justify-center">
+          {universe.image && universe.image.length > 0 ? (
             <Image
-              src={universe.thumbnail}
+              src={universe.image[0]}
               alt={universe.name}
               fill
               className="object-cover"
+              priority
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
@@ -45,32 +46,30 @@ export default function TemplateUniverse({
           )}
         </div>
 
-        {/* 기본 정보 */}
-        <div className="flex-1 flex flex-col gap-4">
-          <div className="flex items-start justify-between">
-            <div>
-              <h1 className="text-2xl font-bold">{universe.name}</h1>
-              {isMyProfile && (
-                <Link href={`/u/${slug}/v/${universe.id}/edit`}>
-                  <Button variant="ghost" size="sm" className="mt-2">
-                    <Edit className="w-4 h-4 mr-2" />
-                    수정하기
-                  </Button>
-                </Link>
-              )}
+        {/* 정보 + 수정 버튼 */}
+        <div className="flex-1 flex flex-col gap-2 relative w-full h-64 p-4 md:p-0">
+          {/* 수정하기 버튼 우상단 */}
+          {isMyProfile && (
+            <div className="absolute top-0 right-0 z-10">
+              <Link href={`/u/${slug}/v/${universe.id}/edit`}>
+                <Button variant="outline" size="icon" className="shadow-md hover:bg-primary/10 hover:text-primary">
+                  <Edit className="w-5 h-5" />
+                </Button>
+              </Link>
             </div>
-          </div>
-
+          )}
+          <h1 className="text-3xl font-extrabold tracking-tight leading-tight mb-1" style={{ fontFamily: 'Pretendard, sans-serif' }}>
+            {universe.name}
+          </h1>
           {universe.description && (
-            <p className="text-muted-foreground whitespace-pre-wrap">
+            <p className="text-base text-muted-foreground whitespace-pre-wrap mb-1">
               {universe.description}
             </p>
           )}
-
           {hashtags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 pt-2">
               {hashtags.map((tag, index) => (
-                <Badge key={index} variant="secondary">
+                <Badge key={index} variant="secondary" className="text-xs px-2 py-0.5">
                   <Hash className="w-3 h-3 mr-1" />
                   {tag}
                 </Badge>
@@ -115,32 +114,6 @@ export default function TemplateUniverse({
           <CharacterList characters={characters} isMyProfile={isMyProfile} />
         </CardContent>
       </Card>
-
-      {/* 이미지 갤러리 */}
-      {universe.image && universe.image.length > 0 && (
-        <Card>
-          <CardHeader>
-            <h2 className="text-lg font-semibold">갤러리</h2>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {universe.image.map((image, index) => (
-                <div
-                  key={index}
-                  className="relative aspect-square rounded-lg overflow-hidden bg-muted"
-                >
-                  <Image
-                    src={image}
-                    alt={`${universe.name} 이미지 ${index + 1}`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }
