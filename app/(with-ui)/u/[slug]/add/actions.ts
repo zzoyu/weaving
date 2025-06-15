@@ -65,7 +65,8 @@ export async function createCharacter(
     thumbnail,
     `${profile_id}_${Math.floor(Math.random() * 10000).toString()}`,
     ImagePath.CHARACTER_THUMBNAIL,
-    true
+    true,
+    false
   );
   const imageUrls = await Promise.all(
     imageFiles.map(async (image) => {
@@ -73,6 +74,7 @@ export async function createCharacter(
         image,
         `${profile_id}_${Math.floor(Math.random() * 10000).toString()}`,
         ImagePath.CHARACTER,
+        true,
         true
       );
     })
@@ -177,6 +179,7 @@ export async function updateCharacter(
           image,
           `${profile_id}_${Math.floor(Math.random() * 10000).toString()}`,
           ImagePath.CHARACTER,
+          true,
           true
         );
       } catch (error) {
