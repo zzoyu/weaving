@@ -1,5 +1,6 @@
 import { Plan } from '@/types/plan';
 import { createClient } from '@/utils/supabase/server';
+import { fetchProfileById } from '../(with-ui)/u/[slug]/actions';
 
 export async function fetchPlanById(id: number): Promise<Plan | null> {
   const supabase = createClient();
@@ -20,17 +21,7 @@ export async function fetchPlanById(id: number): Promise<Plan | null> {
 
 export async function fetchPlanByProfileId(profileId: number): Promise<Plan | null> {
   const supabase = createClient();
-  
-  const { data, error } = await supabase
-    .from('profile')
-    .select('plan_id')
-    .eq('id', profileId)
-    .single();
 
-  if (error || !data?.plan_id) {
-    console.error('Error fetching profile plan:', error);
-    return null;
-  }
-
-  return fetchPlanById(data.plan_id);
+  const profile = await fetchProfileById(profileId);
+  return await fetchPlanById(profile?.data?.plan_id as number);
 } 

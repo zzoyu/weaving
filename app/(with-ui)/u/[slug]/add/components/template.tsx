@@ -123,6 +123,9 @@ export default function CharacterAddTemplate({
             }
           });
 
+          // Add profile_id to FormData
+          formData.append("profile_id", profileId.toString());
+
           // Add image files from UploadImage component
           const halfImageInput = document.querySelector('input[name="half-image"]') as HTMLInputElement;
           const fullImageInput = document.querySelector('input[name="full-image"]') as HTMLInputElement;
@@ -149,7 +152,6 @@ export default function CharacterAddTemplate({
           const res = await createCharacter(formData, combinedProperties);
           if (res) {
             toast({
-              title: "캐릭터 생성",
               description: "캐릭터가 생성되었습니다.",
               variant: "default",
             });
@@ -165,7 +167,7 @@ export default function CharacterAddTemplate({
         }
       })}
     >
-      <input type="hidden" {...register("profile_slug")} />
+      <input type="hidden" name="profile_id" value={profileId} />
 
       <Tabs
         defaultValue="half"

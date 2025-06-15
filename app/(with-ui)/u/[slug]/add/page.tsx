@@ -1,4 +1,4 @@
-import { fetchPlanByProfileId } from "@/app/actions/plan";
+import { fetchPlanById } from "@/app/actions/plan";
 import { fetchProfileByUserId } from "@/app/profile/actions";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
@@ -17,6 +17,8 @@ export default async function NewCharacterPage({
   // if not my profile, redirect to profile page
   const myProfile = await fetchProfileByUserId(user?.user?.id as string);
 
+  console.log(myProfile);
+
   if (!myProfile) {
     redirect("/");
   }
@@ -25,7 +27,7 @@ export default async function NewCharacterPage({
     redirect("/");
   }
 
-  const userPlan = await fetchPlanByProfileId(myProfile.id as number);
+  const userPlan = await fetchPlanById(myProfile.plan_id as number);
   if (!userPlan) {
     redirect("/");
   }

@@ -5,11 +5,10 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
@@ -36,9 +35,6 @@ export default function ButtonDelete({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>캐릭터를 삭제하시겠습니까?</AlertDialogTitle>
-          <AlertDialogDescription>
-            캐릭터를 삭제하면 복구할 수 없습니다. 정말 삭제하시겠습니까?
-          </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>취소</AlertDialogCancel>
@@ -62,7 +58,7 @@ export default function ButtonDelete({
                 });
             }}
           >
-            계속
+            삭제
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -5,6 +5,7 @@ interface Profile {
   slug: string;
   created_at?: string;
   profile_image?: string;
+  plan_id?: number;
 }
 
 interface Friend {
