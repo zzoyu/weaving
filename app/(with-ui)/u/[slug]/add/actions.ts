@@ -22,12 +22,6 @@ export async function createCharacter(
   const relationship_to = formData.getAll("relationship_to") as string[];
   const relationship_name = formData.getAll("relationship_name") as string[];
 
-  // print all of the formData
-  console.log("FormData entries:");
-  for (const [key, value] of formData.entries()) {
-    console.log(`${key}:`, value instanceof File ? `File: ${value.name} (${value.type})` : value);
-  }
-
   const responseProfile = await supabase
     .from("profile")
     .select("id")
@@ -56,7 +50,6 @@ export async function createCharacter(
     throw new Error(`캐릭터당 관계 한도(${userPlan.limit.maxRelationshipsPerCharacter}개)를 초과했습니다.`);
   }
 
-  console.log(properties);
   if (!name) throw new Error("Name is required");
 
   // get hashtag
@@ -66,10 +59,6 @@ export async function createCharacter(
   const halfImage = formData.get("half-image") as File | null;
   const fullImage = formData.get("full-image") as File | null;
   const thumbnail = formData.get("half-thumbnail") as File | null;
-
-  console.log("Half image:", halfImage instanceof File ? `File: ${halfImage.name} (${halfImage.type})` : halfImage);
-  console.log("Full image:", fullImage instanceof File ? `File: ${fullImage.name} (${fullImage.type})` : fullImage);
-  console.log("Thumbnail:", thumbnail instanceof File ? `File: ${thumbnail.name} (${thumbnail.type})` : thumbnail);
 
   const imageFiles = [halfImage, fullImage].filter((file): file is File => file instanceof File);
 
@@ -82,15 +71,17 @@ export async function createCharacter(
 
   const thumbnailUrl = await uploadImage(
     thumbnail,
-    Math.floor(Math.random() * 10000).toString(),
-    ImagePath.CHARACTER_THUMBNAIL
+    `${profile_id}_${Math.floor(Math.random() * 10000).toString()}`,
+    ImagePath.CHARACTER_THUMBNAIL,
+    true
   );
   const imageUrls = await Promise.all(
     imageFiles.map(async (image) => {
       return uploadImage(
         image,
-        Math.floor(Math.random() * 10000).toString(),
-        ImagePath.CHARACTER
+        `${profile_id}_${Math.floor(Math.random() * 10000).toString()}`,
+        ImagePath.CHARACTER,
+        true
       );
     })
   );
@@ -114,8 +105,6 @@ export async function createCharacter(
   if (error || !data) {
     throw error;
   }
-
-  console.log(data);
 
   const relationships = relationship_to.map((to, index) => {
     const name = relationship_name[index];
@@ -147,29 +136,28 @@ export async function updateCharacter(
   const characterId = Number(formData.get("character_id") as string);
   if (!characterId) throw new Error("Character ID is required");
 
+  // Get profile_id
+  const responseProfile = await supabase
+    .from("profile")
+    .select("id")
+    .eq("slug", profile_slug)
+    .maybeSingle();
+  const profile_id = responseProfile?.data?.id;
+  if (!profile_id) throw new Error("Profile not found");
+
   const isHalfEdited = formData.get("half-image-is-edited") === "true";
   const isFullEdited = formData.get("full-image-is-edited") === "true";
 
-  // print all of the formData
-  console.log("FormData entries:");
-  for (const [key, value] of formData.entries()) {
-    console.log(`${key}:`, value instanceof File ? `File: ${value.name} (${value.type})` : value);
-  }
-
-  console.log(properties);
   if (!name) throw new Error("Name is required");
 
   const thumbnail = formData.get("half-thumbnail") as File;
   const originalThumbnail = formData.get("original_thumbnail") as string;
-
-  console.log(thumbnail);
 
   const imageFiles = [
     formData.get("half-image") as File,
     formData.get("full-image") as File,
   ];
 
-  console.log(imageFiles);
   if (!imageFiles[0] && !isHalfEdited) throw new Error("Image is required");
   if (!thumbnail && !originalThumbnail)
     throw new Error("Thumbnail is required");
@@ -179,41 +167,32 @@ export async function updateCharacter(
   const thumbnailUrl = isHalfEdited
     ? await uploadImage(
         thumbnail,
-        Math.floor(Math.random() * 10000).toString(),
-        ImagePath.CHARACTER_THUMBNAIL
+        `${profile_id}_${Math.floor(Math.random() * 10000).toString()}`,
+        ImagePath.CHARACTER_THUMBNAIL,
+        true
       )
     : originalThumbnail;
 
   const imageFlag = [isHalfEdited, isFullEdited];
   const originalImages = formData.getAll("original_image[]") as string[];
 
-  console.log("Original images:", originalImages);
-  console.log("Image flags:", imageFlag);
-
   const imageUrls = await Promise.all(
     imageFiles.map(async (image, index) => {
-      console.log("Processing image", index);
-      console.log("Image flag:", imageFlag[index]);
-      console.log("Original image:", originalImages[index]);
-      console.log("New image:", image);
-
       // 이미지가 변경되지 않았으면 원본 이미지 URL 사용
       if (!imageFlag[index]) {
-        console.log("Using original image:", originalImages[index]);
         return originalImages[index];
       }
       // 이미지가 변경되었지만 파일이 없으면 원본 이미지 URL 사용
       if (!image) {
-        console.log("No new image, using original:", originalImages[index]);
         return originalImages[index];
       }
 
       try {
-        console.log("Uploading new image:", image);
         return await uploadImage(
           image,
-          Math.floor(Math.random() * 10000).toString(),
-          ImagePath.CHARACTER
+          `${profile_id}_${Math.floor(Math.random() * 10000).toString()}`,
+          ImagePath.CHARACTER,
+          true
         );
       } catch (error) {
         console.error(`Failed to upload image ${index}:`, error);
@@ -221,8 +200,6 @@ export async function updateCharacter(
       }
     })
   );
-
-  console.log("Uploaded image URLs:", imageUrls);
 
   const { data, error } = await supabase
     .from("character")
