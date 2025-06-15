@@ -25,6 +25,7 @@ const nextConfig = {
       {
         hostname: "*.oraclecloud.com",
         protocol: "https",
+        pathname: "**/images/**",
       },
     ],
   },

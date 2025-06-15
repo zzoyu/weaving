@@ -1,9 +1,9 @@
 "use server";
 
 import { ImagePath } from "@/types/image";
-import { uploadImage } from "./upload-image";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
+import { uploadImage } from "./upload-image";
 
 export async function changeProfileImage(slug: string, payload: FormData) {
   const supabase = createClient();
@@ -14,7 +14,8 @@ export async function changeProfileImage(slug: string, payload: FormData) {
       const newProfileImage = await uploadImage(
         newImage,
         slug,
-        ImagePath.PROFILE
+        ImagePath.PROFILE,
+        true
       );
       if (!newProfileImage) throw new Error("Failed to upload image");
       const { data, error } = await supabase
