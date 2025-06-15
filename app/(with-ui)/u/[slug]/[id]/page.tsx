@@ -39,8 +39,17 @@ export async function generateMetadata(
 
   return {
     ...baseMetadata,
-    title: "위빙 :: " + characterData.name + " 관찰 중 🔍",
-    openGraph: { images: [characterData.thumbnail!] },
+    title: "위빙 :: " + characterData.name + " 관찰 중 ��",
+    openGraph: {
+      images: [
+        {
+          url: `/api/og?name=${encodeURIComponent(characterData.name)}&description=${encodeURIComponent(characterData.description || '')}&thumbnail=${encodeURIComponent(characterData.thumbnail || '')}`,
+          width: 800,
+          height: 400,
+          alt: characterData.name,
+        },
+      ],
+    },
   };
 }
 
