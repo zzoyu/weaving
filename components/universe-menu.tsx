@@ -39,7 +39,7 @@ export default function UniverseMenu({ universeId, onDelete }: UniverseMenuProps
           세계관 수정
         </Button>
         <ButtonShareUniverse universeId={universeId} />
-        <ButtonDeleteUniverse universeId={universeId}>세계관 삭제</ButtonDeleteUniverse>
+        <ButtonDeleteUniverse universeId={universeId} className="w-full justify-start text-base text-gray-700 hover:text-destructive">세계관 삭제</ButtonDeleteUniverse>
       </PopoverContent>
     </Popover>
   );

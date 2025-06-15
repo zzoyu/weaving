@@ -13,6 +13,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
+import { Button } from "./ui/button";
 
 interface ButtonDeleteUniverseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
@@ -28,8 +29,10 @@ export default function ButtonDeleteUniverse({
   const { toast } = useToast();
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
-        <button {...props}>{children}</button>
+      <AlertDialogTrigger asChild>
+        <Button variant="ghost" size="sm" className="w-full justify-start text-base text-gray-700 hover:text-destructive">
+          {children || "세계관 삭제"}
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
