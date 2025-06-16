@@ -144,11 +144,6 @@ export default function CharacterAddTemplate({
             formData.append("half-thumbnail", halfThumbnailInput.files[0]);
           }
 
-          
-          for (const [key, value] of formData.entries()) {
-            ` : value);
-          }
-
           const res = await createCharacter(formData, combinedProperties);
           if (res) {
             toast({
