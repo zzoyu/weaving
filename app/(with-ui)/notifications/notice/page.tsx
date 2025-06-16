@@ -18,7 +18,7 @@ export default async function NoticePage() {
   return (
     <main className="flex flex-col justify-start pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto">
       <div className="fixed top-0 w-full flex p-4">
-        <h2 className="flex gap-2 items-center">
+        <h2 className="flex gap-2 items-center text-xl">
           <ButtonBack />
           공지사항
         </h2>
@@ -37,8 +37,8 @@ export default async function NoticePage() {
             ]}
           />
         )}
-        <div className="pt-16 px-4">
-          <div className="flex flex-col gap-4">
+        <div className="pt-6 md:pt-10 px-2 md:px-4">
+          <div className="flex flex-col">
             {noticeList &&
               noticeList.map((notice) => (
                 <Link
@@ -46,9 +46,9 @@ export default async function NoticePage() {
                   href={`/notifications/notice/${notice.id}`}
                   className="flex flex-col gap-2"
                 >
-                  <div className="p-4 border-b border-gray-200">
-                    <h3 className="text-lg font-semibold">{notice.title}</h3>
-                    <p className="text-gray-500">
+                  <div className="px-2 py-4 border-b border-gray-200">
+                    <h3 className="text-sm md:text-base font-semibold">{notice.title}</h3>
+                    <p className="text-gray-500 text-xs md:text-sm">
                       {new Date(notice.created_at).toLocaleDateString("ko-KR", {
                         year: "numeric",
                         month: "2-digit",
