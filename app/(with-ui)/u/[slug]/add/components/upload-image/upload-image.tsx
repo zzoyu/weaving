@@ -34,7 +34,7 @@ export default function UploadImage({
     imageFileInput.current?.click();
   }
   function handleChangeImage(event: React.ChangeEvent<HTMLInputElement>) {
-    console.log(event);
+    
     const file = event.target.files?.[0];
     if (!file) {
       setIsEdited(false);
@@ -126,7 +126,7 @@ export default function UploadImage({
         <UploadImageCropLayer
           src={imagePreviewSrc}
           onCrop={(blob) => {
-            console.log(blob);
+            
             if (useThumbnail && thumbnailFileInput.current) {
               const file = new File(
                 [blob],

@@ -39,7 +39,7 @@ export async function generateMetadata(
 
   return {
     ...baseMetadata,
-    title: "위빙 :: " + characterData.name + " 관찰 중 ��",
+    title: "위빙 :: " + characterData.name + " 관찰 중 🔎",
     openGraph: {
       images: [
         {
@@ -64,7 +64,7 @@ export default async function CharacterPage({
   if (!characterData) notFound();
 
   const relationships = await fetchRelationships(Number(id));
-  console.log(relationships);
+  
 
   const supabase = createClient();
 

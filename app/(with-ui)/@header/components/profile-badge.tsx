@@ -13,7 +13,6 @@ export default function ProfileBadge({
   profile,
   notifications,
 }: ProfileBadgeProps) {
-  console.log(profile);
   return (
     <Avatar>
       {(notifications?.length || 0) > 0 && (

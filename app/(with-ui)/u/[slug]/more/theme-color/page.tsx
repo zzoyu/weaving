@@ -38,9 +38,6 @@ export default async function ThemeColorPage({ params }: PageProps) {
 
   return (
     <main className="flex flex-col h-full pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto">
-      <h1 className="text-2xl font-bold font-pretendard mb-6">
-        테마 컬러 분석
-      </h1>
       <ThemeColorChart characters={characters} />
     </main>
   );

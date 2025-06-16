@@ -14,7 +14,6 @@ export async function fetchFriendRequestsByProfileId(id?: number) {
     .is("is_approved", null)
     .order("id", { ascending: false });
 
-  console.log(friendRequests);
 
   if (error) {
     throw error;

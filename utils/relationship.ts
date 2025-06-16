@@ -7,7 +7,7 @@ export function buildRelationshipTree(
   const relationshipMap = new Map<number, RelationshipNode>();
   const rootNodes: RelationshipNode[] = [];
 
-  console.log(relationships);
+  
 
   // 먼저 모든 관계를 Map에 저장
   relationships.forEach((rel) => {
@@ -22,9 +22,9 @@ export function buildRelationshipTree(
       depth: rel.depth,
       children: [],
     };
-    console.log(node.relationship_in);
+    
     relationshipMap.set(rel.to_id, node);
-    console.log(relationshipMap);
+    
   });
 
   // relationship_in 설정 및 트리 구조 구성

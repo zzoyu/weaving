@@ -1,14 +1,14 @@
 "use client";
 
 import { Character } from "@/types/character";
-import { LayerAddRelationship } from "./layer-add-relationship";
-import { Suspense, useState } from "react";
-import {
-  createRelationship,
-  deleteRelationship,
-  updateRelationship,
-} from "../actions";
 import { Relationship } from "@/types/relationship";
+import { useState } from "react";
+import {
+    createRelationship,
+    deleteRelationship,
+    updateRelationship,
+} from "../actions";
+import { LayerAddRelationship } from "./layer-add-relationship";
 
 export default function ButtonAddRelationship({
   character,
@@ -40,7 +40,7 @@ export default function ButtonAddRelationship({
               (relationship) => relationship.to_id === toId
             );
             if (exsisitingRelationship?.id) {
-              console.log("update", exsisitingRelationship);
+              
               updateRelationship(exsisitingRelationship.id, type);
             } else {
               createRelationship(character.id, toId, type);

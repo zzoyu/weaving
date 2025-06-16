@@ -17,7 +17,7 @@ export default async function NewCharacterPage({
   // if not my profile, redirect to profile page
   const myProfile = await fetchProfileByUserId(user?.user?.id as string);
 
-  console.log(myProfile);
+  
 
   if (!myProfile) {
     redirect("/");
