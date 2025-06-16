@@ -64,7 +64,7 @@ export default async function CharacterPage({
   if (!characterData) notFound();
 
   const relationships = await fetchRelationships(Number(id));
-  console.log(relationships);
+  
 
   const supabase = createClient();
 

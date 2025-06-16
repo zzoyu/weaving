@@ -1,12 +1,12 @@
 "use client";
 
 import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
+    Sheet,
+    SheetClose,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
 } from "@/components/ui/sheet";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import SearchIcon from "@/public/assets/icons/search.svg";
@@ -42,7 +42,7 @@ export function ProfileList({
         return false;
       });
     if (filteredColor?.colors?.length) {
-      console.log("filteredColor", filteredColor);
+      
       tempCharacters = tempCharacters.filter((character) => {
         const color = character.properties.find(
           (property) => property.key === filteredColor.type

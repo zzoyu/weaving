@@ -23,7 +23,6 @@ export async function changeProfileImage(slug: string, payload: FormData) {
         .from("profile")
         .update({ profile_image: newProfileImage })
         .eq("slug", slug);
-      console.log(data, error);
       if (error) {
         console.error(error);
         throw new Error(error.message);

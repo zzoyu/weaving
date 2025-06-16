@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/client";
 
 export async function signInWithTwitter() {
   const supabase = createClient();
-  console.log(process.env.NEXT_PUBLIC_BASE_URL);
+  
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "twitter",
     options: {
@@ -15,7 +15,7 @@ export async function signInWithTwitter() {
     },
   });
 
-  console.log(data, error);
+  
   return { data, error };
 }
 

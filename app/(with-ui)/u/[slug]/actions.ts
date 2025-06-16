@@ -52,7 +52,6 @@ export async function fetchProfilesByIds(ids: number[]): Promise<{
 }
 
 export async function fetchCharactersByProfileId(profileId: number) {
-  console.log("fetchCharactersByProfileId", profileId);
   const supabase = createClient();
   const { data, error } = (await supabase
     .from("character")
@@ -159,7 +158,6 @@ export async function removeFriendByProfileId(from: number, to: number) {
       `and(from_profile_id.eq.${from},to_profile_id.eq.${to}),and(from_profile_id.eq.${to},to_profile_id.eq.${from})`
     )
     .eq("is_approved", true);
-  console.log("removeFriendByProfileId", data, error);
 
   revalidatePath("/u/[slug]", "page");
 
@@ -192,7 +190,6 @@ export async function fetchIsFriendByIds(id1?: number, id2?: number) {
       `and(from_profile_id.eq.${id1},to_profile_id.eq.${id2}),and(from_profile_id.eq.${id2},to_profile_id.eq.${id1})`
     );
 
-  console.log("fetchIsFriendByIds", data, error);
 
   if (error || (Array.isArray(data) && data.length === 0) || !data) {
     return false;
@@ -251,7 +248,6 @@ export async function addFavoriteCharacter(
   profile_id: number,
   character_id: number
 ) {
-  console.log("addFavoriteCharacter", profile_id, character_id);
   const supabase = createClient();
   const { data, error } = await supabase.from("character_favorite").insert([
     {

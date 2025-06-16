@@ -114,7 +114,7 @@ export default function CharacterAddTemplate({
           const formData = new FormData();
           Object.entries(data).forEach(([key, value]) => {
             if (value instanceof File) {
-              console.log(`Adding file to FormData: ${key}`, value.name, value.type);
+              
               formData.append(key, value);
             } else if (typeof value === "string") {
               formData.append(key, value);
@@ -132,21 +132,21 @@ export default function CharacterAddTemplate({
           const halfThumbnailInput = document.querySelector('input[name="half-thumbnail"]') as HTMLInputElement;
 
           if (halfImageInput?.files?.[0]) {
-            console.log("Adding half-image from input:", halfImageInput.files[0].name);
+            
             formData.append("half-image", halfImageInput.files[0]);
           }
           if (fullImageInput?.files?.[0]) {
-            console.log("Adding full-image from input:", fullImageInput.files[0].name);
+            
             formData.append("full-image", fullImageInput.files[0]);
           }
           if (halfThumbnailInput?.files?.[0]) {
-            console.log("Adding half-thumbnail from input:", halfThumbnailInput.files[0].name);
+            
             formData.append("half-thumbnail", halfThumbnailInput.files[0]);
           }
 
-          console.log("FormData before submit:");
+          
           for (const [key, value] of formData.entries()) {
-            console.log(`${key}:`, value instanceof File ? `File: ${value.name} (${value.type})` : value);
+            ` : value);
           }
 
           const res = await createCharacter(formData, combinedProperties);

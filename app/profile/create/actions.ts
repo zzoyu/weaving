@@ -1,7 +1,5 @@
 "use server";
 
-import { uploadImage } from "@/actions/upload-image";
-import { ImagePath } from "@/types/image";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -31,7 +29,7 @@ export async function createProfile(payload: FormData) {
     .from("profile")
     .insert({ ...newProfile });
 
-  console.log(data, error);
+  
   if (error) {
     throw new Error(error.message);
   }

@@ -12,9 +12,9 @@ export async function createUniverse(formData: FormData) {
   if (!user) throw new Error("로그인이 필요합니다.");
 
   // 디버깅을 위한 로깅
-  console.log("FormData contents:");
+  
   for (const [key, value] of formData.entries()) {
-    console.log(`${key}:`, value instanceof File ? `File: ${value.name}` : value);
+    
   }
 
   const name = formData.get("name") as string;
@@ -65,7 +65,7 @@ export async function createUniverse(formData: FormData) {
     throw universeError || new Error("세계관 생성에 실패했습니다.");
   }
 
-  console.log("universe", universe);
+  
 
   // 캐릭터-세계관 관계 생성
   if (characterUniverses.length > 0) {

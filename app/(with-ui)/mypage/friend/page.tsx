@@ -10,7 +10,6 @@ export default async function FriendPage() {
   const user = await supabase.auth.getUser();
   const profile = await fetchProfileByUserId(user?.data?.user?.id as string);
 
-  console.log(profile);
 
   const friends = await fetchFriendsByProfileId(profile?.id);
 

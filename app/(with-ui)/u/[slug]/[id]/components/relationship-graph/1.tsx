@@ -2,9 +2,9 @@
 
 import { Character } from "@/types/character";
 import {
-  ERelationshipType,
-  RelationshipNode,
-  relationshipTypeData,
+    ERelationshipType,
+    RelationshipNode,
+    relationshipTypeData,
 } from "@/types/relationship";
 import * as d3 from "d3";
 import { useEffect, useMemo, useRef } from "react";
@@ -18,7 +18,7 @@ export default function RelationshipGraph1({
   relationships: RelationshipNode[];
   isMine?: boolean;
 }) {
-  console.log(relationships);
+  
 
   const svgRef = useRef<SVGSVGElement>(null);
 
