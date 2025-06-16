@@ -55,18 +55,17 @@ export default async function Page({ params }: PageProps) {
   ];
 
   return (
-    <main className="flex flex-col h-full pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto px-10">
-      <h1 className="text-2xl font-bold font-pretendard mb-6">추가 기능</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <main className="flex flex-col h-full w-full justify-center items-center">
+      <div className="grid grid-cols-2 gap-4 md:gap-8 place-items-center w-4/5 max-w-4xl auto-rows-fr">
         {features.map((feature) => (
           <Link
             key={feature.href}
             href={`/u/${params.slug}/more/${feature.href}`}
-            className="p-8 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gradient-to-br dark:from-[#232526] dark:to-[#414345] shadow-lg hover:shadow-2xl transition-transform hover:scale-105 duration-200 flex flex-col cursor-pointer"
+            className=" w-full p-8 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gradient-to-br dark:from-[#232526] dark:to-[#414345] shadow-lg hover:shadow-2xl transition-transform hover:scale-105 duration-200 flex flex-col cursor-pointer h-full"
           >
-            <div className="text-5xl mb-4">{feature.icon}</div>
-            <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">{feature.title}</h2>
-            <p className="text-gray-500 dark:text-gray-300">{feature.description}</p>
+            <div className="text-3xl mb-4">{feature.icon}</div>
+            <p className="text-sm md:text-base font-bold mb-2 text-gray-900 dark:text-white">{feature.title}</p>
+            <p className="text-xs md:text-sm text-gray-500 dark:text-gray-300">{feature.description}</p>
           </Link>
         ))}
       </div>

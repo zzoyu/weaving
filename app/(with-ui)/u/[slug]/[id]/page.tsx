@@ -39,7 +39,7 @@ export async function generateMetadata(
 
   return {
     ...baseMetadata,
-    title: "위빙 :: " + characterData.name + " 관찰 중 ��",
+    title: "위빙 :: " + characterData.name + " 관찰 중 🔎",
     openGraph: {
       images: [
         {
