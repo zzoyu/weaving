@@ -84,7 +84,7 @@ export default function UniverseAddTemplate({
       await createUniverse(formData);
 
       toast({
-        description: "유니버스가 생성되었습니다.",
+        description: "세계관이 저장되었습니다.",
       });
 
       router.push(`/u/${slug}/v`);
@@ -190,7 +190,7 @@ export default function UniverseAddTemplate({
         disabled={isSubmitting}
         className="text-background-default bg-text-black rounded w-full text-xl p-2"
       >
-        {isSubmitting ? "생성 중..." : "유니버스 생성"}
+        {isSubmitting ? "저장 중..." : "저장하기"}
       </Button>
     </form>
   );
