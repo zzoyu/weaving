@@ -37,7 +37,7 @@ export default async function ThemeColorPage({ params }: PageProps) {
   const { data: characters } = await fetchCharactersByProfileId(myProfile.id);
 
   return (
-    <main className="flex flex-col h-full pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto">
+    <main className="flex flex-col h-fit pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto pb-10">
       <ThemeColorChart characters={characters} />
     </main>
   );

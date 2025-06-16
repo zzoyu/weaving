@@ -144,7 +144,7 @@ function FilterPopup({
           <SheetTitle>Filter</SheetTitle>
           <SheetContent>
             {/* 필터 옵션 */}
-            <div className="space-y-4 flex flex-col">
+            <div className="space-y-4 flex flex-col pt-10">
               <div>
                 <ToggleGroup
                   type="single"
@@ -217,7 +217,7 @@ function FilterPopup({
 
               <SheetClose asChild>
                 <button
-                  className="w-full p-4 md:py-2 text-white bg-primary rounded-lg"
+                  className="w-full p-4 md:py-2 text-white bg-text-black dark:bg-primary rounded-lg"
                   onClick={() => {
                     // 필터 적용 로직 추가
                     onUpdate(type, color || []);

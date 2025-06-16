@@ -108,8 +108,8 @@ export default async function PublicProfilePage({
             to={data}
           />
         )}
-        <h2 className="text-2xl mb-2.5">{data?.nickname}의 프로필</h2>
-        <span className=" text-gray-600">
+        <h2 className="text-xl md:text-2xl mb-2.5">{data?.nickname}의 프로필</h2>
+        <span className=" text-gray-600 text-sm md:text-base">
           {responseCharacters?.data.length || 0}개의 캐릭터
         </span>
       </div>

@@ -5,12 +5,12 @@ import { colorHexMap, colorNameMap } from "@/types/color";
 import Image from "next/image";
 import { useState } from "react";
 import {
-    Bar,
-    BarChart,
-    LabelList,
-    ResponsiveContainer,
-    XAxis,
-    YAxis,
+  Bar,
+  BarChart,
+  LabelList,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
 } from "recharts";
 
 interface ChartData {
@@ -176,18 +176,18 @@ export default function ThemeColorChart({ characters }: ThemeColorChartProps) {
   };
 
   return (
-    <section className="w-full flex flex-col items-center bg-white dark:bg-neutral-950 rounded-2xl p-4 md:p-6 mb-10">
-      <h1 className="text-2xl md:text-3xl font-pretendard mb-5 text-gray-900 dark:text-white mt-10">
+    <section className="w-full h-fit flex flex-col items-center bg-white dark:bg-neutral-950 rounded-2xl p-4 md:p-6 mb-10">
+      <h1 className="text-xl md:text-2xl font-pretendard mb-5 text-gray-900 dark:text-white mt-10">
         당신의 테마 컬러는?
       </h1>
-      <div className="w-full flex flex-col items-center justify-center py-10">
+      <div className="w-full flex flex-col items-center justify-center py-4 md:py-10 h-full">
         <Image unoptimized 
           src={`/assets/images/more/theme-color-biased/${mainColor}.png`}
           alt="theme-color-chart"
           width={300}
           height={300}
         />
-        <h1 className="font-pretendard mt-10 font-extrabold text-4xl antialiased">
+        <h1 className="font-pretendard mt-4 md:mt-10 font-extrabold text-2xl md:text-3xl antialiased">
           {listColorDescription[mainColor as keyof typeof listColorDescription]}
         </h1>
       </div>

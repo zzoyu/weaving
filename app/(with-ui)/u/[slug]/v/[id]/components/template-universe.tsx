@@ -1,12 +1,7 @@
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { CharacterWithProfile } from "@/types/character";
 import { Universe } from "@/types/universe";
-import { Edit, Hash, ImageIcon } from "lucide-react";
+import { ImageIcon } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
-import CharacterList from "./character-list";
 
 interface UniverseTemplateProps {
   universe: Universe;
@@ -26,94 +21,87 @@ export default function TemplateUniverse({
     : [];
 
   return (
-    <div className="w-full flex flex-col gap-6">
-      {/* 헤더 섹션 */}
-      <div className="relative flex flex-col md:flex-row gap-6 items-start">
-        {/* 대표 이미지 */}
-        <div className="relative w-full md:w-64 aspect-[4/3] rounded-none md:rounded-xl overflow-hidden shadow-lg border border-white/10 bg-muted flex items-center justify-center">
-          {universe.image && universe.image.length > 0 ? (
-            <Image unoptimized 
-              src={universe.image[0]}
-              alt={universe.name}
-              fill
-              className="object-cover"
-              priority
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <ImageIcon className="w-12 h-12 text-muted-foreground" />
-            </div>
-          )}
-        </div>
-
-        {/* 정보 + 수정 버튼 */}
-        <div className="flex-1 flex flex-col gap-2 relative w-full h-64 p-4 md:p-0">
-          {/* 수정하기 버튼 우상단 */}
-          {isMyProfile && (
-            <div className="absolute top-0 right-0 z-10">
-              <Link href={`/u/${slug}/v/${universe.id}/edit`}>
-                <Button variant="outline" size="icon" className="shadow-md hover:bg-primary/10 hover:text-primary">
-                  <Edit className="w-5 h-5" />
-                </Button>
-              </Link>
-            </div>
-          )}
-          <h1 className="text-3xl font-extrabold tracking-tight leading-tight mb-1" style={{ fontFamily: 'Pretendard, sans-serif' }}>
-            {universe.name}
-          </h1>
-          {universe.description && (
-            <p className="text-base text-muted-foreground whitespace-pre-wrap mb-1">
-              {universe.description}
-            </p>
-          )}
-          {hashtags.length > 0 && (
-            <div className="flex flex-wrap gap-2 pt-2">
-              {hashtags.map((tag, index) => (
-                <Badge key={index} variant="secondary" className="text-xs px-2 py-0.5">
-                  <Hash className="w-3 h-3 mr-1" />
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          )}
-        </div>
+    <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-8 pb-20 bg-white">
+      {/* 상단 이미지 */}
+      <div className="w-48 h-48 relative flex items-center justify-center mt-8 mb-2">
+        {universe.image && universe.image.length > 0 ? (
+          <Image
+            unoptimized
+            src={universe.image[0]}
+            alt={universe.name}
+            fill
+            className="object-contain rounded-xl border border-gray-200 bg-gray-50"
+            priority
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50">
+            <ImageIcon className="w-16 h-16 text-muted-foreground" />
+          </div>
+        )}
       </div>
 
-      {/* 속성 섹션 */}
+      {/* 이름, 설명, 수정/관계도 버튼 */}
+      <div className="w-full flex flex-col items-center gap-2">
+        <div className="flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-center" style={{ fontFamily: 'Pretendard, sans-serif' }}>{universe.name}</h1>
+        </div>
+        {universe.description && (
+          <p className="text-base text-muted-foreground text-center mb-2">{universe.description}</p>
+        )}
+      </div>
+
+      {/* 속성 카드 리스트 */}
       {universe.properties && universe.properties.length > 0 && (
-        <Card>
-          <CardHeader className="pb-2">
-            <h2 className="text-lg font-semibold flex items-center">
-              세계관 정보
-            </h2>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-2">
-              {universe.properties.map((property, index) => (
-                <div
-                  key={index}
-                  className="flex justify-between py-2 border-b last:border-b-0"
-                >
-                  <span className="font-medium">{property.key}</span>
-                  <span className="text-muted-foreground">{property.value}</span>
-                </div>
-              ))}
+        <div className="w-full max-w-md flex flex-col gap-3 mt-2">
+          {universe.properties.map((property, idx) => (
+            <div
+              key={idx}
+              className="flex justify-between items-center px-5 py-3 rounded-xl bg-gray-50 border border-gray-200 shadow-sm"
+            >
+              <span className="font-semibold text-gray-600 text-base">{property.key}</span>
+              <span className="text-gray-900 text-base font-medium break-all text-right">{property.value}</span>
             </div>
-          </CardContent>
-        </Card>
+          ))}
+        </div>
       )}
 
-      {/* 캐릭터 리스트 섹션 */}
-      <Card>
-        <CardHeader className="pb-2">
-          <h2 className="text-lg font-semibold flex items-center">
-            등장 캐릭터
-          </h2>
-        </CardHeader>
-        <CardContent>
-          <CharacterList characters={characters} isMyProfile={isMyProfile} />
-        </CardContent>
-      </Card>
+          {/* 관계 인물(캐릭터) */}
+          <div className="w-full mt-6 px-4">
+            <h2 className="text-lg font-semibold mb-4">소속 캐릭터</h2>
+            <div className="grid grid-cols-3 min-w-[300px] gap-2">
+              {characters && characters.length > 0 ? (
+                characters.map((character, idx) => (
+                  <div key={idx} className="flex flex-col items-center">
+                    <div className="w-16 h-16 relative rounded-full overflow-hidden bg-gray-100 border border-gray-200 mb-1">
+                      {character.image && character.image.length > 0 ? (
+                        <Image
+                          unoptimized
+                          src={character.image[0]}
+                          alt={character.name}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <ImageIcon className="w-8 h-8 text-muted-foreground absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+                      )}
+                    </div>
+                    <span className="text-xs text-center line-clamp-1">{character.name}</span>
+                  </div>
+                ))
+              ) : (
+                <span className="text-gray-400 col-span-3 text-center">관계 인물이 없습니다.</span>
+              )}
+            </div>
+          </div>
+
+      {/* 해시태그 */}
+      {hashtags.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-8">
+          {hashtags.map((tag, index) => (
+            <span key={index} className="bg-gray-100 text-gray-500 rounded-full px-3 py-1 text-xs font-medium">#{tag}</span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

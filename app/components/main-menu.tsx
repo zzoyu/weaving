@@ -64,11 +64,11 @@ export default function MainMenu() {
   }, [redirectPath]);
 
   return (
-    <div className="h-1/2 flex flex-col justify-start items-center gap-10 pt-10">
+    <div className="flex flex-col flex-1 justify-start items-center gap-4 pt-10 w-full">
       {isSignedIn === false && (
         <button
           onClick={handleSignIn}
-          className="bg-black text-white px-8 py-4 rounded-full hover:bg-gray-800 transition-colors duration-200 flex items-center gap-2 text-xl"
+          className="bg-black text-white w-3/5 py-4 rounded-full hover:bg-gray-800 transition-colors duration-200 flex items-center gap-2 text-xl justify-center"
         >
           <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -87,7 +87,7 @@ export default function MainMenu() {
           </button>
         </>
       )}
-      <ul className="flex items-center divide-x-2 gap-1 text-gray-400 divide-gray-300 underline underline-offset-2 font-thin text-sm">
+      <ul className="flex items-center divide-x-2 gap-1 text-gray-400 divide-gray-300 underline underline-offset-2 font-thin text-xs">
         <li>
           <Link href="/term">이용약관</Link>
         </li>
@@ -95,9 +95,6 @@ export default function MainMenu() {
           <Link href="/privacy">개인정보보호정책</Link>
         </li>
       </ul>
-      <div className="h-full flex flex-col justify-end pb-10">
-        <footer className="font-light text-gray-400">©weaving</footer>
-      </div>
     </div>
   );
 }

@@ -94,7 +94,7 @@ export default function UploadImage({
           <div className="relative w-full h-full">
             <Image unoptimized 
               className="object-contain w-full h-full overflow-hidden"
-              alt={"유니버스 이미지"}
+              alt={"세계관 이미지"}
               src={imagePreviewSrc}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

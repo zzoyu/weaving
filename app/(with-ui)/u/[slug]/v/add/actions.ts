@@ -46,7 +46,7 @@ export async function createUniverse(formData: FormData) {
     false
   );
 
-  // 유니버스 생성
+  // 세계관 생성
   const { data: universe, error: universeError } = await supabase
     .from("universes")
     .insert([{
@@ -62,12 +62,12 @@ export async function createUniverse(formData: FormData) {
     .single();
 
   if (universeError || !universe) {
-    throw universeError || new Error("유니버스 생성에 실패했습니다.");
+    throw universeError || new Error("세계관 생성에 실패했습니다.");
   }
 
   
 
-  // 캐릭터-유니버스 관계 생성
+  // 캐릭터-세계관 관계 생성
   if (characterUniverses.length > 0) {
     const { error: relationError } = await supabase
       .from("universes_characters")

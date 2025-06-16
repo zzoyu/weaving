@@ -35,9 +35,9 @@ export default function ButtonDeleteUniverse({
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>유니버스를 삭제하시겠습니까?</AlertDialogTitle>
+          <AlertDialogTitle>세계관를 삭제하시겠습니까?</AlertDialogTitle>
           <AlertDialogDescription>
-            유니버스를 삭제하면 복구할 수 없습니다. 정말 삭제하시겠습니까?
+            세계관를 삭제하면 복구할 수 없습니다. 정말 삭제하시겠습니까?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -48,7 +48,7 @@ export default function ButtonDeleteUniverse({
                 .then((result: boolean) => {
                   if (result) {
                     toast({
-                      description: "유니버스가 삭제되었습니다.",
+                      description: "세계관이 삭제되었습니다.",
                     });
                     router.replace("/profile");
                   }

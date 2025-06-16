@@ -46,7 +46,7 @@ export function NavigationSignIn({ slug }: { slug?: string }) {
             href={item.href}
           >
             <item.icon />
-            <span className="text-sm">{item.label}</span>
+            <span className=" text-xs">{item.label}</span>
           </Link>
         ))}
       </div>
