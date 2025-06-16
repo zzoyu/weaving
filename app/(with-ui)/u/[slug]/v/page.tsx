@@ -23,8 +23,17 @@ export default async function UniversePage({
   const universes = await fetchUniversesByProfileId(profile.id);
 
   return (
-    <main className="flex flex-col items-center min-h-[80vh] py-12">
-      <div className="w-full max-w-xl px-4">
+    <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-[3.75rem] min-h-fit relative">
+      <div className="flex flex-col items-center justify-start my-10">
+        <h2 className="text-xl md:text-2xl mb-2.5">{profile.nickname}의 세계관</h2>
+        <span className="text-gray-600 text-sm md:text-base">
+          {universes.length || 0}개의 세계관
+        </span>
+      </div>
+
+      {isMine && <ButtonAddUniverse slug={params.slug} />}
+
+      <div className="w-full mt-2">
         <Suspense fallback={<UniverseListSkeleton />}>
           <UniverseList
             universes={universes}
@@ -35,7 +44,6 @@ export default async function UniversePage({
             profile={profile}
           />
         </Suspense>
-        {isMine && <ButtonAddUniverse slug={params.slug} />}
       </div>
     </main>
   );
