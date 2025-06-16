@@ -87,7 +87,7 @@ export default function UploadImageCropLayer({
   });
 
   return (
-    <div className="fixed -top-10 left-0 w-full h-full flex flex-col items-center justify-center gap-10 bg-background-default z-10">
+    <div className="fixed z-50 inset-0 w-full h-full flex flex-col items-center justify-center gap-10 bg-background-default">
       <small
         className="
       border-2 border-primary rounded-lg p-1
