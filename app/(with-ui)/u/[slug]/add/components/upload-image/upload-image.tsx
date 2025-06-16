@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import ImageIcon from "@/public/assets/icons/image.svg";
+import { ImageIcon } from "lucide-react";
 import { useRef, useState } from "react";
 import UploadImageCropLayer from "./upload-image-crop-layer";
 
@@ -90,7 +90,7 @@ export default function UploadImage({
         )}
         {imagePreviewSrc && !isOpenedCropLayer ? (
           <div className="relative w-full h-full">
-            <Image
+            <Image unoptimized 
               className="object-contain w-full h-full overflow-hidden"
               alt={"캐릭터 이미지"}
               src={imagePreviewSrc}
@@ -100,7 +100,7 @@ export default function UploadImage({
             {useThumbnail &&
               (thumbnailFileInput.current?.files?.[0] || thumbnailUrl) && (
                 <div className="absolute z-10 -bottom-2 -right-2 w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md">
-                  <Image
+                  <Image unoptimized 
                     className="object-cover w-full h-full"
                     alt={"썸네일 이미지"}
                     src={

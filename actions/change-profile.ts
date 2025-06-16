@@ -15,7 +15,8 @@ export async function changeProfileImage(slug: string, payload: FormData) {
         newImage,
         slug,
         ImagePath.PROFILE,
-        true
+        true,
+        false
       );
       if (!newProfileImage) throw new Error("Failed to upload image");
       const { data, error } = await supabase

@@ -24,7 +24,7 @@ export default function ProfileEditForm({ profile }: { profile: Profile }) {
         className="flex flex-col gap-4 w-full max-w-md"
       >
         <div className="relative flex flex-col gap-4 justify-center items-center">
-          <Image
+          <Image unoptimized 
             src={avatarUrl || ""}
             alt="프로필 사진"
             width={96}

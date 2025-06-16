@@ -42,7 +42,8 @@ export async function createUniverse(formData: FormData) {
     thumbnail,
     `${profileId}_${Math.floor(Math.random() * 10000).toString()}`,
     ImagePath.UNIVERSE_THUMBNAIL,
-    true
+    true,
+    false
   );
 
   // 유니버스 생성

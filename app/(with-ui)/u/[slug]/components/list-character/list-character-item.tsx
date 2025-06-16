@@ -72,7 +72,7 @@ export default function ListCharacterItem({
                   <IconLocked width={48} height={48} />
                 </div>
               )}
-              <Image
+              <Image unoptimized 
                 src={character.thumbnail || character?.image?.[0] || ""}
                 alt={character.name}
                 width={100}

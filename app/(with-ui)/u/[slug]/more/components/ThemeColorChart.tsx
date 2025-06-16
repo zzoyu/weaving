@@ -5,12 +5,12 @@ import { colorHexMap, colorNameMap } from "@/types/color";
 import Image from "next/image";
 import { useState } from "react";
 import {
-  Bar,
-  BarChart,
-  LabelList,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
+    Bar,
+    BarChart,
+    LabelList,
+    ResponsiveContainer,
+    XAxis,
+    YAxis,
 } from "recharts";
 
 interface ChartData {
@@ -181,7 +181,7 @@ export default function ThemeColorChart({ characters }: ThemeColorChartProps) {
         당신의 테마 컬러는?
       </h1>
       <div className="w-full flex flex-col items-center justify-center py-10">
-        <Image
+        <Image unoptimized 
           src={`/assets/images/more/theme-color-biased/${mainColor}.png`}
           alt="theme-color-chart"
           width={300}

@@ -50,7 +50,8 @@ export async function uploadImage(
   image: File,
   characterId: string,
   imagePath: ImagePath = ImagePath.PROFILE,
-  useObjectStorage: boolean = false
+  useObjectStorage: boolean = false,
+  convertToWebp: boolean = false
 ) {
   // 이미지 크기가 0이면 빈 문자열 반환
   if (image.size === 0) {
@@ -58,7 +59,7 @@ export async function uploadImage(
   }
 
   // 이미지를 WebP로 변환
-  const { file: webpFile, fileName: finalFileName } = await convertToWebPFile(image);
+  const { file: webpFile, fileName: finalFileName } = convertToWebp ? await convertToWebPFile(image) : { file: image, fileName: image.name };
   const fullPath = `${imagePath}/${characterId}_${finalFileName}`;
 
   if (useObjectStorage) {

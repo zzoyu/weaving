@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
-import InputPassword from "../components/input-password";
 import { redirect } from "next/navigation";
+import InputPassword from "../../../[id]/components/input-password";
 
 export default function Page({
   params,

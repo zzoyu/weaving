@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { CharacterWithProfile } from "@/types/character";
 import { Universe } from "@/types/universe";
-import { Edit, Hash, Image as ImageIcon } from "lucide-react";
+import { Edit, Hash, ImageIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import CharacterList from "./character-list";
@@ -32,7 +32,7 @@ export default function TemplateUniverse({
         {/* 대표 이미지 */}
         <div className="relative w-full md:w-64 aspect-[4/3] rounded-none md:rounded-xl overflow-hidden shadow-lg border border-white/10 bg-muted flex items-center justify-center">
           {universe.image && universe.image.length > 0 ? (
-            <Image
+            <Image unoptimized 
               src={universe.image[0]}
               alt={universe.name}
               fill
