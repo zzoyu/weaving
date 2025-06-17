@@ -28,12 +28,12 @@ export default function InputHashtag({
               e.stopPropagation();
             }
           }}
-          placeholder="해시태그 입력"
+          placeholder="공백 입력으로 구분"
           className="w-full text-xl border-background-muted focus:outline-none pl-6 py-1 dark:bg-neutral-900 dark:text-gray-100"
         />
       </div>
       <div className="inline-flex flex-wrap gap-2">
-        {hashtags.length ? (
+        {hashtags.length > 0 &&
           hashtags.map((hashtag, index) => (
             <span className="item-hashtag" key={`hashtag-${index}-${hashtag}`}>
               #{hashtag}
@@ -49,11 +49,8 @@ export default function InputHashtag({
                 ✕
               </button>
             </span>
-          ))
-        ) : (
-          <span className="text-primary-200">해시태그를 입력해주세요.</span>
-        )}
+          ))}
       </div>
     </div>
   );
-} 
+}

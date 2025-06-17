@@ -1,14 +1,10 @@
 import { Character } from "./character";
 
-import SymbolFamily from "@/public/assets/icons/relationship/family.svg";
-import SymbolFriend from "@/public/assets/icons/relationship/friend.svg";
-import SymbolHate from "@/public/assets/icons/relationship/hate.svg";
-import SymbolLove from "@/public/assets/icons/relationship/love.svg";
-
 import urlFamily from "@/public/assets/icons/relationship/family.svg?url";
 import urlFriend from "@/public/assets/icons/relationship/friend.svg?url";
 import urlHate from "@/public/assets/icons/relationship/hate.svg?url";
 import urlLove from "@/public/assets/icons/relationship/love.svg?url";
+import { Clover, Heart, Swords, Users } from "lucide-react";
 
 export interface Relationship {
   id?: number;
@@ -46,17 +42,17 @@ export enum ERelationshipType {
 }
 
 export const relationshipSymbolList = {
-  [ERelationshipType.FRIEND]: SymbolFriend,
-  [ERelationshipType.FAMILY]: SymbolFamily,
-  [ERelationshipType.LOVE]: SymbolLove,
-  [ERelationshipType.HATE]: SymbolHate,
+  [ERelationshipType.FRIEND]: Clover,
+  [ERelationshipType.FAMILY]: Users,
+  [ERelationshipType.LOVE]: Heart,
+  [ERelationshipType.HATE]: Swords,
 };
 
 export const relationshipTypeData = {
   [ERelationshipType.FRIEND]: {
     label: "Friend",
     value: ERelationshipType.FRIEND,
-    symbol: SymbolFriend,
+    symbol: Clover,
     color: "bg-symbol-friend",
     url: urlFriend,
     hexColor: "#F5B84C",
@@ -64,7 +60,7 @@ export const relationshipTypeData = {
   [ERelationshipType.FAMILY]: {
     label: "Family",
     value: ERelationshipType.FAMILY,
-    symbol: SymbolFamily,
+    symbol: Users,
     color: "bg-symbol-family",
     url: urlFamily,
     hexColor: "#4AAE7A",
@@ -72,7 +68,7 @@ export const relationshipTypeData = {
   [ERelationshipType.LOVE]: {
     label: "Love",
     value: ERelationshipType.LOVE,
-    symbol: SymbolLove,
+    symbol: Heart,
     color: "bg-symbol-love",
     url: urlLove,
     hexColor: "#7D9AE5",
@@ -80,7 +76,7 @@ export const relationshipTypeData = {
   [ERelationshipType.HATE]: {
     label: "Hate",
     value: ERelationshipType.HATE,
-    symbol: SymbolHate,
+    symbol: Swords,
     color: "bg-symbol-hate",
     url: urlHate,
     hexColor: "#E15A5A",

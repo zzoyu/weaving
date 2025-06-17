@@ -10,6 +10,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Character } from "@/types/character";
 import { Relationship } from "@/types/relationship";
+import { Clover, Heart, Swords, Users } from "lucide-react";
 import React, { useState } from "react";
 import {
   fetchCharactersByProfileId,
@@ -17,10 +18,10 @@ import {
 } from "../../actions";
 
 const relationshipTypes = [
-  { label: "LOVE", name: "love", icon: "❤️", color: "text-red-500" },
-  { label: "FRIEND", name: "friend", icon: "⭐", color: "text-green-500" },
-  { label: "HATE", name: "hate", icon: "♠️", color: "text-black" },
-  { label: "FAMILY", name: "family", icon: "🟡", color: "text-yellow-500" },
+  { label: "LOVE", name: "love", icon: Heart, color: "text-red-500" },
+  { label: "FRIEND", name: "friend", icon: Clover, color: "text-green-500" },
+  { label: "HATE", name: "hate", icon: Swords, color: "text-black" },
+  { label: "FAMILY", name: "family", icon: Users, color: "text-yellow-500" },
 ];
 
 function RelationshipModal({
@@ -53,10 +54,7 @@ function RelationshipModal({
   const renderContent = () => {
     if (isLoading) {
       return Array.from({ length: 5 }).map((_, index) => (
-        <div
-          className="flex justify-between items-center gap-2"
-          key={index}
-        >
+        <div className="flex justify-between items-center gap-2" key={index}>
           <Skeleton className="w-16 h-16 rounded-full shrink-0" />
           <Skeleton className="h-16 w-full rounded" />
         </div>
@@ -72,10 +70,7 @@ function RelationshipModal({
     }
 
     return filteredCharacters.map((character) => (
-      <div
-        className="flex justify-between items-center"
-        key={character.id}
-      >
+      <div className="flex justify-between items-center" key={character.id}>
         <div
           className="flex items-center justify-center cursor-pointer gap-4"
           onClick={() => {}}
@@ -106,22 +101,30 @@ function RelationshipModal({
             <SelectValue placeholder="관계" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem
-              value="관계"
-              className="flex items-center gap-2"
-            >
+            <SelectItem value="관계" className="flex items-center gap-2">
               <span className="text-gray-400">관계</span>
             </SelectItem>
-            {relationshipTypes.map((type) => (
-              <SelectItem
-                key={type.label}
-                value={type.name}
-                className="flex items-center gap-2"
-              >
-                <span className={type.color}>{type.icon}</span>
-                {type.label}
-              </SelectItem>
-            ))}
+            {relationshipTypes.map(
+              (type: (typeof relationshipTypes)[number]) => (
+                <SelectItem
+                  key={type.label}
+                  value={type.name}
+                  className="flex gap-2"
+                >
+                  <div className="flex items-start gap-2">
+                    <span className={type.color}>
+                      {(() => {
+                        const IconComponent = type.icon;
+                        return IconComponent ? (
+                          <IconComponent className="w-4 h-4" />
+                        ) : null;
+                      })()}
+                    </span>
+                    {type.label}
+                  </div>
+                </SelectItem>
+              )
+            )}
           </SelectContent>
         </Select>
       </div>
@@ -179,7 +182,8 @@ export function ButtonAddRelationship({
   const [myCharacters, setMyCharacters] = useState<Character[]>([]);
   const [friendCharacters, setFriendCharacters] = useState<Character[]>([]);
   const [isMyCharactersLoading, setIsMyCharactersLoading] = useState(true);
-  const [isFriendCharactersLoading, setIsFriendCharactersLoading] = useState(true);
+  const [isFriendCharactersLoading, setIsFriendCharactersLoading] =
+    useState(true);
 
   // 컴포넌트 마운트 시 한 번만 데이터 로드
   React.useEffect(() => {
@@ -190,23 +194,27 @@ export function ButtonAddRelationship({
         // 내 프로필 캐릭터 가져오기
         const { data: myData } = await fetchCharactersByProfileId(profileId);
         if (!isMounted) return;
-        
+
         if (myData) {
-          const filteredMyData = myData.filter((relatable) => relatable.id !== character?.id);
+          const filteredMyData = myData.filter(
+            (relatable) => relatable.id !== character?.id
+          );
           setMyCharacters(filteredMyData);
         }
         setIsMyCharactersLoading(false);
 
         // 친구 프로필 캐릭터 가져오기
-        const friendData = await fetchCharactersFromFriendsByProfileId(profileId);
+        const friendData = await fetchCharactersFromFriendsByProfileId(
+          profileId
+        );
         if (!isMounted) return;
-        
+
         if (friendData) {
           setFriendCharacters(friendData);
         }
         setIsFriendCharactersLoading(false);
       } catch (error) {
-        console.error('Failed to fetch characters:', error);
+        console.error("Failed to fetch characters:", error);
         if (isMounted) {
           setIsMyCharactersLoading(false);
           setIsFriendCharactersLoading(false);
@@ -335,11 +343,15 @@ export function ButtonAddRelationship({
                     )?.color
                   }
                 >
-                  {
-                    relationshipTypes.find(
+                  {(() => {
+                    const type = relationshipTypes.find(
                       (type) => type.name === relationship.name
-                    )?.icon
-                  }
+                    );
+                    const IconComponent = type?.icon;
+                    return IconComponent ? (
+                      <IconComponent className="w-4 h-4" />
+                    ) : null;
+                  })()}
                 </span>
                 <select
                   className="border rounded p-1"
