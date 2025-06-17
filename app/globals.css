@@ -17,6 +17,11 @@
   :root {
     --radius: 0.5rem;
   }
+
+  *:focus,
+  *:focus-visible {
+    @apply outline-none ring-0;
+  }
 }
 
 @layer components {
@@ -107,7 +112,9 @@ svg > path {
   }
 }
 
-button:focus, button:focus-visible, button:active {
+button:focus,
+button:focus-visible,
+button:active {
   outline: none !important;
   box-shadow: none !important;
 }
