@@ -25,10 +25,15 @@ const fontBody = localFont({
   variable: "--font-pretendard",
 });
 
-export const metadata: Metadata = {
-  title: "위빙",
-  description: "우리의 세계가 만나는 곳",
-};
+export function generateMetadata(): Metadata {
+  return {
+    title: "위빙",
+    description: "우리의 세계가 만나는 곳",
+    other: {
+      "google-adsense-account": "ca-pub-8566989289200896",
+    },
+  };
+}
 
 export default function RootLayout({
   children,
