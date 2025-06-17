@@ -35,7 +35,9 @@ export default function MainMenu() {
     });
 
     // 세션 상태 변경 구독
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN" || event === "USER_UPDATED") {
         if (session) {
           setIsSignedIn(true);
@@ -64,7 +66,7 @@ export default function MainMenu() {
   }, [redirectPath]);
 
   return (
-    <div className="flex flex-col flex-1 justify-start items-center gap-4 pt-10 w-full">
+    <div className="flex flex-col flex-1 justify-start items-center gap-4 pt-20 w-full">
       {isSignedIn === false && (
         <button
           onClick={handleSignIn}
