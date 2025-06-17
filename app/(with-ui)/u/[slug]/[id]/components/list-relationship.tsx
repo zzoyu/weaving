@@ -3,9 +3,9 @@
 import { Character } from "@/types/character";
 import { colorList } from "@/types/color";
 import {
-    ERelationshipType,
-    Relationship,
-    relationshipTypeData,
+  ERelationshipType,
+  Relationship,
+  relationshipTypeData,
 } from "@/types/relationship";
 import clsx from "clsx";
 import Image from "next/image";
@@ -23,7 +23,7 @@ export function ListRelationship({
 
   return (
     <div className="flex flex-col">
-      <h2 className="mb-6 font-bold px-10">관계 인물</h2>
+      <h2 className="text-xl font-bold mb-2">관계 인물</h2>
       <div className="grid grid-cols-3 gap-4">
         {(!isOpened ? relationships.slice(0, 3) : relationships).map(
           (relationship) => {
@@ -57,7 +57,8 @@ export function ListRelationship({
                     </div>
                   )}
                   <div className="rounded-full overflow-hidden m-2">
-                    <Image unoptimized 
+                    <Image
+                      unoptimized
                       src={character.thumbnail || character?.image?.[0] || ""}
                       alt={character.name}
                       width={100}
