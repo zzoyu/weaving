@@ -22,7 +22,7 @@ export function ListRelationship({
   const [isOpened, setIsOpened] = useState(false);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col px-10">
       <h2 className="text-xl font-bold mb-2">관계 인물</h2>
       <div className="grid grid-cols-3 gap-4">
         {(!isOpened ? relationships.slice(0, 3) : relationships).map(
@@ -74,7 +74,7 @@ export function ListRelationship({
                       "w-full h-fit flex justify-center items-center p-2"
                     )}
                   >
-                    <p>{character.name}</p>
+                    <p className="text-sm">{character.name}</p>
                   </div>
                 </div>
               </Link>

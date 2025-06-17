@@ -21,7 +21,7 @@ export async function createCharacter(
   const profile_id = Number(formData.get("profile_id") as string);
   const relationship_to = formData.getAll("relationship_to") as string[];
   const relationship_name = formData.getAll("relationship_name") as string[];
-  
+
   // Get user's plan and check character limit
   const userPlan = await fetchPlanByProfileId(profile_id);
   if (!userPlan) throw new Error("Plan not found");
@@ -34,12 +34,16 @@ export async function createCharacter(
 
   if (countError) throw countError;
   if (!count || count >= userPlan.limit.maxCharacterSlots) {
-    throw new Error(`캐릭터 생성 한도(${userPlan.limit.maxCharacterSlots}개)를 초과했습니다.`);
+    throw new Error(
+      `캐릭터 생성 한도(${userPlan.limit.maxCharacterSlots}개)를 초과했습니다.`
+    );
   }
 
   // Check relationship count
   if (relationship_to.length > userPlan.limit.maxRelationshipsPerCharacter) {
-    throw new Error(`캐릭터당 관계 한도(${userPlan.limit.maxRelationshipsPerCharacter}개)를 초과했습니다.`);
+    throw new Error(
+      `캐릭터당 관계 한도(${userPlan.limit.maxRelationshipsPerCharacter}개)를 초과했습니다.`
+    );
   }
 
   if (!name) throw new Error("Name is required");
@@ -52,14 +56,18 @@ export async function createCharacter(
   const fullImage = formData.get("full-image") as File | null;
   const thumbnail = formData.get("half-thumbnail") as File | null;
 
-  const imageFiles = [halfImage, fullImage].filter((file): file is File => file instanceof File);
+  const imageFiles = [halfImage, fullImage].filter(
+    (file): file is File => file !== null && file.size > 0
+  );
 
   if (imageFiles.length > userPlan.limit.maxImagesPerCharacter) {
-    throw new Error(`캐릭터당 이미지 한도(${userPlan.limit.maxImagesPerCharacter}개)를 초과했습니다.`);
+    throw new Error(
+      `캐릭터당 이미지 한도(${userPlan.limit.maxImagesPerCharacter}개)를 초과했습니다.`
+    );
   }
 
-  if (!halfImage || !(halfImage instanceof File)) throw new Error("상반신 이미지는 필수입니다");
-  if (!thumbnail || !(thumbnail instanceof File)) throw new Error("썸네일은 필수입니다");
+  if (!halfImage) throw new Error("상반신 이미지는 필수입니다");
+  if (!thumbnail) throw new Error("썸네일은 필수입니다");
 
   const thumbnailUrl = await uploadImage(
     thumbnail,
