@@ -1,5 +1,5 @@
 import { Toaster } from "@/components/ui/toaster";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import clsx from "clsx";
 import type { Metadata } from "next";
 import { Poiret_One } from "next/font/google";
@@ -36,12 +36,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
+  const gtmScriptUrl = process.env.NEXT_PUBLIC_GTM_SCRIPT_URL;
+
   return (
     <html lang="ko">
       <body className={clsx(fontTitle.variable, fontBody.variable)}>
         {children}
         <Toaster />
         {gaId && <GoogleAnalytics gaId={gaId} />}
+        {gtmId && (
+          <GoogleTagManager gtmId={gtmId} gtmScriptUrl={gtmScriptUrl} />
+        )}
       </body>
     </html>
   );
