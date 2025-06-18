@@ -42,12 +42,12 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={clsx(fontTitle.variable, fontBody.variable)}>
-        {children}
-        <Toaster />
-        {gaId && <GoogleAnalytics gaId={gaId} />}
         {gtmId && (
           <GoogleTagManager gtmId={gtmId} gtmScriptUrl={gtmScriptUrl} />
         )}
+        {children}
+        <Toaster />
+        {gaId && <GoogleAnalytics gaId={gaId} />}
       </body>
     </html>
   );
