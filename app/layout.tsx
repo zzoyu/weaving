@@ -43,7 +43,13 @@ export default function RootLayout({
     <html lang="ko">
       <body className={clsx(fontTitle.variable, fontBody.variable)}>
         {gtmId && (
-          <GoogleTagManager gtmId={gtmId} gtmScriptUrl={gtmScriptUrl} />
+          <GoogleTagManager
+            gtmId={gtmId}
+            gtmScriptUrl={gtmScriptUrl}
+            dataLayer={{
+              page_type: "page",
+            }}
+          />
         )}
         {children}
         <Toaster />
