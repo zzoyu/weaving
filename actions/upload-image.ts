@@ -1,13 +1,16 @@
 import { ImagePath } from "@/types/image";
 import { getWebPFileName, webpBuffer } from "@/utils/image.server";
 import { createClient } from "@/utils/supabase/server";
+import * as Sentry from "@sentry/nextjs";
 
 // Oracle Object Storage 환경 변수 설정
 const OCI_WRITE_URL = process.env.OCI_WRITE_URL;
 const OCI_READ_URL = process.env.OCI_READ_URL;
 
 if (!OCI_WRITE_URL || !OCI_READ_URL) {
-  throw new Error("Oracle Object Storage 환경 변수가 설정되지 않았습니다.");
+  const err = new Error("Oracle Object Storage 환경 변수가 설정되지 않았습니다.");
+  Sentry.captureException(err);
+  throw err;
 }
 
 export async function uploadImageToObjectStorage(
@@ -34,7 +37,9 @@ export async function uploadImageToObjectStorage(
         url: writeUrl,
         body: responseText,
       });
-      throw new Error(`업로드 실패: ${response.statusText} - ${responseText}`);
+      const err = new Error(`업로드 실패: ${response.statusText} - ${responseText}`);
+      Sentry.captureException(err);
+      throw err;
     }
 
     // 읽기용 URL 반환
@@ -42,6 +47,7 @@ export async function uploadImageToObjectStorage(
     return { url: readUrl };
   } catch (error) {
     console.error("이미지 업로드 중 오류 발생:", error);
+    Sentry.captureException(error);
     throw new Error("이미지 업로드에 실패했습니다.");
   }
 }
@@ -79,6 +85,7 @@ export async function uploadImage(
 
   if (fileError) {
     console.error("Supabase 업로드 오류:", fileError);
+    Sentry.captureException(fileError);
     throw new Error(fileError.message);
   }
 
