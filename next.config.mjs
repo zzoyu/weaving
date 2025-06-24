@@ -28,6 +28,11 @@ const nextConfig = {
         pathname: "**/images/**",
       },
       {
+        hostname: "*.customer-oci.com",
+        protocol: "https",
+        pathname: "**/images/**",
+      },
+      {
         hostname: "picsum.photos",
         protocol: "https",
       },
