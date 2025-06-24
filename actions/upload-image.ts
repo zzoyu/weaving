@@ -1,5 +1,5 @@
 import { ImagePath } from "@/types/image";
-import { convertToWebPFile } from "@/utils/image";
+import { getWebPFileName, webpBuffer } from "@/utils/image.server";
 import { createClient } from "@/utils/supabase/server";
 
 // Oracle Object Storage 환경 변수 설정
@@ -11,11 +11,11 @@ if (!OCI_WRITE_URL || !OCI_READ_URL) {
 }
 
 export async function uploadImageToObjectStorage(
-  file: File,
+  file: Buffer,
   fileName: string
 ): Promise<{ url: string }> {
   try {
-    const writeUrl = `${OCI_WRITE_URL}/${fileName}`;
+    const writeUrl = `${OCI_WRITE_URL}${fileName}`;
 
     // PUT 요청 보내기
     const response = await fetch(writeUrl, {
@@ -59,13 +59,15 @@ export async function uploadImage(
   }
 
   // 이미지를 WebP로 변환
-  const { file: webpFile, fileName: finalFileName } = convertToWebp
-    ? await convertToWebPFile(image)
-    : { file: image, fileName: image.name };
+  const webpFile = await webpBuffer(Buffer.from(await image.arrayBuffer()));
+  const finalFileName = getWebPFileName(image.name);
   const fullPath = `${imagePath}/${characterId}_${finalFileName}`;
 
   if (useObjectStorage) {
-    const { url } = await uploadImageToObjectStorage(webpFile, fullPath);
+    const { url } = await uploadImageToObjectStorage(
+      Buffer.from(webpFile),
+      fullPath
+    );
     return url;
   }
 
