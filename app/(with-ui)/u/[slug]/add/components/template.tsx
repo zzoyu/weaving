@@ -145,12 +145,17 @@ export default function CharacterAddTemplate({
           }
 
           const res = await createCharacter(formData, combinedProperties);
-          if (res) {
+          if (res && res.success) {
             toast({
               description: "캐릭터가 생성되었습니다.",
               variant: "default",
             });
             router.push(`/u/${slug}`);
+          } else {
+            toast({
+              description: res?.message || "캐릭터 생성에 실패했습니다.",
+              variant: "destructive",
+            });
           }
         } catch (err) {
           toast({

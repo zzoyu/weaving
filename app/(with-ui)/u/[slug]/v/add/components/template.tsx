@@ -81,14 +81,20 @@ export default function UniverseAddTemplate({
       formData.append("universes_characters", JSON.stringify(characterUniverses));
       formData.append("hashtags", hashtags);
 
-      await createUniverse(formData);
-
-      toast({
-        description: "세계관이 저장되었습니다.",
-      });
-
-      router.push(`/u/${slug}/v`);
-      router.refresh();
+      const res = await createUniverse(formData);
+      if (res && res.success) {
+        toast({
+          description: "세계관이 저장되었습니다.",
+          variant: "default",
+        });
+        router.push(`/u/${slug}/v`);
+        router.refresh();
+      } else {
+        toast({
+          description: res?.message || "세계관 저장에 실패했습니다.",
+          variant: "destructive",
+        });
+      }
     } catch (error) {
       console.error("Error creating universe:", error);
       toast({
