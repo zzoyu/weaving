@@ -7,7 +7,7 @@ const OCI_WRITE_URL = process.env.OCI_WRITE_URL;
 const OCI_READ_URL = process.env.OCI_READ_URL;
 
 if (!OCI_WRITE_URL || !OCI_READ_URL) {
-  throw new Error('Oracle Object Storage 환경 변수가 설정되지 않았습니다.');
+  throw new Error("Oracle Object Storage 환경 변수가 설정되지 않았습니다.");
 }
 
 export async function uploadImageToObjectStorage(
@@ -19,30 +19,30 @@ export async function uploadImageToObjectStorage(
 
     // PUT 요청 보내기
     const response = await fetch(writeUrl, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'image/webp',
+        "Content-Type": "image/webp",
       },
       body: file,
     });
 
     if (!response.ok) {
       const responseText = await response.text();
-      console.error('업로드 실패:', {
+      console.error("업로드 실패:", {
         status: response.status,
         statusText: response.statusText,
         url: writeUrl,
-        body: responseText
+        body: responseText,
       });
       throw new Error(`업로드 실패: ${response.statusText} - ${responseText}`);
     }
 
     // 읽기용 URL 반환
-    const readUrl = `${OCI_READ_URL}/${fileName}`;
+    const readUrl = `${fileName}`;
     return { url: readUrl };
   } catch (error) {
-    console.error('이미지 업로드 중 오류 발생:', error);
-    throw new Error('이미지 업로드에 실패했습니다.');
+    console.error("이미지 업로드 중 오류 발생:", error);
+    throw new Error("이미지 업로드에 실패했습니다.");
   }
 }
 
@@ -55,11 +55,13 @@ export async function uploadImage(
 ) {
   // 이미지 크기가 0이면 빈 문자열 반환
   if (image.size === 0) {
-    return '';
+    return "";
   }
 
   // 이미지를 WebP로 변환
-  const { file: webpFile, fileName: finalFileName } = convertToWebp ? await convertToWebPFile(image) : { file: image, fileName: image.name };
+  const { file: webpFile, fileName: finalFileName } = convertToWebp
+    ? await convertToWebPFile(image)
+    : { file: image, fileName: image.name };
   const fullPath = `${imagePath}/${characterId}_${finalFileName}`;
 
   if (useObjectStorage) {
@@ -74,7 +76,7 @@ export async function uploadImage(
     .upload(fullPath, webpFile);
 
   if (fileError) {
-    console.error('Supabase 업로드 오류:', fileError);
+    console.error("Supabase 업로드 오류:", fileError);
     throw new Error(fileError.message);
   }
 

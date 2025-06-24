@@ -2,6 +2,7 @@
 
 import { Character } from "@/types/character";
 import { Relationship } from "@/types/relationship";
+import { getPublicUrl } from "@/utils/image";
 import { useEffect, useRef } from "react";
 
 export default function RelationshipGraph({
@@ -39,7 +40,7 @@ export default function RelationshipGraph({
     ctx.textAlign = "center";
 
     const imageCenter = new Image(100, 100);
-    imageCenter.src = character.thumbnail!;
+    imageCenter.src = getPublicUrl(character.thumbnail);
     // wait for image to load
     imageCenter.onload = () => {
       // draw the image on the canvas in circle shape
@@ -74,7 +75,7 @@ export default function RelationshipGraph({
     relationships.forEach((relationship) => {
       const character = relationship.character as Character;
       const characterImage = new Image(100, 100);
-      characterImage.src = character.thumbnail!;
+      characterImage.src = getPublicUrl(character.thumbnail);
       const x = middlePoint.x + r * Math.cos(angle);
       const y = middlePoint.y + r * Math.sin(angle);
 

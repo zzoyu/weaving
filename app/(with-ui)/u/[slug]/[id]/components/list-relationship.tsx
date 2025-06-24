@@ -3,10 +3,11 @@
 import { Character } from "@/types/character";
 import { colorList } from "@/types/color";
 import {
-    ERelationshipType,
-    Relationship,
-    relationshipTypeData,
+  ERelationshipType,
+  Relationship,
+  relationshipTypeData,
 } from "@/types/relationship";
+import { getPublicUrl } from "@/utils/image";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
@@ -57,8 +58,13 @@ export function ListRelationship({
                     </div>
                   )}
                   <div className="rounded-full overflow-hidden m-2">
-                    <Image unoptimized 
-                      src={character.thumbnail || character?.image?.[0] || ""}
+                    <Image
+                      unoptimized
+                      src={
+                        getPublicUrl(character.thumbnail) ||
+                        getPublicUrl(character?.image?.[0]) ||
+                        ""
+                      }
                       alt={character.name}
                       width={100}
                       height={100}

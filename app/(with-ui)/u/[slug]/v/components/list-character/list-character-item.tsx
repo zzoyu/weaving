@@ -9,6 +9,7 @@ import Link from "next/link";
 
 import IconLocked from "@/public/assets/icons/locked.svg";
 import { colorList } from "@/types/color";
+import { getPublicUrl } from "@/utils/image";
 
 export default function ListCharacterItem({
   character,
@@ -72,8 +73,13 @@ export default function ListCharacterItem({
                   <IconLocked width={48} height={48} />
                 </div>
               )}
-              <Image unoptimized 
-                src={character.thumbnail || character?.image?.[0] || ""}
+              <Image
+                unoptimized
+                src={
+                  getPublicUrl(character.thumbnail) ||
+                  getPublicUrl(character?.image?.[0]) ||
+                  ""
+                }
                 alt={character.name}
                 width={100}
                 height={100}
