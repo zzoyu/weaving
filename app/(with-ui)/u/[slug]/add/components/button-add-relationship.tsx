@@ -10,6 +10,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Character } from "@/types/character";
 import { Relationship } from "@/types/relationship";
+import { getPublicUrl } from "@/utils/image";
 import React, { useState } from "react";
 import {
   fetchCharactersByProfileId,
@@ -53,10 +54,7 @@ function RelationshipModal({
   const renderContent = () => {
     if (isLoading) {
       return Array.from({ length: 5 }).map((_, index) => (
-        <div
-          className="flex justify-between items-center gap-2"
-          key={index}
-        >
+        <div className="flex justify-between items-center gap-2" key={index}>
           <Skeleton className="w-16 h-16 rounded-full shrink-0" />
           <Skeleton className="h-16 w-full rounded" />
         </div>
@@ -72,17 +70,14 @@ function RelationshipModal({
     }
 
     return filteredCharacters.map((character) => (
-      <div
-        className="flex justify-between items-center"
-        key={character.id}
-      >
+      <div className="flex justify-between items-center" key={character.id}>
         <div
           className="flex items-center justify-center cursor-pointer gap-4"
           onClick={() => {}}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={character.thumbnail}
+            src={getPublicUrl(character.thumbnail)}
             alt={character.name}
             className="w-16 h-16 rounded-full mb-2"
           />
@@ -106,10 +101,7 @@ function RelationshipModal({
             <SelectValue placeholder="관계" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem
-              value="관계"
-              className="flex items-center gap-2"
-            >
+            <SelectItem value="관계" className="flex items-center gap-2">
               <span className="text-gray-400">관계</span>
             </SelectItem>
             {relationshipTypes.map((type) => (
@@ -179,7 +171,8 @@ export function ButtonAddRelationship({
   const [myCharacters, setMyCharacters] = useState<Character[]>([]);
   const [friendCharacters, setFriendCharacters] = useState<Character[]>([]);
   const [isMyCharactersLoading, setIsMyCharactersLoading] = useState(true);
-  const [isFriendCharactersLoading, setIsFriendCharactersLoading] = useState(true);
+  const [isFriendCharactersLoading, setIsFriendCharactersLoading] =
+    useState(true);
 
   // 컴포넌트 마운트 시 한 번만 데이터 로드
   React.useEffect(() => {
@@ -190,23 +183,27 @@ export function ButtonAddRelationship({
         // 내 프로필 캐릭터 가져오기
         const { data: myData } = await fetchCharactersByProfileId(profileId);
         if (!isMounted) return;
-        
+
         if (myData) {
-          const filteredMyData = myData.filter((relatable) => relatable.id !== character?.id);
+          const filteredMyData = myData.filter(
+            (relatable) => relatable.id !== character?.id
+          );
           setMyCharacters(filteredMyData);
         }
         setIsMyCharactersLoading(false);
 
         // 친구 프로필 캐릭터 가져오기
-        const friendData = await fetchCharactersFromFriendsByProfileId(profileId);
+        const friendData = await fetchCharactersFromFriendsByProfileId(
+          profileId
+        );
         if (!isMounted) return;
-        
+
         if (friendData) {
           setFriendCharacters(friendData);
         }
         setIsFriendCharactersLoading(false);
       } catch (error) {
-        console.error('Failed to fetch characters:', error);
+        console.error("Failed to fetch characters:", error);
         if (isMounted) {
           setIsMyCharactersLoading(false);
           setIsFriendCharactersLoading(false);

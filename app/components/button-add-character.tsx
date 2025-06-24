@@ -5,6 +5,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Character } from "@/types/character";
+import { getPublicUrl } from "@/utils/image";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -13,7 +14,10 @@ interface ButtonAddCharacterProps {
   onAdd: (characterId: number) => void;
 }
 
-export function ButtonAddCharacter({ characters, onAdd }: ButtonAddCharacterProps) {
+export function ButtonAddCharacter({
+  characters,
+  onAdd,
+}: ButtonAddCharacterProps) {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -24,15 +28,15 @@ export function ButtonAddCharacter({ characters, onAdd }: ButtonAddCharacterProp
   );
 
   const handleToggleCharacter = (characterId: number) => {
-    setSelectedCharacters(prev => 
+    setSelectedCharacters((prev) =>
       prev.includes(characterId)
-        ? prev.filter(id => id !== characterId)
+        ? prev.filter((id) => id !== characterId)
         : [...prev, characterId]
     );
   };
 
   const handleConfirm = () => {
-    selectedCharacters.forEach(characterId => {
+    selectedCharacters.forEach((characterId) => {
       onAdd(characterId);
     });
     setSelectedCharacters([]);
@@ -41,15 +45,15 @@ export function ButtonAddCharacter({ characters, onAdd }: ButtonAddCharacterProp
 
   return (
     <div className="w-full">
-      <Button 
+      <Button
         type="button"
-        variant="outline" 
+        variant="outline"
         className="w-full"
         onClick={() => setIsOpen(true)}
       >
         캐릭터 추가
       </Button>
-      
+
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent
           className="p-0 gap-0 flex flex-col w-full h-full max-w-full max-h-full
@@ -66,7 +70,7 @@ export function ButtonAddCharacter({ characters, onAdd }: ButtonAddCharacterProp
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            
+
             <div className="flex-1 overflow-y-auto p-4">
               <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 {filteredCharacters.map((character) => (
@@ -81,22 +85,25 @@ export function ButtonAddCharacter({ characters, onAdd }: ButtonAddCharacterProp
                     role="button"
                     tabIndex={0}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
+                      if (e.key === "Enter" || e.key === " ") {
                         handleToggleCharacter(character.id);
                       }
                     }}
                   >
                     <div className="aspect-square relative">
                       {character.thumbnail ? (
-                        <Image unoptimized 
-                          src={character.thumbnail}
+                        <Image
+                          unoptimized
+                          src={getPublicUrl(character.thumbnail)}
                           alt={character.name}
                           fill
                           className="object-cover"
                         />
                       ) : (
                         <div className="w-full h-full bg-muted flex items-center justify-center">
-                          <span className="text-muted-foreground">No Image</span>
+                          <span className="text-muted-foreground">
+                            No Image
+                          </span>
                         </div>
                       )}
                     </div>
@@ -126,10 +133,7 @@ export function ButtonAddCharacter({ characters, onAdd }: ButtonAddCharacterProp
                   >
                     취소
                   </Button>
-                  <Button 
-                    type="button"
-                    onClick={handleConfirm}
-                  >
+                  <Button type="button" onClick={handleConfirm}>
                     {selectedCharacters.length}개 캐릭터 추가
                   </Button>
                 </div>
@@ -140,4 +144,4 @@ export function ButtonAddCharacter({ characters, onAdd }: ButtonAddCharacterProp
       </Dialog>
     </div>
   );
-} 
+}

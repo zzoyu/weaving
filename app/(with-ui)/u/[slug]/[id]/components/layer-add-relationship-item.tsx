@@ -2,6 +2,7 @@
 
 import { Character } from "@/types/character";
 import { ERelationshipType, Relationship } from "@/types/relationship";
+import { getPublicUrl } from "@/utils/image";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -29,8 +30,9 @@ export function LayerAddRelationshipItem({
   return (
     <div className="flex justify-between items-center gap-2 w-full">
       <div className="flex items-center gap-4 relative">
-        <Image unoptimized 
-          src={character.thumbnail || ""}
+        <Image
+          unoptimized
+          src={getPublicUrl(character.thumbnail)}
           alt={character.name}
           width={100}
           height={100}
