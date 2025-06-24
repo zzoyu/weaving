@@ -16,6 +16,7 @@ import ListProperties from "@/app/components/properties/list-properties";
 import { useToast } from "@/hooks/use-toast";
 import IconFull from "@/public/assets/icons/image/full.svg";
 import IconHalf from "@/public/assets/icons/image/half.svg";
+import { getPublicUrl } from "@/utils/image";
 import { useRouter } from "next/navigation";
 
 export default function CharacterEditTemplate({
@@ -49,15 +50,15 @@ export default function CharacterEditTemplate({
   );
 
   const [currentThumbnail, setCurrentThumbnail] = useState<string>(
-    character.thumbnail || ""
+    getPublicUrl(character.thumbnail) || ""
   );
 
   const [currentHalfImage, setCurrentHalfImage] = useState<string>(
-    character.image?.[0] || ""
+    getPublicUrl(character.image?.[0]) || ""
   );
 
   const [currentFullImage, setCurrentFullImage] = useState<string>(
-    character.image?.[1] || ""
+    getPublicUrl(character.image?.[1]) || ""
   );
 
   const handleRelationshipNameChange = ({
@@ -97,8 +98,6 @@ export default function CharacterEditTemplate({
       <Suspense fallback={<Loading />}>
         <form
           className="flex flex-col gap-2 items-center w-full md:max-w-md p-4"
-          
-            
           action={(formData) => {
             updateCharacter(formData, [...properties, ...currentColors]).then(
               (result) => {

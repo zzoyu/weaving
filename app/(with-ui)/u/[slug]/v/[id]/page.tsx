@@ -1,4 +1,5 @@
 import { fetchProfileBySlug } from "@/app/profile/actions";
+import { getPublicUrl } from "@/utils/image";
 import { createClient } from "@/utils/supabase/server";
 import { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
@@ -34,7 +35,9 @@ export async function generateMetadata(
     ...baseMetadata,
     title: "위빙 :: " + universeData.name,
     description: universeData.description || baseMetadata.description,
-    openGraph: universeData.thumbnail ? { images: [universeData.thumbnail] } : undefined,
+    openGraph: getPublicUrl(universeData.thumbnail)
+      ? { images: [getPublicUrl(universeData.thumbnail)] }
+      : undefined,
   };
 }
 
@@ -48,7 +51,8 @@ export default async function UniversePage({
   const universeData = await fetchUniverseById(Number(id));
   if (!universeData) notFound();
 
-  const { characters, error: charactersError } = await fetchCharactersByUniverseId(Number(id));
+  const { characters, error: charactersError } =
+    await fetchCharactersByUniverseId(Number(id));
   if (charactersError) {
     console.error("Error fetching characters:", charactersError);
   }
@@ -56,7 +60,7 @@ export default async function UniversePage({
   const supabase = createClient();
   const currentUser = await supabase.auth.getUser();
   const profile = await fetchProfileBySlug(slug);
-  
+
   if (!profile) notFound();
 
   const isMyProfile = profile.user_id === currentUser?.data.user?.id;

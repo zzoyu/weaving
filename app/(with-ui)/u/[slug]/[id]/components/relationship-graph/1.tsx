@@ -2,10 +2,11 @@
 
 import { Character } from "@/types/character";
 import {
-    ERelationshipType,
-    RelationshipNode,
-    relationshipTypeData,
+  ERelationshipType,
+  RelationshipNode,
+  relationshipTypeData,
 } from "@/types/relationship";
+import { getPublicUrl } from "@/utils/image";
 import * as d3 from "d3";
 import { useEffect, useMemo, useRef } from "react";
 
@@ -18,8 +19,6 @@ export default function RelationshipGraph1({
   relationships: RelationshipNode[];
   isMine?: boolean;
 }) {
-  
-
   const svgRef = useRef<SVGSVGElement>(null);
 
   const width = 600;
@@ -120,7 +119,7 @@ export default function RelationshipGraph1({
 
     target
       .append("image")
-      .attr("xlink:href", relationship.thumbnail || "")
+      .attr("xlink:href", getPublicUrl(relationship.thumbnail) || "")
       .attr("width", r * 2)
       .attr("height", r * 2)
       .attr("x", node.x - r)
@@ -210,7 +209,7 @@ export default function RelationshipGraph1({
 
     svg
       .append("image")
-      .attr("xlink:href", character.thumbnail || "")
+      .attr("xlink:href", getPublicUrl(character.thumbnail) || "")
       .attr("width", r * 2)
       .attr("height", r * 2)
       .attr("x", originX - r)

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { CharacterWithProfile, Property } from "@/types/character";
 import { Universe } from "@/types/universe";
+import { getPublicUrl } from "@/utils/image";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import UploadImage from "../../../add/components/upload-image/upload-image";
@@ -17,16 +18,22 @@ interface EditUniverseProps {
   onSubmit: (data: Universe) => Promise<void>;
 }
 
-export default function EditUniverse({ universe, characters, onSubmit }: EditUniverseProps) {
+export default function EditUniverse({
+  universe,
+  characters,
+  onSubmit,
+}: EditUniverseProps) {
   const { toast } = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hashtags, setHashtags] = useState<string>(universe.hashtags || "");
   const [currentHashtag, setCurrentHashtag] = useState<string>("");
-  const [listProperties, setListProperties] = useState<Property[]>(universe.properties || []);
-  const [characterUniverses, setCharacterUniverses] = useState<{ character_id: number }[]>(
-    characters.map(c => ({ character_id: c.id }))
+  const [listProperties, setListProperties] = useState<Property[]>(
+    universe.properties || []
   );
+  const [characterUniverses, setCharacterUniverses] = useState<
+    { character_id: number }[]
+  >(characters.map((c) => ({ character_id: c.id })));
 
   const previewHashtags = useMemo(() => {
     if (!hashtags) return [];
@@ -37,9 +44,9 @@ export default function EditUniverse({ universe, characters, onSubmit }: EditUni
   }, [hashtags]);
 
   const handleAddCharacter = (characterId: number) => {
-    setCharacterUniverses(prev => [
+    setCharacterUniverses((prev) => [
       ...prev,
-      { character_id: Number(characterId) }
+      { character_id: Number(characterId) },
     ]);
   };
 
@@ -51,8 +58,12 @@ export default function EditUniverse({ universe, characters, onSubmit }: EditUni
       const form = event.currentTarget;
       const formData = {
         ...universe,
-        name: (form.querySelector('input[name="name"]') as HTMLInputElement)?.value || "",
-        description: (form.querySelector('input[name="description"]') as HTMLInputElement)?.value || "",
+        name:
+          (form.querySelector('input[name="name"]') as HTMLInputElement)
+            ?.value || "",
+        description:
+          (form.querySelector('input[name="description"]') as HTMLInputElement)
+            ?.value || "",
         properties: listProperties,
         hashtags: hashtags,
         characterUniverses: characterUniverses,
@@ -65,7 +76,8 @@ export default function EditUniverse({ universe, characters, onSubmit }: EditUni
     } catch (error) {
       console.error("Error updating universe:", error);
       toast({
-        description: error instanceof Error ? error.message : "잠시 후 다시 시도해주세요.",
+        description:
+          error instanceof Error ? error.message : "잠시 후 다시 시도해주세요.",
         variant: "destructive",
       });
     } finally {
@@ -74,13 +86,16 @@ export default function EditUniverse({ universe, characters, onSubmit }: EditUni
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center w-full md:max-w-md p-4">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-4 items-center w-full md:max-w-md p-4"
+    >
       <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
-        <UploadImage 
-          name="universe" 
-          useThumbnail 
-          aspectRatio={16/9} 
-          imageUrl={universe.image?.[0]}
+        <UploadImage
+          name="universe"
+          useThumbnail
+          aspectRatio={16 / 9}
+          imageUrl={getPublicUrl(universe.image?.[0])}
         />
       </div>
 
@@ -114,19 +129,32 @@ export default function EditUniverse({ universe, characters, onSubmit }: EditUni
         <h2 className="text-xl font-bold mb-2">소속 캐릭터</h2>
         <div className="flex flex-col gap-2">
           {characterUniverses.length === 0 && (
-            <div className="text-muted-foreground text-sm text-center py-4">아직 추가된 캐릭터가 없습니다.</div>
+            <div className="text-muted-foreground text-sm text-center py-4">
+              아직 추가된 캐릭터가 없습니다.
+            </div>
           )}
           {characterUniverses.map((cu) => {
-            const character = characters.find((c) => Number(c.id) === Number(cu.character_id));
+            const character = characters.find(
+              (c) => Number(c.id) === Number(cu.character_id)
+            );
             return (
-              <div key={cu.character_id} className="flex items-center justify-between p-2 bg-background-muted rounded">
-                <span>{character ? character.name : `ID: ${cu.character_id}`}</span>
+              <div
+                key={cu.character_id}
+                className="flex items-center justify-between p-2 bg-background-muted rounded"
+              >
+                <span>
+                  {character ? character.name : `ID: ${cu.character_id}`}
+                </span>
                 <Button
                   variant="ghost"
                   size="sm"
                   type="button"
                   onClick={() => {
-                    setCharacterUniverses(characterUniverses.filter((c) => c.character_id !== cu.character_id));
+                    setCharacterUniverses(
+                      characterUniverses.filter(
+                        (c) => c.character_id !== cu.character_id
+                      )
+                    );
                   }}
                 >
                   ✕
@@ -165,8 +193,8 @@ export default function EditUniverse({ universe, characters, onSubmit }: EditUni
         />
       </div>
 
-      <Button 
-        type="submit" 
+      <Button
+        type="submit"
         disabled={isSubmitting}
         className="text-background-default bg-text-black rounded w-full text-xl p-2"
       >
@@ -174,4 +202,4 @@ export default function EditUniverse({ universe, characters, onSubmit }: EditUni
       </Button>
     </form>
   );
-} 
+}

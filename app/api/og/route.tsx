@@ -1,21 +1,23 @@
-import { ImageResponse } from 'next/og';
+import { getPublicUrl } from "@/utils/image";
+import Image from "next/image";
+import { ImageResponse } from "next/og";
 
-export const runtime = 'edge';
+export const runtime = "edge";
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const name = searchParams.get('name');
-    const description = searchParams.get('description');
-    const thumbnail = searchParams.get('thumbnail');
+    const name = searchParams.get("name");
+    const description = searchParams.get("description");
+    const thumbnail = searchParams.get("thumbnail");
 
     if (!thumbnail) {
-      return new Response('Thumbnail is required', { status: 400 });
+      return new Response("Thumbnail is required", { status: 400 });
     }
 
-    const imageRes = await fetch(thumbnail);
+    const imageRes = await fetch(getPublicUrl(thumbnail));
     if (!imageRes.ok) {
-      return new Response('Failed to load thumbnail', { status: 400 });
+      return new Response("Failed to load thumbnail", { status: 400 });
     }
     const imageBuffer = await imageRes.arrayBuffer();
 
@@ -23,50 +25,51 @@ export async function GET(request: Request) {
       (
         <div
           style={{
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'white',
-            padding: '8px 16px',
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "white",
+            padding: "8px 16px",
           }}
         >
           <div
             style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '24px',
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "24px",
             }}
           >
-            <img
+            <Image
               src={imageBuffer as any}
-              alt={name || ''}
+              unoptimized
+              alt={name || ""}
               style={{
-                width: '240px',
-                height: '240px',
-                objectFit: 'cover',
-                borderRadius: '8px',
+                width: "240px",
+                height: "240px",
+                objectFit: "cover",
+                borderRadius: "8px",
               }}
             />
             <div
               style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '16px',
-                maxWidth: '480px',
+                display: "flex",
+                flexDirection: "column",
+                gap: "16px",
+                maxWidth: "480px",
               }}
             >
               <h1
                 style={{
-                  fontSize: '48px',
-                  fontWeight: 'bold',
-                  color: '#1a1a1a',
+                  fontSize: "48px",
+                  fontWeight: "bold",
+                  color: "#1a1a1a",
                   margin: 0,
-                  lineHeight: '1.2',
+                  lineHeight: "1.2",
                 }}
               >
                 {name}
@@ -74,10 +77,10 @@ export async function GET(request: Request) {
               {description && (
                 <p
                   style={{
-                    fontSize: '28px',
-                    color: '#666666',
+                    fontSize: "28px",
+                    color: "#666666",
                     margin: 0,
-                    lineHeight: '1.4',
+                    lineHeight: "1.4",
                   }}
                 >
                   {description}
@@ -90,12 +93,11 @@ export async function GET(request: Request) {
       {
         width: 800,
         height: 400,
-      },
+      }
     );
   } catch (e: unknown) {
-    
     return new Response(`Failed to generate the image`, {
       status: 500,
     });
   }
-} 
+}
