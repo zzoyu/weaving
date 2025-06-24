@@ -1,7 +1,7 @@
-import { createClient } from "@/utils/supabase/server";
 import { fetchProfileByUserId } from "@/app/profile/actions";
+import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
-import { createProfile } from "./actions";
+import ProfileCreateForm from "./profile-create-form";
 
 export default async function ProfileCreatePage() {
   const supabase = createClient();
@@ -25,25 +25,7 @@ export default async function ProfileCreatePage() {
     <main className="flex flex-col justify-center items-center pt-16 gap-16">
       <h2>프로필 작성하기</h2>
       <p className="text-center text-gray-500">프로필을 작성해주세요.</p>
-      <form className="flex flex-col" action={createProfile}>
-        <input hidden type="text" name="user_id" value={data.user.id} />
-        <input
-          hidden
-          type="text"
-          name="profile_url"
-          value={(data.user.user_metadata as TwitterMetadata).avatar_url}
-        />
-        <label htmlFor="name">이름</label>
-        <input
-          type="text"
-          name="nickname"
-          required
-          className="bg-transparent"
-        />
-        <label htmlFor="slug">접근 주소</label>
-        <input type="text" name="slug" required className="bg-transparent" />
-        <button type="submit">작성하기</button>
-      </form>
+      <ProfileCreateForm user={data.user} />
     </main>
   );
 }
