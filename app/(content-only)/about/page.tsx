@@ -79,7 +79,7 @@ export default function WeavingLanding() {
         "네, 현재 누구나 무료로 이용하실 수 있습니다.\n각 30개의 캐릭터 프로필 슬롯과 세계관 슬롯을 기본 제공합니다.\n향후 더 많은 슬롯이나 고급 기능이 필요한 경우, 유료 플랜을 통해 확장하실 수 있도록 준비 중입니다.",
     },
     {
-      question: "등록한 캐릭터를 비공개로 설정할 수 있나요?",
+      question: "캐릭터를 비공개로 등록할 수 있나요?",
       answer:
         "가능합니다.\n모든 캐릭터는 공개 여부를 개별 설정하실 수 있으며, 비밀글 기능을 통해 특정 사용자에게만 공유할 수 있는 옵션도 제공됩니다.",
     },
@@ -347,7 +347,7 @@ export default function WeavingLanding() {
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-10">
               여러분의 특별한 세상을
               <br />
-              위빙에서 공유해보세요.
+              위빙에서 공유해보세요
             </h2>
 
             <Button
