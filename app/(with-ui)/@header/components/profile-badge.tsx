@@ -18,8 +18,9 @@ export default function ProfileBadge({
       {(notifications?.length || 0) > 0 && (
         <div className="absolute top-0.5 right-0.5 z-10 w-2.5 h-2.5 bg-red-500 rounded-full"></div>
       )}
-      <AvatarImage src={profile?.profile_image || ""} alt="프로필 이미지" />
-      <Skeleton className="h-full w-full rounded-full" />
+      <Skeleton className="h-full w-full rounded-full">
+        <AvatarImage src={profile?.profile_image || ""} alt="프로필 이미지" />
+      </Skeleton>
     </Avatar>
   );
 }
