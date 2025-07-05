@@ -69,6 +69,10 @@ export default function UniverseAddTemplate({
       // 이미지 관련 필드는 UploadImage 컴포넌트에서 자동으로 추가됨
       const imageFile = form["universe-image"] as HTMLInputElement;
       const thumbnailFile = form["universe-thumbnail"] as HTMLInputElement;
+
+      console.log(imageFile);
+      console.log(thumbnailFile);
+
       if (imageFile?.files?.[0]) {
         formData.append("universe-image", imageFile.files[0]);
       }
