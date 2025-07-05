@@ -97,7 +97,7 @@ export default function MainMenu() {
           <Link href="/privacy">개인정보보호정책</Link>
         </li>
         <li className="pl-1">
-          <Link href="/guideline">컨텐츠가이드라인</Link>
+          <Link href="/guideline">콘텐츠가이드라인</Link>
         </li>
       </ul>
     </div>
