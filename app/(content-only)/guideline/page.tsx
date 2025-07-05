@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "컨텐츠 가이드라인",
-  description: "컨텐츠 가이드라인",
+  title: "콘텐츠 가이드라인",
+  description: "콘텐츠 가이드라인",
 };
 
 export default function GuidelinePage() {

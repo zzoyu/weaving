@@ -23,8 +23,8 @@ export function ListRelationship({
   const [isOpened, setIsOpened] = useState(false);
 
   return (
-    <div className="flex flex-col">
-      <h2 className="mb-6 font-bold px-10">관계 인물</h2>
+    <div className="flex flex-col px-10 ">
+      <h2 className="text-lg font-bold mb-4">관계 인물</h2>
       <div className="grid grid-cols-3 gap-4">
         {(!isOpened ? relationships.slice(0, 3) : relationships).map(
           (relationship) => {
@@ -89,7 +89,7 @@ export function ListRelationship({
       </div>
       {relationships.length > 3 && (
         <button
-          className="w-full text-right p-2 mt-2 text-gray-600"
+          className="w-full text-right p-2 mt-2 text-gray-600 text-sm"
           onClick={() => setIsOpened(!isOpened)}
         >
           {isOpened ? "▲ 접기" : "▼ 더보기"}
