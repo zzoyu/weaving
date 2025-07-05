@@ -91,8 +91,8 @@ export default async function PublicProfilePage({
   favoriteCharacters = await fetchFavoriteCharactersByProfileId(data.id);
 
   return (
-    <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-[3.75rem] min-h-fit relative">
-      <div className="flex flex-col items-center justify-start my-10 ">
+    <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-20 min-h-fit relative">
+      <div className="flex flex-col items-center justify-start my-10">
         {!isMine && myProfile && (
           <ButtonRequestFriend
             isMine={isMine}

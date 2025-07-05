@@ -5,6 +5,11 @@ export function getPublicUrl(fileName?: string): string {
     return "";
   }
 
+  // 파일이 Blob인 경우
+  if (fileName.startsWith("blob:")) {
+    return fileName;
+  }
+
   // 파일 이름이 절대경로 시작하면 그대로 반환
   if (fileName.startsWith("http://") || fileName.startsWith("https://")) {
     return fileName;

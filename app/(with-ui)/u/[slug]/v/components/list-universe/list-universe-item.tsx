@@ -1,6 +1,7 @@
 "use client";
 
 import { Universe } from "@/types/universe";
+import { getPublicUrl } from "@/utils/image";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,8 +23,9 @@ export default function ListUniverseItem({
         )}
       >
         <div className="w-full aspect-[16/9] relative">
-          <Image unoptimized 
-            src={universe.thumbnail || universe?.image?.[0] || ""}
+          <Image
+            unoptimized
+            src={getPublicUrl(universe.thumbnail || universe?.image?.[0] || "")}
             alt={universe.name}
             fill
             className="object-cover rounded-md"
@@ -35,4 +37,4 @@ export default function ListUniverseItem({
       </div>
     </Link>
   );
-} 
+}
