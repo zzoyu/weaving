@@ -35,7 +35,9 @@ export default function MainMenu() {
     });
 
     // 세션 상태 변경 구독
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN" || event === "USER_UPDATED") {
         if (session) {
           setIsSignedIn(true);
@@ -93,6 +95,9 @@ export default function MainMenu() {
         </li>
         <li className="pl-1">
           <Link href="/privacy">개인정보보호정책</Link>
+        </li>
+        <li className="pl-1">
+          <Link href="/guideline">컨텐츠가이드라인</Link>
         </li>
       </ul>
     </div>
