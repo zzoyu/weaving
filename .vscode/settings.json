@@ -5,5 +5,5 @@
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit"
   },
-  "conventionalCommits.scopes": ["content"]
+  "conventionalCommits.scopes": ["content", "BUG"]
 }
