@@ -33,7 +33,7 @@ export default function MypageTemplate({ profile }: { profile: Profile }) {
         </Link>
         <Separator className="mx-2" orientation="vertical" />
         <Link href="/guideline" className="text-xs text-gray-500">
-          컨텐츠가이드라인
+          콘텐츠가이드라인
         </Link>
       </div>
 
