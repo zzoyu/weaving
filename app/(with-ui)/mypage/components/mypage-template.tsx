@@ -24,12 +24,16 @@ export default function MypageTemplate({ profile }: { profile: Profile }) {
       </section>
 
       <div className="flex flex-row items-center justify-center w-full max-w-md p-4">
-        <Link href="/term" className="text-sm text-gray-500">
+        <Link href="/term" className="text-xs text-gray-500">
           이용약관
         </Link>
         <Separator className="mx-2" orientation="vertical" />
-        <Link href="/privacy" className="text-sm text-gray-500">
+        <Link href="/privacy" className="text-xs text-gray-500">
           개인정보처리방침
+        </Link>
+        <Separator className="mx-2" orientation="vertical" />
+        <Link href="/guideline" className="text-xs text-gray-500">
+          컨텐츠가이드라인
         </Link>
       </div>
 
