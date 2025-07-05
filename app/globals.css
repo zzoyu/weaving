@@ -6,7 +6,7 @@
 
 @layer base {
   h1 {
-    @apply text-4xl font-poiret-one text-black dark:text-white;
+    @apply text-4xl font-pretendard text-black dark:text-white ;
   }
   h2 {
     @apply text-xl font-pretendard text-black dark:text-white;
