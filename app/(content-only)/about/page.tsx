@@ -1,553 +1,378 @@
 "use client";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  ChevronDown,
+  FolderCheckIcon,
+  Search,
+  Share2,
+  Users,
+} from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useState } from "react";
 
-const carouselImages = [
-  "/assets/images/about/b3-4-1.png",
-  "/assets/images/about/b3-4-2.png",
-  "/assets/images/about/b3-4-3.png",
-  "/assets/images/about/b3-4-4.png",
-  "/assets/images/about/b3-4-5.png",
-  "/assets/images/about/b3-4-6.png",
-];
+export default function WeavingLanding() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeFeature, setActiveFeature] = useState(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-const relationshipImages = [
-  "/assets/images/about/b3-4-2-1.png",
-  "/assets/images/about/b3-4-2-2.png",
-  "/assets/images/about/b3-4-2-3.png",
-  "/assets/images/about/b3-4-2-4.png",
-  "/assets/images/about/b3-4-2-5.png",
-  "/assets/images/about/b3-4-2-6.png",
-];
-function CarouselCard1() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], ["0vh", "100vh"]);
+  const features = [
+    {
+      icon: <FolderCheckIcon className="w-8 h-8" />,
+      title: "캐릭터와 세계관 설정을\n한 곳에서 통합 관리",
+      description:
+        "블로그, 클라우드, 메모장에 흩어져 있던\n캐릭터, 세계관 관련 정보를\n위빙 안에서 한 번에 정리하고 관리해보세요.",
+      description_pc:
+        "블로그, 클라우드, 메모장에 흩어져 있던 캐릭터, 세계관 관련 정보를\n위빙 안에서 한 번에 정리하고 관리해보세요.",
+      image: "/assets/images/about/book-icon.png",
+    },
+    {
+      icon: <Search className="w-8 h-8" />,
+      title: "검색과 분류 기능으로 깔끔하게 정리",
+      description:
+        "테마색, 이름, 해시태그 기반으로\n캐릭터를 빠르게 검색할 수 있어\n프로필 수가 많아도 문제 없어요.",
+      description_pc:
+        "테마색, 이름, 해시태그 기반으로 캐릭터를 빠르게 검색할 수 있어\n프로필 수가 많아도 문제 없어요.",
+      image: "/assets/images/about/palette-icon.png",
+    },
+    {
+      icon: <Users className="w-8 h-8" />,
+      title: "관계도에서 만나보는 친구의 캐릭터",
+      description:
+        "팔로우한 친구의 캐릭터를 선택하여\n내 캐릭터와의 관계를 설정하고\n관계도 형태로 시각화할 수 있어요.",
+      description_pc:
+        "팔로우한 친구의 캐릭터를 선택하여 내 캐릭터와의 관계를 설정하고\n관계도 형태로 시각화할 수 있어요.",
+      image: "/assets/images/about/character-icon.png",
+    },
+    {
+      icon: <Share2 className="w-8 h-8" />,
+      title: "커미션이나 협업도 링크 하나로 해결",
+      description:
+        "사진과 주요 정보가 담긴 캐릭터 프로필 페이지를\n링크로 간편하게 전달할 수 있어요.",
+      description_pc:
+        "사진과 주요 정보가 담긴 캐릭터 프로필 페이지를\n링크로 간편하게 전달할 수 있어요.",
+      image: "/assets/images/about/share-icon.png",
+    },
+  ];
 
-  // 모바일에서 x 이동량을 줄이기 위한 함수
-  const getX = (i: number) => {
-    if (typeof window !== "undefined" && window.innerWidth < 640) {
-      return `${i * 20}px`;
-    }
-    return `${i * 40}px`;
-  };
+  const targetUsers = [
+    {
+      image: "/assets/images/about/book-icon.png",
+      title: "만화, 시나리오 작가 등\n서사 기반 창작자",
+    },
+    {
+      image: "/assets/images/about/palette-icon.png",
+      title: "캐릭터 정보를 시각화하는\n디자이너, 일러스트레이터",
+    },
+    {
+      image: "/assets/images/about/character-icon.png",
+      title: "오리지널 캐릭터를 만드는\n모든 크리에이터",
+    },
+  ];
+
+  const faqs = [
+    {
+      question: "위빙은 무료로 사용할 수 있나요?",
+      answer:
+        "네, 현재 누구나 무료로 이용하실 수 있습니다.\n각 30개의 캐릭터 프로필 슬롯과 세계관 슬롯을 기본 제공합니다.\n향후 더 많은 슬롯이나 고급 기능이 필요한 경우, 유료 플랜을 통해 확장하실 수 있도록 준비 중입니다.",
+    },
+    {
+      question: "등록한 캐릭터를 비공개로 설정할 수 있나요?",
+      answer:
+        "가능합니다.\n모든 캐릭터는 공개 여부를 개별 설정하실 수 있으며, 비밀글 기능을 통해 특정 사용자에게만 공유할 수 있는 옵션도 제공됩니다.",
+    },
+    {
+      question: "친구의 캐릭터와 관계도를 만들려면?",
+      answer:
+        "친구 신청을 통해 연결되면, 서로의 공개 캐릭터를 확인하고 캐릭터 간 관계도를 만들 수 있습니다.",
+    },
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveFeature((prev) => (prev + 1) % features.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <motion.div
-      ref={ref}
-      style={{ y }}
-      className="w-full h-full relative"
-      layoutId="carousel-card"
-    >
-      <motion.div className="w-full h-full flex flex-col items-center justify-center sticky">
-        {carouselImages.map((src, i) => {
-          return (
-            <motion.div
-              key={src}
-              className="absolute w-[50vw] max-w-[160px] h-[50vw] max-h-[160px] flex items-center justify-center sm:w-[160px] sm:h-[160px]"
-              initial={{ opacity: 0 }}
-              whileInView={{
-                opacity: 1,
-                x: getX(i),
-                transition: {
-                  duration: 0.6,
-                  delay: i * 0.2,
-                  ease: "easeOut",
-                },
-              }}
-              viewport={{ once: false, amount: 0.1 }}
-            >
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-cyan-50 font-pretendard">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-green-100">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
               <Image
-                src={src}
-                alt={`carousel-${i}`}
-                width={160}
-                height={160}
-                className="object-contain rounded-xl"
+                src="/assets/logos/logo_text_horizontal_color.svg"
+                alt="weaving"
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="object-contain w-[120px] md:w-[200px]"
               />
-            </motion.div>
-          );
-        })}
-      </motion.div>
-    </motion.div>
-  );
-}
-
-function CarouselCard2() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-
-  // 모바일에서 x 이동량을 줄이기 위한 함수
-  const getX = (i: number, offset: number = 0) => {
-    if (typeof window !== "undefined" && window.innerWidth < 640) {
-      return `${i * 20 + offset}px`;
-    }
-    return `${i * 40 + offset}px`;
-  };
-
-  return (
-    <motion.div ref={ref} className="w-full h-full" layoutId="carousel-card">
-      <div className="w-full h-full flex flex-col items-center justify-center">
-        {carouselImages.map((src, i) => {
-          return (
-            <motion.div
-              key={src}
-              className="absolute w-[50vw] max-w-[160px] h-[50vw] max-h-[160px] flex items-center justify-center sm:w-[160px] sm:h-[160px]"
-              initial={{ opacity: 1, x: getX(i), y: 0 }}
-              whileInView={
-                i % 2 === 0
-                  ? {
-                      x: getX(i, -100),
-                      y: 0,
-                      opacity: 0,
-                      transition: {
-                        duration: 0.6,
-                        delay: i * 0.2,
-                        ease: "easeOut",
-                      },
-                    }
-                  : {
-                      x: getX(i),
-                      y: 0,
-                      opacity: 1,
-                    }
-              }
-              viewport={{ once: false, amount: 0.1 }}
-            >
-              <Image
-                src={src}
-                alt={`carousel-${i}`}
-                width={160}
-                height={160}
-                className="object-contain rounded-xl"
-              />
-            </motion.div>
-          );
-        })}
-      </div>
-    </motion.div>
-  );
-}
-
-function calculatePosition(i: number) {
-  const angle = (i * 360) / relationshipImages.length;
-  const x = Math.cos((angle * Math.PI) / 180) * 100;
-  const y = Math.sin((angle * Math.PI) / 180) * 100;
-  return { x, y };
-}
-
-function RelationshipCard() {
-  return (
-    <div className="w-20 h-20 rounded-full bg-background-muted object-cover object-bottom flex items-center justify-center overflow-visible">
-      <motion.div
-        className="w-20 h-20 rounded-full bg-background-muted object-cover object-bottom overflow-hidden flex items-center justify-center"
-        initial={{ opacity: 0, y: 0, x: 0, scale: 0.8, rotate: 0, z: 999 }}
-        whileInView={{ opacity: 1, y: 0, x: 0, scale: 1.2, rotate: 0, z: 999 }}
-        viewport={{ once: false, amount: 0.3 }}
-        transition={{
-          duration: 0.8,
-          ease: "easeInOut",
-          animation: {
-            type: "spring",
-          },
-        }}
-      >
-        <Image
-          src="/assets/images/about/b3-4-2-1.png"
-          alt="creator-1"
-          width={100}
-          height={100}
-          className="mb-2"
-        />
-      </motion.div>
-      {relationshipImages.map((src, i) => {
-        if (i === 0) return null;
-        const { x, y } = calculatePosition(i);
-        return (
-          <motion.div
-            key={src}
-            className="absolute w-20 h-20 rounded-full bg-background-muted object-cover object-bottom overflow-hidden flex items-center justify-center"
-            initial={{
-              opacity: 0,
-              y: 0,
-              x: 0,
-              scale: 0.8,
-              rotate: 0,
-              rotateX: 0,
-              rotateY: 0,
-            }}
-            whileInView={{
-              opacity: 1,
-              y,
-              x,
-              scale: 1,
-              rotate: 0,
-              rotateX: 0,
-              rotateY: 0,
-              transition: {
-                duration: 0.4 + i * 0.2,
-                ease: "easeInOut",
-                delay: i * 0.2,
-              },
-            }}
-            viewport={{ once: false, amount: 0.3 }}
-          >
-            <Image
-              src={src}
-              alt={`relationship-${i}`}
-              width={100}
-              height={100}
-              className="absolute w-20 h-20 rounded-full bg-background-muted object-cover object-bottom overflow-hidden flex items-center justify-center"
-            />
-          </motion.div>
-        );
-      })}
-    </div>
-  );
-}
-
-function ParallaxSection() {
-  return (
-    <div className="w-full py-40 relative mb-40">
-      <motion.div
-        className="flex gap-40 items-center mb-96 relative z-10 w-full flex-col md:flex-row justify-center md:justify-between"
-        initial={{ opacity: 0, y: 100, x: 0 }}
-        whileInView={{ opacity: 1, y: 0, x: 0 }}
-        viewport={{ once: false, amount: 0.3 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
-        <div className="flex flex-col flex-1">
-          <h3 className="text-left mb-2 font-bold text-sm">
-            캐릭터와 세계관 설정을
-            <br />한 곳에서 통합 관리
-          </h3>
-          <p className="text-text-dark text-sm">
-            블로그, 클라우드, 메모장에 흩어져 있던 캐릭터·세계관·관계도를 위빙
-            안에서 한 번에 정리하고 관리해보세요.
-          </p>
-        </div>
-        <div className="flex flex-col flex-1 items-center justify-center w-full h-full relative">
-          <div className="sticky w-full h-full top-0 left-0">
-            <CarouselCard1 />
+            </div>
           </div>
         </div>
-      </motion.div>
+      </header>
 
-      <motion.div
-        className="flex gap-40 items-center mb-96 relative z-10 w-full flex-col md:flex-row justify-center md:justify-between"
-        initial={{ opacity: 0, y: 100 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.3 }}
-        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-      >
-        <div className="flex flex-col flex-1 items-center justify-center">
-          <CarouselCard2 />
-        </div>
-        <div className="flex flex-col flex-1">
-          <h3 className="text-left mb-2 font-bold text-sm">
-            검색과 분류 기능으로 깔끔하게 정리
-          </h3>
-          <p className="text-text-dark text-sm">
-            테마색, 이름, 해시태그 기반으로 캐릭터를 정렬·검색할 수 있어 프로필
-            수가 많아도 문제 없어요.
-          </p>
-        </div>
-      </motion.div>
+      {/* Hero Section */}
+      <section className="py-12 md:py-20 lg:py-24">
+        <div className="container mx-auto px-4 text-center">
+          <div className="max-w-4xl mx-auto">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
+              창작자를 위한
+              <br />
+              <span className="bg-gradient-to-r from-[#97E6AB] to-[#68E7FA] bg-clip-text font-extrabold text-transparent">
+                캐릭터 & 세계관 관리 플랫폼
+              </span>
+            </h1>
 
-      <motion.div
-        className="flex gap-40 items-center mb-96 relative z-10 w-full flex-col md:flex-row justify-center md:justify-between"
-        initial={{ opacity: 0, y: 100 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.3 }}
-        transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
-      >
-        <div className="flex flex-col flex-1">
-          <h3 className="text-left mb-2 font-bold text-sm">
-            관계도에서 만나보는 친구의 캐릭터
-          </h3>
-          <p className="text-text-dark text-sm">
-            팔로우한 친구의 캐릭터를 선택하여 내 캐릭터와의 관계를 설정하고,
-            관계도 형태로 시각화할 수 있어요.
-          </p>
-        </div>
-        <div className="flex flex-1 items-center justify-center">
-          <RelationshipCard />
-        </div>
-      </motion.div>
+            <p className="text-base md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+              지금, 당신만의 캐릭터와 세계관을{" "}
+              <br className="block md:hidden" />
+              정리하고 연결해보세요.
+            </p>
 
-      <motion.div
-        className="flex flex-1 gap-4"
-        initial={{ opacity: 0, y: 100 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.3 }}
-        transition={{
-          duration: 0.8,
-          ease: "easeOut",
-          staggerChildren: 0.2,
-          delay: 0.6,
-        }}
-      >
-        <div className="flex flex-col flex-1"></div>
-        <div className="flex flex-col flex-1">
-          <h3 className="text-left mb-2 font-bold text-sm">
-            커미션이나 협업도 링크 하나로 해결
-          </h3>
-          <p className="text-text-dark text-sm">
-            사진과 주요 정보가 담긴 캐릭터 프로필 페이지를 링크로 간편하게
-            전달할 수 있어요.
-          </p>
-        </div>
-      </motion.div>
-    </div>
-  );
-}
-
-export default function AboutPage() {
-  const fadeInUp = {
-    initial: { opacity: 0, y: 40 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -40 },
-    transition: { duration: 0.7, ease: "easeOut" },
-  };
-  const fadeIn = {
-    initial: { opacity: 0 },
-    animate: { opacity: 1 },
-    exit: { opacity: 0 },
-    transition: { duration: 0.7, ease: "easeOut" },
-  };
-  const scaleIn = {
-    initial: { opacity: 0, scale: 0.92 },
-    animate: { opacity: 1, scale: 1 },
-    exit: { opacity: 0, scale: 0.92 },
-    transition: { duration: 0.7, ease: "easeOut" },
-  };
-  const staggerContainer = {
-    initial: {},
-    animate: { transition: { staggerChildren: 0.15 } },
-  };
-
-  return (
-    <div className="h-dvh overflow-y-scroll scroll-smooth w-full">
-      <article className="flex flex-col gap-4 px-4 max-w-3xl mx-auto md:px-8 w-full">
-        <motion.div
-          className="flex flex-col items-center w-full h-dvh justify-center"
-          variants={fadeIn}
-          initial="initial"
-          animate="animate"
-          transition={{ duration: 1 }}
-        >
-          <motion.h1
-            className="text-center font-black text-2xl mb-4"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            창작자를 위한
-            <br />
-            캐릭터 & 세계관 관리 플랫폼
-          </motion.h1>
-          <motion.p
-            className="text-center text-text-dark mb-7 text-sm"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            지금, 당신만의 캐릭터와 세계관을 정리하고 연결해보세요.
-          </motion.p>
-          <motion.div
-            variants={scaleIn}
-            initial="initial"
-            animate="animate"
-            transition={{ duration: 0.6, delay: 0.6 }}
-            whileHover={{
-              scale: 1.07,
-              boxShadow: "0 4px 24px rgba(0,0,0,0.12)",
-            }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <Button className="py-2.5 px-9 rounded-full" asChild>
-              <Link href="/">위빙 시작하기</Link>
+            <Button
+              size="lg"
+              className="bg-gradient-to-r from-[#97E6AB] to-[#68E7FA] hover:from-[#97E6AB] hover:to-[#68E7FA] text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            >
+              위빙 시작하기
             </Button>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
+      </section>
 
-        <motion.div
-          className="w-full h-dvh flex flex-col justify-center mb-40"
-          variants={staggerContainer}
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: false, amount: 0.3 }}
-        >
-          <motion.h2
-            className="text-left mb-4 font-extrabold text-lg"
-            variants={fadeInUp}
-          >
-            모든 창작자를 위해
-          </motion.h2>
-          <motion.ul
-            className="flex flex-col gap-4 justify-between md:flex-row w-full items-center mb-40"
-            variants={staggerContainer}
-          >
-            {[0, 1, 2].map((i, index) => (
-              <motion.li
-                key={i}
-                className="flex flex-col items-center justify-center gap-2 w-2/3 bg-background-muted rounded-lg p-4 shadow-md"
-                variants={fadeInUp}
-                custom={index}
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
-                }}
-                initial="initial"
-                whileInView="animate"
-                exit="exit"
-                transition={{
-                  duration: 0.7,
-                  ease: "easeOut",
-                  delay: index * 0.4,
-                }}
-                viewport={{ once: false, amount: 0.5 }}
+      {/* Target Users Section */}
+      <section id="users" className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              모든 창작자를 위해
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            {targetUsers.map((user, index) => (
+              <Card
+                key={index}
+                className="text-center p-6 hover:shadow-lg transition-shadow duration-300 border-0 bg-gradient-to-br from-gray-50 to-white"
               >
-                <Image
-                  src={`/assets/images/about/b2_${i + 1}.png`}
-                  alt={`creator-${i + 1}`}
-                  width={100}
-                  height={100}
-                />
-                <p className="text-xs text-center">
-                  {i === 0 && (
-                    <>
-                      만화, 시나리오 작가 등<br />
-                      서사 기반 창작자
-                    </>
-                  )}
-                  {i === 1 && (
-                    <>
-                      캐릭터 정보를 시각화하는
-                      <br />
-                      디자이너, 일러스트레이터
-                    </>
-                  )}
-                  {i === 2 && (
-                    <>
-                      오리지널 캐릭터를 만드는
-                      <br />
-                      모든 크리에이터
-                    </>
-                  )}
-                </p>
-              </motion.li>
+                <CardContent className="pt-6">
+                  <div className="mb-4 flex justify-center">
+                    <Image
+                      priority
+                      unoptimized
+                      src={user.image}
+                      alt={user.title}
+                      width={128}
+                      height={128}
+                      className="object-contain"
+                    />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 mb-2 whitespace-pre-line">
+                    {user.title}
+                  </h3>
+                </CardContent>
+              </Card>
             ))}
-          </motion.ul>
-        </motion.div>
+          </div>
+        </div>
+      </section>
 
-        <ParallaxSection />
+      {/* Features Section */}
+      <section
+        id="features"
+        className="py-16 bg-gradient-to-br from-green-50 to-cyan-50"
+      >
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              흩어지지 않게, 연결되게
+            </h2>
+            <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
+              서사를 만들다 보면 자꾸 흩어지는 정보들,{" "}
+              <br className="block md:hidden" />
+              위빙에서 정리하세요.
+            </p>
+          </div>
 
-        <motion.div
-          className="w-full h-dvh flex flex-col gap-4 justify-center mb-40"
-          variants={staggerContainer}
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: false, amount: 0.3 }}
-        >
-          <motion.h2
-            className="text-left mb-2 font-extrabold text-lg"
-            variants={fadeInUp}
-          >
-            흩어지지 않게, 연결되게
-          </motion.h2>
-          <motion.p className="text-text-dark text-sm mb-4" variants={fadeInUp}>
-            서사를 만들다 보면 자꾸 흩어지는 정보들, 위빙에서 정리하세요.
-          </motion.p>
-        </motion.div>
+          <div className="max-w-6xl mx-auto">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className={`flex flex-col lg:flex-row items-center gap-8 mb-16 ${
+                  index % 2 === 1 ? "lg:flex-row-reverse" : ""
+                }`}
+              >
+                <div className="flex-1 text-center lg:text-left">
+                  <div className="mb-4 flex justify-center lg:justify-start">
+                    <div className="p-3 bg-white rounded-full shadow-md">
+                      {feature.icon}
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4 whitespace-pre-line md:whitespace-normal">
+                    {feature.title}
+                  </h3>
+                  {feature.description_pc ? (
+                    <>
+                      <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-line md:block hidden">
+                        {feature.description_pc}
+                      </p>
+                      <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-line block md:hidden">
+                        {feature.description}
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-line md:whitespace-normal">
+                      {feature.description}
+                    </p>
+                  )}
+                </div>
 
-        <motion.div
-          className="w-full h-dvh flex flex-col gap-4 justify-center items-center mb-40 mt-40"
-          variants={staggerContainer}
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: false, amount: 0.3 }}
-        >
-          <motion.h2
-            className="text-left mb-20 font-extrabold text-lg"
-            variants={fadeInUp}
-          >
-            여러분의 특별한 세상을 위빙에서 공유해보세요.
-          </motion.h2>
-          <motion.h2
-            className="text-left mb-2 font-extrabold text-lg place-self-start"
-            variants={fadeInUp}
-          >
-            FAQ
-          </motion.h2>
-          <motion.div
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            className="w-full"
-          >
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="item-1">
-                <AccordionTrigger>
-                  Q. 위빙은 무료로 사용할 수 있나요?
-                </AccordionTrigger>
-                <AccordionContent>
-                  A. 네, 현재 누구나 무료로 이용하실 수 있습니다. <br />
-                  각 30개의 캐릭터 프로필 슬롯과 세계관 슬롯을 기본 제공합니다.
-                  <br />
-                  향후 더 많은 슬롯이나 고급 기능이 필요한 경우, 유료 플랜을
-                  통해 확장하실 수 있도록 준비 중입니다.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-2">
-                <AccordionTrigger>
-                  Q. 등록한 캐릭터를 비공개로 설정할 수 있나요?
-                </AccordionTrigger>
-                <AccordionContent>
-                  A. 가능합니다. 모든 캐릭터는 공개 여부를 개별 설정하실 수
-                  있으며, <br />
-                  비밀글 기능을 통해 특정 사용자에게만 공유할 수 있는 옵션도
-                  제공됩니다.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-3">
-                <AccordionTrigger>
-                  Q. 관계도에 친구 캐릭터를 추가하려면 어떻게 하나요?
-                </AccordionTrigger>
-                <AccordionContent>
-                  A. 친구 신청을 통해 연결되면, 서로의 공개 캐릭터를 확인하고
-                  캐릭터 간 관계도를 만들 수 있습니다.
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </motion.div>
-        </motion.div>
-        <Button
-          className="w-full max-w-md mx-auto mb-20"
-          variant={"link"}
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        >
-          맨 위로 가기
-        </Button>
-      </article>
+                <div className="flex-1 flex justify-center">
+                  <div className="relative">
+                    {/* 스마트폰 목업 */}
+                    <div className="w-full h-full">
+                      {/* 앱 콘텐츠 */}
+                      <div className="p-4 h-full bg-gradient-to-br from-green-50 to-cyan-50">
+                        {index === 0 && (
+                          <Image
+                            unoptimized
+                            src="/assets/images/about/mockup-list.png"
+                            alt="list"
+                            width={0}
+                            height={0}
+                            sizes="100vw"
+                            className="object-contain w-3/4 h-full mx-auto ml-[17%] md:ml-0"
+                          />
+                        )}
+
+                        {index === 1 && (
+                          <Image
+                            unoptimized
+                            src="/assets/images/about/mockup-filter.png"
+                            alt="filter"
+                            width={0}
+                            height={0}
+                            sizes="100vw"
+                            className="object-contain w-4/5 h-full mx-auto ml-[15%] md:ml-0"
+                          />
+                        )}
+
+                        {index === 2 && (
+                          <Image
+                            unoptimized
+                            src="/assets/images/about/mockup-relationships.png"
+                            alt="relationships"
+                            width={0}
+                            height={0}
+                            className="object-contain w-full h-full ml-[3%] md:ml-0"
+                          />
+                        )}
+
+                        {index === 3 && (
+                          <Image
+                            unoptimized
+                            src="/assets/images/about/mockup-og.png"
+                            alt="opengraph"
+                            width={0}
+                            height={0}
+                            className="object-contain w-full h-full ml-[5%] md:ml-0"
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section
+        id="faq"
+        className="py-16 bg-gradient-to-br from-gray-50 to-white"
+      >
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-12">
+              FAQ
+            </h2>
+
+            <div className="space-y-4">
+              {faqs.map((faq, index) => (
+                <Card key={index} className="border-0 shadow-sm">
+                  <CardContent className="p-0">
+                    <button
+                      className="w-full p-6 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
+                      onClick={() =>
+                        setOpenFaq(openFaq === index ? null : index)
+                      }
+                    >
+                      <span className="font-semibold text-gray-900 pr-4">
+                        Q. {faq.question}
+                      </span>
+                      <ChevronDown
+                        className={`w-5 h-5 text-gray-500 transition-transform ${
+                          openFaq === index ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {openFaq === index && (
+                      <div className="px-6 pb-6">
+                        <p className="text-gray-600 leading-relaxed whitespace-pre-line">
+                          A. {faq.answer}
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 bg-gradient-to-r from-[#97E6AB] to-[#68E7FA]">
+        <div className="container mx-auto px-4 text-center">
+          <div className="max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-10">
+              여러분의 특별한 세상을
+              <br />
+              위빙에서 공유해보세요.
+            </h2>
+
+            <Button
+              size="lg"
+              className="bg-white text-green-600 hover:bg-gray-100 px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            >
+              위빙 시작하기
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-8 bg-gray-900 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <Image
+              src="/assets/logos/logo_text_horizontal_color_white.svg"
+              alt="weaving"
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="object-contain w-[100px]"
+            />
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
