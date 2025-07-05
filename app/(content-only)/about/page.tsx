@@ -10,6 +10,7 @@ import {
   Users,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function WeavingLanding() {
@@ -137,8 +138,9 @@ export default function WeavingLanding() {
             <Button
               size="lg"
               className="bg-gradient-to-r from-[#97E6AB] to-[#68E7FA] hover:from-[#97E6AB] hover:to-[#68E7FA] text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              asChild
             >
-              위빙 시작하기
+              <Link href="/">위빙 시작하기</Link>
             </Button>
           </div>
         </div>
@@ -351,8 +353,9 @@ export default function WeavingLanding() {
             <Button
               size="lg"
               className="bg-white text-green-600 hover:bg-gray-100 px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              asChild
             >
-              위빙 시작하기
+              <Link href="/">위빙 시작하기</Link>
             </Button>
           </div>
         </div>
