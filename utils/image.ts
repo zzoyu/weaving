@@ -1,5 +1,5 @@
 export function getPublicUrl(fileName?: string): string {
-  const OCI_READ_URL = process.env.OCI_READ_URL;
+  const OCI_READ_URL = process.env.NEXT_PUBLIC_OCI_READ_URL;
   // 파일 이름이 없으면 빈 문자열 반환
   if (!fileName || fileName.trim() === "") {
     return "";
