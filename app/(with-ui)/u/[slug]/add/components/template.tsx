@@ -5,6 +5,7 @@ import { ColorProperties } from "@/app/components/properties/color-properties";
 import ListProperties from "@/app/components/properties/list-properties";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { useUnsavedChangesWarning } from "@/hooks/use-unsaved-changes-warning";
 import { baseProperties } from "@/lib/base-properties";
 import IconFull from "@/public/assets/icons/image/full.svg";
 import IconHalf from "@/public/assets/icons/image/half.svg";
@@ -92,7 +93,7 @@ export default function CharacterAddTemplate({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
     setValue,
     watch,
   } = useForm({
@@ -105,6 +106,8 @@ export default function CharacterAddTemplate({
     },
   });
 
+  useUnsavedChangesWarning(isDirty);
+
   return (
     <form
       className="flex flex-col gap-2 items-center w-full md:max-w-md p-4"
@@ -114,7 +117,6 @@ export default function CharacterAddTemplate({
           const formData = new FormData();
           Object.entries(data).forEach(([key, value]) => {
             if (value instanceof File) {
-              
               formData.append(key, value);
             } else if (typeof value === "string") {
               formData.append(key, value);
@@ -127,20 +129,23 @@ export default function CharacterAddTemplate({
           formData.append("profile_id", profileId.toString());
 
           // Add image files from UploadImage component
-          const halfImageInput = document.querySelector('input[name="half-image"]') as HTMLInputElement;
-          const fullImageInput = document.querySelector('input[name="full-image"]') as HTMLInputElement;
-          const halfThumbnailInput = document.querySelector('input[name="half-thumbnail"]') as HTMLInputElement;
+          const halfImageInput = document.querySelector(
+            'input[name="half-image"]'
+          ) as HTMLInputElement;
+          const fullImageInput = document.querySelector(
+            'input[name="full-image"]'
+          ) as HTMLInputElement;
+          const halfThumbnailInput = document.querySelector(
+            'input[name="half-thumbnail"]'
+          ) as HTMLInputElement;
 
           if (halfImageInput?.files?.[0]) {
-            
             formData.append("half-image", halfImageInput.files[0]);
           }
           if (fullImageInput?.files?.[0]) {
-            
             formData.append("full-image", fullImageInput.files[0]);
           }
           if (halfThumbnailInput?.files?.[0]) {
-            
             formData.append("half-thumbnail", halfThumbnailInput.files[0]);
           }
 
@@ -159,7 +164,10 @@ export default function CharacterAddTemplate({
           }
         } catch (err) {
           toast({
-            description: err instanceof Error ? err.message : "캐릭터 생성에 실패했습니다.",
+            description:
+              err instanceof Error
+                ? err.message
+                : "캐릭터 생성에 실패했습니다.",
             variant: "destructive",
           });
         } finally {
@@ -202,7 +210,7 @@ export default function CharacterAddTemplate({
 
       <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
         <input
-          className="text-2xl w-full max-w-72 text-center border-primary focus:outline-none"
+          className="text-2xl w-full max-w-72 text-center border-primary focus:outline-none placeholder:text-gray-400 placeholder:text-base"
           type="text"
           {...register("name")}
           placeholder="이름"
@@ -213,11 +221,13 @@ export default function CharacterAddTemplate({
         <input
           type="text"
           {...register("description")}
-          className="text-xl w-full max-w-72 text-center border-primary focus:outline-none mb-4"
+          className="text-xl w-full max-w-72 text-center border-primary focus:outline-none mb-4 placeholder:text-gray-400 placeholder:text-sm"
           placeholder="캐릭터의 한 마디"
         />
         {errors.description && (
-          <span className="text-red-500 text-sm">{errors.description.message}</span>
+          <span className="text-red-500 text-sm">
+            {errors.description.message}
+          </span>
         )}
       </div>
 
@@ -256,8 +266,16 @@ export default function CharacterAddTemplate({
         }}
       />
 
-      <input type="hidden" {...register("properties")} value={JSON.stringify(combinedProperties)} />
-      <input type="hidden" {...register("relationships")} value={JSON.stringify(relationships)} />
+      <input
+        type="hidden"
+        {...register("properties")}
+        value={JSON.stringify(combinedProperties)}
+      />
+      <input
+        type="hidden"
+        {...register("relationships")}
+        value={JSON.stringify(relationships)}
+      />
       <input type="hidden" {...register("hashtags")} value={hashtags} />
 
       <button

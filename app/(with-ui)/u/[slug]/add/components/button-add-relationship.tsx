@@ -8,21 +8,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import DeleteIcon from "@/public/assets/icons/delete.svg";
 import { Character } from "@/types/character";
-import { Relationship } from "@/types/relationship";
+import {
+  ERelationshipType,
+  Relationship,
+  relationshipTypeData,
+} from "@/types/relationship";
 import { getPublicUrl } from "@/utils/image";
+import clsx from "clsx";
 import React, { useState } from "react";
 import {
   fetchCharactersByProfileId,
   fetchCharactersFromFriendsByProfileId,
 } from "../../actions";
-
-const relationshipTypes = [
-  { label: "LOVE", name: "love", icon: "❤️", color: "text-red-500" },
-  { label: "FRIEND", name: "friend", icon: "⭐", color: "text-green-500" },
-  { label: "HATE", name: "hate", icon: "♠️", color: "text-black" },
-  { label: "FAMILY", name: "family", icon: "🟡", color: "text-yellow-500" },
-];
 
 function RelationshipModal({
   isOpen,
@@ -85,35 +84,40 @@ function RelationshipModal({
         </div>
         <Select
           onValueChange={(value) => {
-            const selectedType = relationshipTypes.find(
-              (type) => type.name === value
-            );
+            const selectedType =
+              relationshipTypeData[value as ERelationshipType];
             if (selectedType && addRelationship) {
               addRelationship({
-                name: selectedType.name,
+                name: selectedType.value,
                 characterId: character.id,
                 characterName: character.name,
               });
             }
           }}
         >
-          <SelectTrigger className="w-32">
+          <SelectTrigger className="w-fit text-sm">
             <SelectValue placeholder="관계" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="w-fit text-sm">
             <SelectItem value="관계" className="flex items-center gap-2">
               <span className="text-gray-400">관계</span>
             </SelectItem>
-            {relationshipTypes.map((type) => (
-              <SelectItem
-                key={type.label}
-                value={type.name}
-                className="flex items-center gap-2"
-              >
-                <span className={type.color}>{type.icon}</span>
-                {type.label}
-              </SelectItem>
-            ))}
+            {Object.values(ERelationshipType).map((type) => {
+              const relationshipType = relationshipTypeData[type];
+              return (
+                <SelectItem
+                  key={type}
+                  value={type}
+                  className="flex items-center gap-2 flex-row justify-start text-sm"
+                >
+                  <span className={clsx("flex items-center gap-2")}>
+                    <relationshipType.symbol width={16} height={16} />
+
+                    {relationshipType?.label}
+                  </span>
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
       </div>
@@ -308,66 +312,62 @@ export function ButtonAddRelationship({
       </div>
       {tempRelationships.length > 0 && (
         <div className="bg-gray-200 p-4 rounded">
-          {tempRelationships.map((relationship, index) => (
-            <div
-              key={relationship.id}
-              className="flex items-center justify-between py-2 border-b last:border-b-0"
-            >
-              <input
-                type="hidden"
-                name={`relationship_to`}
-                value={relationship.to_id}
-              />
-              <input
-                type="hidden"
-                name={`relationship_name`}
-                value={relationship.name}
-              />
-              <span>{relationship.character?.name}</span>
-              <div className="flex items-center gap-2">
-                <span
-                  className={
-                    relationshipTypes.find(
-                      (type) => type.name === relationship.name
-                    )?.color
-                  }
-                >
-                  {
-                    relationshipTypes.find(
-                      (type) => type.name === relationship.name
-                    )?.icon
-                  }
-                </span>
-                <select
-                  className="border rounded p-1"
+          {tempRelationships.map((relationship, index) => {
+            const relationshipType =
+              relationshipTypeData[relationship.name as ERelationshipType];
+            return (
+              <div
+                key={relationship.id}
+                className="flex items-center justify-between py-2 border-b last:border-b-0"
+              >
+                <input
+                  type="hidden"
+                  name={`relationship_to`}
+                  value={relationship.to_id}
+                />
+                <input
+                  type="hidden"
+                  name={`relationship_name`}
                   value={relationship.name}
-                  onChange={(e) => {
-                    const newType = e.target.value;
-                    handleTypeChange(index, newType);
-                  }}
-                >
-                  {relationshipTypes.map((type) => (
-                    <option key={type.label} value={type.name}>
-                      {type.label}
-                    </option>
-                  ))}
-                </select>
-                <button>
-                  <span
-                    onClick={() => {
-                      const updatedRelationships = tempRelationships.filter(
-                        (_, i) => i !== index
-                      );
-                      setRelationships(updatedRelationships);
-                      onChange(updatedRelationships);
+                />
+                <span className="text-sm">{relationship.character?.name}</span>
+                <div className="flex items-center gap-2">
+                  <relationshipType.symbol width={16} height={16} />
+                  <select
+                    className="border rounded p-1"
+                    value={relationship.name}
+                    onChange={(e) => {
+                      const newType = e.target.value;
+                      handleTypeChange(index, newType);
                     }}
                   >
-                    X
-                  </span>
-                </button>
+                    {Object.values(ERelationshipType).map((type) => (
+                      <option key={type} value={type}>
+                        {relationshipTypeData[type]?.label}
+                      </option>
+                    ))}
+                  </select>
+                  <button>
+                    <span
+                      onClick={() => {
+                        const updatedRelationships = tempRelationships.filter(
+                          (_, i) => i !== index
+                        );
+                        setRelationships(updatedRelationships);
+                        onChange(updatedRelationships);
+                      }}
+                    >
+                      <DeleteIcon
+                        className=" text-background-dark"
+                        width={20}
+                        height={20}
+                      />
+                    </span>
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

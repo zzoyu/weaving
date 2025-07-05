@@ -33,7 +33,9 @@ export default function UniverseAddTemplate({
     { key: "주요 사건", value: "", type: EPropertyType.STRING },
     { key: "규칙", value: "", type: EPropertyType.STRING },
   ]);
-  const [characterUniverses, setCharacterUniverses] = useState<{ character_id: number }[]>([]);
+  const [characterUniverses, setCharacterUniverses] = useState<
+    { character_id: number }[]
+  >([]);
 
   const previewHashtags = useMemo(() => {
     if (!hashtags) return [];
@@ -44,9 +46,9 @@ export default function UniverseAddTemplate({
   }, [hashtags]);
 
   const handleAddCharacter = (characterId: number) => {
-    setCharacterUniverses(prev => [
+    setCharacterUniverses((prev) => [
       ...prev,
-      { character_id: Number(characterId) }
+      { character_id: Number(characterId) },
     ]);
   };
 
@@ -58,14 +60,18 @@ export default function UniverseAddTemplate({
       // 기존 formData를 새로 생성하여 중복 방지
       const form = event.currentTarget;
       const formData = new FormData();
-      
+
       // 기본 필드 추가
       formData.append("profile_id", profileId.toString());
-      const nameInput = form.querySelector('input[name="name"]') as HTMLInputElement;
-      const descriptionInput = form.querySelector('input[name="description"]') as HTMLInputElement;
+      const nameInput = form.querySelector(
+        'input[name="name"]'
+      ) as HTMLInputElement;
+      const descriptionInput = form.querySelector(
+        'input[name="description"]'
+      ) as HTMLInputElement;
       formData.append("name", nameInput?.value || "");
       formData.append("description", descriptionInput?.value || "");
-      
+
       // 이미지 관련 필드는 UploadImage 컴포넌트에서 자동으로 추가됨
       const imageFile = form["universe-image"] as HTMLInputElement;
       const thumbnailFile = form["universe-thumbnail"] as HTMLInputElement;
@@ -75,10 +81,13 @@ export default function UniverseAddTemplate({
       if (thumbnailFile?.files?.[0]) {
         formData.append("universe-thumbnail", thumbnailFile.files[0]);
       }
-      
+
       // JSON 데이터 추가
       formData.append("list_properties", JSON.stringify(listProperties));
-      formData.append("universes_characters", JSON.stringify(characterUniverses));
+      formData.append(
+        "universes_characters",
+        JSON.stringify(characterUniverses)
+      );
       formData.append("hashtags", hashtags);
 
       const res = await createUniverse(formData);
@@ -98,7 +107,8 @@ export default function UniverseAddTemplate({
     } catch (error) {
       console.error("Error creating universe:", error);
       toast({
-        description: error instanceof Error ? error.message : "잠시 후 다시 시도해주세요.",
+        description:
+          error instanceof Error ? error.message : "잠시 후 다시 시도해주세요.",
         variant: "destructive",
       });
     } finally {
@@ -107,14 +117,17 @@ export default function UniverseAddTemplate({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center w-full md:max-w-md p-4">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-4 items-center w-full md:max-w-md p-4"
+    >
       <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
-        <UploadImage name="universe" useThumbnail aspectRatio={16/9} />
+        <UploadImage name="universe" useThumbnail aspectRatio={16 / 9} />
       </div>
 
       <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
         <input
-          className="text-2xl w-full max-w-72 text-center border-primary focus:outline-none"
+          className="text-2xl w-full max-w-72 text-center border-primary focus:outline-none placeholder:text-gray-400 placeholder:text-base"
           type="text"
           name="name"
           placeholder="이름"
@@ -123,7 +136,7 @@ export default function UniverseAddTemplate({
         <input
           type="text"
           name="description"
-          className="text-xl w-full max-w-72 text-center border-primary focus:outline-none mb-4"
+          className="text-xl w-full max-w-72 text-center border-primary focus:outline-none mb-4 placeholder:text-gray-400 placeholder:text-sm"
           placeholder="세계관에 대한 설명"
         />
       </div>
@@ -140,19 +153,32 @@ export default function UniverseAddTemplate({
         <h2 className="text-xl font-bold mb-2">소속 캐릭터</h2>
         <div className="flex flex-col gap-2">
           {characterUniverses.length === 0 && (
-            <div className="text-muted-foreground text-sm text-center py-4">아직 추가된 캐릭터가 없습니다.</div>
+            <div className="text-muted-foreground text-sm text-center py-4">
+              아직 추가된 캐릭터가 없습니다.
+            </div>
           )}
           {characterUniverses.map((cu) => {
-            const character = characters.find((c) => Number(c.id) === Number(cu.character_id));
+            const character = characters.find(
+              (c) => Number(c.id) === Number(cu.character_id)
+            );
             return (
-              <div key={cu.character_id} className="flex items-center justify-between p-2 bg-background-muted rounded">
-                <span>{character ? character.name : `ID: ${cu.character_id}`}</span>
+              <div
+                key={cu.character_id}
+                className="flex items-center justify-between p-2 bg-background-muted rounded"
+              >
+                <span>
+                  {character ? character.name : `ID: ${cu.character_id}`}
+                </span>
                 <Button
                   variant="ghost"
                   size="sm"
                   type="button"
                   onClick={() => {
-                    setCharacterUniverses(characterUniverses.filter((c) => c.character_id !== cu.character_id));
+                    setCharacterUniverses(
+                      characterUniverses.filter(
+                        (c) => c.character_id !== cu.character_id
+                      )
+                    );
                   }}
                 >
                   ✕
@@ -191,8 +217,8 @@ export default function UniverseAddTemplate({
         />
       </div>
 
-      <Button 
-        type="submit" 
+      <Button
+        type="submit"
         disabled={isSubmitting}
         className="text-background-default bg-text-black rounded w-full text-xl p-2"
       >

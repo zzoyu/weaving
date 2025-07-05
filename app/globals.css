@@ -9,7 +9,7 @@
     @apply text-4xl font-poiret-one text-black dark:text-white;
   }
   h2 {
-    @apply text-3xl font-pretendard text-black dark:text-white;
+    @apply text-xl font-pretendard text-black dark:text-white;
   }
   input {
     @apply bg-background-default dark:bg-neutral-900 text-gray-900 dark:text-gray-100 rounded border;
@@ -29,7 +29,7 @@
   }
 
   .item-hashtag {
-    @apply rounded-full pl-6 pr-8 py-1 text-gray-500 dark:text-gray-400 bg-background-light dark:bg-gray-800 relative;
+    @apply rounded-full pl-6 pr-8 py-1 text-gray-500 dark:text-gray-400 bg-background-light dark:bg-gray-800 relative text-sm;
   }
 }
 
@@ -107,7 +107,9 @@ svg > path {
   }
 }
 
-button:focus, button:focus-visible, button:active {
+button:focus,
+button:focus-visible,
+button:active {
   outline: none !important;
   box-shadow: none !important;
 }
