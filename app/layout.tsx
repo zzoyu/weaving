@@ -29,6 +29,23 @@ const fontBody = localFont({
 export const metadata: Metadata = {
   title: "위빙",
   description: "우리의 세계가 만나는 곳",
+  openGraph: {
+    title: "위빙",
+    description: "우리의 세계가 만나는 곳",
+    images: ["/assets/logos/logo_text_horizontal_color.svg"],
+  },
+  themeColor: "#97E6AB",
+  creator: "파인딩벤자민",
+  robots: {
+    index: true,
+    follow: true,
+  },
+  icons: {
+    icon: "/assets/logos/logo_text_horizontal_color.svg",
+  },
+  other: {
+    "google-adsense-account": "ca-pub-8566989289200896",
+  },
 };
 
 export default function RootLayout({
