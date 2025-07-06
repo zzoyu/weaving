@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Poiret_One } from "next/font/google";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "./globals.css";
 
 // const fontTitle = localFont({
@@ -60,6 +61,12 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={clsx(fontTitle.variable, fontBody.variable)}>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8566989289200896"
+          crossOrigin="anonymous"
+          strategy="beforeInteractive"
+        />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {gtmId && <GoogleTagManager gtmId={gtmId} />}
           {children}
