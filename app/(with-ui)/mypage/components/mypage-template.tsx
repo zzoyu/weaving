@@ -2,7 +2,6 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import ButtonDelete from "./button-delete";
 import ButtonLogout from "./button-logout";
-import FeedbackButton from "./feedback-button";
 import ListFriend from "./list-friend";
 import ProfileEditForm from "./profile-edit-form";
 
@@ -18,6 +17,10 @@ export default function MypageTemplate({ profile }: { profile: Profile }) {
         <div className="mb-4 flex flex-col">
           <Separator className="my-2" />
           <ButtonLogout />
+          <Separator className="my-2" />
+          <Link href={"/help"} className="w-full px-4 py-2 text-center">
+            도움센터
+          </Link>
           <Separator className="my-2" />
           <ButtonDelete userId={profile.user_id} />
         </div>
@@ -36,8 +39,6 @@ export default function MypageTemplate({ profile }: { profile: Profile }) {
           콘텐츠가이드라인
         </Link>
       </div>
-
-      <FeedbackButton />
     </main>
   );
 }
