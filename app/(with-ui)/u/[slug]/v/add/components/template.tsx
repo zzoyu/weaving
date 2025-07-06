@@ -168,7 +168,7 @@ export default function UniverseAddTemplate({
             return (
               <div
                 key={cu.character_id}
-                className="flex items-center justify-between p-2 bg-background-muted rounded"
+                className="temporarily-added-character-item"
               >
                 <span>
                   {character ? character.name : `ID: ${cu.character_id}`}
@@ -223,10 +223,11 @@ export default function UniverseAddTemplate({
 
       <Button
         type="submit"
+        variant="outline"
         disabled={isSubmitting}
-        className="text-background-default bg-text-black rounded w-full text-xl p-2"
+        className="rounded w-full text-xl p-2"
       >
-        {isSubmitting ? "저장 중..." : "저장하기"}
+        저장하기
       </Button>
     </form>
   );

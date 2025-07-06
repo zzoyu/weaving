@@ -130,7 +130,7 @@ function RelationshipModal({
         isOpen ? "visible" : "invisible"
       }`}
     >
-      <div className="w-96 h-fit bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      <div className="w-96 h-fit bg-white dark:bg-neutral-800 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <h2 className="text-center text-xl my-4">캐릭터 선택</h2>
         <div className="gap-2 p-4 flex flex-col w-full overflow-y-auto h-96">
           {renderContent()}
@@ -311,7 +311,7 @@ export function ButtonAddRelationship({
         </button>
       </div>
       {tempRelationships.length > 0 && (
-        <div className="bg-gray-200 p-4 rounded">
+        <div className="bg-gray-200 dark:bg-neutral-800 p-4 rounded">
           {tempRelationships.map((relationship, index) => {
             const relationshipType =
               relationshipTypeData[relationship.name as ERelationshipType];

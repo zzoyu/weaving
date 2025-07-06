@@ -6,7 +6,7 @@
 
 @layer base {
   h1 {
-    @apply text-4xl font-pretendard text-black dark:text-white ;
+    @apply text-4xl font-pretendard text-black dark:text-white;
   }
   h2 {
     @apply text-xl font-pretendard text-black dark:text-white;
@@ -30,6 +30,14 @@
 
   .item-hashtag {
     @apply rounded-full pl-6 pr-8 py-1 text-gray-500 dark:text-gray-400 bg-background-light dark:bg-gray-800 relative text-sm;
+  }
+
+  .context-menu-item {
+    @apply text-base text-gray-700 dark:text-gray-300;
+  }
+
+  .temporarily-added-character-item {
+    @apply flex items-center justify-between p-2 bg-background-muted rounded dark:bg-neutral-800;
   }
 }
 

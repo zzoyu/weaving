@@ -32,7 +32,7 @@ export default function HelpPage() {
           </button>
         </Link>
       </header>
-      <main className="flex flex-col h-full w-full justify-center items-center">
+      <main className="flex flex-col h-full w-full justify-center items-center dark:bg-neutral-900">
         <div className="grid grid-cols-2 gap-4 md:gap-8 place-items-center w-4/5 max-w-4xl auto-rows-fr">
           {features.map((feature) => (
             <Link

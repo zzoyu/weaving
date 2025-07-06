@@ -75,7 +75,7 @@ export function ListRelationship({
                       character.password && "text-opacity-50",
                       character.isFavorite
                         ? "bg-primary"
-                        : "bg-background-default",
+                        : "bg-background-default dark:bg-neutral-800",
                       "w-full h-fit flex justify-center items-center p-2"
                     )}
                   >

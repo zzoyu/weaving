@@ -98,9 +98,9 @@ export default function WeavingLanding() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-cyan-50 font-pretendard">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-cyan-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 font-pretendard">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-green-100">
+      <header className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-green-100 dark:border-gray-800">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -110,7 +110,15 @@ export default function WeavingLanding() {
                 width={0}
                 height={0}
                 sizes="100vw"
-                className="object-contain w-[120px] md:w-[200px]"
+                className="object-contain w-[120px] md:w-[200px] dark:hidden"
+              />
+              <Image
+                src="/assets/logos/logo_text_horizontal_color_white.svg"
+                alt="weaving"
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="object-contain w-[120px] md:w-[200px] hidden dark:block"
               />
             </div>
           </div>
@@ -121,7 +129,7 @@ export default function WeavingLanding() {
       <section className="py-12 md:py-20 lg:py-24">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight">
               창작자를 위한
               <br />
               <span className="bg-gradient-to-r from-[#97E6AB] to-[#68E7FA] bg-clip-text font-extrabold text-transparent">
@@ -129,7 +137,7 @@ export default function WeavingLanding() {
               </span>
             </h1>
 
-            <p className="text-base md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-base md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
               지금, 당신만의 캐릭터와 세계관을{" "}
               <br className="block md:hidden" />
               정리하고 연결해보세요.
@@ -137,7 +145,7 @@ export default function WeavingLanding() {
 
             <Button
               size="lg"
-              className="bg-gradient-to-r from-[#97E6AB] to-[#68E7FA] hover:from-[#97E6AB] hover:to-[#68E7FA] text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              className="bg-gradient-to-r from-[#97E6AB] to-[#68E7FA] hover:from-[#97E6AB] hover:to-[#68E7FA] text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 dark:from-green-700 dark:to-cyan-700 dark:text-white"
               asChild
             >
               <Link href="/">위빙 시작하기</Link>
@@ -147,10 +155,10 @@ export default function WeavingLanding() {
       </section>
 
       {/* Target Users Section */}
-      <section id="users" className="py-16 bg-white">
+      <section id="users" className="py-16 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
               모든 창작자를 위해
             </h2>
           </div>
@@ -159,7 +167,7 @@ export default function WeavingLanding() {
             {targetUsers.map((user, index) => (
               <Card
                 key={index}
-                className="text-center p-6 hover:shadow-lg transition-shadow duration-300 border-0 bg-gradient-to-br from-gray-50 to-white"
+                className="text-center p-6 hover:shadow-lg transition-shadow duration-300 border-0 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 dark:text-white"
               >
                 <CardContent className="pt-6">
                   <div className="mb-4 flex justify-center">
@@ -173,7 +181,7 @@ export default function WeavingLanding() {
                       className="object-contain"
                     />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2 whitespace-pre-line">
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2 whitespace-pre-line">
                     {user.title}
                   </h3>
                 </CardContent>
@@ -186,14 +194,14 @@ export default function WeavingLanding() {
       {/* Features Section */}
       <section
         id="features"
-        className="py-16 bg-gradient-to-br from-green-50 to-cyan-50"
+        className="py-16 bg-gradient-to-br from-green-50 to-cyan-50 dark:from-gray-900 dark:to-gray-900"
       >
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
               흩어지지 않게, 연결되게
             </h2>
-            <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               서사를 만들다 보면 자꾸 흩어지는 정보들,{" "}
               <br className="block md:hidden" />
               위빙에서 정리하세요.
@@ -210,24 +218,24 @@ export default function WeavingLanding() {
               >
                 <div className="flex-1 text-center lg:text-left">
                   <div className="mb-4 flex justify-center lg:justify-start">
-                    <div className="p-3 bg-white rounded-full shadow-md">
+                    <div className="p-3 bg-white dark:bg-gray-800 rounded-full shadow-md">
                       {feature.icon}
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4 whitespace-pre-line md:whitespace-normal">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 whitespace-pre-line md:whitespace-normal">
                     {feature.title}
                   </h3>
                   {feature.description_pc ? (
                     <>
-                      <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-line md:block hidden">
+                      <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed whitespace-pre-line md:block hidden">
                         {feature.description_pc}
                       </p>
-                      <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-line block md:hidden">
+                      <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed whitespace-pre-line block md:hidden">
                         {feature.description}
                       </p>
                     </>
                   ) : (
-                    <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-line md:whitespace-normal">
+                    <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed whitespace-pre-line md:whitespace-normal">
                       {feature.description}
                     </p>
                   )}
@@ -238,7 +246,7 @@ export default function WeavingLanding() {
                     {/* 스마트폰 목업 */}
                     <div className="w-full h-full">
                       {/* 앱 콘텐츠 */}
-                      <div className="p-4 h-full bg-gradient-to-br from-green-50 to-cyan-50">
+                      <div className="p-4 h-full bg-gradient-to-br bg-transparent to-cyan-50 dark:bg-transparent dark:to-gray-900">
                         {index === 0 && (
                           <Image
                             unoptimized
@@ -297,29 +305,32 @@ export default function WeavingLanding() {
       {/* FAQ Section */}
       <section
         id="faq"
-        className="py-16 bg-gradient-to-br from-gray-50 to-white"
+        className="py-16 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-950"
       >
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white text-center mb-12">
               FAQ
             </h2>
 
             <div className="space-y-4">
               {faqs.map((faq, index) => (
-                <Card key={index} className="border-0 shadow-sm">
+                <Card
+                  key={index}
+                  className="border-0 shadow-sm dark:bg-gray-800 dark:text-white"
+                >
                   <CardContent className="p-0">
                     <button
-                      className="w-full p-6 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
+                      className="w-full p-6 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                       onClick={() =>
                         setOpenFaq(openFaq === index ? null : index)
                       }
                     >
-                      <span className="font-semibold text-gray-900 pr-4">
+                      <span className="font-semibold text-gray-900 dark:text-white pr-4">
                         Q. {faq.question}
                       </span>
                       <ChevronDown
-                        className={`w-5 h-5 text-gray-500 transition-transform ${
+                        className={`w-5 h-5 text-gray-500 dark:text-gray-300 transition-transform ${
                           openFaq === index ? "rotate-180" : ""
                         }`}
                       />
@@ -327,7 +338,7 @@ export default function WeavingLanding() {
 
                     {openFaq === index && (
                       <div className="px-6 pb-6">
-                        <p className="text-gray-600 leading-relaxed whitespace-pre-line">
+                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-line">
                           A. {faq.answer}
                         </p>
                       </div>
@@ -341,7 +352,7 @@ export default function WeavingLanding() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-[#97E6AB] to-[#68E7FA]">
+      <section className="py-16 bg-gradient-to-r from-[#97E6AB] to-[#68E7FA] dark:from-green-700 dark:to-cyan-700">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-2xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-10">
@@ -352,7 +363,7 @@ export default function WeavingLanding() {
 
             <Button
               size="lg"
-              className="bg-white text-green-600 hover:bg-gray-100 px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              className="bg-white text-green-600 hover:bg-gray-100 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800 px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               asChild
             >
               <Link href="/">위빙 시작하기</Link>
@@ -362,7 +373,7 @@ export default function WeavingLanding() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 bg-gray-900 text-white">
+      <footer className="py-8 bg-gray-900 text-white dark:bg-black">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
             <Image

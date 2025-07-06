@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import clsx from "clsx";
 import type { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 import { Poiret_One } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -42,10 +43,12 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={clsx(fontTitle.variable, fontBody.variable)}>
-        {gtmId && <GoogleTagManager gtmId={gtmId} />}
-        {children}
-        <Toaster />
-        {gaId && <GoogleAnalytics gaId={gaId} />}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {gtmId && <GoogleTagManager gtmId={gtmId} />}
+          {children}
+          <Toaster />
+          {gaId && <GoogleAnalytics gaId={gaId} />}
+        </ThemeProvider>
       </body>
     </html>
   );

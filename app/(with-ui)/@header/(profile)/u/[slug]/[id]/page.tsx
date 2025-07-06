@@ -67,16 +67,13 @@ export default async function Header({
                 {character?.id && character?.password?.length && (
                   <ButtonUnlock characterId={character.id} />
                 )}
-                <Link
-                  href={`${params.id}/edit`}
-                  className="text-base text-gray-700 hover:text-primary-500"
-                >
+                <Link href={`${params.id}/edit`} className="context-menu-item">
                   프로필 수정
                 </Link>
                 <DialogShareButton>프로필 공유</DialogShareButton>
                 <ButtonDelete
                   characterId={character.id}
-                  className="text-base text-gray-700 hover:text-primary-500"
+                  className="context-menu-item"
                 >
                   프로필 삭제
                 </ButtonDelete>

@@ -1,18 +1,19 @@
 "use client";
 
 import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
 } from "@/components/ui/sheet";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import SearchIcon from "@/public/assets/icons/search.svg";
 import { Character, ColorPropertyKey } from "@/types/character";
 import { colorList } from "@/types/color";
 import clsx from "clsx";
+import { X } from "lucide-react";
 import { useMemo, useState } from "react";
 import ListCharacter from "./list-character/list-character";
 
@@ -39,10 +40,10 @@ export function ProfileList({
     if (searchKeyword)
       tempCharacters = tempCharacters.filter((character) => {
         if (character.name.includes(searchKeyword)) return true;
+        if (character.hashtags?.includes?.(searchKeyword)) return true;
         return false;
       });
     if (filteredColor?.colors?.length) {
-      
       tempCharacters = tempCharacters.filter((character) => {
         const color = character.properties.find(
           (property) => property.key === filteredColor.type
@@ -82,10 +83,10 @@ export function ProfileList({
           </button>
           {searchKeyword && (
             <button
-              className=" right-2 text-white bg-slate-300 w-6 h-6 rounded-full absolute"
+              className=" right-2 text-text-black dark:text-white rounded-full absolute p-2"
               onClick={() => setSearchKeyword("")}
             >
-              ✕
+              <X className="w-4 h-4" />
             </button>
           )}
         </div>
@@ -217,7 +218,7 @@ function FilterPopup({
 
               <SheetClose asChild>
                 <button
-                  className="w-full p-4 md:py-2 text-white bg-text-black dark:bg-primary rounded-lg"
+                  className="w-full p-4 md:py-2 text-white dark:text-text-black bg-text-black dark:bg-primary rounded-lg"
                   onClick={() => {
                     // 필터 적용 로직 추가
                     onUpdate(type, color || []);

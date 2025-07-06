@@ -63,7 +63,10 @@ function PopupRelationshipGraph({
   return (
     <div className="fixed z-10 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white w-full h-full md:w-5/6 md:h-5/6 p-4 rounded-lg relative">
-        <button className="absolute top-2 right-2 z-20" onClick={() => onClose()}>
+        <button
+          className="absolute top-2 right-2 z-20"
+          onClick={() => onClose()}
+        >
           닫기
         </button>
         <h2 className="text-2xl font-bold">관계도</h2>
@@ -124,7 +127,8 @@ export function ProfileCard({
                 key={`image-${index}`}
                 className="relative flex justify-center items-center w-full"
               >
-                <Image unoptimized 
+                <Image
+                  unoptimized
                   src={getPublicUrl(image)}
                   alt={character.name}
                   width={200}
@@ -170,7 +174,7 @@ export function ProfileCard({
 
 const CharacterProfileField = ({ property }: { property: Property }) => {
   return (
-    <div className="flex justify-between border-b py-2 w-full">
+    <div className="flex justify-between border-b py-2 w-full text-text-black dark:text-background-default">
       <span className="w-1/3 font-bold">{property?.key}</span>
       <span className="w-full">{property?.value}</span>
     </div>
