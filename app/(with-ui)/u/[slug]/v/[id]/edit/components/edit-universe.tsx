@@ -140,7 +140,7 @@ export default function EditUniverse({
             return (
               <div
                 key={cu.character_id}
-                className="flex items-center justify-between p-2 bg-background-muted rounded"
+                className="temporarily-added-character-item"
               >
                 <span>
                   {character ? character.name : `ID: ${cu.character_id}`}
@@ -195,10 +195,11 @@ export default function EditUniverse({
 
       <Button
         type="submit"
+        variant="outline"
         disabled={isSubmitting}
-        className="text-background-default bg-text-black rounded w-full text-xl p-2"
+        className="text-background-default bg-text-black dark:text-text-black dark:bg-background-default rounded w-full text-xl p-2"
       >
-        {isSubmitting ? "저장 중..." : "저장하기"}
+        저장하기
       </Button>
     </form>
   );

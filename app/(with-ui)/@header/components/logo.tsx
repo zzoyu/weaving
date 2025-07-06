@@ -1,5 +1,5 @@
-import LogoColor from "@/public/assets/logos/logo_text_horizontal_color.svg";
-import LogoWhite from "@/public/assets/logos/logo_text_horizontal_color_white.svg";
+import LogoColor from "@/public/assets/logos/logo_text_horizontal_color_beta.svg";
+import LogoWhite from "@/public/assets/logos/logo_text_horizontal_white_beta.svg";
 
 export default function Logo() {
   return (
@@ -12,4 +12,4 @@ export default function Logo() {
       </span>
     </span>
   );
-} 
+}

@@ -1,7 +1,6 @@
 "use client";
 
 import { Copy } from "lucide-react";
-import { usePathname, useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,7 +25,7 @@ export function DialogShareButton({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="text-gray-700">{children}</button>
+        <button className="context-menu-item">{children}</button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>

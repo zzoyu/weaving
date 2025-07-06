@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -23,10 +24,7 @@ export function DialogLock({ characterId }: { characterId: number }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <button
-          className="text-base text-gray-700 hover:text-primary-500"
-          onClick={() => setIsOpen(true)}
-        >
+        <button className="context-menu-item" onClick={() => setIsOpen(true)}>
           캐릭터 잠금
         </button>
       </DialogTrigger>
@@ -46,12 +44,12 @@ export function DialogLock({ characterId }: { characterId: number }) {
         >
           <input type="hidden" name="character_id" value={characterId} />
           <DialogHeader>
-            <DialogContent>
-              <DialogTitle>캐릭터 잠금</DialogTitle>
+            <DialogTitle>캐릭터 잠금</DialogTitle>
+            <DialogDescription>
               캐릭터를 잠그면 로그인 하지 않은 사용자는 비밀번호를 입력해야
               열람이 가능합니다. 친구로 등록된 유저는 비밀번호를 입력하지 않고도
               열람이 가능합니다.
-            </DialogContent>
+            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">

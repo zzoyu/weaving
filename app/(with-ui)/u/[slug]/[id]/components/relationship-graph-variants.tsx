@@ -79,7 +79,9 @@ export default function RelationshipGraphVariants({
           <button
             key={variant.name}
             className={`px-3 py-1 rounded ${
-              selected === idx ? "bg-blue-500 text-white" : "bg-gray-200"
+              selected === idx
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 dark:bg-neutral-800"
             }`}
             onClick={() => setSelected(idx)}
           >

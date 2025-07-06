@@ -8,6 +8,7 @@ export async function fetchNoticeList(): Promise<
       type: string;
       title: string;
       created_at: string;
+      lang: string;
     }[]
   | null
 > {
@@ -15,9 +16,10 @@ export async function fetchNoticeList(): Promise<
 
   const { data } = await supabase
     .from("notice")
-    .select("id, title, type, created_at")
+    .select("id, title, type, created_at, lang")
     .eq("is_visible", true)
     .order("created_at", { ascending: false })
+    .eq("lang", "ko")
     .limit(10);
 
   return data;

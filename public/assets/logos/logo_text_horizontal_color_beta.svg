@@ -4,32 +4,13 @@
    version="1.1"
    id="svg11"
    sodipodi:docname="logo_text_horizontal_color_beta.svg"
-   width="643.7879"
-   height="120.60735"
    inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview11"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="1.0745512"
-     inkscape:cx="286.16599"
-     inkscape:cy="-72.123135"
-     inkscape:window-width="1920"
-     inkscape:window-height="991"
-     inkscape:window-x="-9"
-     inkscape:window-y="-9"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg11" />
+  
   <defs
      id="defs2">
     <style
@@ -73,15 +54,15 @@
        y2="63.389999" />
   </defs>
   <g
-     id="레이어_2"
-     data-name="레이어 2"
+     id="layer_2"
+     data-name="layer 2"
      transform="translate(0.00541756,9.997244)">
     <g
-       id="레이어_1-2"
-       data-name="레이어 1">
+       id="layer_1-2"
+       data-name="layer 1">
       <g
-         id="레이어_2-2"
-         data-name="레이어 2">
+         id="layer_2-2"
+         data-name="layer 2">
         <g
            id="격리_모드"
            data-name="격리 모드">
