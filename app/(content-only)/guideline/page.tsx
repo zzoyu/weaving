@@ -18,7 +18,7 @@ export default function GuidelinePage() {
       </header>
       <iframe
         className="w-full h-full"
-        src="https://equinox-galley-25a.notion.site/ebd/6ed61cc98c394a508ff5578b439a67e1"
+        src="https://findingbenjamin.notion.site/ebd/6ed61cc98c394a508ff5578b439a67e1"
         width="100%"
         height="100%"
         allowFullScreen

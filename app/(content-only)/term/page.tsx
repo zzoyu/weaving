@@ -12,7 +12,7 @@ export default function Term() {
       </header>
       <iframe
         className="w-full h-full"
-        src="https://equinox-galley-25a.notion.site/ebd/977ff70e969b4543b1c38128650f267e"
+        src="https://findingbenjamin.notion.site/ebd/977ff70e969b4543b1c38128650f267e"
         width="100%"
         height="100%"
         frameBorder="0"
