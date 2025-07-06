@@ -20,16 +20,25 @@ async function getIdsAndSlugs() {
     console.error(error);
     return [];
   }
-  return data.map((data) => {
-    const profileSlug = data.profile?.[0]?.slug ?? "";
-    return {
-      id: data.id,
-      slug: profileSlug,
-    };
-  });
+  return data.map(
+    (data: {
+      id: string;
+      profile_id: string;
+      profile: { slug: string }[] | { slug: string };
+    }) => {
+      const profileSlug = Array.isArray(data.profile)
+        ? data.profile[0].slug
+        : data.profile.slug;
+      return {
+        id: data.id,
+        slug: profileSlug,
+      };
+    }
+  );
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const slugs = await getSlugs();
   const idsAndSlugs = await getIdsAndSlugs();
