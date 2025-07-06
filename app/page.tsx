@@ -1,8 +1,6 @@
-import LogoColored from "@/public/assets/logos/logo_text_vertical_color.svg";
-import LogoWhite from "@/public/assets/logos/logo_text_vertical_white.svg";
+import Landing from "@/components/landing";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import MainMenu from "./components/main-menu";
 
 export default async function Home({
   searchParams,
@@ -22,18 +20,5 @@ export default async function Home({
     redirect("/profile");
   }
 
-  return (
-    <main className="h-full flex flex-col items-center pt-[10vh]">
-      <div className="flex-1 w-7/12 max-w-40 flex flex-col items-center justify-center gap-2">
-        <span className="block dark:hidden">
-          <LogoColored height={160} />
-        </span>
-        <span className="hidden dark:block">
-          <LogoWhite height={160} />
-        </span>
-      </div>
-
-      <MainMenu />
-    </main>
-  );
+  return <Landing />;
 }
