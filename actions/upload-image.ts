@@ -1,5 +1,5 @@
 import { ImagePath } from "@/types/image";
-import { getWebPFileName, webpBuffer } from "@/utils/image.server";
+import { getPngFileName, pngBuffer } from "@/utils/image.server";
 import { createClient } from "@/utils/supabase/server";
 import * as Sentry from "@sentry/nextjs";
 
@@ -8,7 +8,9 @@ const OCI_WRITE_URL = process.env.OCI_WRITE_URL;
 const OCI_READ_URL = process.env.OCI_READ_URL;
 
 if (!OCI_WRITE_URL || !OCI_READ_URL) {
-  const err = new Error("Oracle Object Storage 환경 변수가 설정되지 않았습니다.");
+  const err = new Error(
+    "Oracle Object Storage 환경 변수가 설정되지 않았습니다."
+  );
   Sentry.captureException(err);
   throw err;
 }
@@ -37,7 +39,9 @@ export async function uploadImageToObjectStorage(
         url: writeUrl,
         body: responseText,
       });
-      const err = new Error(`업로드 실패: ${response.statusText} - ${responseText}`);
+      const err = new Error(
+        `업로드 실패: ${response.statusText} - ${responseText}`
+      );
       Sentry.captureException(err);
       throw err;
     }
@@ -64,14 +68,14 @@ export async function uploadImage(
     return "";
   }
 
-  // 이미지를 WebP로 변환
-  const webpFile = await webpBuffer(Buffer.from(await image.arrayBuffer()));
-  const finalFileName = getWebPFileName(image.name);
+  // 이미지를 최적화
+  const pngFile = await pngBuffer(Buffer.from(await image.arrayBuffer()));
+  const finalFileName = getPngFileName(image.name);
   const fullPath = `${imagePath}/${characterId}_${finalFileName}`;
 
   if (useObjectStorage) {
     const { url } = await uploadImageToObjectStorage(
-      Buffer.from(webpFile),
+      Buffer.from(pngFile),
       fullPath
     );
     return url;
@@ -81,7 +85,7 @@ export async function uploadImage(
 
   const { data: fileData, error: fileError } = await supabase.storage
     .from("assets")
-    .upload(fullPath, webpFile);
+    .upload(fullPath, pngFile);
 
   if (fileError) {
     console.error("Supabase 업로드 오류:", fileError);
