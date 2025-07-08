@@ -35,7 +35,6 @@ export const metadata: Metadata = {
     description: "우리의 세계가 만나는 곳",
     images: ["/assets/images/og/with-logo.png"],
   },
-  themeColor: "#97E6AB",
   creator: "파인딩벤자민",
   robots: {
     index: true,

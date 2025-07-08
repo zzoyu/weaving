@@ -3,6 +3,9 @@ import { getPublicUrl } from "@/utils/image";
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
+const pretendardFont = fetch(
+  "https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/public/static/Pretendard-ExtraBold.otf"
+).then(async (res) => await res.arrayBuffer());
 
 export async function GET(request: Request) {
   try {
@@ -36,6 +39,8 @@ export async function GET(request: Request) {
             position: "relative",
             justifyContent: "center",
             alignItems: "center",
+            margin: "0",
+            padding: "0",
           }}
         >
           <img
@@ -98,8 +103,12 @@ export async function GET(request: Request) {
             >
               <h1
                 style={{
+                  fontFamily: "Pretendard-ExtraBold",
+                  fontStyle: "normal",
+                  fontWeight: 800,
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
                   fontSize: "48px",
-                  fontWeight: "bold",
                   margin: 0,
                   textAlign: "left",
                   color: "transparent",
@@ -112,8 +121,8 @@ export async function GET(request: Request) {
               {description && (
                 <p
                   style={{
-                    fontSize: "18px",
-                    margin: "0 0 0 10px",
+                    fontSize: "20px",
+                    margin: "0 0 0 4px",
                     color: "white",
                   }}
                 >
@@ -127,6 +136,14 @@ export async function GET(request: Request) {
       {
         width: 600,
         height: 315,
+        fonts: [
+          {
+            name: "Pretendard-ExtraBold",
+            data: await pretendardFont,
+            weight: 800,
+            style: "normal",
+          },
+        ],
       }
     );
   } catch (e: unknown) {
