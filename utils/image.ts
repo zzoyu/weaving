@@ -11,7 +11,7 @@ export function getPublicUrl(fileName?: string): string {
   }
 
   // 파일 이름이 절대경로 시작하면 그대로 반환
-  if (fileName.startsWith("http://") || fileName.startsWith("https://")) {
+  if (fileName.startsWith("http:") || fileName.startsWith("https:")) {
     return fileName;
   }
 
