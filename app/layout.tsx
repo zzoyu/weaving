@@ -33,16 +33,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: "위빙",
     description: "우리의 세계가 만나는 곳",
-    images: ["/assets/logos/logo_text_horizontal_color.svg"],
+    images: ["/public/assets/images/og/with-logo.png"],
   },
   themeColor: "#97E6AB",
   creator: "파인딩벤자민",
   robots: {
     index: true,
     follow: true,
-  },
-  icons: {
-    icon: "/assets/logos/logo_text_horizontal_color.svg",
   },
   other: {
     "google-adsense-account": "ca-pub-8566989289200896",
