@@ -1,3 +1,4 @@
+import { generateOgImage } from "@/actions/generate-og-image";
 import { fetchProfileByUserId } from "@/app/profile/actions";
 import { EPropertyType } from "@/types/character";
 import { createClient } from "@/utils/supabase/server";
@@ -37,16 +38,21 @@ export async function generateMetadata(
     return baseMetadata;
   }
 
+  const ogImage = (await generateOgImage(
+    characterData.name,
+    characterData.description || "",
+    characterData.thumbnail || ""
+  )) as Response;
+
+  const ogImageUrl = ogImage.url;
+
   return {
     ...baseMetadata,
     title: "위빙 :: " + characterData.name + " 관찰 중 🔎",
     openGraph: {
       images: [
         {
-          url: `/api/og?name=${encodeURIComponent(characterData.name)}&description=${encodeURIComponent(characterData.description || '')}&thumbnail=${encodeURIComponent(characterData.thumbnail || '')}`,
-          width: 800,
-          height: 400,
-          alt: characterData.name,
+          url: ogImageUrl,
         },
       ],
     },
@@ -64,7 +70,6 @@ export default async function CharacterPage({
   if (!characterData) notFound();
 
   const relationships = await fetchRelationships(Number(id));
-  
 
   const supabase = createClient();
 
