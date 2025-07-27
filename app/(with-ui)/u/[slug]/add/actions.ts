@@ -97,12 +97,12 @@ export async function createCharacter(
       };
     }
 
-    if (!halfImage || !(halfImage instanceof File)) {
+    if (!halfImage) {
       const err = new Error("상반신 이미지는 필수입니다");
       Sentry.captureException(err);
       return { success: false, message: "상반신 이미지는 필수입니다." };
     }
-    if (!thumbnail || !(thumbnail instanceof File)) {
+    if (!thumbnail) {
       const err = new Error("썸네일은 필수입니다");
       Sentry.captureException(err);
       return { success: false, message: "썸네일은 필수입니다." };

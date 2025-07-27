@@ -114,9 +114,7 @@ export default function CharacterAddTemplate({
   // properties가 바뀔 때마다 react-hook-form에 값 할당 (validation용)
   useEffect(() => {
     setValue("properties", combinedProperties);
-    if (isInitialized) {
-      trigger("properties"); // 초기화 후에만 validation 트리거
-    } else setIsInitialized(true);
+    trigger("properties");
   }, [properties]);
 
   useEffect(() => {

@@ -5,10 +5,7 @@ import { z } from "zod";
 
 const propertySchema = z.object({
   key: z.string().min(1, "키는 필수입니다"),
-  value: z
-    .string()
-    .min(1, "값은 필수입니다")
-    .max(1500, "최대 1500자 이하여야 합니다"),
+  value: z.string().max(1500, "최대 1500자 이하여야 합니다"),
   type: z.nativeEnum(EPropertyType),
 });
 
