@@ -13,6 +13,8 @@ import { Character, EPropertyType, Property } from "@/types/character";
 import { PlanLimit } from "@/types/plan";
 import { Relationship } from "@/types/relationship";
 import { zodResolver } from "@hookform/resolvers/zod";
+import clsx from "clsx";
+import { CircleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -98,13 +100,23 @@ export default function CharacterAddTemplate({
     watch,
   } = useForm({
     resolver: zodResolver(createCharacterSchema(planLimit)),
+    mode: "onChange",
     defaultValues: {
       profile_slug: slug,
       properties: combinedProperties,
       relationships,
-      hashtags: "",
+      hashtags: hashtags || "",
     },
   });
+
+  const variants = {
+    input: {
+      error:
+        "text-2xl w-full max-w-72 text-center border-red-500 focus:outline-none",
+      default:
+        "text-2xl w-full max-w-72 text-center border-primary focus:outline-none",
+    },
+  };
 
   useUnsavedChangesWarning(isDirty);
 
@@ -208,24 +220,32 @@ export default function CharacterAddTemplate({
         </TabsContent>
       </Tabs>
 
-      <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
+      <div className="flex flex-col gap-2 w-full justify-center items-center mt-6 mb-4">
         <input
-          className="text-2xl w-full max-w-72 text-center border-primary focus:outline-none placeholder:text-gray-400 placeholder:text-base"
+          className={clsx(
+            errors.name ? variants.input.error : variants.input.default
+          )}
           type="text"
           {...register("name")}
           placeholder="이름"
         />
         {errors.name && (
-          <span className="text-red-500 text-sm">{errors.name.message}</span>
+          <span className="text-red-500 text-sm flex items-center gap-1">
+            <CircleAlert className="text-red-500 w-4 h-4" />
+            {errors.name.message}
+          </span>
         )}
         <input
           type="text"
           {...register("description")}
-          className="text-xl w-full max-w-72 text-center border-primary focus:outline-none mb-4 placeholder:text-gray-400 placeholder:text-sm"
+          className={clsx(
+            errors.description ? variants.input.error : variants.input.default
+          )}
           placeholder="캐릭터의 한 마디"
         />
         {errors.description && (
-          <span className="text-red-500 text-sm">
+          <span className="text-red-500 text-sm flex items-center gap-1">
+            <CircleAlert className="inline w-4 h-4" />
             {errors.description.message}
           </span>
         )}
@@ -236,6 +256,7 @@ export default function CharacterAddTemplate({
         handler={(newValue) => {
           setProperties(newValue);
         }}
+        errors={errors.properties}
       />
       <div className=" px-10 w-full">
         <ColorProperties properties={colors} handler={setColors} editable />
@@ -266,6 +287,16 @@ export default function CharacterAddTemplate({
         }}
       />
 
+      <input
+        type="hidden"
+        {...register("properties")}
+        value={JSON.stringify(combinedProperties)}
+      />
+      <input
+        type="hidden"
+        {...register("relationships")}
+        value={JSON.stringify(relationships)}
+      />
       <input
         type="hidden"
         {...register("properties")}

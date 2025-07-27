@@ -3,16 +3,19 @@
 import { Textarea } from "@/components/ui/textarea";
 import DeleteIcon from "@/public/assets/icons/delete.svg";
 import { Property } from "@/types/character";
+import { CircleAlert } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export default function ListPropertiesItem({
   property,
   onChange,
   onDelete,
+  error,
 }: {
   property: Property;
   onChange: (property: Property) => void;
   onDelete: (property: Property) => void;
+  error?: string;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -90,6 +93,12 @@ export default function ListPropertiesItem({
       >
         <DeleteIcon className=" text-background-dark" width={28} height={28} />
       </button>
+      {error && (
+        <span className="text-red-500 text-sm flex items-center gap-1">
+          <CircleAlert className="inline w-4 h-4" />
+          {error}
+        </span>
+      )}
     </div>
   );
 }

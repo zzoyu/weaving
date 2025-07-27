@@ -24,7 +24,7 @@ export const createCharacterSchema = (planLimit: PlanLimit) =>
     profile_slug: z.string(),
     properties: z
       .array(propertySchema)
-      .length(25, "속성은 최대 25개까지 추가할 수 있습니다"),
+      .max(25, "속성은 최대 25개까지 추가할 수 있습니다"),
     relationships: z
       .array(relationshipSchema)
       .max(
