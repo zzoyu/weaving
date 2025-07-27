@@ -1,17 +1,42 @@
 "use client";
 
+import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import DeleteIcon from "@/public/assets/icons/delete.svg";
 import { Property } from "@/types/character";
+import { CircleAlert } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ListPropertiesItem({
   property,
   onChange,
   onDelete,
+  error,
 }: {
   property: Property;
   onChange: (property: Property) => void;
   onDelete: (property: Property) => void;
+  error?: string;
 }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isExpanded) {
+      textareaRef.current?.focus();
+      textareaRef.current?.setSelectionRange(
+        textareaRef.current.value.length,
+        textareaRef.current.value.length
+      );
+    } else {
+      inputRef.current?.focus();
+      inputRef.current?.setSelectionRange(
+        inputRef.current.value.length,
+        inputRef.current.value.length
+      );
+    }
+  }, [isExpanded]);
+
   return (
     <div className="w-full h-fit relative flex items-center justify-center group">
       <div className="w-full flex gap-4">
@@ -28,9 +53,9 @@ export default function ListPropertiesItem({
             onChange({ ...property, key: event.target.value });
           }}
         />
-        <input
-          type="text"
-          className="w-full text-center p-1 border-background-muted focus:outline-none"
+        <AutosizeTextarea
+          minHeight={16}
+          className="w-full p-1 border-background-muted focus:outline-none bg-transparent resize-none focus:ring-0 ring-0 active:ring-0 active:border-none"
           value={property.value}
           onChange={(event) => {
             onChange({ ...property, value: event.target.value });
@@ -46,6 +71,12 @@ export default function ListPropertiesItem({
       >
         <DeleteIcon className=" text-background-dark" width={28} height={28} />
       </button>
+      {error && (
+        <span className="text-red-500 text-sm flex items-center gap-1">
+          <CircleAlert className="inline w-4 h-4" />
+          {error}
+        </span>
+      )}
     </div>
   );
-} 
+}
