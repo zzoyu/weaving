@@ -16,7 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 import { CircleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { createCharacter } from "../actions";
 import { createCharacterSchema } from "../schema";
@@ -105,9 +105,22 @@ export default function CharacterAddTemplate({
       profile_slug: slug,
       properties: combinedProperties,
       relationships,
-      hashtags: hashtags || "",
+      hashtags: hashtags,
     },
   });
+
+  // properties가 바뀔 때마다 react-hook-form에 값 할당
+  useEffect(() => {
+    setValue("properties", combinedProperties);
+  }, [combinedProperties, setValue]);
+
+  useEffect(() => {
+    setValue("relationships", relationships);
+  }, [relationships, setValue]);
+
+  useEffect(() => {
+    setValue("hashtags", hashtags);
+  }, [hashtags, setValue]);
 
   const variants = {
     input: {

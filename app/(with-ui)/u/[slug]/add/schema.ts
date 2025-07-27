@@ -5,7 +5,10 @@ import { z } from "zod";
 
 const propertySchema = z.object({
   key: z.string().min(1, "키는 필수입니다"),
-  value: z.string().length(1500, "최대 1500자 이하여야 합니다").optional(),
+  value: z
+    .string()
+    .min(1, "값은 필수입니다")
+    .max(1500, "최대 1500자 이하여야 합니다"),
   type: z.nativeEnum(EPropertyType),
 });
 
@@ -24,14 +27,28 @@ export const createCharacterSchema = (planLimit: PlanLimit) =>
     profile_slug: z.string(),
     properties: z
       .array(propertySchema)
-      .max(25, "속성은 최대 25개까지 추가할 수 있습니다"),
+      .refine((value) => {
+        const filtered = value.filter((i) => i.type !== EPropertyType.COLOR);
+        return filtered.length <= 25;
+      }, "속성은 최대 25개까지 추가할 수 있습니다")
+      .refine((value) => {
+        const invalidProperty = value.find((i) => i.value.length > 1500);
+        if (invalidProperty) {
+          return false;
+        }
+        return true;
+      }, "속성 값은 최대 1500자 이하여야 합니다"),
     relationships: z
       .array(relationshipSchema)
       .max(
         planLimit.maxRelationshipsPerCharacter,
         `관계는 최대 ${planLimit.maxRelationshipsPerCharacter}개까지 추가할 수 있습니다`
       ),
-    hashtags: z.string().optional(),
+    hashtags: z.string().refine((value) => {
+      if (!value) return true;
+      const tags = value.split(" ");
+      return tags.length <= 20;
+    }, "해시태그는 최대 20개까지 추가할 수 있습니다"),
   });
 
 export type CreateCharacterFormData = {
