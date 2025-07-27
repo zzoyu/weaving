@@ -1,6 +1,6 @@
 "use client";
 
-import { Textarea } from "@/components/ui/textarea";
+import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import DeleteIcon from "@/public/assets/icons/delete.svg";
 import { Property } from "@/types/character";
 import { CircleAlert } from "lucide-react";
@@ -53,36 +53,14 @@ export default function ListPropertiesItem({
             onChange({ ...property, key: event.target.value });
           }}
         />
-        {isExpanded ? (
-          <Textarea
-            ref={textareaRef}
-            className="w-full text-left p-1 border-background-muted focus:outline-none bg-transparent resize-none h-auto overflow-hidden"
-            value={property.value}
-            onChange={(event) => {
-              onChange({ ...property, value: event.target.value });
-              if (event.target.value.length <= 20) {
-                setIsExpanded(false);
-              }
-              if (textareaRef.current) {
-                textareaRef.current.style.height = "auto"; // Reset height to auto to allow expansion
-                textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Set height to scrollHeight
-              }
-            }}
-          />
-        ) : (
-          <input
-            ref={inputRef}
-            type="text"
-            className="w-full text-center p-1 border-background-muted focus:outline-none"
-            value={property.value}
-            onChange={(event) => {
-              onChange({ ...property, value: event.target.value });
-              if (event.target.value.length > 20) {
-                setIsExpanded(true);
-              }
-            }}
-          />
-        )}
+        <AutosizeTextarea
+          minHeight={16}
+          className="w-full p-1 border-background-muted focus:outline-none bg-transparent resize-none focus:ring-0 ring-0 active:ring-0 active:border-none"
+          value={property.value}
+          onChange={(event) => {
+            onChange({ ...property, value: event.target.value });
+          }}
+        />
       </div>
       <button
         className="absolute right-0 visible md:invisible md:group-hover:visible"
