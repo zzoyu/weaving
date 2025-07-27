@@ -29,6 +29,7 @@ export default function ListProperties({
         <ListPropertiesItem
           key={`key-value-${index}-${property.key}`}
           property={property}
+          error={errors?.[index]?.value?.message}
           onChange={(property) => {
             const newValue = structuredClone(localProperties);
             newValue[index] = property;
@@ -41,7 +42,6 @@ export default function ListProperties({
             handler(newProperties);
             setLocalProperties(newProperties);
           }}
-          error={errors?.[index]?.message}
         />
       ))}
       <div className="flex justify-center p-2">

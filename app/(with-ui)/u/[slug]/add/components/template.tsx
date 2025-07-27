@@ -91,36 +91,47 @@ export default function CharacterAddTemplate({
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isDirty },
     setValue,
+    trigger,
     watch,
   } = useForm({
     resolver: zodResolver(createCharacterSchema(planLimit)),
     mode: "onChange",
     defaultValues: {
       profile_slug: slug,
-      properties: combinedProperties,
-      relationships,
-      hashtags: hashtags,
+      properties: [...baseProperties],
+      relationships: [],
+      hashtags: "",
     },
   });
 
-  // properties가 바뀔 때마다 react-hook-form에 값 할당
+  // properties가 바뀔 때마다 react-hook-form에 값 할당 (validation용)
   useEffect(() => {
     setValue("properties", combinedProperties);
-  }, [combinedProperties, setValue]);
+    if (isInitialized) {
+      trigger("properties"); // 초기화 후에만 validation 트리거
+    } else setIsInitialized(true);
+  }, [properties]);
 
   useEffect(() => {
     setValue("relationships", relationships);
-  }, [relationships, setValue]);
+    // if (isInitialized) {
+    trigger("relationships"); // 초기화 후에만 validation 트리거
+    // }
+  }, [relationships, setValue, trigger, isInitialized]);
 
   useEffect(() => {
     setValue("hashtags", hashtags);
-  }, [hashtags, setValue]);
+    // if (isInitialized) {
+    trigger("hashtags"); // 초기화 후에만 validation 트리거
+    // }
+  }, [hashtags, setValue, trigger, isInitialized]);
 
   const variants = {
     input: {
@@ -279,8 +290,10 @@ export default function CharacterAddTemplate({
         onChange={setRelationships}
         editable
         profileId={profileId}
+        error={errors?.relationships}
       />
       <InputHashtag
+        error={errors.hashtags}
         value={currentHashtag}
         hashtags={previewHashtags}
         onChange={(newValue) => {
@@ -300,16 +313,6 @@ export default function CharacterAddTemplate({
         }}
       />
 
-      <input
-        type="hidden"
-        {...register("properties")}
-        value={JSON.stringify(combinedProperties)}
-      />
-      <input
-        type="hidden"
-        {...register("relationships")}
-        value={JSON.stringify(relationships)}
-      />
       <input
         type="hidden"
         {...register("properties")}

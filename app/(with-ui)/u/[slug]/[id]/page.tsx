@@ -1,6 +1,7 @@
 import { generateOgImage } from "@/actions/generate-og-image";
 import { fetchProfileByUserId } from "@/app/profile/actions";
 import { EPropertyType } from "@/types/character";
+import { getPublicUrl } from "@/utils/image";
 import { createClient } from "@/utils/supabase/server";
 import { Metadata, ResolvingMetadata } from "next";
 import { cookies } from "next/headers";
@@ -41,7 +42,7 @@ export async function generateMetadata(
   const ogImage = (await generateOgImage(
     characterData.name,
     characterData.description || "",
-    characterData.thumbnail || ""
+    getPublicUrl(characterData.thumbnail) || ""
   )) as Response;
 
   const ogImageUrl = ogImage.url;

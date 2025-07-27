@@ -17,7 +17,9 @@ import {
 } from "@/types/relationship";
 import { getPublicUrl } from "@/utils/image";
 import clsx from "clsx";
+import { CircleAlert } from "lucide-react";
 import React, { useState } from "react";
+import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 import {
   fetchCharactersByProfileId,
   fetchCharactersFromFriendsByProfileId,
@@ -153,12 +155,14 @@ export function ButtonAddRelationship({
   editable = false,
   relationships,
   character,
+  error,
 }: {
   profileId: number;
   onChange: (data: Relationship[]) => void;
   editable?: boolean;
   relationships: Relationship[];
   character?: Character;
+  error?: Merge<FieldError, FieldErrorsImpl<Relationship[]>>;
 }) {
   const [tempRelationships, setRelationships] =
     useState<Relationship[]>(relationships);
@@ -368,6 +372,12 @@ export function ButtonAddRelationship({
               </div>
             );
           })}
+          {error && (
+            <span className="text-red-500 text-sm flex items-center gap-1">
+              <CircleAlert className="inline w-4 h-4" />
+              {error.message}
+            </span>
+          )}
         </div>
       )}
     </div>

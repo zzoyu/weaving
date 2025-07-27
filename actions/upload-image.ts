@@ -26,7 +26,7 @@ export async function uploadImageToObjectStorage(
     const response = await fetch(writeUrl, {
       method: "PUT",
       headers: {
-        "Content-Type": "image/webp",
+        "Content-Type": "image/png",
       },
       body: file,
     });

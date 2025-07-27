@@ -83,7 +83,7 @@ export async function createCharacter(
     const thumbnail = formData.get("half-thumbnail") as File | null;
 
     const imageFiles = [halfImage, fullImage].filter(
-      (file): file is File => file instanceof File
+      (file): file is File => file !== null && file.size > 0
     );
 
     if (imageFiles.length > userPlan.limit.maxImagesPerCharacter) {
