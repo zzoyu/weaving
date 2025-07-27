@@ -1,13 +1,9 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 import { CharacterWithProfile } from "@/types/character";
 import { getPublicUrl } from "@/utils/image";
-import { motion } from "framer-motion";
-import { Hash, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -17,11 +13,19 @@ interface CharacterListProps {
   isMyProfile: boolean;
 }
 
-export default function CharacterList({
+import { Character } from "@/types/character";
+import { colorList } from "@/types/color";
+import { ERelationshipType, relationshipTypeData } from "@/types/relationship";
+import clsx from "clsx";
+
+export function ListCharacter({
   characters,
-  isMyProfile,
-}: CharacterListProps) {
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
+  isMine = false,
+}: {
+  characters: Character[];
+  isMine?: boolean;
+}) {
+  const [isOpened, setIsOpened] = useState(false);
 
   if (!characters.length) {
     return (
@@ -29,95 +33,70 @@ export default function CharacterList({
         <CardContent className="flex flex-col items-center justify-center py-12 text-muted-foreground">
           <Star className="w-12 h-12 mb-4 opacity-50" />
           <p className="text-lg">아직 등록된 캐릭터가 없어요</p>
-          {isMyProfile && (
-            <Link href={`../add`} className="mt-4">
-              <Button variant="outline">캐릭터 추가하기</Button>
-            </Link>
-          )}
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <div className="grid grid-cols-2 gap-4">
-      {characters.map((character, index) => {
-        const hashtags = character.hashtags
-          ? character.hashtags.split(" ").filter(Boolean)
-          : [];
+    <div className="flex flex-col px-10 ">
+      <h2 className="text-lg font-bold mb-4">소속 인물</h2>
+      <div className="grid grid-cols-3 gap-4">
+        {(!isOpened ? characters.slice(0, 3) : characters).map((character) => {
+          const relationshipType =
+            relationshipTypeData[character.name as ERelationshipType];
 
-        return (
-          <motion.div
-            key={character.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.1 }}
-            onHoverStart={() => setHoveredId(character.id)}
-            onHoverEnd={() => setHoveredId(null)}
-          >
-            <Link href={`/u/${character.profile.slug}/${character.id}`}>
-              <Card
-                className={cn(
-                  "group relative overflow-hidden transition-all duration-300",
-                  "hover:shadow-lg hover:scale-[1.02]",
-                  "border-2 hover:border-primary/20"
+          return (
+            <Link
+              href={`../character/${character.id}`}
+              key={`relationship-${character.id}`}
+            >
+              <div
+                className={clsx(
+                  "flex flex-col items-center justify-center gap-1 overflow-hidden rounded-md relative group focus-within:ring-2",
+                  colorList?.[
+                    character?.properties?.find?.((i) => i.key === "themeColor")
+                      ?.value || "white"
+                  ] + " bg-opacity-50"
                 )}
               >
-                <div className="grid grid-cols-2 items-stretch">
-                  {/* 왼쪽: 썸네일 */}
-                  <div className="relative aspect-square w-full h-full bg-muted">
-                    {character.thumbnail ? (
-                      <Image
-                        unoptimized
-                        src={getPublicUrl(character.thumbnail)}
-                        alt={character.name}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                        sizes="100px"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-3xl font-bold text-muted-foreground">
-                        {character.name[0]}
-                      </div>
-                    )}
-                  </div>
-                  {/* 오른쪽: 정보 */}
-                  <div className="flex flex-col justify-center p-3">
-                    <h3 className="font-semibold truncate">{character.name}</h3>
-                    {character.description && (
-                      <p className="text-xs text-muted-foreground mt-2 line-clamp-2">
-                        {character.description}
-                      </p>
-                    )}
-                    {hashtags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {hashtags.slice(0, 3).map((tag, i) => (
-                          <Badge
-                            key={i}
-                            variant="secondary"
-                            className="text-[10px] px-1.5 py-0.5 h-5 min-w-0"
-                          >
-                            <Hash className="w-3 h-3 mr-0.5" />
-                            {tag}
-                          </Badge>
-                        ))}
-                        {hashtags.length > 3 && (
-                          <Badge
-                            variant="outline"
-                            className="text-[10px] px-1.5 py-0.5 h-5 min-w-0"
-                          >
-                            +{hashtags.length - 3}
-                          </Badge>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                <div className="rounded-full overflow-hidden m-2">
+                  <Image
+                    unoptimized
+                    src={
+                      getPublicUrl(character.thumbnail) ||
+                      getPublicUrl(character?.image?.[0]) ||
+                      ""
+                    }
+                    alt={character.name}
+                    width={100}
+                    height={100}
+                  />
                 </div>
-              </Card>
+                <div
+                  className={clsx(
+                    character.password && "text-opacity-50",
+                    character.isFavorite
+                      ? "bg-primary"
+                      : "bg-background-default dark:bg-neutral-800",
+                    "w-full h-fit flex justify-center items-center p-2"
+                  )}
+                >
+                  <p>{character.name}</p>
+                </div>
+              </div>
             </Link>
-          </motion.div>
-        );
-      })}
+          );
+        })}
+      </div>
+      {characters.length > 3 && (
+        <button
+          className="w-full text-right p-2 mt-2 text-gray-600 text-sm"
+          onClick={() => setIsOpened(!isOpened)}
+        >
+          {isOpened ? "▲ 접기" : "▼ 더보기"}
+        </button>
+      )}
     </div>
   );
 }

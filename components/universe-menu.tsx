@@ -9,15 +9,19 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import MoreIcon from "@/public/assets/icons/more.svg";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 interface UniverseMenuProps {
   universeId: number;
   onDelete?: () => void;
 }
 
-export default function UniverseMenu({ universeId, onDelete }: UniverseMenuProps) {
+export default function UniverseMenu({
+  universeId,
+  onDelete,
+}: UniverseMenuProps) {
   const router = useRouter();
+  const params = useParams();
 
   return (
     <Popover>
@@ -34,13 +38,18 @@ export default function UniverseMenu({ universeId, onDelete }: UniverseMenuProps
           variant="ghost"
           size="sm"
           className="w-full justify-start text-base text-gray-700 hover:text-primary-500"
-          onClick={() => router.push(`/u/${universeId}/v/${universeId}/edit`)}
+          onClick={() => router.push(`/u/${params.slug}/v/${params.id}/edit`)}
         >
           세계관 수정
         </Button>
         <ButtonShareUniverse universeId={universeId} />
-        <ButtonDeleteUniverse universeId={universeId} className="w-full justify-start text-base text-gray-700 hover:text-destructive">세계관 삭제</ButtonDeleteUniverse>
+        <ButtonDeleteUniverse
+          universeId={universeId}
+          className="w-full justify-start text-base text-gray-700 hover:text-destructive"
+        >
+          세계관 삭제
+        </ButtonDeleteUniverse>
       </PopoverContent>
     </Popover>
   );
-} 
+}

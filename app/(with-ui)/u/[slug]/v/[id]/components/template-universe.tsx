@@ -1,7 +1,10 @@
 import { CharacterWithProfile } from "@/types/character";
 import { Universe } from "@/types/universe";
+import { getPublicUrl } from "@/utils/image";
 import { ImageIcon } from "lucide-react";
 import Image from "next/image";
+import { CharacterProfileField } from "../../../[id]/components/profile-card";
+import { ListCharacter } from "./character-list";
 
 interface UniverseTemplateProps {
   universe: Universe;
@@ -27,10 +30,10 @@ export default function TemplateUniverse({
         {universe.image && universe.image.length > 0 ? (
           <Image
             unoptimized
-            src={universe.image[0]}
+            src={getPublicUrl(universe.image[0]) || ""}
             alt={universe.name}
             fill
-            className="object-contain rounded-xl border border-gray-200 bg-gray-50"
+            className="object-contain bg-gray-50"
             priority
           />
         ) : (
@@ -43,12 +46,7 @@ export default function TemplateUniverse({
       {/* 이름, 설명, 수정/관계도 버튼 */}
       <div className="w-full flex flex-col items-center gap-2">
         <div className="flex items-center gap-2">
-          <h1
-            className="text-2xl font-bold text-center"
-            style={{ fontFamily: "Pretendard, sans-serif" }}
-          >
-            {universe.name}
-          </h1>
+          <h1 className="text-2xl font-bold text-center">{universe.name}</h1>
         </div>
         {universe.description && (
           <p className="text-base text-muted-foreground text-center mb-2">
@@ -58,55 +56,24 @@ export default function TemplateUniverse({
       </div>
 
       {/* 속성 카드 리스트 */}
-      {universe.properties && universe.properties.length > 0 && (
-        <div className="w-full max-w-md flex flex-col gap-3 mt-2">
-          {universe.properties.map((property, idx) => (
-            <div
-              key={idx}
-              className="flex justify-between items-center px-5 py-3 rounded-xl bg-gray-50 border border-gray-200 shadow-sm"
-            >
-              <span className="font-semibold text-gray-600 text-base">
-                {property.key}
-              </span>
-              <span className="text-gray-900 text-base font-medium break-all text-right">
-                {property.value}
-              </span>
+      <div className="flex flex-col justify-center items-center gap-2 w-full">
+        <div className="text-gray-700 w-full px-10">
+          {universe.properties && universe.properties.length > 0 && (
+            <div className="w-full max-w-md flex flex-col gap-3 mt-2">
+              {universe.properties.map((property, idx) => (
+                <CharacterProfileField
+                  key={`property-${idx}`}
+                  property={property}
+                />
+              ))}
             </div>
-          ))}
-        </div>
-      )}
-
-      {/* 관계 인물(캐릭터) */}
-      <div className="w-full mt-6 px-4">
-        <h2 className="text-lg font-semibold mb-4">소속 캐릭터</h2>
-        <div className="grid grid-cols-3 min-w-[300px] gap-2">
-          {characters && characters.length > 0 ? (
-            characters.map((character, idx) => (
-              <div key={idx} className="flex flex-col items-center">
-                <div className="w-16 h-16 relative rounded-full overflow-hidden bg-gray-100 border border-gray-200 mb-1">
-                  {character.image && character.image.length > 0 ? (
-                    <Image
-                      unoptimized
-                      src={character.image[0]}
-                      alt={character.name}
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <ImageIcon className="w-8 h-8 text-muted-foreground absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
-                  )}
-                </div>
-                <span className="text-xs text-center line-clamp-1">
-                  {character.name}
-                </span>
-              </div>
-            ))
-          ) : (
-            <span className="text-gray-400 col-span-3 text-center">
-              관계 인물이 없습니다.
-            </span>
           )}
         </div>
+      </div>
+
+      {/* 캐릭터 리스트 */}
+      <div className="w-full px-0 mt-2">
+        <ListCharacter characters={characters} isMine={isMyProfile} />
       </div>
 
       {/* 해시태그 */}

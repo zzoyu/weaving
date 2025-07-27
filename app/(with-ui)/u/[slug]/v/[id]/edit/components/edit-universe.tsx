@@ -197,7 +197,7 @@ export default function EditUniverse({
         type="submit"
         variant="outline"
         disabled={isSubmitting}
-        className="text-background-default bg-text-black dark:text-text-black dark:bg-background-default rounded w-full text-xl p-2"
+        className="text-background-default bg-text-black rounded w-full text-xl p-2"
       >
         저장하기
       </Button>
