@@ -1,4 +1,5 @@
 import { marked } from "marked";
+import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Script from "next/script";
@@ -38,25 +39,31 @@ type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export async function generateMetadata({ params }: Props) {
-  const id = await params.id;
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
   const data = await fetchBlogItem(parseInt(id));
 
   if (!data) {
     notFound();
   }
 
+  const img = data.content.match(/<img[^>]+src="([^">]+)"/)?.[1];
+  const description = data.content
+    .replace(/<img[^>]*>/g, "")
+    .replace(/[#*_`~]/g, "")
+    .substring(0, 160);
+
   return {
     title: data.title,
-    description: data.content
-      .replace(/<img[^>]*>/g, "")
-      .replace(/[#*_`~]/g, "")
-      .substring(0, 160),
-    thumbnail:
-      data.content.match(/<img[^>]+src="([^">]+)"/)?.[1] ||
-      "/assets/logo_color.svg",
-    publishedAt: data.created_at,
-    author: { name: "위빙" },
+    description,
+    openGraph: {
+      type: "article",
+      title: data.title,
+      description,
+      images: img ? [img] : [],
+      publishedTime: data.created_at,
+      authors: ["위빙"],
+    },
   };
 }
 
