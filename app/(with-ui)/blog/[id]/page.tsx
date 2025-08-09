@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "article",
       title: data.title,
       description,
-      images: img ? [img] : [],
+      images: img ? [img] : undefined,
       publishedTime: data.created_at,
       authors: ["위빙"],
     },
