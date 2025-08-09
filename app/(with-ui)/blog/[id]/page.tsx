@@ -1,7 +1,64 @@
 import { marked } from "marked";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 import { fetchBlogItem } from "../actions";
+
+function StructuredData({
+  post,
+}: {
+  post: {
+    title: string;
+    summary: string;
+    thumbnail: string;
+    publishedAt: string;
+  };
+}) {
+  return (
+    <Script
+      id="structured-data"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          headline: post.title,
+          description: post.summary,
+          image: post.thumbnail,
+          author: { "@type": "Person", name: "위빙" },
+          datePublished: post.publishedAt,
+        }),
+      }}
+    />
+  );
+}
+
+type Props = {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata({ params }: Props) {
+  const id = await params.id;
+  const data = await fetchBlogItem(parseInt(id));
+
+  if (!data) {
+    notFound();
+  }
+
+  return {
+    title: data.title,
+    description: data.content
+      .replace(/<img[^>]*>/g, "")
+      .replace(/[#*_`~]/g, "")
+      .substring(0, 160),
+    thumbnail:
+      data.content.match(/<img[^>]+src="([^">]+)"/)?.[1] ||
+      "/assets/logo_color.svg",
+    publishedAt: data.created_at,
+    author: { name: "위빙" },
+  };
+}
 
 export default async function BlogDetailPage({
   params,
@@ -21,6 +78,19 @@ export default async function BlogDetailPage({
 
   return (
     <main className="flex flex-col justify-start pt-4 md:pt-10 w-full md:max-w-[40rem] mx-auto">
+      <StructuredData
+        post={{
+          title: blogItem.title,
+          summary: blogItem.content
+            .replace(/<img[^>]*>/g, "")
+            .replace(/[#*_`~]/g, "")
+            .substring(0, 160),
+          thumbnail:
+            blogItem.content.match(/<img[^>]+src="([^">]+)"/)?.[1] ||
+            "/assets/logo_color.svg",
+          publishedAt: blogItem.created_at,
+        }}
+      />
       <div className="fixed top-0 w-full flex p-4 z-10">
         <h2 className="flex gap-2 items-center text-xl">
           <Link href="/blog" className="transition-colors">
