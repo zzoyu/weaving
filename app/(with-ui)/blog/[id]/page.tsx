@@ -117,7 +117,7 @@ export default async function BlogDetailPage({
               </p>
             </div>
             <article
-              className="prose prose-stone prose-h1:font-pretendard prose-h1:text-xl prose-h2:text-lg prose-h3:text-base prose-h4:text-sm prose-p:text-base dark:prose-invert max-w-none break-words"
+              className="prose prose-stone prose-h1:font-pretendard prose-h1:text-xl prose-h2:text-lg prose-h3:text-base prose-h4:text-sm prose-p:text-base dark:prose-invert max-w-none break-words mb-20"
               dangerouslySetInnerHTML={{ __html: parsedMarkdown }}
             />
           </div>

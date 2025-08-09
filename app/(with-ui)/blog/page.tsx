@@ -46,9 +46,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                     <Link
                       key={article.id}
                       href={`/blog/${article.id}`}
-                      className="flex flex-col gap-2 hover:bg-gray-50 transition-colors"
+                      className="flex flex-col gap-2 transition-colors"
                     >
-                      <div className="px-2 py-4 border-b border-gray-200">
+                      <div className="px-2 py-4 border-b">
                         <h3 className="text-sm md:text-base font-semibold">
                           {article.title}
                         </h3>
