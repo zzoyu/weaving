@@ -3,8 +3,16 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
   ChevronDown,
   FolderCheckIcon,
+  Menu,
   Search,
   Share2,
   Users,
@@ -123,6 +131,78 @@ export default function Landing() {
                 sizes="100vw"
                 className="object-contain w-[120px] md:w-[200px] hidden dark:block"
               />
+            </div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-6">
+              <Link
+                href="/blog"
+                className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
+              >
+                아티클 보기
+              </Link>
+              <Link
+                href="/help"
+                className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
+              >
+                고객센터
+              </Link>
+              <Button
+                className="bg-gradient-to-r from-[#97E6AB] to-[#68E7FA] hover:from-[#97E6AB] hover:to-[#68E7FA] text-white px-6 py-2 rounded-full"
+                asChild
+              >
+                <Link href="/signin">위빙 시작하기</Link>
+              </Button>
+            </div>
+
+            {/* Mobile Hamburger Menu */}
+            <div className="md:hidden">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                  >
+                    <Menu className="h-5 w-5" />
+                    <span className="sr-only">메뉴 열기</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent 
+                  side="right" 
+                  className="w-[280px] bg-white dark:bg-gray-900"
+                >
+                  <SheetHeader>
+                    <SheetTitle className="text-left text-gray-900 dark:text-white">
+                      메뉴
+                    </SheetTitle>
+                  </SheetHeader>
+                  <div className="flex flex-col gap-4 mt-6">
+                    <Link
+                      href="/blog"
+                      className="flex items-center px-4 py-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800 rounded-lg transition-colors"
+                    >
+                      아티클 보기
+                    </Link>
+                    <Link
+                      href="/help"
+                      className="flex items-center px-4 py-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800 rounded-lg transition-colors"
+                    >
+                      고객센터
+                    </Link>
+                    <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
+                      <Link
+                        href="/signin"
+                        className="block w-full"
+                      >
+                        <Button className="w-full bg-gradient-to-r from-[#97E6AB] to-[#68E7FA] hover:from-[#97E6AB] hover:to-[#68E7FA] text-white">
+                          위빙 시작하기
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
           </nav>
         </div>
