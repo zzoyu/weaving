@@ -37,11 +37,22 @@ async function getIdsAndSlugs() {
   );
 }
 
+async function getBlogArticlesIds() {
+  const supabase = createClient();
+  const { data, error } = await supabase.from("articles").select("id");
+  if (error) {
+    console.error(error);
+    return [];
+  }
+  return data.map((article) => article.id);
+}
+
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const slugs = await getSlugs();
   const idsAndSlugs = await getIdsAndSlugs();
+  const blogArticleIds = await getBlogArticlesIds();
 
   // 정적 경로
   const staticRoutes = [
@@ -50,8 +61,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/guideline",
     "/privacy",
     "/term",
-    "/mypage",
-    "/notifications",
+    "/signin",
   ];
 
   // 동적 경로 예시
@@ -62,6 +72,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
     ...idsAndSlugs.map(({ id, slug }) => ({
       url: `${baseUrl}/u/${slug}/${id}`,
+      lastModified: new Date(),
+    })),
+    ...blogArticleIds.map((id) => ({
+      url: `${baseUrl}/blog/${id}`,
       lastModified: new Date(),
     })),
   ];
