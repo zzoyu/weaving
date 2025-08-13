@@ -168,8 +168,8 @@ export default function Landing() {
                     <span className="sr-only">메뉴 열기</span>
                   </Button>
                 </SheetTrigger>
-                <SheetContent 
-                  side="right" 
+                <SheetContent
+                  side="right"
                   className="w-[280px] bg-white dark:bg-gray-900"
                 >
                   <SheetHeader>
@@ -191,10 +191,7 @@ export default function Landing() {
                       고객센터
                     </Link>
                     <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
-                      <Link
-                        href="/signin"
-                        className="block w-full"
-                      >
+                      <Link href="/signin" className="block w-full">
                         <Button className="w-full bg-gradient-to-r from-[#97E6AB] to-[#68E7FA] hover:from-[#97E6AB] hover:to-[#68E7FA] text-white">
                           위빙 시작하기
                         </Button>
@@ -532,7 +529,7 @@ export default function Landing() {
                 href="/privacy"
                 className="text-sm text-gray-500 dark:text-gray-400 hover:underline"
               >
-                개인정보 처리방침
+                개인정보처리방침
               </Link>
               <Link
                 href="/terms"
@@ -544,7 +541,7 @@ export default function Landing() {
                 href="/guideline"
                 className="text-sm text-gray-500 dark:text-gray-400 hover:underline"
               >
-                콘텐츠 가이드라인
+                콘텐츠가이드라인
               </Link>
             </nav>
 

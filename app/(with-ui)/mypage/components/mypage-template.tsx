@@ -27,7 +27,7 @@ export default function MypageTemplate({ profile }: { profile: Profile }) {
       </section>
 
       <div className="flex flex-row items-center justify-center w-full max-w-md p-4">
-        <Link href="/term" className="text-xs text-gray-500">
+        <Link href="/terms" className="text-xs text-gray-500">
           이용약관
         </Link>
         <Separator className="mx-2" orientation="vertical" />
