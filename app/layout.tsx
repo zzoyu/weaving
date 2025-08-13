@@ -30,12 +30,18 @@ const fontBody = localFont({
 export const metadata: Metadata = {
   title: "위빙",
   description: "우리의 세계가 만나는 곳",
+  applicationName: "위빙",
   openGraph: {
+    type: "website",
     title: "위빙",
+    siteName: "위빙",
     description: "우리의 세계가 만나는 곳",
-    images: ["/assets/images/og/with-logo.png"],
+    images: ["/assets/images/og/with-logo.jpg"],
+    locale: "ko_KR",
   },
   creator: "파인딩벤자민",
+  authors: [{ name: "파인딩벤자민" }],
+  keywords: ["위빙", "weaving", "창작자", "콘텐츠 공유"],
   robots: {
     index: true,
     follow: true,
