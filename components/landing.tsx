@@ -33,7 +33,7 @@ export default function Landing() {
         "블로그, 클라우드, 메모장에 흩어져 있던\n캐릭터, 세계관 관련 정보를\n위빙 안에서 한 번에 정리하고 관리해보세요.",
       description_pc:
         "블로그, 클라우드, 메모장에 흩어져 있던 캐릭터, 세계관 관련 정보를\n위빙 안에서 한 번에 정리하고 관리해보세요.",
-      image: "/assets/images/about/book-icon.png",
+      image: "/assets/images/about/book-icon.webp",
     },
     {
       icon: <Search className="w-8 h-8" />,
@@ -42,7 +42,7 @@ export default function Landing() {
         "테마색, 이름, 해시태그 기반으로\n캐릭터를 빠르게 검색할 수 있어\n프로필 수가 많아도 문제 없어요.",
       description_pc:
         "테마색, 이름, 해시태그 기반으로 캐릭터를 빠르게 검색할 수 있어\n프로필 수가 많아도 문제 없어요.",
-      image: "/assets/images/about/palette-icon.png",
+      image: "/assets/images/about/palette-icon.webp",
     },
     {
       icon: <Users className="w-8 h-8" />,
@@ -51,7 +51,7 @@ export default function Landing() {
         "팔로우한 친구의 캐릭터를 선택하여\n내 캐릭터와의 관계를 설정하고\n관계도 형태로 시각화할 수 있어요.",
       description_pc:
         "팔로우한 친구의 캐릭터를 선택하여 내 캐릭터와의 관계를 설정하고\n관계도 형태로 시각화할 수 있어요.",
-      image: "/assets/images/about/character-icon.png",
+      image: "/assets/images/about/character-icon.webp",
     },
     {
       icon: <Share2 className="w-8 h-8" />,
@@ -60,21 +60,21 @@ export default function Landing() {
         "사진과 주요 정보가 담긴 캐릭터 프로필 페이지를\n링크로 간편하게 전달할 수 있어요.",
       description_pc:
         "사진과 주요 정보가 담긴 캐릭터 프로필 페이지를\n링크로 간편하게 전달할 수 있어요.",
-      image: "/assets/images/about/share-icon.png",
+      image: "/assets/images/about/share-icon.webp",
     },
   ];
 
   const targetUsers = [
     {
-      image: "/assets/images/about/book-icon.png",
+      image: "/assets/images/about/book-icon.webp",
       title: "만화, 시나리오 작가 등\n서사 기반 창작자",
     },
     {
-      image: "/assets/images/about/palette-icon.png",
+      image: "/assets/images/about/palette-icon.webp",
       title: "캐릭터 정보를 시각화하는\n디자이너, 일러스트레이터",
     },
     {
-      image: "/assets/images/about/character-icon.png",
+      image: "/assets/images/about/character-icon.webp",
       title: "오리지널 캐릭터를 만드는\n모든 크리에이터",
     },
   ];
@@ -401,7 +401,7 @@ export default function Landing() {
                           {index === 0 && (
                             <Image
                               unoptimized
-                              src="/assets/images/about/mockup-list.png"
+                              src="/assets/images/about/mockup-list.webp"
                               alt="list"
                               width={0}
                               height={0}
@@ -413,7 +413,7 @@ export default function Landing() {
                           {index === 1 && (
                             <Image
                               unoptimized
-                              src="/assets/images/about/mockup-filter.png"
+                              src="/assets/images/about/mockup-filter.webp"
                               alt="filter"
                               width={0}
                               height={0}
@@ -425,7 +425,7 @@ export default function Landing() {
                           {index === 2 && (
                             <Image
                               unoptimized
-                              src="/assets/images/about/mockup-relationships.png"
+                              src="/assets/images/about/mockup-relationships.webp"
                               alt="relationships"
                               width={0}
                               height={0}
@@ -436,7 +436,7 @@ export default function Landing() {
                           {index === 3 && (
                             <Image
                               unoptimized
-                              src="/assets/images/about/mockup-og.png"
+                              src="/assets/images/about/mockup-og.webp"
                               alt="opengraph"
                               width={0}
                               height={0}
