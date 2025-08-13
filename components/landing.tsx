@@ -218,6 +218,34 @@ export default function Landing() {
                     >
                       고객센터
                     </Link>
+                    <Link
+                      href="/privacy"
+                      aria-description="Privacy Policy"
+                      aria-label="개인정보처리방침"
+                      about="/privacy"
+                      prefetch={true}
+                      className="flex items-center px-4 py-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800 rounded-lg transition-colors"
+                    >
+                      개인정보처리방침
+                    </Link>
+                    <Link
+                      href="/terms"
+                      aria-description="Terms of Service"
+                      aria-label="서비스 이용약관"
+                      prefetch={true}
+                      className="flex items-center px-4 py-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800 rounded-lg transition-colors"
+                    >
+                      서비스 이용약관
+                    </Link>
+                    <Link
+                      href="/guideline"
+                      aria-description="Content Guidelines"
+                      aria-label="콘텐츠가이드라인"
+                      prefetch={true}
+                      className="flex items-center px-4 py-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-800 rounded-lg transition-colors"
+                    >
+                      콘텐츠가이드라인
+                    </Link>
                     <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
                       <Link href="/signin" className="block w-full">
                         <Button className="w-full bg-gradient-to-r from-[#97E6AB] to-[#68E7FA] hover:from-[#97E6AB] hover:to-[#68E7FA] text-white">

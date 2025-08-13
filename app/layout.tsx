@@ -8,7 +8,7 @@ import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://weaving.kr";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 // const fontTitle = localFont({
 //   src: "../public/assets/fonts/playwrite/PlaywritePL-ExtraLight.ttf",
@@ -79,6 +79,20 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="beforeInteractive"
         />
+        {/* 구조화 데이터: CreativeWork */}
+        <Script
+          id="structured-data"
+          type="application/ld+json"
+          strategy="afterInteractive"
+        >
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CreativeWork",
+            name: "위빙",
+            url: baseUrl,
+            logo: `${baseUrl}/assets/logos/logo_text_horizontal_color_white.svg`,
+          })}
+        </Script>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {gtmId && <GoogleTagManager gtmId={gtmId} />}
           {children}
