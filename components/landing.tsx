@@ -527,18 +527,28 @@ export default function Landing() {
             >
               <Link
                 href="/privacy"
+                aria-description="Privacy Policy"
+                aria-label="개인정보처리방침"
+                about="/privacy"
+                prefetch={true}
                 className="text-sm text-gray-500 dark:text-gray-400 hover:underline"
               >
                 개인정보처리방침
               </Link>
               <Link
                 href="/terms"
+                aria-description="Terms of Service"
+                aria-label="서비스 이용약관"
+                prefetch={true}
                 className="text-sm text-gray-500 dark:text-gray-400 hover:underline"
               >
-                이용약관
+                서비스 이용약관
               </Link>
               <Link
                 href="/guideline"
+                aria-description="Content Guidelines"
+                aria-label="콘텐츠가이드라인"
+                prefetch={true}
                 className="text-sm text-gray-500 dark:text-gray-400 hover:underline"
               >
                 콘텐츠가이드라인
