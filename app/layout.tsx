@@ -8,6 +8,8 @@ import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://weaving.kr";
+
 // const fontTitle = localFont({
 //   src: "../public/assets/fonts/playwrite/PlaywritePL-ExtraLight.ttf",
 //   display: "swap",
@@ -36,9 +38,17 @@ export const metadata: Metadata = {
     title: "위빙",
     siteName: "위빙",
     description: "우리의 세계가 만나는 곳",
-    images: ["/assets/images/og/with-logo.jpg"],
+    images: [
+      {
+        url: `${baseUrl}/assets/images/og/with-logo.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "위빙 - 우리의 세계가 만나는 곳",
+      },
+    ],
     locale: "ko_KR",
   },
+
   creator: "파인딩벤자민",
   authors: [{ name: "파인딩벤자민" }],
   keywords: ["위빙", "weaving", "창작자", "콘텐츠 공유"],

@@ -91,7 +91,7 @@ export default function MainMenu() {
       )}
       <ul className="flex items-center divide-x-2 gap-1 text-gray-400 divide-gray-300 underline underline-offset-2 font-thin text-xs">
         <li>
-          <Link href="/terms">이용약관</Link>
+          <Link href="/terms">서비스 이용약관</Link>
         </li>
         <li className="pl-1">
           <Link href="/privacy">개인정보보호정책</Link>
