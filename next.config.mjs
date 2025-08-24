@@ -86,7 +86,7 @@ const withMDX = createMDX({
 });
 
 export default MillionLint.next({
-  enabled: true,
+  enabled: false,
   rsc: true,
 })(
   withSentryConfig(
