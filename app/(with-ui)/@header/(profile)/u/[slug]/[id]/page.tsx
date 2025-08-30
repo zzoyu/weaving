@@ -13,6 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import MoreIcon from "@/public/assets/icons/more.svg";
+import { getPublicUrl } from "@/utils/image";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import ButtonLock from "./components/button-lock";
@@ -70,7 +71,16 @@ export default async function Header({
                 <Link href={`${params.id}/edit`} className="context-menu-item">
                   프로필 수정
                 </Link>
-                <DialogShareButton>프로필 공유</DialogShareButton>
+                <DialogShareButton
+                  title={character.name}
+                  description={character.description}
+                  thumbnailUrl={getPublicUrl(character.thumbnail)}
+                  templateId={Number(
+                    process.env.NEXT_PUBLIC_KAKAO_MESSAGE_TEMPLATE_ID_CHARACTER
+                  )}
+                >
+                  프로필 공유
+                </DialogShareButton>
                 <ButtonDelete
                   characterId={character.id}
                   className="context-menu-item"

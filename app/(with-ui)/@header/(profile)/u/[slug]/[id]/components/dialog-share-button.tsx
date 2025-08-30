@@ -18,18 +18,29 @@ import { useToast } from "@/hooks/use-toast";
 import { usePathname } from "next/navigation";
 
 import XIcon from "@/public/assets/images/x.svg";
+import Image from "next/image";
+import Script from "next/script";
 
 export function DialogShareButton({
   children,
+  title,
+  description,
+  thumbnailUrl,
+  templateId,
+  extraVariables = {},
 }: {
   children?: React.ReactNode;
+  title?: string;
+  description?: string;
+  thumbnailUrl?: string;
+  templateId?: number;
+  extraVariables?: { [key: string]: string };
 }) {
   const { toast } = useToast();
   const currentUrl = process.env.NEXT_PUBLIC_BASE_URL + usePathname();
   const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
     currentUrl
   )}`;
-  console.log(twitterShareUrl);
   // 복사 버튼 클릭 핸들러
   const handleCopy = async () => {
     try {
@@ -46,8 +57,34 @@ export function DialogShareButton({
     }
   };
 
+  const shareKakaotalk = () => {
+    const Kakao = (window as any).Kakao;
+    Kakao.Share.sendCustom({
+      templateId,
+      templateArgs: {
+        TITLE: title,
+        DESC: description,
+        THUMBNAIL: thumbnailUrl,
+        REGI_WEB_DOMAIN: currentUrl,
+        ...extraVariables,
+      },
+    });
+  };
+
   return (
     <Dialog>
+      <Script
+        src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.7/kakao.min.js"
+        integrity="sha384-tJkjbtDbvoxO+diRuDtwRO9JXR7pjWnfjfRn5ePUpl7e7RJCxKCwwnfqUAdXh53p"
+        crossOrigin="anonymous"
+        onLoad={() => {
+          if (!(window as any)?.Kakao?.isInitialized?.()) {
+            (window as any)?.Kakao?.init?.(
+              process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY
+            );
+          }
+        }}
+      ></Script>
       <DialogTrigger asChild>
         <button className="context-menu-item">{children}</button>
       </DialogTrigger>
@@ -56,7 +93,7 @@ export function DialogShareButton({
           <DialogTitle>공유하기</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-4">
-          <div className="flex flex-row w-full">
+          <div className="flex flex-row w-full gap-4">
             <Button
               type="button"
               size="lg"
@@ -71,6 +108,20 @@ export function DialogShareButton({
               >
                 <XIcon />
               </a>
+            </Button>
+            <Button
+              type="button"
+              size="lg"
+              className="w-16 h-16"
+              variant="default"
+              onClick={shareKakaotalk}
+            >
+              <Image
+                src="/assets/images/kakaotalk_sharing_btn_medium.png"
+                alt="카카오톡 공유 버튼"
+                width={24}
+                height={24}
+              />
             </Button>
           </div>
 
