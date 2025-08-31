@@ -1,7 +1,6 @@
 "use client";
 
 import ButtonDeleteUniverse from "@/components/button-delete-universe";
-import ButtonShareUniverse from "@/components/button-share-universe";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -9,15 +8,18 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import MoreIcon from "@/public/assets/icons/more.svg";
+import { Universe } from "@/types/universe";
+import { getPublicUrl } from "@/utils/image";
 import { useParams, useRouter } from "next/navigation";
+import { DialogShareButton } from "./interactions/dialog-share-button";
 
 interface UniverseMenuProps {
-  universeId: number;
+  universe: Universe;
   onDelete?: () => void;
 }
 
 export default function UniverseMenu({
-  universeId,
+  universe,
   onDelete,
 }: UniverseMenuProps) {
   const router = useRouter();
@@ -42,9 +44,18 @@ export default function UniverseMenu({
         >
           세계관 수정
         </Button>
-        <ButtonShareUniverse universeId={universeId} />
+        <DialogShareButton
+          title={universe.name}
+          description={universe.description}
+          thumbnailUrl={getPublicUrl(universe.thumbnail)}
+          templateId={Number(
+            process.env.NEXT_PUBLIC_KAKAO_MESSAGE_TEMPLATE_ID_UNIVERSE
+          )}
+        >
+          세계관 공유
+        </DialogShareButton>
         <ButtonDeleteUniverse
-          universeId={universeId}
+          universeId={universe.id}
           className="w-full justify-start text-base text-gray-700 hover:text-destructive"
         >
           세계관 삭제

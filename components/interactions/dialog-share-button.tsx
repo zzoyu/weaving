@@ -92,12 +92,12 @@ export function DialogShareButton({
         <DialogHeader>
           <DialogTitle>공유하기</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-row w-full gap-4">
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-row w-full gap-2 mt-2">
             <Button
               type="button"
               size="lg"
-              className=" w-16 h-16"
+              className="w-16 h-16 rounded-2xl"
               asChild
               variant="default"
             >
@@ -112,15 +112,18 @@ export function DialogShareButton({
             <Button
               type="button"
               size="lg"
-              className="w-16 h-16"
-              variant="default"
+              className="w-16 h-16 relative"
+              variant="ghost"
               onClick={shareKakaotalk}
             >
               <Image
                 src="/assets/images/kakaotalk_sharing_btn_medium.png"
                 alt="카카오톡 공유 버튼"
-                width={24}
-                height={24}
+                unoptimized
+                width={0}
+                height={0}
+                fill
+                className="h-12 w-12"
               />
             </Button>
           </div>

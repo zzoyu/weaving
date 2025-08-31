@@ -7,6 +7,7 @@ import {
 } from "@/app/(with-ui)/u/[slug]/[id]/actions";
 import ButtonDelete from "@/app/(with-ui)/u/[slug]/components/button-delete";
 import { fetchProfileByUserId } from "@/app/profile/actions";
+import { DialogShareButton } from "@/components/interactions/dialog-share-button";
 import {
   Popover,
   PopoverContent,
@@ -18,7 +19,6 @@ import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import ButtonLock from "./components/button-lock";
 import { ButtonUnlock } from "./components/button-unlock";
-import { DialogShareButton } from "./components/dialog-share-button";
 
 export default async function Header({
   params,
