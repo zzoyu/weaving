@@ -6,7 +6,7 @@ import { createClient } from "./utils/supabase/server";
 const protectedRoutes = [
   "/profile",
   "/mypage",
-  "/u",
+  "/u/:slug/add",
   // 추가 보호 라우트...
 ];
 
@@ -20,16 +20,19 @@ const publicRoutes = [
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  
+
   // 공개 라우트는 세션 업데이트만 수행
-  if (publicRoutes.some(route => path.startsWith(route))) {
+  if (publicRoutes.some((route) => path.startsWith(route))) {
     return await updateSession(request);
   }
 
   // 보호된 라우트에 대한 인증 체크
-  if (protectedRoutes.some(route => path.startsWith(route))) {
+  if (protectedRoutes.some((route) => path.startsWith(route))) {
     const supabase = createClient();
-    const { data: { user }, error } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
 
     // 인증되지 않은 사용자 또는 세션 만료
     if (!user || error) {
@@ -45,11 +48,13 @@ export async function middleware(request: NextRequest) {
         .select()
         .eq("user_id", user.id)
         .single();
-      
+
       if (response.error || !response?.data) {
         return NextResponse.redirect(new URL("/", request.url));
       }
-      return NextResponse.redirect(new URL("/u/" + response.data.slug, request.url));
+      return NextResponse.redirect(
+        new URL("/u/" + response.data.slug, request.url)
+      );
     }
   }
 

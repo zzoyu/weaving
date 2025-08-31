@@ -18,7 +18,8 @@ export default async function Header({
 
   const isLoggedIn = !!data.user?.id;
   const universe = await fetchUniverseById(Number(params.id));
-  const isMine = profile?.slug === params.slug && profile?.id === universe?.profile_id;
+  const isMine =
+    profile?.slug === params.slug && profile?.id === universe?.profile_id;
 
   if (!universe) return null;
 
@@ -34,10 +35,8 @@ export default async function Header({
           <span className="text-primary-300">← 세계관</span>
         </button>
       </Link>
-      <div className="flex items-center gap-2">
-        {isMine && (
-          <UniverseMenu universeId={universe.id} />
-        )}
+      <div className="flex gap-2 items-start justify-center">
+        {isMine && <UniverseMenu universe={universe} />}
       </div>
     </header>
   );
