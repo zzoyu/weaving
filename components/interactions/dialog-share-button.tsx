@@ -20,6 +20,10 @@ import { usePathname } from "next/navigation";
 import XIcon from "@/public/assets/images/x.svg";
 import Image from "next/image";
 import Script from "next/script";
+import { useMemo } from "react";
+
+const KAKAO_CLIENT_KEY = process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export function DialogShareButton({
   children,
@@ -27,6 +31,7 @@ export function DialogShareButton({
   description,
   thumbnailUrl,
   templateId,
+  targetPath,
   extraVariables = {},
 }: {
   children?: React.ReactNode;
@@ -34,10 +39,12 @@ export function DialogShareButton({
   description?: string;
   thumbnailUrl?: string;
   templateId?: number;
+  targetPath?: string;
   extraVariables?: { [key: string]: string };
 }) {
   const { toast } = useToast();
-  const currentUrl = process.env.NEXT_PUBLIC_BASE_URL + usePathname();
+  const pathname = usePathname();
+  const currentUrl = useMemo(() => BASE_URL + pathname, [pathname]);
   const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
     currentUrl
   )}`;
@@ -65,7 +72,7 @@ export function DialogShareButton({
         TITLE: title,
         DESC: description,
         THUMBNAIL: thumbnailUrl,
-        REGI_WEB_DOMAIN: currentUrl,
+        PATH: targetPath || pathname,
         ...extraVariables,
       },
     });
@@ -79,9 +86,7 @@ export function DialogShareButton({
         crossOrigin="anonymous"
         onLoad={() => {
           if (!(window as any)?.Kakao?.isInitialized?.()) {
-            (window as any)?.Kakao?.init?.(
-              process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY
-            );
+            (window as any)?.Kakao?.init?.(KAKAO_CLIENT_KEY);
           }
         }}
       ></Script>
