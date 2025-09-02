@@ -12,6 +12,19 @@ export function getPublicUrl(fileName?: string): string {
 
   // 파일 이름이 절대경로 시작하면 그대로 반환
   if (fileName.startsWith("http:") || fileName.startsWith("https:")) {
+    // Optionally reject unapproved external URLs at this level too
+    try {
+      const parsed = new URL(fileName);
+      const allowed = [
+        "cdn.jsdelivr.net", // Add trusted hosts here
+        "your-cdn-domain.com",
+      ];
+      if (!allowed.includes(parsed.hostname)) {
+        return ""; // Block/return blank for untrusted host
+      }
+    } catch {
+      return "";
+    }
     return fileName;
   }
 
