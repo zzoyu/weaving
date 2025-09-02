@@ -2,6 +2,21 @@
 import { getPublicUrl } from "@/utils/image";
 import { ImageResponse } from "next/og";
 
+// Allow-list for external thumbnail domains
+const ALLOWED_THUMBNAIL_HOSTS = [
+  "cdn.jsdelivr.net", // Example CDN host, add any trusted host here
+  "your-cdn-domain.com",
+];
+
+function isAllowedExternalUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return ALLOWED_THUMBNAIL_HOSTS.includes(parsed.hostname);
+  } catch (e) {
+    return false;
+  }
+}
+
 export const runtime = "edge";
 const pretendardFont = fetch(
   "https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/public/static/Pretendard-ExtraBold.otf"
@@ -19,6 +34,14 @@ export async function GET(request: Request) {
     );
     if (!thumbnail) {
       return new Response("Thumbnail is required", { status: 400 });
+    }
+
+    // SSRF mitigation: Only allow thumbnail URLs from approved hosts
+    if (
+      (thumbnail.startsWith("http://") || thumbnail.startsWith("https://")) &&
+      !isAllowedExternalUrl(thumbnail)
+    ) {
+      return new Response("Untrusted thumbnail URL", { status: 400 });
     }
 
     const imageRes = await fetch(thumbnail);
