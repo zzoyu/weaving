@@ -6,8 +6,15 @@ import { ImageResponse } from "next/og";
 const ALLOWED_THUMBNAIL_HOSTS = [
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.PUBLIC_OCI_READ_URL,
-  process.NEXT_PUBLIC_BASE_URL
-];
+  process.env.NEXT_PUBLIC_BASE_URL
+].filter(Boolean).map((entry) => {
+  try {
+    // If entry is a full URL, extract hostname; else, use as-is
+    return new URL(entry).hostname;
+  } catch {
+    return entry;
+  }
+});
 
 function isAllowedExternalUrl(url: string): boolean {
   try {
