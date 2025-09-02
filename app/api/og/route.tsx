@@ -4,8 +4,9 @@ import { ImageResponse } from "next/og";
 
 // Allow-list for external thumbnail domains
 const ALLOWED_THUMBNAIL_HOSTS = [
-  "cdn.jsdelivr.net", // Example CDN host, add any trusted host here
-  "your-cdn-domain.com",
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.PUBLIC_OCI_READ_URL,
+  process.NEXT_PUBLIC_BASE_URL
 ];
 
 function isAllowedExternalUrl(url: string): boolean {
