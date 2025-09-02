@@ -1,3 +1,28 @@
+// Allow-list for external thumbnail domains
+const ALLOWED_THUMBNAIL_HOSTS = [
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.PUBLIC_OCI_READ_URL,
+  process.env.NEXT_PUBLIC_BASE_URL,
+]
+  .filter(Boolean)
+  .map((entry) => {
+    try {
+      // If entry is a full URL, extract hostname; else, use as-is
+      return new URL(entry || "").hostname;
+    } catch {
+      return entry;
+    }
+  });
+
+export function isAllowedExternalUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return ALLOWED_THUMBNAIL_HOSTS.includes(parsed.hostname);
+  } catch (e) {
+    return false;
+  }
+}
+
 export function getPublicUrl(fileName?: string): string {
   const OCI_READ_URL = process.env.NEXT_PUBLIC_OCI_READ_URL;
   // 파일 이름이 없으면 빈 문자열 반환
@@ -15,11 +40,7 @@ export function getPublicUrl(fileName?: string): string {
     // Optionally reject unapproved external URLs at this level too
     try {
       const parsed = new URL(fileName);
-      const allowed = [
-        "cdn.jsdelivr.net", // Add trusted hosts here
-        "your-cdn-domain.com",
-      ];
-      if (!allowed.includes(parsed.hostname)) {
+      if (!isAllowedExternalUrl(fileName)) {
         return ""; // Block/return blank for untrusted host
       }
     } catch {
