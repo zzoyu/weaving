@@ -13,11 +13,9 @@ import { useEffect, useMemo, useRef } from "react";
 export default function RelationshipGraph({
   character,
   relationships,
-  isMine,
 }: {
   character: Character;
   relationships: RelationshipNode[];
-  isMine?: boolean;
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -140,12 +138,11 @@ export default function RelationshipGraph({
     target: d3.Selection<any, any, any, any>,
     node: { x: number; y: number; lineCenter: { x: number; y: number } },
     relationship: RelationshipNode,
-    index: number,
-    isMine?: boolean
+    index: number
   ) {
     const r = radius[1];
 
-    if (isMine && relationship.relationship_out) {
+    if (relationship.relationship_out) {
       const relationshipType =
         relationship.relationship_out.toLowerCase() as ERelationshipType;
       const relationshipData = relationshipTypeData[relationshipType];
@@ -226,7 +223,7 @@ export default function RelationshipGraph({
       .attr("stroke-width", 3); // 테두리 두께
 
     nodes.forEach((node, index) => {
-      drawNodeText(svg, node, relationships[index], index, isMine);
+      drawNodeText(svg, node, relationships[index], index);
     });
   }, [width]);
   return (

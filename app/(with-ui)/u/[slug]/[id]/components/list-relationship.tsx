@@ -15,10 +15,8 @@ import { useState } from "react";
 
 export function ListRelationship({
   relationships,
-  isMine = false,
 }: {
   relationships: Relationship[];
-  isMine?: boolean;
 }) {
   const [isOpened, setIsOpened] = useState(false);
 
@@ -47,7 +45,7 @@ export function ListRelationship({
                     ] + " bg-opacity-50"
                   )}
                 >
-                  {isMine && relationshipType?.symbol && (
+                  {relationshipType?.symbol && (
                     <div
                       className={clsx(
                         "absolute left-2 top-2 rounded-full text-white p-1.5",
