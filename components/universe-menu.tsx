@@ -8,6 +8,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import MoreIcon from "@/public/assets/icons/more.svg";
+import { CharacterWithProfile } from "@/types/character";
 import { Universe } from "@/types/universe";
 import { getPublicUrl } from "@/utils/image";
 import { useParams, useRouter } from "next/navigation";
@@ -15,11 +16,13 @@ import { DialogShareButton } from "./interactions/dialog-share-button";
 
 interface UniverseMenuProps {
   universe: Universe;
+  characters: CharacterWithProfile[];
   onDelete?: () => void;
 }
 
 export default function UniverseMenu({
   universe,
+  characters,
   onDelete,
 }: UniverseMenuProps) {
   const router = useRouter();
@@ -51,6 +54,9 @@ export default function UniverseMenu({
           templateId={Number(
             process.env.NEXT_PUBLIC_KAKAO_MESSAGE_TEMPLATE_ID_UNIVERSE
           )}
+          extraVariables={{
+            VAL1: characters.length.toString(),
+          }}
         >
           세계관 공유
         </DialogShareButton>

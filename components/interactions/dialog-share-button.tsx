@@ -32,7 +32,7 @@ export function DialogShareButton({
   thumbnailUrl,
   templateId,
   targetPath,
-  extraVariables = {},
+  extraVariables,
 }: {
   children?: React.ReactNode;
   title?: string;
@@ -40,7 +40,7 @@ export function DialogShareButton({
   thumbnailUrl?: string;
   templateId?: number;
   targetPath?: string;
-  extraVariables?: { [key: string]: string };
+  extraVariables?: { [key: string]: any };
 }) {
   const { toast } = useToast();
   const pathname = usePathname();

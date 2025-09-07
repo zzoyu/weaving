@@ -1,6 +1,9 @@
 export const dynamic = "force-dynamic";
 
-import { fetchUniverseById } from "@/app/(with-ui)/u/[slug]/v/actions";
+import {
+  fetchCharactersByUniverseId,
+  fetchUniverseById,
+} from "@/app/(with-ui)/u/[slug]/v/actions";
 import { fetchProfileByUserId } from "@/app/profile/actions";
 import UniverseMenu from "@/components/universe-menu";
 import { createClient } from "@/utils/supabase/server";
@@ -23,6 +26,8 @@ export default async function Header({
 
   if (!universe) return null;
 
+  const { characters } = await fetchCharactersByUniverseId(universe.id);
+
   // 클라이언트 상태로 메뉴 토글
   // (실제 적용 시 아래 부분을 client 컴포넌트로 분리하는 것이 best practice)
   return (
@@ -36,7 +41,7 @@ export default async function Header({
         </button>
       </Link>
       <div className="flex gap-2 items-start justify-center">
-        {isMine && <UniverseMenu universe={universe} />}
+        {isMine && <UniverseMenu universe={universe} characters={characters} />}
       </div>
     </header>
   );
