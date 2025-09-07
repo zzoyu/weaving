@@ -10,13 +10,11 @@ function RelationshipGraphVariant1(props: {
   character: Character;
   relationships: RelationshipNode[];
   relationshipsExtended: RelationshipNode[];
-  isMine?: boolean;
 }) {
   return (
     <RelationshipGraph1
       character={props.character}
       relationships={props.relationshipsExtended}
-      isMine={props.isMine}
     />
   );
 }
@@ -25,14 +23,12 @@ function RelationshipGraphVariant2(props: {
   character: Character;
   relationships: RelationshipNode[];
   relationshipsExtended: RelationshipNode[];
-  isMine?: boolean;
 }) {
   // 추후 다른 스타일/로직 적용 가능
   return (
     <RelationshipGraph2
       character={props.character}
       relationships={props.relationshipsExtended}
-      isMine={props.isMine}
     />
   );
 }
@@ -41,7 +37,6 @@ function RelationshipGraphVariant3(props: {
   character: Character;
   relationships: RelationshipNode[];
   relationshipsExtended: RelationshipNode[];
-  isMine?: boolean;
 }) {
   // 추후 다른 스타일/로직 적용 가능
   return (
@@ -62,12 +57,10 @@ export default function RelationshipGraphVariants({
   character,
   relationships,
   relationshipsExtended,
-  isMine,
 }: {
   character: Character;
   relationships: RelationshipNode[];
   relationshipsExtended: RelationshipNode[];
-  isMine?: boolean;
 }) {
   const [selected, setSelected] = useState(0);
   const VariantComponent = graphVariants[selected].Component;
@@ -93,7 +86,6 @@ export default function RelationshipGraphVariants({
         character={character}
         relationships={relationships}
         relationshipsExtended={relationshipsExtended}
-        isMine={isMine}
       />
     </div>
   );

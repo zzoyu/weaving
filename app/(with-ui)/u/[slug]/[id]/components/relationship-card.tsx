@@ -6,15 +6,13 @@ import { ListRelationship } from "./list-relationship";
 export function RelationshipCard({
   character,
   relationships,
-  isMine = false,
 }: {
   character: Character;
   relationships: Relationship[];
-  isMine: boolean;
 }) {
   return (
     relationships.length > 0 && (
-      <ListRelationship relationships={relationships} isMine={isMine} />
+      <ListRelationship relationships={relationships} />
     )
   );
 }

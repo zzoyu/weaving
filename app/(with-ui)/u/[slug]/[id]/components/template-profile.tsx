@@ -45,7 +45,6 @@ export default function TemplateProfile({
           <RelationshipCard
             character={characterData}
             relationships={relationships}
-            isMine={isMyProfile}
           />
         </>
       )}
