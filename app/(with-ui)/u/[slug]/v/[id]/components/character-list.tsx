@@ -48,7 +48,7 @@ export function ListCharacter({
 
           return (
             <Link
-              href={`../character/${character.id}`}
+              href={`../${character.id}`}
               key={`relationship-${character.id}`}
             >
               <div
