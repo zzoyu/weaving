@@ -20,31 +20,6 @@ export async function Header() {
         </Link>
       </div>
       <div className="flex items-center gap-2">
-        {/* {isMine && (
-          <Popover>
-            <PopoverTrigger asChild>
-              <button className="p-1 border border-primary rounded-full overflow-hidden w-10 h-10 flex items-center justify-center">
-                <MoreIcon width={24} height={24} className="text-primary-300" />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent className="w-40">
-              <div className="flex flex-col gap-2 p-4 justify-start items-start">
-                <Link
-                  href="edit"
-                  className="text-base text-gray-700 hover:text-primary-500"
-                >
-                  프로필 설정
-                </Link>
-                <ButtonShare className="text-base text-gray-700 hover:text-primary-500">
-                  프로필 공유
-                </ButtonShare>
-                <ButtonDelete className="text-base text-gray-700 hover:text-primary-500">
-                  프로필 삭제
-                </ButtonDelete>
-              </div>
-            </PopoverContent>
-          </Popover>
-        )} */}
         {profile && (
           <ProfileBadge profile={profile} notifications={notifications} />
         )}

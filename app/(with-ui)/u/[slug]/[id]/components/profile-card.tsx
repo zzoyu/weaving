@@ -22,12 +22,10 @@ function PopupRelationshipGraph({
   character,
   relationships,
   onClose,
-  isMine = false,
 }: {
   character: Character;
   relationships: Relationship[];
   onClose: () => void;
-  isMine?: boolean;
 }) {
   const [deepRelationships, setDeepRelationships] = useState<
     RelationshipNode[] | null
@@ -82,7 +80,6 @@ function PopupRelationshipGraph({
               character={character}
               relationships={deepRelationships}
               relationshipsExtended={deepRelationshipsExtended || []}
-              isMine={isMine}
             />
           )}
         </div>
@@ -115,7 +112,6 @@ export function ProfileCard({
           character={character}
           relationships={relationships}
           onClose={() => setIsOpenRelationshipGraph(false)}
-          isMine={isMine}
         />
       )}
       <Carousel className="w-full">

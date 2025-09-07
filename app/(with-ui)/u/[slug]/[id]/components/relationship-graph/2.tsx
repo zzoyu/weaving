@@ -13,11 +13,9 @@ import { useEffect, useMemo, useRef } from "react";
 export default function RelationshipGraph2({
   character,
   relationships,
-  isMine,
 }: {
   character: Character;
   relationships: RelationshipNode[];
-  isMine?: boolean;
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -252,13 +250,12 @@ export default function RelationshipGraph2({
     target: d3.Selection<any, any, any, any>,
     node: { x: number; y: number; lineCenter: { x: number; y: number } },
     relationship: RelationshipNode,
-    index: number,
-    isMine?: boolean
+    index: number
   ) {
     const r = radius[1];
     const parallelOffset = 12;
 
-    if (isMine) {
+    if (true) {
       // 양방향 관계 표시
       const relationshipTypes = [];
       const hasIn = !!relationship.relationship_in;
@@ -438,7 +435,7 @@ export default function RelationshipGraph2({
       .attr("stroke-width", 3);
 
     nodes.forEach((node, index) => {
-      drawNodeText(svg, node, relationships[index], index, isMine);
+      drawNodeText(svg, node, relationships[index], index);
     });
   }, [width]);
   return (
