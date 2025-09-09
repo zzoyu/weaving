@@ -6,6 +6,7 @@ import ListProperties from "@/app/components/properties/list-properties";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { CharacterWithProfile, Property } from "@/types/character";
+import { Plan } from "@/types/plan";
 import { Universe } from "@/types/universe";
 import { getPublicUrl } from "@/utils/image";
 import { useRouter } from "next/navigation";
@@ -16,12 +17,14 @@ interface EditUniverseProps {
   universe: Universe;
   characters: CharacterWithProfile[];
   onSubmit: (data: Universe) => Promise<void>;
+  plan: Plan;
 }
 
 export default function EditUniverse({
   universe,
   characters,
   onSubmit,
+  plan,
 }: EditUniverseProps) {
   const { toast } = useToast();
   const router = useRouter();
@@ -163,10 +166,10 @@ export default function EditUniverse({
             );
           })}
           <ButtonAddCharacter
-            characters={characters.filter(
-              (c) => !characterUniverses.some((cu) => cu.character_id === c.id)
-            )}
+            characters={characters}
+            currentUniverses={characterUniverses}
             onAdd={handleAddCharacter}
+            maxSelectableCharacters={plan.maxCharactersInUniverse}
           />
         </div>
       </div>

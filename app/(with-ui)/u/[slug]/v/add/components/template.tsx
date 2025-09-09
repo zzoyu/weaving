@@ -6,6 +6,7 @@ import ListProperties from "@/app/components/properties/list-properties";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Character, EPropertyType, Property } from "@/types/character";
+import { Plan } from "@/types/plan";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { createUniverse } from "../actions";
@@ -15,12 +16,14 @@ interface UniverseAddTemplateProps {
   slug: string;
   profileId: number;
   characters: Character[];
+  plan: Plan;
 }
 
 export default function UniverseAddTemplate({
   slug,
   profileId,
   characters,
+  plan,
 }: UniverseAddTemplateProps) {
   const { toast } = useToast();
   const router = useRouter();
@@ -195,6 +198,7 @@ export default function UniverseAddTemplate({
               (c) => !characterUniverses.some((cu) => cu.character_id === c.id)
             )}
             onAdd={handleAddCharacter}
+            maxSelectableCharacters={plan.maxCharactersInUniverse}
           />
         </div>
       </div>

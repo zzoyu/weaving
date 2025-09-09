@@ -1,4 +1,5 @@
 import { isGrantedUserByProfileSlug } from "@/actions/is-granted-user";
+import { fetchPlanByProfileId } from "@/app/actions/plan";
 import { Universe } from "@/types/universe";
 import { createClient } from "@/utils/supabase/server";
 import { notFound, redirect } from "next/navigation";
@@ -23,15 +24,21 @@ export default async function EditPage({
 
   const { characters } = await fetchCharactersByUniverseId(Number(params.id));
 
+  const plan = await fetchPlanByProfileId(universe.profile_id);
+  if (!plan) {
+    redirect(`/u/${params.slug}/v/${params.id}`);
+  }
+
   return (
     <main className="flex flex-col justify-center items-center pt-10 w-full md:max-w-[40rem] mx-auto gap-10">
       <EditUniverse
         universe={universe}
         characters={characters}
+        plan={plan}
         onSubmit={async (data: Universe) => {
           "use server";
           const supabase = createClient();
-          
+
           // 이미지가 변경되었는지 확인 (URL이 blob:으로 시작하는 경우)
           let image = data.image;
           if (image?.[0]?.startsWith("blob:")) {
