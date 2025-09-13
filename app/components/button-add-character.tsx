@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 interface ButtonAddCharacterProps {
   characters: Character[];
   currentUniverses: { character_id: number }[];
-  onAdd: (characterId: number) => void;
+  onAdd: (characterIds: { character_id: number }[]) => void;
   maxSelectableCharacters?: number;
 }
 
@@ -57,9 +57,7 @@ export function ButtonAddCharacter({
   };
 
   const handleConfirm = () => {
-    selectedCharacters.forEach((characterId) => {
-      onAdd(characterId);
-    });
+    onAdd(selectedCharacters.map((id) => ({ character_id: id })));
     setSelectedCharacters([]);
     setIsOpen(false);
   };
@@ -141,7 +139,7 @@ export function ButtonAddCharacter({
               </div>
             </div>
 
-            {selectedCharacters.length > 0 && (
+            {
               <div className="p-4 border-t bg-background">
                 <div className="flex justify-end gap-2">
                   <Button
@@ -159,7 +157,7 @@ export function ButtonAddCharacter({
                   </Button>
                 </div>
               </div>
-            )}
+            }
           </div>
         </DialogContent>
       </Dialog>

@@ -46,11 +46,12 @@ export default function EditUniverse({
       .map((tag) => tag.trim());
   }, [hashtags]);
 
-  const handleAddCharacter = (characterId: number) => {
-    setCharacterUniverses((prev) => [
-      ...prev,
-      { character_id: Number(characterId) },
-    ]);
+  const handleAddCharacter = (
+    characterIds: {
+      character_id: number;
+    }[]
+  ) => {
+    setCharacterUniverses(() => [...characterIds]);
   };
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -169,7 +170,7 @@ export default function EditUniverse({
             characters={characters}
             currentUniverses={characterUniverses}
             onAdd={handleAddCharacter}
-            maxSelectableCharacters={plan.maxCharactersInUniverse}
+            maxSelectableCharacters={plan.limit.maxCharactersInUniverse}
           />
         </div>
       </div>

@@ -48,11 +48,8 @@ export default function UniverseAddTemplate({
       .map((tag) => tag.trim());
   }, [hashtags]);
 
-  const handleAddCharacter = (characterId: number) => {
-    setCharacterUniverses((prev) => [
-      ...prev,
-      { character_id: Number(characterId) },
-    ]);
+  const handleAddCharacter = (characterIds: { character_id: number }[]) => {
+    setCharacterUniverses(() => [...characterIds]);
   };
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -194,9 +191,7 @@ export default function UniverseAddTemplate({
             );
           })}
           <ButtonAddCharacter
-            characters={characters.filter(
-              (c) => !characterUniverses.some((cu) => cu.character_id === c.id)
-            )}
+            characters={characters}
             onAdd={handleAddCharacter}
             maxSelectableCharacters={plan.limit.maxCharactersInUniverse}
             currentUniverses={characterUniverses}
