@@ -1,5 +1,6 @@
 "use client";
 
+import OverlayLoading from "@/components/overlay-loading";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,12 +12,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { clearCharacterPassword } from "../actions";
 
 export function ButtonUnlock({ characterId }: { characterId: number }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <AlertDialog>
@@ -33,6 +34,14 @@ export function ButtonUnlock({ characterId }: { characterId: number }) {
           action={(formData) => {
             clearCharacterPassword(formData);
             setIsOpen(false);
+            setIsSubmitting(false);
+          }}
+          onSubmit={(e) => {
+            if (isSubmitting) {
+              e.preventDefault();
+              return;
+            }
+            setIsSubmitting(true);
           }}
         >
           <input type="hidden" name="character_id" value={characterId} />
@@ -46,6 +55,9 @@ export function ButtonUnlock({ characterId }: { characterId: number }) {
             <AlertDialogCancel>아니오</AlertDialogCancel>
             <AlertDialogAction>네</AlertDialogAction>
           </AlertDialogFooter>
+          {isSubmitting ? (
+            <OverlayLoading message="잠금 해제 중입니다..." />
+          ) : null}
         </form>
       </AlertDialogContent>
     </AlertDialog>
