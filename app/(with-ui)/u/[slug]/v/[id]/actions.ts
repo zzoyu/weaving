@@ -78,7 +78,7 @@ export async function fetchRelationshipsWithDepthExtended(
     console.error(error?.message);
     throw error;
   }
-  
+
   // 데이터를 트리 구조로 변환
   const treeData = buildRelationshipTree(id, data);
 
@@ -93,7 +93,6 @@ export async function createBulkRelationships(
     name: string;
   }[]
 ) {
-  
   const supabase = createClient();
   const { data, error } = await supabase.from("relationship").insert(
     relationships.map((relationship) => ({
@@ -128,7 +127,6 @@ export async function createRelationship(
 }
 
 export async function updateRelationship(id: number, name: string) {
-  
   const supabase = createClient();
   const { data, error } = await supabase
     .from("relationship")
@@ -136,7 +134,7 @@ export async function updateRelationship(id: number, name: string) {
       name: name || "friend",
     })
     .eq("id", id);
-  
+
   if (error) {
     throw error;
   }
@@ -145,7 +143,6 @@ export async function updateRelationship(id: number, name: string) {
 }
 
 export async function deleteRelationship(id: number) {
-  
   const supabase = createClient();
   const { data, error } = await supabase
     .from("relationship")

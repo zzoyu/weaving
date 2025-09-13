@@ -96,7 +96,7 @@ export default function UploadImage({
               unoptimized
               className="object-contain w-full h-full overflow-hidden"
               alt={"세계관 이미지"}
-              src={getPublicUrl(imagePreviewSrc)}
+              src={imagePreviewSrc}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />

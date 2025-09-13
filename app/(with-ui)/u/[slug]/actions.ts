@@ -190,7 +190,6 @@ export async function fetchIsFriendByIds(id1?: number, id2?: number) {
       `and(from_profile_id.eq.${id1},to_profile_id.eq.${id2}),and(from_profile_id.eq.${id2},to_profile_id.eq.${id1})`
     );
 
-
   if (error || (Array.isArray(data) && data.length === 0) || !data) {
     return false;
   }

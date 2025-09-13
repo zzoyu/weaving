@@ -1,3 +1,4 @@
+import { AlertToaster } from "@/components/interactions/alert-toaster";
 import { Toaster } from "@/components/ui/toaster";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import clsx from "clsx";
@@ -97,6 +98,7 @@ export default function RootLayout({
           {gtmId && <GoogleTagManager gtmId={gtmId} />}
           {children}
           <Toaster />
+          <AlertToaster />
           {gaId && <GoogleAnalytics gaId={gaId} />}
         </ThemeProvider>
       </body>

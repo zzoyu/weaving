@@ -1,10 +1,14 @@
 "use server";
 
+import { fetchPlanByProfileId } from "@/app/actions/plan";
 import { CharacterWithProfile } from "@/types/character";
 import { Universe } from "@/types/universe";
 import { createClient } from "@/utils/supabase/server";
 
-export async function addFavoriteUniverse(profileId: number, universeId: number) {
+export async function addFavoriteUniverse(
+  profileId: number,
+  universeId: number
+) {
   const supabase = createClient();
   const { error } = await supabase
     .from("favorite_universes")
@@ -13,7 +17,10 @@ export async function addFavoriteUniverse(profileId: number, universeId: number)
   return true;
 }
 
-export async function removeFavoriteUniverse(profileId: number, universeId: number) {
+export async function removeFavoriteUniverse(
+  profileId: number,
+  universeId: number
+) {
   const supabase = createClient();
   const { error } = await supabase
     .from("favorite_universes")
@@ -82,11 +89,21 @@ export async function updateUniverseById(
   return true;
 }
 
-export async function createUniverse(data: Omit<Universe, "id" | "created_at">) {
+export async function createUniverse(
+  data: Omit<Universe, "id" | "created_at">
+) {
+  const plan = await fetchPlanByProfileId(data.profile_id);
+  const currentUniverses = await fetchUniversesByProfileId(data.profile_id);
+  if (currentUniverses.length >= (plan?.maxUniverseSlots || 0)) {
+    return {
+      success: false,
+      message: "사용 가능한 세계관 생성 슬롯이 부족합니다.",
+    };
+  }
   const supabase = createClient();
   const { error } = await supabase.from("universes").insert(data);
   if (error) throw error;
-  return true;
+  return { success: true, message: "세계관이 생성되었습니다." };
 }
 
 export async function fetchCharacterUniversesByUniverseId(universeId: number) {
@@ -104,9 +121,11 @@ export async function fetchCharacterUniversesByUniverseId(universeId: number) {
   return data || [];
 }
 
-export async function fetchCharactersByUniverseId(universeId: number): Promise<{ characters: CharacterWithProfile[], error: any }> {
+export async function fetchCharactersByUniverseId(
+  universeId: number
+): Promise<{ characters: CharacterWithProfile[]; error: any }> {
   const supabase = createClient();
-  
+
   // 1. 먼저 universe_id로 universes_characters 테이블에서 character_id 목록을 가져옴
   const { data: characterUniverses, error: cuError } = await supabase
     .from("universes_characters")
@@ -123,17 +142,19 @@ export async function fetchCharactersByUniverseId(universeId: number): Promise<{
   }
 
   // 2. 가져온 character_id 목록으로 character 테이블에서 상세 정보를 조회
-  const characterIds = characterUniverses.map(cu => cu.character_id);
+  const characterIds = characterUniverses.map((cu) => cu.character_id);
   const { data: characters, error: cError } = await supabase
     .from("character")
-    .select(`
+    .select(
+      `
       *,
       profile:profile_id (
         id,
         slug,
         nickname
       )
-    `)
+    `
+    )
     .in("id", characterIds)
     .order("created_at", { ascending: false });
 
@@ -142,5 +163,8 @@ export async function fetchCharactersByUniverseId(universeId: number): Promise<{
     return { characters: [], error: cError };
   }
 
-  return { characters: (characters || []) as CharacterWithProfile[], error: null };
-} 
+  return {
+    characters: (characters || []) as CharacterWithProfile[],
+    error: null,
+  };
+}

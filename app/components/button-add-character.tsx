@@ -7,27 +7,48 @@ import { useToast } from "@/hooks/use-toast";
 import { Character } from "@/types/character";
 import { getPublicUrl } from "@/utils/image";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ButtonAddCharacterProps {
   characters: Character[];
-  onAdd: (characterId: number) => void;
+  currentUniverses: { character_id: number }[];
+  onAdd: (characterIds: { character_id: number }[]) => void;
+  maxSelectableCharacters?: number;
 }
 
 export function ButtonAddCharacter({
   characters,
+  currentUniverses,
   onAdd,
+  maxSelectableCharacters = 10,
 }: ButtonAddCharacterProps) {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCharacters, setSelectedCharacters] = useState<number[]>([]);
 
+  useEffect(() => {
+    // currentUniverses가 변경될 때 selectedCharacters 초기화
+    setSelectedCharacters(currentUniverses.map((cu) => cu.character_id));
+  }, [currentUniverses, isOpen]);
+
   const filteredCharacters = characters.filter((character) =>
     character.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleToggleCharacter = (characterId: number) => {
+    if (
+      maxSelectableCharacters > 0 &&
+      !selectedCharacters.includes(characterId) &&
+      selectedCharacters.length >= maxSelectableCharacters
+    ) {
+      toast({
+        title: "오류",
+        description: `최대 ${maxSelectableCharacters}개의 캐릭터를 선택할 수 있습니다.`,
+        variant: "destructive",
+      });
+      return;
+    }
     setSelectedCharacters((prev) =>
       prev.includes(characterId)
         ? prev.filter((id) => id !== characterId)
@@ -36,9 +57,7 @@ export function ButtonAddCharacter({
   };
 
   const handleConfirm = () => {
-    selectedCharacters.forEach((characterId) => {
-      onAdd(characterId);
-    });
+    onAdd(selectedCharacters.map((id) => ({ character_id: id })));
     setSelectedCharacters([]);
     setIsOpen(false);
   };
@@ -120,7 +139,7 @@ export function ButtonAddCharacter({
               </div>
             </div>
 
-            {selectedCharacters.length > 0 && (
+            {
               <div className="p-4 border-t bg-background">
                 <div className="flex justify-end gap-2">
                   <Button
@@ -138,7 +157,7 @@ export function ButtonAddCharacter({
                   </Button>
                 </div>
               </div>
-            )}
+            }
           </div>
         </DialogContent>
       </Dialog>
