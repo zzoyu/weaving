@@ -7,6 +7,7 @@ import { ThemeProvider } from "next-themes";
 import { Poiret_One } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
+import { Suspense } from "react";
 import "./globals.css";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -98,7 +99,9 @@ export default function RootLayout({
           {gtmId && <GoogleTagManager gtmId={gtmId} />}
           {children}
           <Toaster />
-          <AlertToaster />
+          <Suspense>
+            <AlertToaster />
+          </Suspense>
           {gaId && <GoogleAnalytics gaId={gaId} />}
         </ThemeProvider>
       </body>
