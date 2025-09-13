@@ -17,7 +17,6 @@ import Loading from "./loading";
 
 type Props = {
   params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 const baseMetadata: Metadata = {
@@ -27,7 +26,7 @@ const baseMetadata: Metadata = {
 };
 
 export async function generateMetadata(
-  { params, searchParams }: Props,
+  { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { slug } = await params;

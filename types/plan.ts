@@ -11,9 +11,10 @@ export interface PlanLimit {
   maxCharactersInUniverse: number;
 }
 
-export interface Plan extends PlanLimit {
+export interface Plan {
   id: number;
   name: string;
   price_krw: number;
   price_usd: number;
+  limit: PlanLimit;
 }

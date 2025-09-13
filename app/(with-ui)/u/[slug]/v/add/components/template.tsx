@@ -198,7 +198,8 @@ export default function UniverseAddTemplate({
               (c) => !characterUniverses.some((cu) => cu.character_id === c.id)
             )}
             onAdd={handleAddCharacter}
-            maxSelectableCharacters={plan.maxCharactersInUniverse}
+            maxSelectableCharacters={plan.limit.maxCharactersInUniverse}
+            currentUniverses={characterUniverses}
           />
         </div>
       </div>
