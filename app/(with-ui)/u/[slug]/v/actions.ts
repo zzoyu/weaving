@@ -94,7 +94,7 @@ export async function createUniverse(
 ) {
   const plan = await fetchPlanByProfileId(data.profile_id);
   const currentUniverses = await fetchUniversesByProfileId(data.profile_id);
-  if (currentUniverses.length >= (plan?.maxUniverseSlots || 0)) {
+  if (currentUniverses.length >= (plan?.limit.maxUniverseSlots || 0)) {
     return {
       success: false,
       message: "사용 가능한 세계관 생성 슬롯이 부족합니다.",
