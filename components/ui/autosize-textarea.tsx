@@ -16,18 +16,18 @@ export const useAutosizeTextArea = ({
   maxHeight = Number.MAX_SAFE_INTEGER,
   minHeight = 0,
 }: UseAutosizeTextAreaProps) => {
-  const [init, setInit] = React.useState(true);
+  const initRef = React.useRef<boolean>(true);
   React.useEffect(() => {
     // We need to reset the height momentarily to get the correct scrollHeight for the textarea
     const offsetBorder = 6;
     const textAreaElement = textAreaRef.current;
     if (textAreaElement) {
-      if (init) {
+      if (initRef.current) {
         textAreaElement.style.minHeight = `${minHeight + offsetBorder}px`;
         if (maxHeight > minHeight) {
           textAreaElement.style.maxHeight = `${maxHeight}px`;
         }
-        setInit(false);
+        initRef.current = false;
       }
       textAreaElement.style.height = `${minHeight + offsetBorder}px`;
       const scrollHeight = textAreaElement.scrollHeight;
@@ -39,13 +39,14 @@ export const useAutosizeTextArea = ({
         textAreaElement.style.height = `${scrollHeight + offsetBorder}px`;
       }
     }
-  }, [textAreaRef.current, triggerAutoSize]);
+  }, [triggerAutoSize, maxHeight, minHeight, textAreaRef]);
 };
 
 export type AutosizeTextAreaRef = {
   textArea: HTMLTextAreaElement;
   maxHeight: number;
   minHeight: number;
+  focus: () => void;
 };
 
 type AutosizeTextAreaProps = {
