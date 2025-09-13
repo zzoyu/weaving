@@ -3,6 +3,7 @@
 import InputHashtag from "@/app/components/input-hashtag";
 import { ColorProperties } from "@/app/components/properties/color-properties";
 import ListProperties from "@/app/components/properties/list-properties";
+import OverlayLoading from "@/components/overlay-loading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useUnsavedChangesWarning } from "@/hooks/use-unsaved-changes-warning";
@@ -330,6 +331,9 @@ export default function CharacterAddTemplate({
       >
         저장하기
       </button>
+      {isLoading ? (
+        <OverlayLoading message="캐릭터를 생성 중입니다..." />
+      ) : null}
     </form>
   );
 }

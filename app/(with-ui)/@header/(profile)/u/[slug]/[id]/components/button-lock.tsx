@@ -1,5 +1,6 @@
 "use client";
 
+import OverlayLoading from "@/components/overlay-loading";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,6 +19,7 @@ import { setCharacterPassword } from "../actions";
 
 export function DialogLock({ characterId }: { characterId: number }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { toast } = useToast();
 
@@ -39,7 +41,15 @@ export function DialogLock({ characterId }: { characterId: number }) {
               })
               .finally(() => {
                 setIsOpen(false);
+                setIsSubmitting(false);
               });
+          }}
+          onSubmit={(e) => {
+            if (isSubmitting) {
+              e.preventDefault();
+              return;
+            }
+            setIsSubmitting(true);
           }}
         >
           <input type="hidden" name="character_id" value={characterId} />
@@ -66,8 +76,13 @@ export function DialogLock({ characterId }: { characterId: number }) {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">잠그기</Button>
+            <Button type="submit" disabled={isSubmitting}>
+              잠그기
+            </Button>
           </DialogFooter>
+          {isSubmitting ? (
+            <OverlayLoading message="잠금 처리 중입니다..." />
+          ) : null}
         </form>
       </DialogContent>
     </Dialog>

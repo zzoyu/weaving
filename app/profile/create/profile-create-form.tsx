@@ -1,6 +1,8 @@
 "use client";
+import OverlayLoading from "@/components/overlay-loading";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { createProfile } from "./actions";
 
 interface ProfileCreateFormProps {
@@ -9,9 +11,12 @@ interface ProfileCreateFormProps {
 
 export default function ProfileCreateForm({ user }: ProfileCreateFormProps) {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     const formData = new FormData(event.target as HTMLFormElement);
     const res = await createProfile(formData);
     if (res && res.success) {
@@ -22,6 +27,7 @@ export default function ProfileCreateForm({ user }: ProfileCreateFormProps) {
         variant: "destructive",
       });
     }
+    setIsSubmitting(false);
   }
 
   return (
@@ -34,15 +40,19 @@ export default function ProfileCreateForm({ user }: ProfileCreateFormProps) {
         value={user.user_metadata?.avatar_url}
       />
       <label htmlFor="name">이름</label>
-      <input
-        type="text"
-        name="nickname"
-        required
-        className="bg-transparent"
-      />
+      <input type="text" name="nickname" required className="bg-transparent" />
       <label htmlFor="slug">접근 주소</label>
       <input type="text" name="slug" required className="bg-transparent" />
-      <button type="submit">작성하기</button>
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="flex items-center justify-center gap-2"
+      >
+        작성하기
+      </button>
+      {isSubmitting ? (
+        <OverlayLoading message="프로필을 생성 중입니다..." />
+      ) : null}
     </form>
   );
-} 
+}

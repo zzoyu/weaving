@@ -1,6 +1,7 @@
 "use client";
 
 import { ColorProperties } from "@/app/components/properties/color-properties";
+import OverlayLoading from "@/components/overlay-loading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { baseProperties } from "@/lib/base-properties";
 import { Character, Property } from "@/types/character";
@@ -115,6 +116,17 @@ export default function CharacterEditTemplate({
                 }
               }
             );
+          }}
+          onSubmit={(e) => {
+            // Prevent double submit from client side while keeping server action
+            const form = e.currentTarget as HTMLFormElement;
+            if ((form as any)._isSubmitting) {
+              e.preventDefault();
+              return;
+            }
+            (form as any)._isSubmitting = true;
+            setIsLoading(true);
+            // allow form to submit to server action
           }}
         >
           <input type="hidden" name="profile_id" value={character.profile_id} />
@@ -231,6 +243,9 @@ export default function CharacterEditTemplate({
           >
             저장하기
           </button>
+          {isLoading ? (
+            <OverlayLoading message="캐릭터를 저장 중입니다..." />
+          ) : null}
         </form>
       </Suspense>
     </main>

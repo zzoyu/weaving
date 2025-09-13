@@ -3,6 +3,7 @@
 import { ButtonAddCharacter } from "@/app/components/button-add-character";
 import InputHashtag from "@/app/components/input-hashtag";
 import ListProperties from "@/app/components/properties/list-properties";
+import OverlayLoading from "@/components/overlay-loading";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Character, EPropertyType, Property } from "@/types/character";
@@ -229,6 +230,9 @@ export default function UniverseAddTemplate({
       >
         저장하기
       </Button>
+      {isSubmitting ? (
+        <OverlayLoading message="세계관을 저장 중입니다..." />
+      ) : null}
     </form>
   );
 }
