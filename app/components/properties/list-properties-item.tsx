@@ -13,6 +13,24 @@ import {
 import { CircleAlert } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+export function SmallPreview({ property }: { property: Property }) {
+  const truncatedValue =
+    property.value.length > 20
+      ? property.value.substring(0, 20) + "..."
+      : property.value;
+
+  return (
+    <div className="w-full h-12 relative flex items-center justify-center group bg-background-default dark:bg-neutral-900 rounded border shadow-md transform-gpu">
+      <div className="w-full flex gap-2 items-center relative px-4">
+        <span className="text-sm font-medium truncate">{property.key}</span>
+        <span className="text-sm text-gray-500 truncate">
+          : {truncatedValue}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default function ListPropertiesItem({
   property,
   onChange,
@@ -33,6 +51,8 @@ export default function ListPropertiesItem({
   const [isExpanded, setIsExpanded] = useState(false);
   const textareaRef = useRef<AutosizeTextAreaRef | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  console.log("rendering item", property, isDragging, attributes, listeners);
 
   useEffect(() => {
     if (isExpanded) {

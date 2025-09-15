@@ -3,9 +3,9 @@
 import AddIcon from "@/public/assets/icons/add.svg";
 import { EPropertyType, Property } from "@/types/character";
 import {
-  closestCenter,
   DndContext,
   DragEndEvent,
+  DragOverlay,
   DragStartEvent,
   PointerSensor,
   useSensor,
@@ -19,7 +19,7 @@ import {
 } from "@dnd-kit/sortable";
 import { useEffect, useState } from "react";
 import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
-import ListPropertiesItem from "./list-properties-item";
+import ListPropertiesItem, { SmallPreview } from "./list-properties-item";
 
 export default function ListProperties({
   properties,
@@ -39,6 +39,8 @@ export default function ListProperties({
 
   console.log(errors);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [offsetX, setOffsetX] = useState(0);
+  const [offsetY, setOffsetY] = useState(0);
 
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -49,6 +51,9 @@ export default function ListProperties({
 
   function handleDragStart(event: DragStartEvent) {
     setActiveId(event.active.id as string);
+    // const rect = event.active.rect.current.translated;
+    setOffsetX((event.activatorEvent as DragEvent).x);
+    setOffsetY((event.activatorEvent as DragEvent).y);
   }
 
   function handleDragEnd(event: DragEndEvent) {
@@ -70,10 +75,32 @@ export default function ListProperties({
     <div className="flex flex-col gap-2 w-full">
       <DndContext
         sensors={sensors}
-        collisionDetection={closestCenter}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
+        {/* 여기 DragOverlay 추가 */}
+        <DragOverlay
+          modifiers={[
+            ({ transform }) => {
+              if (!transform) return transform;
+              return {
+                ...transform,
+                x: offsetX || transform.x || 0,
+                y: offsetY || transform.y || 0,
+              };
+            },
+          ]}
+        >
+          {activeId ? (
+            <SmallPreview
+              property={
+                localProperties.find(
+                  (p) => `property-${p.key}` === activeId
+                ) as Property
+              }
+            />
+          ) : null}
+        </DragOverlay>
         <SortableContext
           items={localProperties.map((p) => `property-${p.key}`)}
           strategy={verticalListSortingStrategy}
@@ -147,12 +174,29 @@ function SortableItem({
     transform,
     transition,
     isDragging,
+    data,
   } = useSortable({ id });
-  // Only apply translation from the transform to avoid any scale distortions
+
+  const [cursorPosition, setCursorPosition] = useState<{
+    x: number;
+    y: number;
+  }>();
+
+  useEffect(() => {
+    function handleMouseMove(e: MouseEvent) {
+      // if (isDragging) {
+      // }
+    }
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
   const translate = transform
-    ? `translate3d(${Math.round((transform as any).x || 0)}px, ${Math.round(
-        (transform as any).y || 0
-      )}px, 0)`
+    ? `translate3d(${Math.round(
+        cursorPosition?.x || transform.x || 0
+      )}px, ${Math.round(cursorPosition?.y || (transform as any).y || 0)}px, 0)`
     : undefined;
 
   const style: React.CSSProperties = {
@@ -160,6 +204,7 @@ function SortableItem({
     transition: transition ?? undefined,
     zIndex: isDragging ? 9999 : undefined,
     touchAction: "none",
+    transformOrigin: "top left",
   };
 
   return (
