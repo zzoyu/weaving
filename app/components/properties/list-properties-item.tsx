@@ -5,6 +5,11 @@ import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import { cn } from "@/lib/utils";
 import DeleteIcon from "@/public/assets/icons/delete.svg";
 import { Property } from "@/types/character";
+import {
+  DraggableAttributes,
+  DraggableSyntheticListeners,
+} from "@dnd-kit/core";
+// drag props may come from different dnd libs; accept a loose shape
 import { CircleAlert } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -13,13 +18,17 @@ export default function ListPropertiesItem({
   onChange,
   onDelete,
   error,
-  dragHandleProps,
+  isDragging = false,
+  listeners,
+  attributes,
 }: {
   property: Property;
   onChange: (property: Property) => void;
   onDelete: (property: Property) => void;
   error?: string;
-  dragHandleProps?: any;
+  isDragging?: boolean;
+  listeners?: DraggableSyntheticListeners;
+  attributes?: DraggableAttributes;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const textareaRef = useRef<AutosizeTextAreaRef | null>(null);
@@ -29,7 +38,7 @@ export default function ListPropertiesItem({
     if (isExpanded) {
       // AutosizeTextarea exposes an imperative handle with a `focus` method
       // and the underlying textarea on `textArea`.
-      textareaRef.current?.focus?.();
+      // textareaRef.current!.focus?.();
       const ta = textareaRef.current?.textArea;
       if (ta) {
         ta.setSelectionRange(ta.value.length, ta.value.length);
@@ -42,15 +51,60 @@ export default function ListPropertiesItem({
       );
     }
   }, [isExpanded]);
+  // When dragging, show a compact preview (short height) similar to the
+  // original behavior. This avoids the large full editor UI from showing
+  // while the item is being dragged.
+  if (isDragging) {
+    const truncatedValue =
+      property.value.length > 20
+        ? property.value.substring(0, 20) + "..."
+        : property.value;
+
+    return (
+      <div
+        className="w-full h-12 relative flex items-center justify-center group bg-background-default dark:bg-neutral-900 rounded border shadow-md transform-gpu"
+        {...(attributes || {})}
+      >
+        <div className="w-full flex gap-2 items-center relative px-4">
+          <button
+            type="button"
+            {...(listeners || {})}
+            className="flex-shrink-0"
+            aria-label="drag-handle"
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="text-background-dark"
+            >
+              <circle cx="5" cy="5" r="1.5" fill="currentColor" />
+              <circle cx="5" cy="12" r="1.5" fill="currentColor" />
+              <circle cx="5" cy="19" r="1.5" fill="currentColor" />
+            </svg>
+          </button>
+          <span className="text-sm font-medium truncate">{property.key}</span>
+          <span className="text-sm text-gray-500 truncate">
+            : {truncatedValue}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // Always render the full item layout when not actively dragging.
+  const containerClass = `w-full h-fit relative flex items-center justify-center group transform-gpu`;
 
   return (
-    <div className="w-full h-fit relative flex items-center justify-center group">
+    <div className={containerClass} {...(attributes || {})}>
       <div className="w-full flex gap-4 items-center relative">
         <button
           type="button"
-          {...(dragHandleProps || {})}
-          className="p-1 select-none absolute left-0"
+          className="p-2 absolute left-0 h-full flex items-center justify-center"
           aria-label="drag-handle"
+          {...(listeners || {})}
         >
           {/* simple grip dots */}
           <svg
@@ -59,7 +113,7 @@ export default function ListPropertiesItem({
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="text-background-dark"
+            className="text-background-dark h-full"
           >
             <circle cx="5" cy="5" r="1.5" fill="currentColor" />
             <circle cx="5" cy="12" r="1.5" fill="currentColor" />
@@ -89,7 +143,7 @@ export default function ListPropertiesItem({
                 ref={textareaRef}
                 minHeight={16}
                 className={cn(
-                  "w-full p-1 border-background-muted focus:outline-none bg-transparent resize-none focus:ring-0 ring-0 active:ring-0 active:border-none",
+                  "w-full p-1 border-background-muted focus:outline-none bg-background-default dark:bg-neutral-900 resize-none focus:ring-0 ring-0 ",
                   {
                     "border-state-error": error,
                   }
