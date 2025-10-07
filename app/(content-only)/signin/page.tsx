@@ -26,10 +26,10 @@ export default async function Home({
     <main className="h-full flex flex-col items-center pt-[10vh]">
       <div className="flex-1 w-7/12 max-w-40 flex flex-col items-center justify-center gap-2">
         <span className="block dark:hidden">
-          <LogoColored height={160} />
+          <LogoColored height={160} className="w-fit" />
         </span>
         <span className="hidden dark:block">
-          <LogoWhite height={160} />
+          <LogoWhite height={160} className="w-fit" />
         </span>
       </div>
 

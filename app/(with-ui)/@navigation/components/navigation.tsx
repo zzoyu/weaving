@@ -1,7 +1,6 @@
 import AdditionalIcon from "@/public/assets/icons/navigation/additional.svg";
 import EarthIcon from "@/public/assets/icons/navigation/earth.svg";
-import ProfileIcon from "@/public/assets/icons/navigation/profile.svg";
-import UserIcon from "@/public/assets/icons/navigation/user.svg";
+import { SettingsIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
 
 export function NavigationSignOut() {
@@ -25,8 +24,8 @@ export function NavigationSignIn({ slug }: { slug?: string }) {
       href: `/u/${slug}/more`,
     },
     {
-      label: "홈",
-      icon: ProfileIcon,
+      label: "캐릭터",
+      icon: UserIcon,
       href: `/u/${slug}`,
     },
     {
@@ -34,7 +33,7 @@ export function NavigationSignIn({ slug }: { slug?: string }) {
       icon: EarthIcon,
       href: `/u/${slug}/v`,
     },
-    { label: "마이페이지", icon: UserIcon, href: "/mypage" },
+    { label: "마이페이지", icon: SettingsIcon, href: "/mypage" },
   ];
   return (
     <nav className="bg-text-black w-full text-icon-default">

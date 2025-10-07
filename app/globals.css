@@ -17,6 +17,14 @@
   :root {
     --radius: 0.5rem;
   }
+  svg {
+    shape-rendering: geometricPrecision;
+    text-rendering: geometricPrecision;
+    image-rendering: crisp-edges;
+  }
+  svg.lucide path {
+    fill: none !important;
+  }
 }
 
 @layer components {
@@ -64,16 +72,6 @@ html {
 body {
   background: var(--background-hex);
   @apply antialiased h-full font-pretendard text-black dark:text-white;
-}
-
-svg > text {
-  @apply font-black fill-gray-900 dark:fill-gray-100;
-  @apply stroke-2 stroke-white dark:stroke-gray-800;
-  @apply font-pretendard antialiased;
-}
-
-svg > path {
-  @apply fill-current;
 }
 
 @layer utilities {
