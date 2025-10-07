@@ -92,6 +92,17 @@ export default function ListProperties({
                   setLocalProperties(newProperties);
                   handler(newProperties);
                 }}
+                handleMove={(index: number, amount: number) => {
+                  const newProperties = [...localProperties];
+                  const [movedItem] = newProperties.splice(index, 1);
+                  newProperties.splice(
+                    Math.min(Math.max(index + amount, 0), newProperties.length),
+                    0,
+                    movedItem
+                  );
+                  setLocalProperties(newProperties);
+                  handler(newProperties);
+                }}
               />
             ))}
             <ButtonAddProperty
@@ -130,6 +141,7 @@ function SortableItem({
   error,
   onChange,
   onDelete,
+  handleMove,
 }: {
   id: string;
   index: number;
@@ -137,6 +149,7 @@ function SortableItem({
   error?: string;
   onChange: (property: Property) => void;
   onDelete: (property: Property) => void;
+  handleMove: (index: number, amount: number) => void;
 }) {
   const { ref, isDragging } = useSortable({
     id,
@@ -146,9 +159,7 @@ function SortableItem({
   return (
     <div
       ref={ref}
-      className={
-        isDragging ? "mb-10 relative h-20 opacity-40" : "mb-2 relative"
-      }
+      className={isDragging ? "mb-4 relative h-20 opacity-40" : "mb-2 relative"}
     >
       {isDragging === false ? (
         <ListPropertiesItem
@@ -156,6 +167,9 @@ function SortableItem({
           error={error}
           onChange={onChange}
           onDelete={onDelete}
+          handleMove={(amount) => {
+            handleMove(index, amount);
+          }}
         />
       ) : (
         <SmallPreview property={property} />

@@ -10,7 +10,7 @@ import {
   DraggableSyntheticListeners,
 } from "@dnd-kit/core";
 // drag props may come from different dnd libs; accept a loose shape
-import { CircleAlert } from "lucide-react";
+import { ChevronDown, ChevronUp, CircleAlert } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export function SmallPreview({ property }: { property: Property }) {
@@ -39,6 +39,7 @@ export default function ListPropertiesItem({
   isDragging = false,
   listeners,
   attributes,
+  handleMove,
 }: {
   property: Property;
   onChange: (property: Property) => void;
@@ -47,6 +48,7 @@ export default function ListPropertiesItem({
   isDragging?: boolean;
   listeners?: DraggableSyntheticListeners;
   attributes?: DraggableAttributes;
+  handleMove: (amount: number) => void;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const textareaRef = useRef<AutosizeTextAreaRef | null>(null);
@@ -122,7 +124,7 @@ export default function ListPropertiesItem({
       <div className="w-full flex gap-4 items-center relative">
         <button
           type="button"
-          className="p-2 absolute left-0 h-full flex items-center justify-center"
+          className="p-2 absolute left-0 h-full items-center justify-center md:flex hidden"
           aria-label="drag-handle"
           {...(listeners || {})}
         >
@@ -142,13 +144,21 @@ export default function ListPropertiesItem({
         </button>
 
         <div className="flex-1 flex gap-4">
+          <div className="flex flex-row md:hidden">
+            <button onClick={() => handleMove(-1)} type="button">
+              <ChevronUp className="text-background-dark" />
+            </button>
+            <button onClick={() => handleMove(1)} type="button">
+              <ChevronDown className="text-background-dark" />
+            </button>
+          </div>
           <input
             type="hidden"
             name="list-properties"
             value={`${property.key}:${property.value}`}
           />
           <input
-            className="w-1/3 text-center p-1  border-background-muted focus:outline-none"
+            className="md:w-1/3 text-center p-1  border-background-muted focus:outline-none w-1/5"
             type="text"
             value={property.key}
             ref={inputRef}
