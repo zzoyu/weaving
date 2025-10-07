@@ -5,6 +5,10 @@ import { EPropertyType, Property } from "@/types/character";
 
 import { DragDropProvider } from "@dnd-kit/react";
 import { useSortable } from "@dnd-kit/react/sortable";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { useEffect, useState } from "react";
 import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 import ListPropertiesItem, { SmallPreview } from "./list-properties-item";
@@ -20,7 +24,7 @@ export default function ListProperties({
 }) {
   const [localProperties, setLocalProperties] =
     useState<Property[]>(properties);
-  const [isDragging, setIsDragging] = useState(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
     setLocalProperties(properties);
@@ -31,44 +35,74 @@ export default function ListProperties({
     return localProperties.findIndex((p) => `property-${p.key}` === id);
   }
 
+  const activeProperty = activeId
+    ? localProperties[findIndexById(activeId)]
+    : null;
+
   return (
     <DragDropProvider
-      onBeforeDragStart={() => setIsDragging(true)}
-      onDragEnd={() => setIsDragging(false)}
+      onDragStart={(event) => {
+        setActiveId(event.operation.source?.id?.toString() || null);
+      }}
+      onDragEnd={(event) => {
+        const overId = event.operation.target?.id;
+        const activeIndex = findIndexById(
+          event.operation.source?.id?.toString()
+        );
+        const overIndex = findIndexById(overId?.toString());
+
+        if (
+          activeIndex !== -1 &&
+          overIndex !== -1 &&
+          activeIndex !== overIndex
+        ) {
+          const newProperties = [...localProperties];
+          const [movedItem] = newProperties.splice(activeIndex, 1);
+          newProperties.splice(overIndex, 0, movedItem);
+          setLocalProperties(newProperties);
+          handler(newProperties);
+        }
+
+        setActiveId(null);
+      }}
     >
       <div className="flex flex-col gap-2 w-full">
         <div>
-          {localProperties.map((property, index) => (
-            <SortableItem
-              key={`property-${index}-${property.key}`}
-              id={`property-${property.key}_${index}`}
-              index={index}
-              property={property}
-              error={errors ? (errors[index] as any)?.message : undefined}
-              isDragging={isDragging}
-              onChange={(newProperty) => {
-                const newProperties = [...localProperties];
-                newProperties[index] = newProperty;
-                setLocalProperties(newProperties);
-                handler(newProperties);
-              }}
-              onDelete={(propertyToDelete) => {
-                const newProperties = localProperties.filter(
-                  (p) => p.key !== propertyToDelete.key
-                );
-                setLocalProperties(newProperties);
-                handler(newProperties);
+          <SortableContext
+            items={localProperties.map((p) => `property-${p.key}`)}
+            strategy={verticalListSortingStrategy}
+          >
+            {localProperties.map((property, index) => (
+              <SortableItem
+                key={`property-${index}-${property.key}`}
+                id={`property-${property.key}_${index}`}
+                index={index}
+                property={property}
+                error={errors ? (errors[index] as any)?.message : undefined}
+                onChange={(newProperty) => {
+                  const newProperties = [...localProperties];
+                  newProperties[index] = newProperty;
+                  setLocalProperties(newProperties);
+                  handler(newProperties);
+                }}
+                onDelete={(propertyToDelete) => {
+                  const newProperties = localProperties.filter(
+                    (p) => p.key !== propertyToDelete.key
+                  );
+                  setLocalProperties(newProperties);
+                  handler(newProperties);
+                }}
+              />
+            ))}
+            <ButtonAddProperty
+              clickHandler={() => {
+                setLocalProperties([
+                  ...localProperties,
+                  { key: "", value: "", type: EPropertyType.STRING },
+                ]);
               }}
             />
-          ))}
-          <ButtonAddProperty
-            clickHandler={() => {
-              setLocalProperties([
-                ...localProperties,
-                { key: "", value: "", type: EPropertyType.STRING },
-              ]);
-            }}
-          />
+          </SortableContext>
         </div>
       </div>
     </DragDropProvider>
@@ -96,7 +130,6 @@ function SortableItem({
   error,
   onChange,
   onDelete,
-  isDragging = false,
 }: {
   id: string;
   index: number;
@@ -104,15 +137,19 @@ function SortableItem({
   error?: string;
   onChange: (property: Property) => void;
   onDelete: (property: Property) => void;
-  isDragging?: boolean;
 }) {
-  const { ref } = useSortable({
+  const { ref, isDragging } = useSortable({
     id,
     index,
   });
 
   return (
-    <div ref={ref} className="mb-2 relative">
+    <div
+      ref={ref}
+      className={
+        isDragging ? "mb-10 relative h-20 opacity-40" : "mb-2 relative"
+      }
+    >
       {isDragging === false ? (
         <ListPropertiesItem
           property={property}
@@ -122,6 +159,7 @@ function SortableItem({
         />
       ) : (
         <SmallPreview property={property} />
+        // <div className="h-20 bg-background-dark rounded" />
       )}
     </div>
   );
