@@ -1,7 +1,7 @@
 // Allow-list for external thumbnail domains
 const ALLOWED_THUMBNAIL_HOSTS = [
   process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.PUBLIC_OCI_READ_URL,
+  process.env.NEXT_PUBLIC_OCI_READ_URL,
   process.env.NEXT_PUBLIC_BASE_URL,
 ]
   .filter(Boolean)
@@ -17,7 +17,9 @@ const ALLOWED_THUMBNAIL_HOSTS = [
 export function isAllowedExternalUrl(url: string): boolean {
   try {
     const parsed = new URL(url);
-    return ALLOWED_THUMBNAIL_HOSTS.includes(parsed.hostname);
+    return ALLOWED_THUMBNAIL_HOSTS.some((host) =>
+      host?.includes(parsed.hostname)
+    );
   } catch (e) {
     return false;
   }
