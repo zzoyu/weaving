@@ -51,8 +51,9 @@ export default function UniverseMenu({
           templateId={Number(
             process.env.NEXT_PUBLIC_KAKAO_MESSAGE_TEMPLATE_ID_UNIVERSE
           )}
+          twitterShareText={`${universe.name} :: 위빙에서 관찰 중🔍`}
         >
-          세계관 공유
+          <button className="context-menu-item">세계관 공유</button>
         </DialogShareButton>
         <ButtonDeleteUniverse
           universeId={universe.id}

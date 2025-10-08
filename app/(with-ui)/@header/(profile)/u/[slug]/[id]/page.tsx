@@ -81,8 +81,9 @@ export default async function Header({
                   templateId={Number(
                     process.env.NEXT_PUBLIC_KAKAO_MESSAGE_TEMPLATE_ID_CHARACTER
                   )}
+                  twitterShareText={`${character.name} :: 위빙에서 관찰 중🔍`}
                 >
-                  프로필 공유
+                  <button className="context-menu-item">프로필 공유</button>
                 </DialogShareButton>
                 <ButtonDelete
                   characterId={character.id}

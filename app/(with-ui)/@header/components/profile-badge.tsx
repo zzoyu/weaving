@@ -14,12 +14,18 @@ export default function ProfileBadge({
   notifications,
 }: ProfileBadgeProps) {
   return (
-    <Avatar>
+    <div className="relative">
       {(notifications?.length || 0) > 0 && (
-        <div className="absolute top-0.5 right-0.5 z-10 w-2.5 h-2.5 bg-red-500 rounded-full"></div>
+        <div className="absolute top-0.5 right-0.5 z-50 w-2.5 h-2.5 bg-red-500 rounded-full"></div>
       )}
-      <AvatarImage src={profile?.profile_image || ""} alt="프로필 이미지" />
-      <Skeleton className="h-full w-full rounded-full"></Skeleton>
-    </Avatar>
+      <Avatar className="w-10 h-10">
+        <AvatarImage
+          src={profile?.profile_image || ""}
+          alt="프로필 이미지"
+          className="z-10"
+        />
+        <Skeleton className="h-full w-full rounded-full"></Skeleton>
+      </Avatar>
+    </div>
   );
 }

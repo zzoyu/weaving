@@ -9,7 +9,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 
 export function AlertDialogConfirm({
   title = "Are you sure?",
@@ -17,12 +16,14 @@ export function AlertDialogConfirm({
   children,
   onConfirm,
   actionText = "Continue",
+  cancelText = "Cancel",
 }: {
   title?: string;
   description?: string;
   onConfirm: () => void;
   children?: React.ReactNode;
   actionText?: string;
+  cancelText?: string;
 }) {
   return (
     <AlertDialog>
@@ -33,10 +34,10 @@ export function AlertDialogConfirm({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>취소</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm}>
             {actionText}
           </AlertDialogAction>
+          <AlertDialogCancel>{cancelText}</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

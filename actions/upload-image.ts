@@ -1,5 +1,8 @@
+"use server";
+
 import { ImagePath } from "@/types/image";
-import { getPngFileName, pngBuffer } from "@/utils/image.server";
+import { getPngFileName } from "@/utils/image";
+import { pngBuffer } from "@/utils/image.server";
 import { createClient } from "@/utils/supabase/server";
 import * as Sentry from "@sentry/nextjs";
 
@@ -28,7 +31,7 @@ export async function uploadImageToObjectStorage(
       headers: {
         "Content-Type": "image/png",
       },
-      body: file,
+      body: file as unknown as BodyInit,
     });
 
     if (!response.ok) {
@@ -54,6 +57,30 @@ export async function uploadImageToObjectStorage(
     Sentry.captureException(error);
     throw new Error("이미지 업로드에 실패했습니다.");
   }
+}
+
+export async function uploadImageOnly(file: FormData, imagePath: string) {
+  const image = file.get("image") as File;
+
+  if (!image) {
+    throw new Error("No image file provided");
+  }
+
+  // 이미지 크기가 0이면 빈 문자열 반환
+  if (image.size === 0) {
+    return "";
+  }
+
+  // 이미지를 최적화
+  const pngFile = await pngBuffer(Buffer.from(await image.arrayBuffer()));
+  const finalFileName = getPngFileName(image.name);
+  const fullPath = `${imagePath}/${finalFileName}`;
+
+  const { url } = await uploadImageToObjectStorage(
+    Buffer.from(pngFile),
+    fullPath
+  );
+  return url;
 }
 
 export async function uploadImage(

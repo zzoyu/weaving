@@ -33,6 +33,7 @@ export function DialogShareButton({
   templateId,
   targetPath,
   extraVariables = {},
+  twitterShareText,
 }: {
   children?: React.ReactNode;
   title?: string;
@@ -41,13 +42,14 @@ export function DialogShareButton({
   templateId?: number;
   targetPath?: string;
   extraVariables?: { [key: string]: string };
+  twitterShareText?: string;
 }) {
   const { toast } = useToast();
   const pathname = usePathname();
   const currentUrl = useMemo(() => BASE_URL + pathname, [pathname]);
   const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-    currentUrl
-  )}`;
+    targetPath || currentUrl
+  )}&text=${encodeURIComponent(twitterShareText || title || "")}`;
   // 복사 버튼 클릭 핸들러
   const handleCopy = async () => {
     try {
@@ -90,9 +92,7 @@ export function DialogShareButton({
           }
         }}
       ></Script>
-      <DialogTrigger asChild>
-        <button className="context-menu-item">{children}</button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-md h-lg">
         <DialogHeader>
           <DialogTitle>공유하기</DialogTitle>
@@ -101,7 +101,7 @@ export function DialogShareButton({
           <div className="flex flex-row w-full gap-2 mt-2">
             <Button
               type="button"
-              size="lg"
+              size="icon"
               className="w-16 h-16 rounded-2xl"
               asChild
               variant="default"
@@ -111,7 +111,11 @@ export function DialogShareButton({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <XIcon />
+                <XIcon
+                  className="text-white !w-6 !h-6"
+                  viewBox="0 0 300 271"
+                  fill="white"
+                />
               </a>
             </Button>
             <Button
@@ -138,7 +142,11 @@ export function DialogShareButton({
               <Label htmlFor="link" className="sr-only">
                 Link
               </Label>
-              <Input id="link" defaultValue={currentUrl} readOnly />
+              <Input
+                id="link"
+                defaultValue={targetPath || currentUrl}
+                readOnly
+              />
             </div>
             <Button
               type="button"

@@ -21,8 +21,6 @@ export async function GET(request: Request) {
       return new Response("Thumbnail is required", { status: 400 });
     }
 
-    console.log("OG Image Thumbnail URL:", thumbnail);
-
     // SSRF mitigation: Only allow thumbnail URLs from approved hosts
     if (!thumbnail.startsWith("https://") || !isAllowedExternalUrl(thumbnail)) {
       return new Response("Untrusted thumbnail URL", { status: 400 });

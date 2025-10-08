@@ -110,20 +110,15 @@ export async function requestFriendByProfileId(
   const { landing_url, content } = payload;
   const supabase = createClient();
 
-  // check whether the friend request already exists
-  const existingFriend = await fetchIsFriendByIds(from, to);
-
-  if (existingFriend) {
-    revalidatePath("/u/[slug]", "page");
-    return null;
-  }
-
-  const { data, error } = await supabase.from("profile_friend").insert([
-    {
-      from_profile_id: from,
-      to_profile_id: to,
-    },
-  ]);
+  const { data, error } = await supabase.from("profile_friend").upsert(
+    [
+      {
+        from_profile_id: from,
+        to_profile_id: to,
+      },
+    ],
+    { onConflict: "from_profile_id,to_profile_id", ignoreDuplicates: true }
+  );
   if (error) {
     throw error;
   }
@@ -151,15 +146,17 @@ export async function requestFriendByProfileId(
 export async function removeFriendByProfileId(from: number, to: number) {
   const supabase = createClient();
 
+  const orFilter = `and(from_profile_id.eq.${from},to_profile_id.eq.${to}),and(from_profile_id.eq.${to},to_profile_id.eq.${from})`;
   const { data, error } = await supabase
     .from("profile_friend")
     .delete()
-    .or(
-      `and(from_profile_id.eq.${from},to_profile_id.eq.${to}),and(from_profile_id.eq.${to},to_profile_id.eq.${from})`
-    )
-    .eq("is_approved", true);
+    .or(orFilter);
 
   revalidatePath("/u/[slug]", "page");
+
+  if (error) {
+    console.error("removeFriendByProfileId error:", error);
+  }
 
   return { data, error };
 }
@@ -168,7 +165,7 @@ export async function fetchExactFriendById(from: number, to: number) {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("profile_friend")
-    .select()
+    .select("*")
     .eq("from_profile_id", from)
     .eq("to_profile_id", to)
     .maybeSingle();
@@ -211,14 +208,18 @@ export async function updateFriendAccepted(from: number, to: number) {
 
 export async function deleteFriend(from: number, to: number) {
   const supabase = createClient();
+
+  const orFilter = `and(from_profile_id.eq.${from},to_profile_id.eq.${to}),and(from_profile_id.eq.${to},to_profile_id.eq.${from})`;
   const { data, error } = await supabase
     .from("profile_friend")
     .delete()
-    .or(
-      `and(from_profile_id.eq.${from},to_profile_id.eq.${to}),and(from_profile_id.eq.${to},to_profile_id.eq.${from})`
-    );
+    .or(orFilter);
 
   revalidatePath("/u/[slug]", "page");
+
+  if (error) {
+    console.error("deleteFriend error:", error);
+  }
 
   return { data, error };
 }
