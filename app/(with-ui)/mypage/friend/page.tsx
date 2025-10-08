@@ -3,6 +3,7 @@ import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/utils/supabase/server";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { fetchFriendsByProfileId, fetchProfilesByIds } from "../actions";
 
 export default async function FriendPage() {
@@ -10,6 +11,9 @@ export default async function FriendPage() {
   const user = await supabase.auth.getUser();
   const profile = await fetchProfileByUserId(user?.data?.user?.id as string);
 
+  if (!profile) {
+    redirect("/");
+  }
 
   const friends = await fetchFriendsByProfileId(profile?.id);
 
@@ -33,7 +37,8 @@ export default async function FriendPage() {
                   href={`/u/${friend.slug}`}
                   className="flex flex-row items-center gap-4"
                 >
-                  <Image unoptimized 
+                  <Image
+                    unoptimized
                     src={friend.profile_image}
                     alt={friend.nickname}
                     width={100}

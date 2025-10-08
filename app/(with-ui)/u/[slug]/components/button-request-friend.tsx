@@ -30,7 +30,7 @@ export default function ButtonRequestFriend({
         </button>
       ) : !isFriend ? (
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-md mt-5"
+          className="bg-blue-500 text-white px-4 py-2 rounded-md mt-5 mb-5"
           onClick={() =>
             requestFriendByProfileId(from.id!, to.id!, {
               landing_url: `/u/${from.slug}`,
