@@ -7,10 +7,9 @@ import ProfileEditForm from "./profile-edit-form";
 
 export default function MypageTemplate({ profile }: { profile: Profile }) {
   return (
-    <main className="flex flex-col items-center justify-start w-full h-full pt-10">
-      <section className="w-full max-w-md p-4 bg-white dark:bg-neutral-900 rounded">
+    <main className="flex flex-col items-center justify-start w-full h-full pt-0 md:pt-10">
+      <section className="w-full max-w-md p-4">
         <div className="mb-4">
-          <h2 className="text-lg font-semibold">접속 중인 계정</h2>
           <ProfileEditForm profile={profile} />
         </div>
         <ListFriend profile={profile} />

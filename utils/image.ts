@@ -60,3 +60,25 @@ export function getPublicUrl(fileName?: string): string {
   // 파일 이름이 '/'로 시작하지 않으면 바로 url 생성
   return OCI_READ_URL + fileName;
 }
+
+/**
+ * 파일명을 WebP로 변환된 이름으로 반환하는 유틸
+ */
+export function getWebPFileName(originalName: string): string {
+  const timestamp = new Date().getTime();
+  const sanitizedFileName = originalName
+    .replace(/[^a-zA-Z0-9가-힣-_]/g, "_")
+    .toLowerCase();
+  return `${sanitizedFileName}_${timestamp}.webp`;
+}
+
+/**
+ * 파일명을 PNG로 변환된 이름으로 반환하는 유틸
+ */
+export function getPngFileName(originalName: string): string {
+  const timestamp = new Date().getTime();
+  const sanitizedFileName = originalName
+    .replace(/[^a-zA-Z0-9가-힣-_]/g, "_")
+    .toLowerCase();
+  return `${sanitizedFileName}_${timestamp}.png`;
+}

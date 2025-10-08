@@ -72,6 +72,7 @@ export default async function PublicProfilePage({
     );
     friendDataFromMe = await fetchExactFriendById(myProfile?.id!, data?.id!);
     friendDataFromUser = await fetchExactFriendById(data.id!, myProfile?.id!);
+
     isFriend = Boolean(friendDataFromMe || friendDataFromUser);
   }
 
@@ -89,6 +90,23 @@ export default async function PublicProfilePage({
 
   favoriteCharacters = await fetchFavoriteCharactersByProfileId(data.id);
 
+  const from =
+    !friendDataFromMe && !friendDataFromUser
+      ? myProfile
+      : friendDataFromMe?.from_profile_id
+      ? myProfile
+      : data;
+  const to =
+    !friendDataFromMe && !friendDataFromUser
+      ? data
+      : friendDataFromMe?.to_profile_id
+      ? data
+      : myProfile;
+
+  if (from === null || to === null) {
+    notFound();
+  }
+
   return (
     <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-20 min-h-fit relative">
       <div className="flex flex-col items-center justify-start my-10">
@@ -100,7 +118,8 @@ export default async function PublicProfilePage({
         </span>
         {!isMine && myProfile && (
           <ButtonRequestFriend
-            isMine={isMine}
+            isMyProfile={isMine}
+            isMyRequest={!!friendDataFromMe}
             isFriend={isFriend}
             isApproved={
               !!(
@@ -108,8 +127,8 @@ export default async function PublicProfilePage({
                 Boolean(friendDataFromUser?.is_approved)
               )
             }
-            from={myProfile}
-            to={data}
+            from={from}
+            to={to}
           />
         )}
       </div>
