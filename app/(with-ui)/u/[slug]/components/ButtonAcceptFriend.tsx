@@ -1,4 +1,5 @@
 "use client";
+import { useToast } from "@/hooks/use-toast";
 import { deleteFriend, updateFriendAccepted } from "../actions";
 
 export default function ButtonAcceptFriend({
