@@ -12,10 +12,7 @@ import { Relationship, RelationshipNode } from "@/types/relationship";
 import { getPublicUrl } from "@/utils/image";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import {
-  fetchRelationshipsWithDepth,
-  fetchRelationshipsWithDepthExtended,
-} from "../actions";
+import { fetchRelationshipsWithDepthExtended } from "../actions";
 import RelationshipGraphVariants from "./relationship-graph-variants";
 
 function PopupRelationshipGraph({
@@ -41,11 +38,9 @@ function PopupRelationshipGraph({
       try {
         setIsLoading(true);
         setError(null);
-        const [data, dataExtended] = await Promise.all([
-          fetchRelationshipsWithDepth(character.id),
-          fetchRelationshipsWithDepthExtended(character.id),
-        ]);
-        setDeepRelationships(data);
+        const dataExtended = await fetchRelationshipsWithDepthExtended(
+          character.id
+        );
         setDeepRelationshipsExtended(dataExtended);
       } catch (error) {
         console.error("Failed to fetch deep relationships");
@@ -60,7 +55,7 @@ function PopupRelationshipGraph({
 
   return (
     <div className="fixed z-10 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white w-full h-full md:w-5/6 md:h-5/6 p-4 rounded-lg relative">
+      <div className="bg-white w-full h-full md:w-5/6 md:h-5/6 p-4 rounded-none md:rounded-lg relative">
         <button
           className="absolute top-2 right-2 z-20"
           onClick={() => onClose()}
@@ -68,17 +63,18 @@ function PopupRelationshipGraph({
           닫기
         </button>
         <h2 className="text-2xl font-bold">관계도</h2>
-        <div className="flex justify-center items-center w-full h-[calc(100%-3rem)] overflow-auto">
+        <div className="flex justify-center items-center w-full h-full absolute top-0 left-0">
           {isLoading ? (
             <div>로딩 중...</div>
           ) : error ? (
             <div className="text-red-500">{error}</div>
-          ) : !deepRelationships || deepRelationships.length === 0 ? (
+          ) : !deepRelationshipsExtended ||
+            deepRelationshipsExtended.length === 0 ? (
             <div>관계 데이터가 없습니다.</div>
           ) : (
             <RelationshipGraphVariants
               character={character}
-              relationships={deepRelationships}
+              relationships={[]}
               relationshipsExtended={deepRelationshipsExtended || []}
             />
           )}

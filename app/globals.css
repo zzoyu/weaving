@@ -72,10 +72,6 @@ svg > text {
   @apply font-pretendard antialiased;
 }
 
-svg > path {
-  @apply fill-current;
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;

@@ -45,7 +45,7 @@ export async function generateMetadata(
     getPublicUrl(characterData.thumbnail) || ""
   )) as Response;
 
-  const ogImageUrl = ogImage.url;
+  const ogImageUrl = ogImage?.url || "";
 
   return {
     ...baseMetadata,

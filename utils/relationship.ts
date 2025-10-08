@@ -4,10 +4,8 @@ export function buildRelationshipTree(
   characterId: number,
   relationships: Relationship[]
 ): RelationshipNode[] {
-  const relationshipMap = new Map<number, RelationshipNode>();
+  const relationshipMap = new Map<number, Map<number, RelationshipNode>>();
   const rootNodes: RelationshipNode[] = [];
-
-  
 
   // 먼저 모든 관계를 Map에 저장
   relationships.forEach((rel) => {
@@ -22,15 +20,16 @@ export function buildRelationshipTree(
       depth: rel.depth,
       children: [],
     };
-    
-    relationshipMap.set(rel.to_id, node);
-    
+
+    if (!relationshipMap.has(rel.from_id)) {
+      relationshipMap.set(rel.from_id, new Map());
+    }
+    relationshipMap.get(rel.from_id)!.set(rel.to_id, node);
   });
 
   // relationship_in 설정 및 트리 구조 구성
   relationships.forEach((rel) => {
-    const node = relationshipMap.get(rel.to_id);
-    if (!node) return;
+    const node = relationshipMap.get(rel.from_id)!.get(rel.to_id)!;
 
     // 반대 방향 관계 찾기
     const reverseRel = relationships.find(
@@ -39,9 +38,11 @@ export function buildRelationshipTree(
 
     if (reverseRel) {
       // 반대 방향 노드의 relationship_in 설정
-      const reverseNode = relationshipMap.get(reverseRel.to_id);
+      const reverseNode = relationshipMap
+        .get(reverseRel.to_id)
+        ?.get(reverseRel.from_id);
       if (reverseNode) {
-        reverseNode.relationship_in = rel.relationship;
+        reverseNode.relationship_in = reverseRel.relationship;
       }
     }
 
@@ -53,15 +54,13 @@ export function buildRelationshipTree(
       } else {
         // 부모 노드 찾기
         const parentNode = relationshipMap.get(rel.from_id);
+
         if (parentNode) {
           // 이미 children에 있는지 확인
-          const isAlreadyChild = parentNode.children?.some(
-            (child) => child.to_id === node.to_id
-          );
-
-          // children에 없고, relationship_out이 있는 경우에만 추가
-          if (!isAlreadyChild && node.relationship_out) {
-            parentNode.children?.push(node);
+          const isAlreadyChild = !!parentNode.get(rel.to_id);
+          if (!isAlreadyChild) {
+            parentNode.get(rel.to_id)?.children?.push(node);
+            console.log("pushing child", node);
           }
         }
       }
