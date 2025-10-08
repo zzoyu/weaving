@@ -84,7 +84,6 @@ export default function ProfileEditForm({ profile }: { profile: Profile }) {
         new FormData(imageUploadForm.current!),
         `${ImagePath.PROFILE}`
       );
-      console.log("Uploaded image URL:", getPublicUrl(url));
 
       if (!url) {
         toast({

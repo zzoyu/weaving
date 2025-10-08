@@ -110,8 +110,6 @@ export async function requestFriendByProfileId(
   const { landing_url, content } = payload;
   const supabase = createClient();
 
-  console.log(from, to, payload);
-
   const { data, error } = await supabase.from("profile_friend").upsert(
     [
       {
