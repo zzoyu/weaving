@@ -48,9 +48,9 @@ function RelationshipGraphVariant3(props: {
 }
 
 const graphVariants = [
-  { name: "기본 그래프", Component: RelationshipGraphVariant1 },
+  // { name: "기본 그래프", Component: RelationshipGraphVariant1 },
   { name: "변형 그래프 1", Component: RelationshipGraphVariant2 },
-  { name: "변형 그래프 2", Component: RelationshipGraphVariant3 },
+  // { name: "변형 그래프 2", Component: RelationshipGraphVariant3 },
 ];
 
 export default function RelationshipGraphVariants({
@@ -66,8 +66,8 @@ export default function RelationshipGraphVariants({
   const VariantComponent = graphVariants[selected].Component;
 
   return (
-    <div>
-      <div className="flex gap-2 mb-4">
+    <div className="flex flex-col items-center justify-center w-full h-full overflow-auto">
+      {/* <div className="flex gap-2 mb-4">
         {graphVariants.map((variant, idx) => (
           <button
             key={variant.name}
@@ -81,7 +81,7 @@ export default function RelationshipGraphVariants({
             {variant.name}
           </button>
         ))}
-      </div>
+      </div> */}
       <VariantComponent
         character={character}
         relationships={relationships}

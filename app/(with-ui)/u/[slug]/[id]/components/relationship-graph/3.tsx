@@ -6,6 +6,7 @@ import {
   RelationshipNode,
   relationshipTypeData,
 } from "@/types/relationship";
+import { getParallelLines } from "@/utils/graph";
 import { getPublicUrl } from "@/utils/image";
 import * as d3 from "d3";
 import { useEffect, useMemo, useRef } from "react";
@@ -19,13 +20,11 @@ export default function RelationshipGraph2({
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
 
-  const width = 600;
-  const height = 600;
+  const width = 800;
+  const height = 800;
 
   const xScale = d3.scaleLinear().domain([0, 100]).range([0, width]);
   const yScale = d3.scaleLinear().domain([0, 100]).range([0, height]);
-  const xAxis = d3.axisBottom(xScale);
-  const yAxis = d3.axisLeft(yScale);
 
   const originX = xScale(50);
   const originY = yScale(50);
@@ -252,67 +251,57 @@ export default function RelationshipGraph2({
     const r = radius[1];
     const parallelOffset = 12;
 
-    // 중심선의 각도 계산
-    const angle = Math.atan2(node.y - originY, node.x - originX);
-    const perpendicularAngle = angle + Math.PI / 2;
+    const nodeRadius = radius[1];
+    const originRadius = radius[0];
 
-    // 평행 이동된 점들의 좌표 계산
-    const offsetX = parallelOffset * Math.cos(perpendicularAngle);
-    const offsetY = parallelOffset * Math.sin(perpendicularAngle);
+    // 평행선 계산
+    const [line1, line2] = getParallelLines(
+      {
+        x:
+          originX +
+          (originRadius * (node.x - originX)) /
+            Math.hypot(node.x - originX, node.y - originY),
+        y:
+          originY +
+          (originRadius * (node.y - originY)) /
+            Math.hypot(node.x - originX, node.y - originY),
+      },
+      {
+        x:
+          node.x -
+          (nodeRadius * (node.x - originX)) /
+            Math.hypot(node.x - originX, node.y - originY),
+        y:
+          node.y -
+          (nodeRadius * (node.y - originY)) /
+            Math.hypot(node.x - originX, node.y - originY),
+      },
+      parallelOffset
+    );
 
-    // 원에 외접하는 점 계산
-    const startX1 = originX + offsetX + r * Math.cos(angle);
-    const startY1 = originY + offsetY + r * Math.sin(angle);
-    const endX1 = node.x + offsetX - r * Math.cos(angle);
-    const endY1 = node.y + offsetY - r * Math.sin(angle);
+    // 각 평행선의 시작점과 끝점 좌표
+    const startX1 = line1.from.x;
+    const startY1 = line1.from.y;
+    const endX1 = line1.to.x;
+    const endY1 = line1.to.y;
 
-    const startX2 = originX - offsetX + r * Math.cos(angle);
-    const startY2 = originY - offsetY + r * Math.sin(angle);
-    const endX2 = node.x - offsetX - r * Math.cos(angle);
-    const endY2 = node.y - offsetY - r * Math.sin(angle);
+    const startX2 = line2.from.x;
+    const startY2 = line2.from.y;
+    const endX2 = line2.to.x;
+    const endY2 = line2.to.y;
 
-    // 화살표 마커 정의 - out 방향
-    target
-      .append("defs")
-      .append("marker")
-      .attr("id", `arrowhead-out-${index}`)
-      .attr("viewBox", "-10 -5 10 10")
-      .attr("refX", 0)
-      .attr("refY", 0)
-      .attr("markerWidth", 6)
-      .attr("markerHeight", 6)
-      .attr("orient", "auto")
-      .append("path")
-      .attr("d", "M0,-5L-10,0L0,5")
-      .attr("fill", "gray");
-
-    // 화살표 마커 정의 - in 방향
-    target
-      .append("defs")
-      .append("marker")
-      .attr("id", `arrowhead-in-${index}`)
-      .attr("viewBox", "0 -5 10 10")
-      .attr("refX", 10)
-      .attr("refY", 0)
-      .attr("markerWidth", 6)
-      .attr("markerHeight", 6)
-      .attr("orient", "auto")
-      .append("path")
-      .attr("d", "M0,-5L10,0L0,5")
-      .attr("fill", "gray");
-
-    // 첫 번째 평행선 (out 방향)
+    // 첫 번째 평행선 (in 방향)
     target
       .append("line")
-      .attr("x1", startX1)
-      .attr("y1", startY1)
-      .attr("x2", endX1)
-      .attr("y2", endY1)
+      .attr("x1", endX1)
+      .attr("y1", endY1)
+      .attr("x2", startX1)
+      .attr("y2", startY1)
       .attr("stroke", "gray")
       .attr("stroke-width", 2)
-      .attr("marker-end", `url(#arrowhead-out-${index})`);
+      .attr("marker-end", `url(#arrowhead)`);
 
-    // 두 번째 평행선 (in 방향)
+    // 두 번째 평행선 (out 방향)
     target
       .append("line")
       .attr("x1", startX2)
@@ -321,7 +310,7 @@ export default function RelationshipGraph2({
       .attr("y2", endY2)
       .attr("stroke", "gray")
       .attr("stroke-width", 2)
-      .attr("marker-end", `url(#arrowhead-in-${index})`);
+      .attr("marker-end", `url(#arrowhead)`);
 
     target
       .append("defs")
@@ -577,6 +566,7 @@ export default function RelationshipGraph2({
       height={height}
       viewBox={`0 0 ${width + 200} ${height + 200}`}
       preserveAspectRatio="xMidYMid meet"
+      className="w-full h-full"
     ></svg>
   );
 }

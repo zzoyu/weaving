@@ -74,6 +74,12 @@ body {
   @apply antialiased h-full font-pretendard text-black dark:text-white;
 }
 
+svg > text {
+  @apply font-black fill-gray-900 dark:fill-gray-100;
+  @apply stroke-2 stroke-white dark:stroke-gray-800;
+  @apply font-pretendard antialiased;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

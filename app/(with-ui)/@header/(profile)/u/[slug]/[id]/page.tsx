@@ -16,6 +16,7 @@ import {
 import MoreIcon from "@/public/assets/icons/more.svg";
 import { getPublicUrl } from "@/utils/image";
 import { createClient } from "@/utils/supabase/server";
+import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import ButtonLock from "./components/button-lock";
 import { ButtonUnlock } from "./components/button-unlock";
@@ -42,7 +43,9 @@ export default async function Header({
     >
       <Link href="./">
         <button className="p-1 rounded-full h-10 flex items-center justify-center text-2xl  bg-transparent">
-          <span className="text-primary-300">← 프로필</span>
+          <span className="text-primary-300 flex flex-row items-center gap-1">
+            <ArrowLeftIcon fill="none" stroke="currentColor" /> 프로필
+          </span>
         </button>
       </Link>
       <div className="flex items-center gap-2">

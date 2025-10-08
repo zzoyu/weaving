@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { getPublicUrl, isAllowedExternalUrl } from "@/utils/image";
+import { isAllowedExternalUrl } from "@/utils/image";
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
@@ -14,18 +14,17 @@ export async function GET(request: Request) {
     const description = decodeURIComponent(
       searchParams.get("description") || ""
     );
-    const thumbnail = getPublicUrl(
-      decodeURIComponent(searchParams.get("thumbnail") || "")
-    );
+    const thumbnail = decodeURIComponent(
+      searchParams.get("thumbnail") || ""
+    ).trim();
     if (!thumbnail) {
       return new Response("Thumbnail is required", { status: 400 });
     }
 
+    console.log("OG Image Thumbnail URL:", thumbnail);
+
     // SSRF mitigation: Only allow thumbnail URLs from approved hosts
-    if (
-      (thumbnail.startsWith("http://") || thumbnail.startsWith("https://")) &&
-      !isAllowedExternalUrl(thumbnail)
-    ) {
+    if (!thumbnail.startsWith("https://") || !isAllowedExternalUrl(thumbnail)) {
       return new Response("Untrusted thumbnail URL", { status: 400 });
     }
 
