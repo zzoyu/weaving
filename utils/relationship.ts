@@ -53,14 +53,15 @@ export function buildRelationshipTree(
         rootNodes.push(node);
       } else {
         // 부모 노드 찾기
-        const parentNode = relationshipMap.get(rel.from_id);
+        const parentNode = relationshipMap.get(rel.from_id)?.get(rel.to_id);
 
         if (parentNode) {
           // 이미 children에 있는지 확인
-          const isAlreadyChild = !!parentNode.get(rel.to_id);
+          const isAlreadyChild = !!parentNode.children?.find(
+            (child) => child.id === node.id
+          );
           if (!isAlreadyChild) {
-            parentNode.get(rel.to_id)?.children?.push(node);
-            console.log("pushing child", node);
+            parentNode.children?.push(node);
           }
         }
       }

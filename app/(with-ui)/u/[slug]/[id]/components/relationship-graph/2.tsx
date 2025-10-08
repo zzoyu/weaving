@@ -86,8 +86,6 @@ export default function RelationshipGraph2({
     [relationships, width, height]
   );
 
-  console.log(relationships);
-
   function drawNode(
     target: d3.Selection<any, any, any, any>,
     node: {

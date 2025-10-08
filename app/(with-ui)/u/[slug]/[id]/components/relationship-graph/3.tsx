@@ -472,7 +472,6 @@ export default function RelationshipGraph2({
 
     // 모든 점선을 먼저 그립니다
     nodes.forEach((node, index) => {
-      console.log("wtf?:", node);
       if (node.children && relationships[index].children) {
         node.children.forEach((child, childIndex) => {
           const childRelationship = relationships[index].children?.[childIndex];
