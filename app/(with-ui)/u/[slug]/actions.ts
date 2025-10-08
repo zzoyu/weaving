@@ -201,6 +201,25 @@ export async function updateFriendAccepted(from: number, to: number) {
     .eq("from_profile_id", from)
     .eq("to_profile_id", to);
 
+  if (error) {
+    return { data, error };
+  }
+
+  // Fetch the accepting user's profile to create a notification
+  const { data: toProfile } = await fetchProfileById(to);
+  
+  if (toProfile) {
+    // Send notification to the original requester (from user)
+    await supabase.from("notification").insert([
+      {
+        from_profile_id: to,
+        to_profile_id: from,
+        content: `${toProfile.nickname} 님이 친구 신청을 수락했습니다.`,
+        landing_url: `/u/${toProfile.slug}`,
+      } as Notification,
+    ]);
+  }
+
   revalidatePath("/u/[slug]", "page");
 
   return { data, error };
