@@ -36,6 +36,7 @@ export type RelationshipNode = {
   thumbnail?: string;
   depth?: number;
   children?: RelationshipNode[];
+  parent?: RelationshipNode;
 };
 
 export enum ERelationshipType {

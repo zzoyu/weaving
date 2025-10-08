@@ -12,6 +12,11 @@ export async function generateOgImage(
     process.env.NEXT_PUBLIC_BASE_URL
   );
 
-  const image = await fetch(imageUrl);
-  return image;
+  try {
+    const image = await fetch(imageUrl);
+    return image;
+  } catch (error) {
+    console.error("Error generating OG image:", error);
+    return null;
+  }
 }
