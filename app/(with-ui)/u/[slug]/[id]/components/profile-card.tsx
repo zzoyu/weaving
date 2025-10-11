@@ -10,6 +10,7 @@ import {
 import { Character, Property } from "@/types/character";
 import { Relationship, RelationshipNode } from "@/types/relationship";
 import { getPublicUrl } from "@/utils/image";
+import { XIcon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { fetchRelationshipsWithDepthExtended } from "../actions";
@@ -60,7 +61,7 @@ function PopupRelationshipGraph({
           className="absolute top-2 right-2 z-20"
           onClick={() => onClose()}
         >
-          닫기
+          <XIcon className="w-6 h-6 text-gray-600 hover:text-gray-900" />
         </button>
         <h2 className="text-2xl font-bold">관계도</h2>
         <div className="flex justify-center items-center w-full h-full absolute top-0 left-0">
