@@ -48,8 +48,8 @@ export default function ButtonRequestFriend({
           }}
           title="친구와의 관계를 해제하시겠습니까?"
           description=""
-          actionText="예"
-          cancelText="아니오"
+          actionText="삭제"
+          cancelText="취소"
         >
           <button className="bg-green-500 button-request-friend mt-5">
             친구
@@ -90,8 +90,8 @@ export default function ButtonRequestFriend({
           }}
           title="친구 신청을 취소하시겠습니까?"
           description=""
-          actionText="예"
-          cancelText="아니오"
+          actionText="삭제"
+          cancelText="취소"
         >
           <button className="bg-gray-300 text-white dark:text-text-black px-4 py-2 rounded-md mt-5">
             친구신청중

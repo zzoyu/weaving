@@ -24,9 +24,9 @@ export default function TemplateUniverse({
     : [];
 
   return (
-    <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-8 pb-20 bg-white dark:bg-neutral-900">
+    <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-8 pb-20">
       {/* 상단 이미지 */}
-      <div className="w-48 h-48 relative flex items-center justify-center mt-8 mb-2">
+      <div className="h-48 relative flex items-center justify-center mt-8 mb-2 w-full">
         {universe.image && universe.image.length > 0 ? (
           <Image
             unoptimized
@@ -59,7 +59,7 @@ export default function TemplateUniverse({
       <div className="flex flex-col justify-center items-center gap-2 w-full">
         <div className="text-gray-700 w-full px-10">
           {universe.properties && universe.properties.length > 0 && (
-            <div className="w-full max-w-md flex flex-col gap-3 mt-2">
+            <div className="w-full flex flex-col gap-3 mt-2">
               {universe.properties.map((property, idx) => (
                 <CharacterProfileField
                   key={`property-${idx}`}

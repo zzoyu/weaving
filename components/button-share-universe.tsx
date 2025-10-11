@@ -2,10 +2,8 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -21,12 +19,16 @@ interface ButtonShareUniverseProps {
   children?: React.ReactNode;
 }
 
-export default function ButtonShareUniverse({ universeId, children }: ButtonShareUniverseProps) {
+export default function ButtonShareUniverse({
+  universeId,
+  children,
+}: ButtonShareUniverseProps) {
   const pathname = usePathname();
   const [copied, setCopied] = useState(false);
-  const shareUrl = typeof window !== "undefined"
-    ? `${window.location.origin}/u${pathname}`
-    : "";
+  const shareUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/u${pathname}`
+      : "";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(shareUrl);
@@ -37,7 +39,11 @@ export default function ButtonShareUniverse({ universeId, children }: ButtonShar
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="w-full justify-start text-base text-gray-700 hover:text-primary-500">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-full justify-start text-base text-gray-700 hover:text-primary-500"
+        >
           {children || "세계관 공유"}
         </Button>
       </DialogTrigger>
@@ -60,15 +66,10 @@ export default function ButtonShareUniverse({ universeId, children }: ButtonShar
             <Copy />
           </Button>
         </div>
-        <DialogFooter className="sm:justify-start">
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              닫기
-            </Button>
-          </DialogClose>
-        </DialogFooter>
-        {copied && <div className="text-green-500 text-xs mt-2">복사되었습니다!</div>}
+        {copied && (
+          <div className="text-green-500 text-xs mt-2">복사되었습니다!</div>
+        )}
       </DialogContent>
     </Dialog>
   );
-} 
+}

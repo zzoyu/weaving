@@ -34,10 +34,10 @@ export function AlertDialogConfirm({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
+          <AlertDialogCancel>{cancelText}</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm}>
             {actionText}
           </AlertDialogAction>
-          <AlertDialogCancel>{cancelText}</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
