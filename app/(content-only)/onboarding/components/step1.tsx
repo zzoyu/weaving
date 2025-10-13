@@ -49,7 +49,7 @@ function NicknameTemplate({
           maxLength={25}
           minLength={1}
           required
-          pattern="^[가-힣a-zA-Z0-9]+$"
+          pattern="^[가-힣a-zA-Z0-9\s]+$"
           onChange={(e) => setNewNickname(e.target.value)}
           value={newNickname}
         />
