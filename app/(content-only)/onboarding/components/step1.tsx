@@ -46,7 +46,7 @@ function NicknameTemplate({
           name="nickname"
           placeholder="닉네임을 입력하세요"
           className="mt-2"
-          maxLength={10}
+          maxLength={25}
           minLength={1}
           required
           pattern="^[가-힣a-zA-Z0-9]+$"
@@ -59,7 +59,7 @@ function NicknameTemplate({
             • 닉네임은 국문, 영문, 숫자만 입력 가능합니다 (특수문자 사용 불가)
           </p>
           <p className="text-sm text-neutral-400">
-            • 닉네임은 10자 이내로 작성 가능합니다
+            • 닉네임은 25자 이내로 작성 가능합니다
           </p>
         </div>
       </div>
