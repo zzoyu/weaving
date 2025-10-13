@@ -42,10 +42,10 @@ export async function fetchRandomNicknameAndSlug(metadata: TwitterMetadata) {
   const adjectiveKo = adjective.ko[adjectiveIndex];
   const adjectiveEn = adjective.en[adjectiveIndex];
 
-  const suffix = faker.string.alphanumeric({
-    length: 5,
-    casing: "upper",
-  });
+  // const suffix = faker.string.alphanumeric({
+  //   length: 5,
+  //   casing: "upper",
+  // });
   const candidates = Array.from({ length: 5 }, () =>
     faker.string.alphanumeric({
       length: 5,
@@ -53,12 +53,38 @@ export async function fetchRandomNicknameAndSlug(metadata: TwitterMetadata) {
     })
   );
 
-  const nickname = `${colorKo} ${adjectiveKo} ${suffix}`;
-  const slug = `${colorEn}-${adjectiveEn}-${suffix}`;
+  const nickname = `${adjectiveKo} ${colorKo} `; // + suffix
+  const slug = `${adjectiveEn}-${colorEn}-`; // + suffix
+  const slugCandidates = candidates.map((candidate) => `${slug}${candidate}`);
+
+  const supabase = createClient();
+  const { data: existingSlugs } = await supabase
+    .from("profiles")
+    .select("slug")
+    .in("slug", slugCandidates);
+
+  if (existingSlugs && existingSlugs.length > 0) {
+    // 이미 존재하는 slug가 있다면, 후보군에서 제거
+    const existingSlugSet = new Set(existingSlugs.map((item) => item.slug));
+    const availableCandidatesIndexes = candidates
+      .map((candidate, index) =>
+        existingSlugSet.has(`${slug}${candidate}`) ? -1 : index
+      )
+      .filter((index) => index !== -1);
+
+    if (availableCandidatesIndexes.length > 0) {
+      // 사용 가능한 후보군이 있다면, 그 중 하나를 선택
+      return {
+        nickname: nickname + candidates[availableCandidatesIndexes[0]],
+        slug: slug + candidates[availableCandidatesIndexes[0]],
+      };
+    }
+  }
+
+  // Check for slug uniqueness and adjust if necessary
 
   return {
-    nickname,
-    slug,
-    candidates,
+    nickname: nickname + candidates[0],
+    slug: slugCandidates[0],
   };
 }

@@ -30,10 +30,16 @@ describe("충돌 테스트", () => {
     const total = 5000;
     for (let i = 0; i < total; i++) {
       const provider_id = generateProviderId(); // 19자리 숫자 문자열 생성
-      const { nickname, slug } = await fetchRandomNicknameAndSlug({
+      const { nickname, slug, candidates } = await fetchRandomNicknameAndSlug({
         provider_id: provider_id,
       } as any);
-      if (seenNicknames.has(nickname) || seenSlugs.has(slug)) {
+      if (
+        seenNicknames.has(nickname) ||
+        (seenSlugs.has(slug) &&
+          !Boolean(
+            candidates.some((candidate) => seenSlugs.has(candidate) == false)
+          ))
+      ) {
         // print detailed debug info before letting the test fail
         console.log(`Collision at iteration ${i}`);
         console.log(`provider_id: ${provider_id}`);

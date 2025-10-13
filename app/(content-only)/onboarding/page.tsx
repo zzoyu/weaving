@@ -12,9 +12,7 @@ export default async function OnboardingPage() {
   const metadata = userData.user?.user_metadata as TwitterMetadata;
 
   // Auto generate nickname and slug.
-  const { nickname, slug, candidates } = await fetchRandomNicknameAndSlug(
-    metadata
-  );
+  const { nickname, slug } = await fetchRandomNicknameAndSlug(metadata);
 
   console.log("Generated nickname and slug:", { nickname, slug });
 
@@ -23,7 +21,6 @@ export default async function OnboardingPage() {
       user={metadata}
       id={userData.user?.id as string}
       defaultProfile={{ nickname, slug }}
-      candidateSlugSuffixes={candidates}
     />
   );
 }

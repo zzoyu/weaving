@@ -16,14 +16,12 @@ interface OnboardingProps extends React.HTMLAttributes<HTMLFormElement> {
     nickname: string;
     slug: string;
   };
-  candidateSlugSuffixes?: string[];
 }
 
 export default function Onboarding({
   id,
   user,
   defaultProfile,
-  candidateSlugSuffixes,
 }: OnboardingProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [profileToCreate, setProfileToCreate] = useState<Profile>({
