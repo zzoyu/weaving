@@ -1,5 +1,6 @@
 import { updateSession } from "@/utils/supabase/middleware";
 import { NextResponse, type NextRequest } from "next/server";
+import { fetchProfileByUserId } from "./app/profile/actions";
 import { createClient } from "./utils/supabase/server";
 
 // 인증이 필요한 라우트 패턴
@@ -15,6 +16,15 @@ const publicRoutes = [
   "/",
   "/auth",
   "/login",
+  "/onboarding",
+  "/u/:slug",
+  "/posts/:id",
+  "/terms",
+  "/privacy",
+  "/guideline",
+  "/about",
+  "/blog",
+  "/help",
   // 추가 공개 라우트...
 ];
 
@@ -34,10 +44,16 @@ export async function middleware(request: NextRequest) {
       error,
     } = await supabase.auth.getUser();
 
-    // 인증되지 않은 사용자 또는 세션 만료
-    if (!user || error) {
-      const redirectUrl = new URL("/", request.url);
+    // 인증되지 않은 사용자 또는 세션 만료 또는 프로필이 없음
+    if (!user?.id || error) {
+      const redirectUrl = new URL("/signin", request.url);
       redirectUrl.searchParams.set("redirect", path);
+      return NextResponse.redirect(redirectUrl);
+    }
+
+    const profile = await fetchProfileByUserId(user.id);
+    if (!profile) {
+      const redirectUrl = new URL("/onboarding", request.url);
       return NextResponse.redirect(redirectUrl);
     }
 

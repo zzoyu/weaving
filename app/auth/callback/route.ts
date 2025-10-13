@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 // The client you created from the Server-Side Auth instructions
-import { createClient } from "@/utils/supabase/server";
 import { fetchProfileByUserId } from "@/app/profile/actions";
-import { createProfile } from "@/app/profile/create/actions";
+import { createClient } from "@/utils/supabase/server";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -22,21 +21,7 @@ export async function GET(request: Request) {
       }
       const profile = await fetchProfileByUserId(userData?.user?.id as string);
       if (!profile) {
-        const payload = new FormData();
-        payload.append("user_id", userData?.user?.id as string);
-        payload.append(
-          "profile_url",
-          userData?.user?.user_metadata?.picture as string
-        );
-        payload.append(
-          "nickname",
-          userData?.user?.user_metadata?.full_name as string
-        );
-        payload.append(
-          "slug",
-          userData?.user?.user_metadata.user_name as string
-        );
-        await createProfile(payload);
+        return NextResponse.redirect(`${origin}/onboarding`); // profile creation page
       }
 
       const forwardedHost = request.headers.get("x-forwarded-host"); // original origin before load balancer
