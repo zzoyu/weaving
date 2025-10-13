@@ -15,8 +15,8 @@ export function AlertDialogConfirm({
   description = "This action cannot be undone.",
   children,
   onConfirm,
-  actionText = "Continue",
-  cancelText = "Cancel",
+  actionText = "확인",
+  cancelText = "취소",
 }: {
   title?: string;
   description?: string;
@@ -34,10 +34,10 @@ export function AlertDialogConfirm({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
+          <AlertDialogCancel>{cancelText}</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm}>
             {actionText}
           </AlertDialogAction>
-          <AlertDialogCancel>{cancelText}</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

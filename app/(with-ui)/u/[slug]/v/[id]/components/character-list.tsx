@@ -1,9 +1,7 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { CharacterWithProfile } from "@/types/character";
 import { getPublicUrl } from "@/utils/image";
-import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -28,14 +26,7 @@ export function ListCharacter({
   const [isOpened, setIsOpened] = useState(false);
 
   if (!characters.length) {
-    return (
-      <Card className="w-full">
-        <CardContent className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-          <Star className="w-12 h-12 mb-4 opacity-50" />
-          <p className="text-lg">아직 등록된 캐릭터가 없어요</p>
-        </CardContent>
-      </Card>
-    );
+    return null;
   }
 
   return (

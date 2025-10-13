@@ -3,6 +3,7 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Notification } from "@/types/notification";
+import { useState } from "react";
 
 interface ProfileBadgeProps {
   profile: Profile;
@@ -13,6 +14,7 @@ export default function ProfileBadge({
   profile,
   notifications,
 }: ProfileBadgeProps) {
+  const [imageLoaded, setImageLoaded] = useState(false);
   return (
     <div className="relative">
       {(notifications?.length || 0) > 0 && (
@@ -22,9 +24,13 @@ export default function ProfileBadge({
         <AvatarImage
           src={profile?.profile_image || ""}
           alt="프로필 이미지"
-          className="z-10"
+          className="z-10 bg-white"
+          onLoadedData={() => setImageLoaded(true)}
+          onError={() => setImageLoaded(true)}
         />
-        <Skeleton className="h-full w-full rounded-full"></Skeleton>
+        {!imageLoaded && (
+          <Skeleton className="h-full w-full rounded-full"></Skeleton>
+        )}
       </Avatar>
     </div>
   );

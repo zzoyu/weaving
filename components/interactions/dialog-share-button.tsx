@@ -5,9 +5,7 @@ import { Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -98,7 +96,7 @@ export function DialogShareButton({
           <DialogTitle>공유하기</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-6">
-          <div className="flex flex-row w-full gap-2 mt-2">
+          <div className="flex flex-row w-full gap-2 mt-2 justify-center">
             <Button
               type="button"
               size="icon"
@@ -159,14 +157,6 @@ export function DialogShareButton({
             </Button>
           </div>
         </div>
-
-        <DialogFooter className="sm:justify-start">
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              닫기
-            </Button>
-          </DialogClose>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

@@ -28,7 +28,11 @@ export async function deleteAccount(id: string) {
     return { success: true, data };
   } catch (err) {
     Sentry.captureException(err);
-    return { success: false, message: err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다." };
+    return {
+      success: false,
+      message:
+        err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다.",
+    };
   }
 }
 
@@ -50,7 +54,6 @@ export async function fetchFriendsByProfileId(id?: number) {
   return data;
 }
 
-
 export async function fetchProfilesByIds(ids: number[]) {
   const supabase = createServerClient();
   const { data, error } = await supabase
@@ -63,4 +66,29 @@ export async function fetchProfilesByIds(ids: number[]) {
   }
 
   return data;
+}
+
+export async function fetchMyProfileNickname() {
+  const supabase = createServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+  const { data, error } = await supabase
+    .from("profile")
+    .select("nickname, last_nickname_changed_at")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return {
+    nickname: data?.nickname,
+    lastChangedAt: data?.last_nickname_changed_at,
+  };
 }

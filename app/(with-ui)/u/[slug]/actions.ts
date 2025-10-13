@@ -206,8 +206,9 @@ export async function updateFriendAccepted(from: number, to: number) {
   }
 
   // Fetch the accepting user's profile to create a notification
-  const { data: toProfile } = await fetchProfileById(to);
-  
+  const response = await fetchProfileById(to);
+  const toProfile = response?.data;
+
   if (toProfile) {
     // Send notification to the original requester (from user)
     await supabase.from("notification").insert([
