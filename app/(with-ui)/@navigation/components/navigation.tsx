@@ -21,7 +21,7 @@ export function NavigationSignIn({ slug }: { slug?: string }) {
     {
       label: "더보기",
       icon: AdditionalIcon,
-      href: `/u/${slug}/more`,
+      href: `/more`,
     },
     {
       label: "캐릭터",
