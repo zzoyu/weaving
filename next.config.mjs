@@ -48,7 +48,7 @@ const nextConfig = {
   // This builds the header from directives for readability and easier maintenance.
   async headers() {
     const directives = {
-      "default-src": ["'self'"],
+      "default-src": ["'self'", "https://*.weavv.in", "https://*.google.com"],
       "script-src": [
         "'self'",
         "'unsafe-inline'",
@@ -67,6 +67,10 @@ const nextConfig = {
         "'self'",
         "'unsafe-inline'",
         "https://fonts.googleapis.com",
+        "https://*.weavv.in",
+        "https://*.adtrafficquality.google",
+        "https://*.googlesyndication.com",
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
       ],
       "img-src": [
         "'self'",
@@ -77,6 +81,7 @@ const nextConfig = {
         "https://*.weavv.in",
         "https://*.oraclecloud.com",
         "https://*.twimg.com",
+        "https://*.adtrafficquality.google",
         process.env.NEXT_PUBLIC_SUPABASE_URL,
       ],
       "connect-src": [
@@ -87,6 +92,8 @@ const nextConfig = {
         "https://*.ingest.us.sentry.io",
         "https://*.adtrafficquality.google",
         "https://fundingchoicesmessages.google.com",
+        "https://*.weavv.in",
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
       ],
       "frame-src": [
         "https://*.googlesyndication.com",
@@ -100,6 +107,7 @@ const nextConfig = {
       ],
       "font-src": [
         "https://fonts.gstatic.com",
+        "https://*.weavv.in",
         process.env.NEXT_PUBLIC_BASE_URL,
       ],
       "object-src": ["'none'"],
