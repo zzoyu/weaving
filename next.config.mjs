@@ -52,13 +52,13 @@ const nextConfig = {
       "script-src": [
         "'self'",
         "'unsafe-inline'",
+        "'unsafe-eval'",
         "https://*.googlesyndication.com",
         "https://www.googletagmanager.com",
         "https://www.google-analytics.com",
         "https://www.googletagservices.com",
-        "https://fundingchoicesmessages.google.com",
+        "https://*.google.com",
         "https://static.cloudflareinsights.com",
-        "https://cdn.jsdelivr.net",
         "https://*.ingest.us.sentry.io",
         "https://*.adtrafficquality.google",
         "https://*.weavv.in",
@@ -88,11 +88,6 @@ const nextConfig = {
         "https://*.adtrafficquality.google",
         "https://fundingchoicesmessages.google.com",
       ],
-      "post-message-src": [
-        "'self'",
-        "https://*.adtrafficquality.google",
-        "https://*.weavv.in",
-      ],
       "frame-src": [
         "https://*.googlesyndication.com",
         "https://googleads.g.doubleclick.net",
@@ -101,13 +96,15 @@ const nextConfig = {
         "https://*.adtrafficquality.google",
         "https://*.weavv.in",
         "https://www.google.com",
+        process.env.NEXT_PUBLIC_BASE_URL,
       ],
-      "font-src": ["https://fonts.gstatic.com", "https://*.weavv.in"],
+      "font-src": [
+        "https://fonts.gstatic.com",
+        process.env.NEXT_PUBLIC_BASE_URL,
+      ],
       "object-src": ["'none'"],
       "base-uri": ["'self'"],
       "form-action": ["'self'"],
-      // Forces browsers to use HTTPS for subresources when possible
-      "upgrade-insecure-requests": [],
     };
 
     const buildCsp = (map) =>
