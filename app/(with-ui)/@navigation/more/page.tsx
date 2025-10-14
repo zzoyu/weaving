@@ -1,9 +1,6 @@
 import { fetchProfileByUserId } from "@/app/profile/actions";
 import { createClient } from "@/utils/supabase/server";
-import {
-  NavigationSignIn,
-  NavigationSignOut,
-} from "../../../components/navigation";
+import { NavigationSignIn, NavigationSignOut } from "../components/navigation";
 
 export default async function NavigationPage() {
   const supabase = createClient();

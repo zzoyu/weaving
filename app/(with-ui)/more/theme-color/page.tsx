@@ -1,6 +1,6 @@
+import { fetchCharactersByProfileId } from "@/app/character/actions";
 import { fetchProfileByUserId } from "@/app/profile/actions";
 import { createClient } from "@/utils/supabase/server";
-import { fetchCharactersByProfileId } from "../../actions";
 import ThemeColorChart from "../components/ThemeColorChart";
 
 interface PageProps {
@@ -34,11 +34,23 @@ export default async function ThemeColorPage({ params }: PageProps) {
     );
   }
 
-  const { data: characters } = await fetchCharactersByProfileId(myProfile.id);
+  const characters = await fetchCharactersByProfileId(myProfile.id);
 
   return (
     <main className="flex flex-col h-fit pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto pb-10">
-      <ThemeColorChart characters={characters} />
+      {characters.length === 0 && (
+        <h1 className="text-2xl font-bold font-pretendard">
+          캐릭터를 먼저 생성해주세요
+        </h1>
+      )}
+      {characters.length > 0 && (
+        <>
+          <h1 className="text-2xl font-bold font-pretendard mb-4">
+            테마 컬러 분석
+          </h1>
+          <ThemeColorChart characters={characters} />
+        </>
+      )}
     </main>
   );
 }

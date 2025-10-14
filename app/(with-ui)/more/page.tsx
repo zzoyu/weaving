@@ -12,26 +12,9 @@ export default async function Page({ params }: PageProps) {
   const supabase = createClient();
   const { data: currentUser } = await supabase.auth.getUser();
 
-  if (!currentUser?.user?.id) {
-    return (
-      <main className="flex flex-col h-full justify-center items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto">
-        <h1 className="text-2xl font-bold font-pretendard">
-          로그인이 필요합니다
-        </h1>
-      </main>
-    );
-  }
-
-  const myProfile = await fetchProfileByUserId(currentUser.user.id);
-  if (!myProfile?.id) {
-    return (
-      <main className="flex flex-col h-full justify-center items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto">
-        <h1 className="text-2xl font-bold font-pretendard">
-          프로필을 먼저 생성해주세요
-        </h1>
-      </main>
-    );
-  }
+  const myProfile = currentUser?.user?.id
+    ? await fetchProfileByUserId(currentUser.user.id)
+    : null;
 
   const features = [
     {
@@ -64,8 +47,12 @@ export default async function Page({ params }: PageProps) {
             className=" w-full p-8 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gradient-to-br dark:from-[#232526] dark:to-[#414345] shadow-lg hover:shadow-2xl transition-transform hover:scale-105 duration-200 flex flex-col cursor-pointer h-full"
           >
             <div className="text-3xl mb-4">{feature.icon}</div>
-            <p className="text-sm md:text-base font-bold mb-2 text-gray-900 dark:text-white">{feature.title}</p>
-            <p className="text-xs md:text-sm text-gray-500 dark:text-gray-300">{feature.description}</p>
+            <p className="text-sm md:text-base font-bold mb-2 text-gray-900 dark:text-white">
+              {feature.title}
+            </p>
+            <p className="text-xs md:text-sm text-gray-500 dark:text-gray-300">
+              {feature.description}
+            </p>
           </Link>
         ))}
       </div>

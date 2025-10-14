@@ -25,6 +25,7 @@ const publicRoutes = [
   "/about",
   "/blog",
   "/help",
+  "/more",
   // 추가 공개 라우트...
 ];
 
