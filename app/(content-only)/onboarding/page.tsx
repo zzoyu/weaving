@@ -1,3 +1,4 @@
+import { fetchProfileByUserId } from "@/app/profile/actions";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { fetchRandomNicknameAndSlug } from "./actions";
@@ -9,12 +10,13 @@ export default async function OnboardingPage() {
   if (!userData?.user?.id) {
     redirect("/signin");
   }
+  if (await fetchProfileByUserId(userData.user.id)) {
+    redirect(`/u/${(await fetchProfileByUserId(userData.user.id))?.slug}`);
+  }
   const metadata = userData.user?.user_metadata as TwitterMetadata;
 
   // Auto generate nickname and slug.
   const { nickname, slug } = await fetchRandomNicknameAndSlug(metadata);
-
-  console.log("Generated nickname and slug:", { nickname, slug });
 
   return (
     <Onboarding
