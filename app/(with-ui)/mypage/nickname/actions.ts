@@ -44,7 +44,7 @@ export async function updateMyProfileNickname(
 
   const { error } = await supabase
     .from("profile")
-    .update({ nickname, last_nickname_changed_at: now })
+    .update({ nickname: nickname.trim(), last_nickname_changed_at: now })
     .eq("user_id", id)
     .maybeSingle();
 

@@ -34,7 +34,7 @@ export default function NicknameTemplate({
     <form
       className="w-full h-full p-8 flex flex-col justify-between"
       action={async (formData) => {
-        if (formData.get("nickname") === nickname) {
+        if (formData.get("nickname")?.toString().trim() === nickname) {
           toast({
             description: "변경된 닉네임이 없습니다.",
             variant: "destructive",
@@ -70,7 +70,7 @@ export default function NicknameTemplate({
           maxLength={10}
           minLength={1}
           required
-          pattern="^[가-힣a-zA-Z0-9]+$"
+          pattern="^[가-힣a-zA-Z0-9\s]+$"
           onChange={(e) => setNewNickname(e.target.value)}
           value={newNickname}
         />
@@ -80,7 +80,7 @@ export default function NicknameTemplate({
             • 닉네임은 국문, 영문, 숫자만 입력 가능합니다 (특수문자 사용 불가)
           </p>
           <p className="text-sm text-neutral-400">
-            • 닉네임은 10자 이내로 작성 가능합니다
+            • 닉네임은 25자 이내로 작성 가능합니다
           </p>
         </div>
       </div>
