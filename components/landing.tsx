@@ -25,6 +25,10 @@ export default function Landing() {
   const [activeFeature, setActiveFeature] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
+  useEffect(() => {
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+  }, []);
+
   const features = [
     {
       icon: <FolderCheckIcon className="w-8 h-8" />,
@@ -296,6 +300,15 @@ export default function Landing() {
             </div>
           </div>
         </section>
+
+        <ins
+          className="adsbygoogle bg-background-dark"
+          style={{ display: "block" }}
+          data-ad-client="ca-pub-8566989289200896"
+          data-ad-slot="1043165761"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
 
         {/* Target Users Section */}
         <section id="users" className="py-16 bg-white dark:bg-gray-900">

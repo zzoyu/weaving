@@ -25,7 +25,7 @@ export default function SidebarAd({
     <div
       className={`px-2 fixed top-14 ${
         position === "left" ? "left-0" : "right-0"
-      } z-10 md:w-40 h-full hidden md:block pb-10`}
+      } z-10 md:w-40 h-full hidden md:block pb-1 bg-background-dark`}
       aria-hidden
     >
       <ins
