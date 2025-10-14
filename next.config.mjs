@@ -44,6 +44,29 @@ const nextConfig = {
       },
     ],
   },
+  // Add CSP header to allow Google AdSense / GTM scripts and resources
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            // Keep this policy reasonably permissive for Google AdSense and tagging.
+            // Adjust/remove 'unsafe-inline' if you migrate to nonces.
+            value:
+              "default-src 'self'; " +
+              "script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagmanager.com https://www.google-analytics.com https://www.googletagservices.com; " +
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+              "img-src 'self' data: https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://www.google-analytics.com; " +
+              "connect-src 'self' https://www.google-analytics.com https://pagead2.googlesyndication.com https://www.googletagmanager.com; " +
+              "frame-src https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagmanager.com; " +
+              "font-src https://fonts.gstatic.com; object-src 'none'; base-uri 'self';",
+          },
+        ],
+      },
+    ];
+  },
   webpack(config) {
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule) =>
