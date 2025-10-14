@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 type Props = {
   position?: "left" | "right";
   adClient?: string;
@@ -11,6 +13,14 @@ export default function SidebarAd({
   adClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID,
   adSlot = process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID,
 }: Props) {
+  useEffect(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.error("Adsense error:", e);
+    }
+  }, []);
+
   return (
     <div
       className={`px-2 fixed top-14 ${
