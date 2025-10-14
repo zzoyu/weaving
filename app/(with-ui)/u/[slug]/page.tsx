@@ -103,7 +103,7 @@ export default async function PublicProfilePage({
       ? data
       : myProfile;
 
-  if (from === null || to === null) {
+  if (currentUser?.data.user?.id && (from === null || to === null)) {
     notFound();
   }
 
@@ -116,7 +116,7 @@ export default async function PublicProfilePage({
         <span className=" text-gray-600 text-sm md:text-base">
           {responseCharacters?.data.length || 0}개의 캐릭터
         </span>
-        {!isMine && myProfile && (
+        {!isMine && myProfile && from && to && (
           <ButtonRequestFriend
             isMyProfile={isMine}
             isMyRequest={!!friendDataFromMe}
