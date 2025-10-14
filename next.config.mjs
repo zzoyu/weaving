@@ -72,7 +72,7 @@ const nextConfig = {
         "https://www.google-analytics.com",
         "https://weavv.in",
         "https://objectstorage.*.oraclecloud.com",
-        NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
       ],
       "connect-src": [
         "'self'",
