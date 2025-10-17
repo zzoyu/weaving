@@ -33,16 +33,15 @@ export function UniverseList({
     return tempUniverses;
   }, [universes, searchKeyword]);
   return (
-    <article className="flex flex-col items-center justify-center gap-2 md:gap-4 mt-2 md:mt-5 w-full max-w-xl px-4 mx-auto">
-      
-      <div className="w-full flex flex-row gap-2 md:gap-4 justify-center items-center mb-10">
-        <div className="flex items-center rounded-full relative w-full max-w-sm md:max-w-full mx-auto h-fit">
+    <article className="flex flex-col items-center justify-center gap-2 lg:gap-4 mt-2 lg:mt-5 w-full max-w-xl px-4 mx-auto">
+      <div className="w-full flex flex-row gap-2 lg:gap-4 justify-center items-center mb-10">
+        <div className="flex items-center rounded-full relative w-full max-w-sm lg:max-w-full mx-auto h-fit">
           <input
             type="text"
             placeholder="검색"
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
-            className="flex-shrink md:flex-0 w-full pl-8 pr-2 py-3 rounded-xl border border-gray-200 dark:border-neutral-700 bg-gray-50 dark:bg-neutral-900 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-gray-400 dark:focus:border-neutral-500 focus:bg-white dark:focus:bg-neutral-800 focus:outline-none transition"
+            className="flex-shrink lg:flex-0 w-full pl-8 pr-2 py-3 rounded-xl border border-gray-200 dark:border-neutral-700 bg-gray-50 dark:bg-neutral-900 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-gray-400 dark:focus:border-neutral-500 focus:bg-white dark:focus:bg-neutral-800 focus:outline-none transition"
           />
           <button className="p-2 rounded-full absolute pointer-events-none">
             <SearchIcon className="text-gray-400 dark:text-gray-500" />
@@ -86,4 +85,4 @@ export function UniverseList({
       )}
     </article>
   );
-} 
+}

@@ -7,7 +7,7 @@ import ProfileEditForm from "./profile-edit-form";
 
 export default function MypageTemplate({ profile }: { profile: Profile }) {
   return (
-    <main className="flex flex-col items-center justify-start w-full h-full pt-0 md:pt-10">
+    <main className="flex flex-col items-center justify-start w-full h-full pt-0 lg:pt-10">
       <section className="w-full max-w-md p-4">
         <div className="mb-4">
           <ProfileEditForm profile={profile} />

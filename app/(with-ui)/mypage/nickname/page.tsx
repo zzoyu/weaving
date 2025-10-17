@@ -15,7 +15,7 @@ export default async function NicknamePage() {
   }
 
   return (
-    <div className="w-full md:max-w-[40rem] mx-auto h-full">
+    <div className="w-full lg:max-w-[40rem] mx-auto h-full">
       <NicknameTemplate nickname={nickname} lastChangedAt={lastChangedAt} />
     </div>
   );

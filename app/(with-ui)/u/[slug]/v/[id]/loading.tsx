@@ -5,9 +5,9 @@ export default function Loading() {
   return (
     <div className="w-full flex flex-col gap-6 animate-pulse">
       {/* 헤더 섹션 스켈레톤 */}
-      <div className="flex flex-col md:flex-row gap-6 items-start">
+      <div className="flex flex-col lg:flex-row gap-6 items-start">
         {/* 썸네일 스켈레톤 */}
-        <Skeleton className="w-full md:w-64 h-64 rounded-lg" />
+        <Skeleton className="w-full lg:w-64 h-64 rounded-lg" />
 
         {/* 기본 정보 스켈레톤 */}
         <div className="flex-1 flex flex-col gap-4">
@@ -51,7 +51,7 @@ export default function Loading() {
           <Skeleton className="h-6 w-24" />
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <Skeleton key={i} className="aspect-square rounded-lg" />
             ))}

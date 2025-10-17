@@ -9,6 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { ErrorBoundary } from "@sentry/nextjs";
 import {
   ChevronDown,
   FolderCheckIcon,
@@ -125,7 +126,7 @@ export default function Landing() {
                 width={0}
                 height={0}
                 sizes="100vw"
-                className="object-contain w-[120px] md:w-[200px] dark:hidden"
+                className="object-contain w-[120px] lg:w-[200px] dark:hidden"
               />
               <Image
                 src="/assets/logos/logo_text_horizontal_color_white.svg"
@@ -133,12 +134,12 @@ export default function Landing() {
                 width={0}
                 height={0}
                 sizes="100vw"
-                className="object-contain w-[120px] md:w-[200px] hidden dark:block"
+                className="object-contain w-[120px] lg:w-[200px] hidden dark:block"
               />
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-6">
+            <div className="hidden lg:flex items-center space-x-6">
               <Link
                 href="/blog"
                 className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
@@ -188,7 +189,7 @@ export default function Landing() {
             </div>
 
             {/* Mobile Hamburger Menu */}
-            <div className="md:hidden">
+            <div className="lg:hidden">
               <Sheet>
                 <SheetTrigger asChild>
                   <Button
@@ -268,14 +269,14 @@ export default function Landing() {
       {/* Hero Section */}
       <main>
         <section
-          className="py-12 md:py-20 lg:py-24"
+          className="py-12 lg:py-20 lg:py-24"
           aria-labelledby="hero-heading"
         >
           <div className="container mx-auto px-4 text-center">
             <div className="max-w-4xl mx-auto">
               <h1
                 id="hero-heading"
-                className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight"
+                className="text-3xl lg:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight"
               >
                 창작자를 위한
                 <br />
@@ -284,9 +285,9 @@ export default function Landing() {
                 </span>
               </h1>
 
-              <p className="text-base md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+              <p className="text-base lg:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
                 지금, 당신만의 캐릭터와 세계관을{" "}
-                <br className="block md:hidden" />
+                <br className="block lg:hidden" />
                 정리하고 연결해보세요.
               </p>
 
@@ -301,25 +302,29 @@ export default function Landing() {
           </div>
         </section>
 
-        <ins
-          className="adsbygoogle bg-background-dark"
-          style={{ display: "block" }}
-          data-ad-client="ca-pub-8566989289200896"
-          data-ad-slot="1043165761"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        ></ins>
+        {/* Adsense Ad */}
+        <ErrorBoundary fallback={<div />}>
+          <ins
+            key="landing-adsense-ad-1"
+            className="adsbygoogle bg-background-dark"
+            style={{ display: "block" }}
+            data-ad-client="ca-pub-8566989289200896"
+            data-ad-slot="1043165761"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
+        </ErrorBoundary>
 
         {/* Target Users Section */}
         <section id="users" className="py-16 bg-white dark:bg-gray-900">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
                 모든 창작자를 위해
               </h2>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="grid lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
               {targetUsers.map((user, index) => (
                 <Card
                   key={index}
@@ -357,13 +362,13 @@ export default function Landing() {
             <div className="text-center mb-12">
               <h2
                 id="features-heading"
-                className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4"
+                className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4"
               >
                 흩어지지 않게, 연결되게
               </h2>
-              <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              <p className="text-base lg:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                 서사를 만들다 보면 자꾸 흩어지는 정보들,{" "}
-                <br className="block md:hidden" />
+                <br className="block lg:hidden" />
                 위빙에서 정리하세요.
               </p>
             </div>
@@ -386,20 +391,20 @@ export default function Landing() {
                         {feature.icon}
                       </div>
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 whitespace-pre-line md:whitespace-normal">
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 whitespace-pre-line lg:whitespace-normal">
                       {feature.title}
                     </h3>
                     {feature.description_pc ? (
                       <>
-                        <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed whitespace-pre-line md:block hidden">
+                        <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed whitespace-pre-line lg:block hidden">
                           {feature.description_pc}
                         </p>
-                        <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed whitespace-pre-line block md:hidden">
+                        <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed whitespace-pre-line block lg:hidden">
                           {feature.description}
                         </p>
                       </>
                     ) : (
-                      <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed whitespace-pre-line md:whitespace-normal">
+                      <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed whitespace-pre-line lg:whitespace-normal">
                         {feature.description}
                       </p>
                     )}
@@ -419,7 +424,7 @@ export default function Landing() {
                               width={0}
                               height={0}
                               sizes="100vw"
-                              className="object-contain w-3/4 h-full mx-auto ml-[17%] md:ml-0"
+                              className="object-contain w-3/4 h-full mx-auto ml-[17%] lg:ml-0"
                             />
                           )}
 
@@ -431,7 +436,7 @@ export default function Landing() {
                               width={0}
                               height={0}
                               sizes="100vw"
-                              className="object-contain w-4/5 h-full mx-auto ml-[15%] md:ml-0"
+                              className="object-contain w-4/5 h-full mx-auto ml-[15%] lg:ml-0"
                             />
                           )}
 
@@ -442,7 +447,7 @@ export default function Landing() {
                               alt="relationships"
                               width={0}
                               height={0}
-                              className="object-contain w-full h-full ml-[3%] md:ml-0"
+                              className="object-contain w-full h-full ml-[3%] lg:ml-0"
                             />
                           )}
 
@@ -453,7 +458,7 @@ export default function Landing() {
                               alt="opengraph"
                               width={0}
                               height={0}
-                              className="object-contain w-full h-full ml-[5%] md:ml-0"
+                              className="object-contain w-full h-full ml-[5%] lg:ml-0"
                             />
                           )}
                         </div>
@@ -476,7 +481,7 @@ export default function Landing() {
             <div className="max-w-3xl mx-auto">
               <h2
                 id="faq-heading"
-                className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white text-center mb-12"
+                className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-12"
               >
                 자주 묻는 질문
               </h2>
@@ -528,7 +533,7 @@ export default function Landing() {
             <div className="max-w-2xl mx-auto">
               <h2
                 id="blog-cta-heading"
-                className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-10"
+                className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-10"
               >
                 캐릭터 창작을 위한
                 <br />
@@ -555,7 +560,7 @@ export default function Landing() {
             <div className="max-w-2xl mx-auto">
               <h2
                 id="cta-heading"
-                className="text-3xl md:text-4xl font-bold text-white mb-10"
+                className="text-3xl lg:text-4xl font-bold text-white mb-10"
               >
                 여러분의 특별한 세상을
                 <br />

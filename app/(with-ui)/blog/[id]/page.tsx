@@ -84,7 +84,7 @@ export default async function BlogDetailPage({
   });
 
   return (
-    <main className="flex flex-col justify-start pt-4 md:pt-10 w-full md:max-w-[40rem] mx-auto">
+    <main className="flex flex-col justify-start pt-4 lg:pt-10 w-full lg:max-w-[40rem] mx-auto">
       <StructuredData
         post={{
           title: blogItem.title,
@@ -106,10 +106,10 @@ export default async function BlogDetailPage({
         </h2>
       </div>
       <div className="px-4 py-2 pt-16">
-        <div className="pt-6 md:pt-10 px-2 md:px-4">
+        <div className="pt-6 lg:pt-10 px-2 lg:px-4">
           <div className="flex flex-col gap-4">
             <div className="border-b border-gray-200 pb-4">
-              <h1 className="text-xl md:text-2xl font-bold mb-2">
+              <h1 className="text-xl lg:text-2xl font-bold mb-2">
                 {blogItem?.title}
               </h1>
               <p className="text-gray-500 text-sm">

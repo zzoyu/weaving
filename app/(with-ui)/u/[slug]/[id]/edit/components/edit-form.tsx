@@ -95,10 +95,10 @@ export default function CharacterEditTemplate({
   const router = useRouter();
 
   return (
-    <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
+    <main className="flex flex-col justify-start items-center pt-2 lg:pt-10 w-full lg:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
       <Suspense fallback={<Loading />}>
         <form
-          className="flex flex-col gap-2 items-center w-full md:max-w-md p-4"
+          className="flex flex-col gap-2 items-center w-full lg:max-w-md p-4"
           action={(formData) => {
             updateCharacter(formData, [...properties, ...currentColors]).then(
               (result) => {

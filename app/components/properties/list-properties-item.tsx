@@ -124,7 +124,7 @@ export default function ListPropertiesItem({
       <div className="w-full flex gap-4 items-center relative">
         <button
           type="button"
-          className="p-2 absolute left-0 h-full items-center justify-center md:flex hidden"
+          className="p-2 absolute left-0 h-full items-center justify-center lg:flex hidden"
           aria-label="drag-handle"
           {...(listeners || {})}
         >
@@ -144,7 +144,7 @@ export default function ListPropertiesItem({
         </button>
 
         <div className="flex-1 flex gap-4">
-          <div className="flex flex-row md:hidden">
+          <div className="flex flex-row lg:hidden">
             <button onClick={() => handleMove(-1)} type="button">
               <ChevronUp className="text-background-dark" />
             </button>
@@ -158,7 +158,7 @@ export default function ListPropertiesItem({
             value={`${property.key}:${property.value}`}
           />
           <input
-            className="md:w-1/3 text-center p-1  border-background-muted focus:outline-none w-1/5"
+            className="lg:w-1/3 text-center p-1  border-background-muted focus:outline-none w-1/5"
             type="text"
             value={property.key}
             ref={inputRef}
@@ -184,7 +184,7 @@ export default function ListPropertiesItem({
                 }}
               />
               <button
-                className="absolute right-0 visible md:invisible md:group-hover:visible"
+                className="absolute right-0 visible lg:invisible lg:group-hover:visible"
                 type="button"
                 onClick={() => {
                   onDelete(property);

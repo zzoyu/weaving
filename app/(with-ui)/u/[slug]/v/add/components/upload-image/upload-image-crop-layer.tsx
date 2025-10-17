@@ -103,7 +103,7 @@ export default function UploadImageCropLayer({
           crop={crop}
           onChange={(c) => setCrop(c)}
           keepSelection
-          aspect={aspectRatio || 16/9}
+          aspect={aspectRatio || 16 / 9}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -114,18 +114,18 @@ export default function UploadImageCropLayer({
           />
         </ReactCrop>
       </div>
-      <div className="flex flex-row gap-2 fixed bottom-16 justify-stretch md:justify-center w-full md:w-auto md:bottom-24 left-1/2 transform -translate-x-1/2 px-4">
+      <div className="flex flex-row gap-2 fixed bottom-16 justify-stretch lg:justify-center w-full lg:w-auto lg:bottom-24 left-1/2 transform -translate-x-1/2 px-4">
         <button
           type="button"
           onClick={handleSave}
-          className="bg-primary hover:bg-primary hover:opacity-90 text-text-black px-10 py-4 rounded-lg w-full md:w-auto"
+          className="bg-primary hover:bg-primary hover:opacity-90 text-text-black px-10 py-4 rounded-lg w-full lg:w-auto"
         >
           저장
         </button>
         <button
           type="button"
           onClick={onClose}
-          className="bg-background-dark hover:bg-background-dark hover:opacity-90 text-primary-200 px-10 py-4 rounded-lg w-full md:w-auto"
+          className="bg-background-dark hover:bg-background-dark hover:opacity-90 text-primary-200 px-10 py-4 rounded-lg w-full lg:w-auto"
         >
           취소
         </button>

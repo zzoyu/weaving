@@ -30,7 +30,7 @@ export default async function EditPage({
   }
 
   return (
-    <main className="flex flex-col justify-center items-center pt-10 w-full md:max-w-[40rem] mx-auto gap-10">
+    <main className="flex flex-col justify-center items-center pt-10 w-full lg:max-w-[40rem] mx-auto gap-10">
       <EditUniverse
         universe={universe}
         characters={characters}

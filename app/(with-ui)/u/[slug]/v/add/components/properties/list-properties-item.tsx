@@ -39,7 +39,7 @@ export default function ListPropertiesItem({
         />
       </div>
       <button
-        className="absolute right-0 visible md:invisible md:group-hover:visible"
+        className="absolute right-0 visible lg:invisible lg:group-hover:visible"
         type="button"
         onClick={() => {
           onDelete(property);

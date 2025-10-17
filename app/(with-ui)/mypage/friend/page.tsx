@@ -26,7 +26,7 @@ export default async function FriendPage() {
   const friendsProfiles = await fetchProfilesByIds(friendsProcessed);
 
   return (
-    <main className="flex flex-col items-center justify-start w-full h-full md:pt-10 pt-0">
+    <main className="flex flex-col items-center justify-start w-full h-full lg:pt-10 pt-0">
       <section className="w-full h-full max-w-md p-4 bg-white rounded">
         <div className="mb-4">
           <h2 className="text-lg font-semibold mb-8 flex flex-row items-end justify-between">

@@ -124,7 +124,7 @@ export default function UniverseAddTemplate({
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-4 items-center w-full md:max-w-md p-4"
+      className="flex flex-col gap-4 items-center w-full lg:max-w-md p-4"
     >
       <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
         <UploadImage name="universe" useThumbnail aspectRatio={16 / 9} />

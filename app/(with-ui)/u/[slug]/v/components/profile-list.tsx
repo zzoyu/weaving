@@ -1,12 +1,12 @@
 "use client";
 
 import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
 } from "@/components/ui/sheet";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import SearchIcon from "@/public/assets/icons/search.svg";
@@ -42,7 +42,6 @@ export function ProfileList({
         return false;
       });
     if (filteredColor?.colors?.length) {
-      
       tempCharacters = tempCharacters.filter((character) => {
         const color = character.properties.find(
           (property) => property.key === filteredColor.type
@@ -67,8 +66,8 @@ export function ProfileList({
     return tempCharacters;
   }, [characters, searchKeyword, filteredColor, favoriteCharacters]);
   return (
-    <article className="flex flex-col gap-2 md:gap-4 mt-2 md:mt-5 w-full md:w-fit px-2 md:px-0">
-      <div className="px-10 py-0 md:px-4 md:py-2 flex flex-row gap-2 md:gap-4 justify-center items-center mb-10">
+    <article className="flex flex-col gap-2 lg:gap-4 mt-2 lg:mt-5 w-full lg:w-fit px-2 lg:px-0">
+      <div className="px-10 py-0 lg:px-4 lg:py-2 flex flex-row gap-2 lg:gap-4 justify-center items-center mb-10">
         <div className="flex items-center rounded-full relative w-full h-fit">
           <input
             type="text"
@@ -139,7 +138,7 @@ function FilterPopup({
           ☰
         </button>
       </SheetTrigger>
-      <SheetContent className="w-sm md:w-64" aria-description="필터 옵션">
+      <SheetContent className="w-sm lg:w-64" aria-description="필터 옵션">
         <SheetHeader>
           <SheetTitle>Filter</SheetTitle>
           <SheetContent>
@@ -159,7 +158,7 @@ function FilterPopup({
                     aria-label="테마색"
                     className="w-full"
                   >
-                    <span className="w-full flex justify-between items-center text-sm md:text-base">
+                    <span className="w-full flex justify-between items-center text-sm lg:text-base">
                       테마색
                     </span>
                   </ToggleGroupItem>
@@ -168,7 +167,7 @@ function FilterPopup({
                     aria-label="눈동자색"
                     className="w-full"
                   >
-                    <span className="w-full flex justify-between items-center text-sm md:text-base">
+                    <span className="w-full flex justify-between items-center text-sm lg:text-base">
                       눈동자색
                     </span>
                   </ToggleGroupItem>
@@ -177,7 +176,7 @@ function FilterPopup({
                     aria-label="머리색"
                     className="w-full"
                   >
-                    <span className="w-full flex justify-between items-center text-sm md:text-base">
+                    <span className="w-full flex justify-between items-center text-sm lg:text-base">
                       머리색
                     </span>
                   </ToggleGroupItem>
@@ -186,7 +185,7 @@ function FilterPopup({
 
               <hr />
               <div>
-                <h3 className="text-lg md:text-base mb-4 font-semibold">
+                <h3 className="text-lg lg:text-base mb-4 font-semibold">
                   색상
                 </h3>
                 <div className="grid grid-cols-5 gap-2">
@@ -194,7 +193,7 @@ function FilterPopup({
                     <button
                       key={index}
                       className={clsx(
-                        `w-full aspect-square rounded-md md:w-8 md:h-8 md:rounded-full ${item[1]} border border-gray-300`,
+                        `w-full aspect-square rounded-md lg:w-8 lg:h-8 lg:rounded-full ${item[1]} border border-gray-300`,
                         {
                           " ring-2 ring-primary": color?.includes(item[0]),
                         }
@@ -206,7 +205,7 @@ function FilterPopup({
                       }}
                     >
                       {color?.includes(item[0]) && (
-                        <span className="text-primary text-xl md:text-base">
+                        <span className="text-primary text-xl lg:text-base">
                           ✓
                         </span>
                       )}
@@ -217,7 +216,7 @@ function FilterPopup({
 
               <SheetClose asChild>
                 <button
-                  className="w-full p-4 md:py-2 text-white bg-primary rounded-lg"
+                  className="w-full p-4 lg:py-2 text-white bg-primary rounded-lg"
                   onClick={() => {
                     // 필터 적용 로직 추가
                     onUpdate(type, color || []);

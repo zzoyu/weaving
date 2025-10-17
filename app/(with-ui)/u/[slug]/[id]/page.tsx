@@ -1,5 +1,6 @@
 import { generateOgImage } from "@/actions/generate-og-image";
 import { fetchProfileByUserId } from "@/app/profile/actions";
+import MorePageResultAd from "@/components/ads/more-result-ad";
 import { EPropertyType } from "@/types/character";
 import { getPublicUrl } from "@/utils/image";
 import { createClient } from "@/utils/supabase/server";
@@ -115,7 +116,7 @@ export default async function CharacterPage({
   }
 
   return (
-    <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
+    <main className="flex flex-col justify-start items-center pt-2 lg:pt-10 w-full lg:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
       <Suspense fallback={<Loading />}>
         <TemplateProfile
           {...{
@@ -128,6 +129,7 @@ export default async function CharacterPage({
           }}
         />
       </Suspense>
+      <MorePageResultAd />
     </main>
   );
 }

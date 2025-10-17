@@ -47,7 +47,7 @@ export default function ListCharacterItem({
             </button>
           ) : (
             <button
-              className="absolute z-20 top-1 left-1 rounded-full md:invisible group-hover:visible"
+              className="absolute z-20 top-1 left-1 rounded-full lg:invisible group-hover:visible"
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
@@ -101,7 +101,7 @@ export default function ListCharacterItem({
             "w-full h-fit flex justify-center items-center p-2"
           )}
         >
-          <p className="text-text-black truncate text-sm md:text-base">
+          <p className="text-text-black truncate text-sm lg:text-base">
             {character.name}
           </p>
         </div>

@@ -145,7 +145,7 @@ export default function CharacterAddTemplate({
 
   return (
     <form
-      className="flex flex-col gap-2 items-center w-full md:max-w-md p-4"
+      className="flex flex-col gap-2 items-center w-full lg:max-w-md p-4"
       onSubmit={handleSubmit(async (data) => {
         setIsLoading(true);
         try {

@@ -66,7 +66,7 @@ export default async function UniversePage({
   const isMyProfile = profile.user_id === currentUser?.data.user?.id;
 
   return (
-    <main className="flex flex-col justify-start items-center pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
+    <main className="flex flex-col justify-start items-center pt-2 lg:pt-10 w-full lg:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
       <Suspense fallback={<Loading />}>
         <TemplateUniverse
           universe={universeData}

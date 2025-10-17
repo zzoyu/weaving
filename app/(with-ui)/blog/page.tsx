@@ -17,12 +17,12 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     // blogData가 null인 경우 처리
     if (!blogData) {
       return (
-        <main className="flex flex-col justify-start pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto">
+        <main className="flex flex-col justify-start pt-2 lg:pt-10 w-full lg:max-w-[40rem] mx-auto">
           <div className="fixed top-0 w-full flex p-4 z-10">
             <h2 className="flex gap-2 items-center text-xl">블로그</h2>
           </div>
           <div className="p-4 pt-16">
-            <div className="pt-6 md:pt-10 px-2 md:px-4">
+            <div className="pt-6 lg:pt-10 px-2 lg:px-4">
               <div className="flex justify-center items-center h-32 text-gray-500">
                 블로그 데이터를 불러올 수 없습니다.
               </div>
@@ -33,12 +33,12 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     }
 
     return (
-      <main className="flex flex-col justify-start pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto">
+      <main className="flex flex-col justify-start pt-2 lg:pt-10 w-full lg:max-w-[40rem] mx-auto">
         <div className="fixed top-0 w-full flex p-4 z-10">
           <h2 className="flex gap-2 items-center text-xl">블로그</h2>
         </div>
         <div className="p-4 pt-16">
-          <div className="pt-6 md:pt-10 px-2 md:px-4">
+          <div className="pt-6 lg:pt-10 px-2 lg:px-4">
             <div className="flex flex-col min-h-[400px]">
               {blogData && blogData.articles.length > 0 ? (
                 <>
@@ -49,10 +49,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                       className="flex flex-col gap-2 transition-colors"
                     >
                       <div className="px-2 py-4 border-b">
-                        <h3 className="text-sm md:text-base font-semibold">
+                        <h3 className="text-sm lg:text-base font-semibold">
                           {article.title}
                         </h3>
-                        <p className="text-gray-500 text-xs md:text-sm">
+                        <p className="text-gray-500 text-xs lg:text-sm">
                           {new Date(article.created_at).toLocaleDateString(
                             "ko-KR",
                             {
@@ -86,12 +86,12 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   } catch (error) {
     console.error("Blog page error:", error);
     return (
-      <main className="flex flex-col justify-start pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto">
+      <main className="flex flex-col justify-start pt-2 lg:pt-10 w-full lg:max-w-[40rem] mx-auto">
         <div className="fixed top-0 w-full flex p-4 z-10">
           <h2 className="flex gap-2 items-center text-xl">블로그</h2>
         </div>
         <div className="p-4 pt-16">
-          <div className="pt-6 md:pt-10 px-2 md:px-4">
+          <div className="pt-6 lg:pt-10 px-2 lg:px-4">
             <div className="flex justify-center items-center h-32 text-gray-500">
               서버 오류가 발생했습니다.
             </div>

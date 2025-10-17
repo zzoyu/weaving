@@ -27,7 +27,7 @@ export default async function Header({
   // (실제 적용 시 아래 부분을 client 컴포넌트로 분리하는 것이 best practice)
   return (
     <header
-      className="fixed top-0 flex w-full items-center justify-between py-4 px-2 md:px-8 bg-transparent"
+      className="fixed top-0 flex w-full items-center justify-between py-4 px-2 lg:px-8 bg-transparent"
       key={params.id}
     >
       <Link href={`/u/${params.slug}`}>

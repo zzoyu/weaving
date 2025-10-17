@@ -436,7 +436,7 @@ export default function RelationshipGraph2({
       height={height}
       viewBox={`0 0 ${width} ${height}`}
       preserveAspectRatio="xMidYMax meet"
-      className="w-full h-full md:w-[800px] md:h-[800px]"
+      className="w-full h-full lg:w-[800px] lg:h-[800px]"
     ></svg>
   );
 }

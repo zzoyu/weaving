@@ -12,8 +12,8 @@ export default function FeedbackButton() {
         window.open("https://forms.gle/4mskYqipgUU6EoJM9", "_blank")
       }
     >
-      <MessageSquarePlus className="h-5 w-5 md:mr-2" />
-      <span className="hidden md:inline">피드백 남기기</span>
+      <MessageSquarePlus className="h-5 w-5 lg:mr-2" />
+      <span className="hidden lg:inline">피드백 남기기</span>
     </Button>
   );
 }

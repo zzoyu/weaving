@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export function NavigationSignOut() {
   return (
-    <nav className="bg-text-black w-full text-icon-default">
+    <nav className="bg-text-black w-full text-icon-default z-50">
       <Link
         className="text-white flex w-full h-full justify-center items-center p-4 font-bold text-lg"
         href="/"
@@ -36,7 +36,7 @@ export function NavigationSignIn({ slug }: { slug?: string }) {
     { label: "마이페이지", icon: SettingsIcon, href: "/mypage" },
   ];
   return (
-    <nav className="bg-text-black w-full text-icon-default">
+    <nav className="bg-text-black w-full text-icon-default z-50">
       <div className="flex justify-center py-2  max-w-[40rem] mx-auto">
         {navItems.map((item, index) => (
           <Link

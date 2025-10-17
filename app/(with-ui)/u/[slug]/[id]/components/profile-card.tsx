@@ -56,7 +56,7 @@ function PopupRelationshipGraph({
 
   return (
     <div className="fixed z-10 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white w-full h-full md:w-5/6 md:h-5/6 p-4 rounded-none md:rounded-lg relative">
+      <div className="bg-white w-full h-full lg:w-5/6 lg:h-5/6 p-4 rounded-none lg:rounded-lg relative">
         <button
           className="absolute top-2 right-2 z-20"
           onClick={() => onClose()}
@@ -144,7 +144,7 @@ export function ProfileCard({
       <div className="flex flex-col justify-center items-center gap-2 w-full">
         {relationships.length > 0 && (
           <button
-            className="bg-green-500 text-background-default rounded-l-full rounded-r-full px-4 py-2 text-sm rounded-lg w-1/3 md:max-w-40 mb-12"
+            className="bg-green-500 text-background-default rounded-l-full rounded-r-full px-4 py-2 text-sm rounded-lg w-1/3 lg:max-w-40 mb-12"
             onClick={() => setIsOpenRelationshipGraph(true)}
           >
             관계도 보기

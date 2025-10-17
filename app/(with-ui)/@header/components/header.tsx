@@ -20,7 +20,7 @@ export default async function Header() {
   const { notifications } = await fetchNotificationsByProfileId(profile?.id);
 
   return (
-    <header className="fixed top-0 flex h-14 w-full items-center justify-between px-2 md:px-8 bg-background-default dark:bg-neutral-900">
+    <header className="fixed top-0 flex h-14 w-full items-center justify-between px-2 lg:px-8 bg-background-default dark:bg-neutral-900">
       <div className="flex items-center justify-center">
         <Link href="/">
           <Logo />
@@ -32,7 +32,7 @@ export default async function Header() {
             <DialogTrigger className="focus:outline-none">
               <ProfileBadge profile={profile} notifications={notifications} />
             </DialogTrigger>
-            <DialogContent className="w-full h-full flex flex-col items-start justify-start gap-4 p-4 pt-20 md:max-h-fit max-w-full md:max-w-lg">
+            <DialogContent className="w-full h-full flex flex-col items-start justify-start gap-4 p-4 pt-20 lg:max-h-fit max-w-full lg:max-w-lg">
               <DialogTitle className="hidden">메뉴</DialogTitle>
               <Link href={"/notifications"} passHref legacyBehavior>
                 <Button

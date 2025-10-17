@@ -75,7 +75,7 @@ export default function Onboarding({
   ];
 
   return (
-    <div className="w-full md:max-w-md h-full mx-auto pt-10">
+    <div className="w-full lg:max-w-md h-full mx-auto pt-10">
       {steps[currentStep]}
     </div>
   );

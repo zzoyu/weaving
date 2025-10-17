@@ -3,15 +3,13 @@
 import { useEffect } from "react";
 
 type Props = {
-  position?: "left" | "right";
   adClient?: string;
   adSlot?: string;
 };
 
-export default function SidebarAd({
-  position = "left",
+export default function MorePageResultAd({
   adClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID,
-  adSlot = process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID,
+  adSlot = "8926557427",
 }: Props) {
   useEffect(() => {
     try {
@@ -22,14 +20,10 @@ export default function SidebarAd({
   }, []);
 
   return (
-    <div
-      className={`px-2 fixed top-14 ${
-        position === "left" ? "left-0" : "right-0"
-      } z-10 md:w-40 h-full hidden md:block pb-1 bg-background-dark`}
-      aria-hidden
-    >
+    <div className="w-full h-40 relative" key={"more-page-item-ad"} aria-hidden>
       <ins
-        className="adsbygoogle justify-center my-2 w-full h-full block"
+        key={"more-page-item-ad"}
+        className="adsbygoogle w-full h-full"
         data-ad-client={adClient}
         data-ad-slot={adSlot}
         data-ad-format="auto"

@@ -45,7 +45,7 @@ export function TabHeader({
   }[];
 }) {
   return (
-    <div className="flex items-center space-x-0 w-full px-0 md:px-8">
+    <div className="flex items-center space-x-0 w-full px-0 lg:px-8">
       {(data || []).map((item, index) => (
         <TabHeaderItem
           key={index}

@@ -24,7 +24,7 @@ export default async function NoticePage({ searchParams }: NoticePageProps) {
   )) ?? { hasNotifications: false };
 
   return (
-    <main className="flex flex-col justify-start pt-2 md:pt-10 w-full md:max-w-[40rem] mx-auto">
+    <main className="flex flex-col justify-start pt-2 lg:pt-10 w-full lg:max-w-[40rem] mx-auto">
       <div className="fixed top-0 w-full flex p-4">
         <h2 className="flex gap-2 items-center text-xl">
           <ButtonBack />
@@ -45,7 +45,7 @@ export default async function NoticePage({ searchParams }: NoticePageProps) {
             ]}
           />
         )}
-        <div className="pt-6 md:pt-10 px-2 md:px-4">
+        <div className="pt-6 lg:pt-10 px-2 lg:px-4">
           <div className="flex flex-col min-h-[400px]">
             {noticeData && noticeData.notices.length > 0 ? (
               <>
@@ -56,10 +56,10 @@ export default async function NoticePage({ searchParams }: NoticePageProps) {
                     className="flex flex-col gap-2"
                   >
                     <div className="px-2 py-4 border-b border-gray-200">
-                      <h3 className="text-sm md:text-base font-semibold">
+                      <h3 className="text-sm lg:text-base font-semibold">
                         {notice.title}
                       </h3>
-                      <p className="text-gray-500 text-xs md:text-sm">
+                      <p className="text-gray-500 text-xs lg:text-sm">
                         {new Date(notice.created_at).toLocaleDateString(
                           "ko-KR",
                           {

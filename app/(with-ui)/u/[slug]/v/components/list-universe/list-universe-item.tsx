@@ -30,7 +30,7 @@ export default function ListUniverseItem({
             fill
             className="object-cover rounded-md"
           />
-          <div className="absolute bottom-0 left-0 w-full bg-black/60 text-white text-center py-2 px-2 text-base md:text-lg truncate">
+          <div className="absolute bottom-0 left-0 w-full bg-black/60 text-white text-center py-2 px-2 text-base lg:text-lg truncate">
             {universe.name}
           </div>
         </div>

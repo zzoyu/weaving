@@ -76,7 +76,7 @@ export function ButtonAddCharacter({
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent
           className="p-0 gap-0 flex flex-col w-full h-full max-w-full max-h-full
-          md:w-[480px] md:max-w-[90vw] md:h-auto md:max-h-[80vh]"
+          lg:w-[480px] lg:max-w-[90vw] lg:h-auto lg:max-h-[80vh]"
         >
           <div className="flex flex-col h-full">
             <div className="p-4 border-b">
@@ -91,7 +91,7 @@ export function ButtonAddCharacter({
             </div>
 
             <div className="flex-1 overflow-y-auto p-4">
-              <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-4 lg:grid-cols-5 gap-4">
                 {filteredCharacters.map((character) => (
                   <div
                     key={character.id}

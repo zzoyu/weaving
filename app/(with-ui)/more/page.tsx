@@ -1,4 +1,5 @@
 import { fetchProfileByUserId } from "@/app/profile/actions";
+import MorePageItemAd from "@/components/ads/more-item-ad";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 
@@ -39,26 +40,24 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <main className="flex flex-col h-full w-full justify-center items-center">
-      <div className="grid grid-cols-2 gap-4 md:gap-8 place-items-center w-4/5 max-w-4xl auto-rows-fr">
+      <div className="grid grid-cols-2 gap-4 lg:gap-8 place-items-center w-4/5 max-w-4xl auto-rows-fr">
         {features.map((feature, index) => (
-          <article
-            key={`${feature.href}-${index}`}
-            className=" w-full p-8 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gradient-to-br dark:from-[#232526] dark:to-[#414345] shadow-lg hover:shadow-2xl transition-transform hover:scale-105 duration-200 flex flex-col cursor-pointer h-full"
-          >
+          <article key={`${feature.href}-${index}`} className="more-list-item">
             <Link
-              href={`/u/${params.slug}/more/${feature.href}`}
+              href={`/more/${feature.href}`}
               className="flex flex-col justify-center h-full"
             >
               <div className="text-3xl mb-4">{feature.icon}</div>
-              <p className="text-sm md:text-base font-bold mb-2 text-gray-900 dark:text-white">
+              <p className="text-sm lg:text-base font-bold mb-2 text-gray-900 dark:text-white">
                 {feature.title}
               </p>
-              <p className="text-xs md:text-sm text-gray-500 dark:text-gray-300">
+              <p className="text-xs lg:text-sm text-gray-500 dark:text-gray-300">
                 {feature.description}
               </p>
             </Link>
           </article>
         ))}
+        <MorePageItemAd />
       </div>
     </main>
   );

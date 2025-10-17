@@ -62,6 +62,7 @@ const nextConfig = {
         "https://*.ingest.us.sentry.io",
         "https://*.adtrafficquality.google",
         "https://*.weavv.in",
+        "https://googleads.g.doubleclick.net",
       ],
       "style-src": [
         "'self'",
@@ -82,10 +83,14 @@ const nextConfig = {
         "https://*.oraclecloud.com",
         "https://*.twimg.com",
         "https://*.adtrafficquality.google",
+        "https://googleads.g.doubleclick.net",
+        "https://*.google.com",
+        "https://www.googletagmanager.com",
         process.env.NEXT_PUBLIC_SUPABASE_URL,
       ],
       "connect-src": [
         "'self'",
+        "ws:",
         "https://www.google-analytics.com",
         "https://*.googlesyndication.com",
         "https://www.googletagmanager.com",
@@ -93,6 +98,8 @@ const nextConfig = {
         "https://*.adtrafficquality.google",
         "https://fundingchoicesmessages.google.com",
         "https://*.weavv.in",
+        "https://*.google.com",
+        "https://googleads.g.doubleclick.net",
         process.env.NEXT_PUBLIC_SUPABASE_URL,
       ],
       "frame-src": [
@@ -103,6 +110,7 @@ const nextConfig = {
         "https://*.adtrafficquality.google",
         "https://*.weavv.in",
         "https://www.google.com",
+        "https://*.google.com",
         process.env.NEXT_PUBLIC_BASE_URL,
       ],
       "font-src": [
@@ -186,6 +194,18 @@ export default MillionLint.next({
 
       // Only print logs for uploading source maps in CI
       silent: !process.env.CI,
+
+      beforeSend(event, hint) {
+        const error = hint.originalException;
+        if (
+          error &&
+          typeof error.message === "string" &&
+          error.message.includes("adsbygoogle.push() error")
+        ) {
+          return null; // Sentry 전송 안 함
+        }
+        return event;
+      },
 
       // For all available options, see:
       // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
