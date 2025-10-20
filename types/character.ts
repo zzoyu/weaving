@@ -8,6 +8,7 @@ type Property = {
   key: string;
   value: string;
   type: EPropertyType;
+  uuid?: string;
 };
 
 type ColorPropertyKey = "themeColor" | "eyeColor" | "hairColor";
@@ -36,4 +37,3 @@ export interface CharacterWithProfile extends Character {
 
 export { EPropertyType };
 export type { Character, ColorPropertyKey, Property };
-

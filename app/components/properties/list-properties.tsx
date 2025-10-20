@@ -9,6 +9,7 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 import ListPropertiesItem, { SmallPreview } from "./list-properties-item";
@@ -22,17 +23,20 @@ export default function ListProperties({
   handler: (properties: Property[]) => void;
   errors?: Merge<FieldError, FieldErrorsImpl<Property[]>>;
 }) {
-  const [localProperties, setLocalProperties] =
-    useState<Property[]>(properties);
+  const [localProperties, setLocalProperties] = useState<Property[]>(
+    properties.map((p) => ({ ...p, uuid: crypto.randomUUID() }))
+  );
   const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
-    setLocalProperties(properties);
+    setLocalProperties(
+      properties.map((p) => ({ ...p, uuid: crypto.randomUUID() }))
+    );
   }, [properties]);
 
   function findIndexById(id: string | null | undefined) {
     if (!id) return -1;
-    return localProperties.findIndex((p) => `property-${p.key}` === id);
+    return localProperties.findIndex((p) => `property-${p.uuid}` === id);
   }
 
   const activeProperty = activeId
@@ -68,52 +72,70 @@ export default function ListProperties({
     >
       <div className="flex flex-col gap-2 w-full">
         <div>
-          <SortableContext
-            items={localProperties.map((p) => `property-${p.key}`)}
-            strategy={verticalListSortingStrategy}
-          >
-            {localProperties.map((property, index) => (
-              <SortableItem
-                key={`property-${index}-${property.key}`}
-                id={`property-${property.key}_${index}`}
-                index={index}
-                property={property}
-                error={errors ? (errors[index] as any)?.message : undefined}
-                onChange={(newProperty) => {
-                  const newProperties = [...localProperties];
-                  newProperties[index] = newProperty;
-                  setLocalProperties(newProperties);
-                  handler(newProperties);
-                }}
-                onDelete={(propertyToDelete) => {
-                  const newProperties = localProperties.filter(
-                    (p) => p.key !== propertyToDelete.key
-                  );
-                  setLocalProperties(newProperties);
-                  handler(newProperties);
-                }}
-                handleMove={(index: number, amount: number) => {
-                  const newProperties = [...localProperties];
-                  const [movedItem] = newProperties.splice(index, 1);
-                  newProperties.splice(
-                    Math.min(Math.max(index + amount, 0), newProperties.length),
-                    0,
-                    movedItem
-                  );
-                  setLocalProperties(newProperties);
-                  handler(newProperties);
+          <div>
+            <SortableContext
+              items={localProperties.map((p) => `property-${p.uuid}`)}
+              strategy={verticalListSortingStrategy}
+            >
+              {localProperties.map((property, index) => (
+                <motion.div
+                  layout
+                  transition={{ type: "spring", stiffness: 400, damping: 28 }}
+                  key={`property-${property.uuid}`}
+                >
+                  <SortableItem
+                    id={`property-${property.uuid}`}
+                    index={index}
+                    property={property}
+                    error={errors ? (errors[index] as any)?.message : undefined}
+                    onChange={(newProperty) => {
+                      const newProperties = [...localProperties];
+                      newProperties[index] = {
+                        ...newProperty,
+                        uuid: property.uuid,
+                      };
+                      setLocalProperties(newProperties);
+                      handler(newProperties);
+                    }}
+                    onDelete={(propertyToDelete) => {
+                      const newProperties = localProperties.filter(
+                        (p) => p.uuid !== propertyToDelete.uuid
+                      );
+                      setLocalProperties(newProperties);
+                      handler(newProperties);
+                    }}
+                    handleMove={(index: number, amount: number) => {
+                      const newProperties = [...localProperties];
+                      const [movedItem] = newProperties.splice(index, 1);
+                      newProperties.splice(
+                        Math.min(
+                          Math.max(index + amount, 0),
+                          newProperties.length
+                        ),
+                        0,
+                        movedItem
+                      );
+                      setLocalProperties(newProperties);
+                      handler(newProperties);
+                    }}
+                  />
+                </motion.div>
+              ))}
+              <ButtonAddProperty
+                clickHandler={() => {
+                  setLocalProperties([
+                    ...localProperties,
+                    {
+                      key: "",
+                      value: "",
+                      type: EPropertyType.STRING,
+                      uuid: crypto.randomUUID(),
+                    },
+                  ]);
                 }}
               />
-            ))}
-            <ButtonAddProperty
-              clickHandler={() => {
-                setLocalProperties([
-                  ...localProperties,
-                  { key: "", value: "", type: EPropertyType.STRING },
-                ]);
-              }}
-            />
-          </SortableContext>
+            </SortableContext>
+          </div>
         </div>
       </div>
     </DragDropProvider>
