@@ -32,10 +32,30 @@ export default function UniverseAddTemplate({
   const [hashtags, setHashtags] = useState<string>("");
   const [currentHashtag, setCurrentHashtag] = useState<string>("");
   const [listProperties, setListProperties] = useState<Property[]>([
-    { key: "장르", value: "", type: EPropertyType.STRING },
-    { key: "사회구조", value: "", type: EPropertyType.STRING },
-    { key: "주요 사건", value: "", type: EPropertyType.STRING },
-    { key: "규칙", value: "", type: EPropertyType.STRING },
+    {
+      key: "장르",
+      value: "",
+      type: EPropertyType.STRING,
+      uuid: crypto.randomUUID(),
+    },
+    {
+      key: "사회구조",
+      value: "",
+      type: EPropertyType.STRING,
+      uuid: crypto.randomUUID(),
+    },
+    {
+      key: "주요 사건",
+      value: "",
+      type: EPropertyType.STRING,
+      uuid: crypto.randomUUID(),
+    },
+    {
+      key: "규칙",
+      value: "",
+      type: EPropertyType.STRING,
+      uuid: crypto.randomUUID(),
+    },
   ]);
   const [characterUniverses, setCharacterUniverses] = useState<
     { character_id: number }[]

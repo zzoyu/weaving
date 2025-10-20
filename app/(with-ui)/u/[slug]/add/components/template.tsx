@@ -35,7 +35,9 @@ export default function CharacterAddTemplate({
   character?: Character;
   planLimit: PlanLimit;
 }) {
-  const [properties, setProperties] = useState([...baseProperties]);
+  const [properties, setProperties] = useState(
+    [...baseProperties].map((p) => ({ ...p, uuid: crypto.randomUUID() }))
+  );
   const [hashtags, setHashtags] = useState<string>("");
   const [currentHashtag, setCurrentHashtag] = useState<string>("");
   const previewHashtags = useMemo(() => {

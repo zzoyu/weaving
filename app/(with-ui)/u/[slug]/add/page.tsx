@@ -42,7 +42,10 @@ export default async function NewCharacterPage({
   }
 
   return (
-    <main className="flex flex-col justify-center items-center pt-10 w-full lg:max-w-[40rem] mx-auto gap-10">
+    <main
+      className="flex flex-col justify-center items-center pt-10 w-full lg:max-w-[40rem] mx-auto gap-10"
+      id="top"
+    >
       <CharacterAddTemplate
         slug={params.slug}
         profileId={myProfile.id as number}
