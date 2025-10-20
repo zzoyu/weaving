@@ -133,7 +133,7 @@ export default async function PublicProfilePage({
         )}
       </div>
       {isMine && myProfile && myProfile?.slug && (
-        <ButtonAddProfile href={`/u/${myProfile.slug}/add`} />
+        <ButtonAddProfile href={`/u/${myProfile.slug}/add`} scroll={false} />
       )}
 
       <Suspense fallback={<Loading />}>
