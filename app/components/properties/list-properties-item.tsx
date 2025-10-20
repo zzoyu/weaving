@@ -156,9 +156,10 @@ export default function ListPropertiesItem({
             type="hidden"
             name="list-properties"
             value={`${property.key}:${property.value}`}
+            className="text-base"
           />
           <input
-            className="lg:w-1/3 text-center p-1  border-background-muted focus:outline-none w-1/5"
+            className="lg:w-1/3 text-center p-1 text-base border-background-muted focus:outline-none w-1/5"
             type="text"
             value={property.key}
             ref={inputRef}
