@@ -112,6 +112,10 @@ export default function CharacterAddTemplate({
     },
   });
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // properties가 바뀔 때마다 react-hook-form에 값 할당 (validation용)
   useEffect(() => {
     setValue("properties", combinedProperties);

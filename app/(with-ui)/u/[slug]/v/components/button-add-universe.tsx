@@ -6,7 +6,7 @@ export default function ButtonAddUniverse({ slug }: { slug: string }) {
     <Link
       className="w-14 h-14 bg-primary rounded-full flex items-center justify-center fixed bottom-20 right-4 z-30 dark:text-text-black"
       href={`/u/${slug}/v/add`}
-      scroll={false}
+      scroll={true}
     >
       <PlusIcon className="w-6 h-6" />
     </Link>

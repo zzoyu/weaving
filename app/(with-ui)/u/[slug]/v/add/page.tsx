@@ -31,13 +31,6 @@ export default async function NewUniversePage({
     redirect("../");
   }
 
-  console.log("plan", plan);
-  console.log(
-    "universes",
-    universes.length,
-    "and plan limit",
-    plan.limit.maxUniverseSlots
-  );
   if ((universes.length || 0) >= plan.limit.maxUniverseSlots) {
     console.log("redirecting...");
     redirect(

@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Character, EPropertyType, Property } from "@/types/character";
 import { Plan } from "@/types/plan";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createUniverse } from "../actions";
 import UploadImage from "./upload-image/upload-image";
 
@@ -120,6 +120,10 @@ export default function UniverseAddTemplate({
       setIsSubmitting(false);
     }
   }
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <form

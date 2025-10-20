@@ -30,7 +30,8 @@ export default function CharacterEditTemplate({
   relationships?: Relationship[];
 }) {
   const [properties, setProperties] = useState(
-    character?.properties || [...baseProperties]
+    character?.properties.map((p) => ({ ...p, uuid: crypto.randomUUID() })) ||
+      [...baseProperties].map((p) => ({ ...p, uuid: crypto.randomUUID() }))
   );
   const [hashtags, setHashtags] = useState<string>(
     character.hashtags?.length || 0 > 0 ? character.hashtags + " " : ""

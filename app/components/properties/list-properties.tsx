@@ -23,15 +23,12 @@ export default function ListProperties({
   handler: (properties: Property[]) => void;
   errors?: Merge<FieldError, FieldErrorsImpl<Property[]>>;
 }) {
-  const [localProperties, setLocalProperties] = useState<Property[]>(
-    properties.map((p) => ({ ...p, uuid: crypto.randomUUID() }))
-  );
+  const [localProperties, setLocalProperties] =
+    useState<Property[]>(properties);
   const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
-    setLocalProperties(
-      properties.map((p) => ({ ...p, uuid: crypto.randomUUID() }))
-    );
+    setLocalProperties(properties);
   }, [properties]);
 
   function findIndexById(id: string | null | undefined) {
@@ -84,6 +81,7 @@ export default function ListProperties({
                   key={`property-${property.uuid}`}
                 >
                   <SortableItem
+                    key={`property-${property.uuid}`}
                     id={`property-${property.uuid}`}
                     index={index}
                     property={property}
