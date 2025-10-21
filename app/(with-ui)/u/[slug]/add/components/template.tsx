@@ -35,7 +35,7 @@ export default function CharacterAddTemplate({
   character?: Character;
   planLimit: PlanLimit;
 }) {
-  const [properties, setProperties] = useState(
+  const [properties, setProperties] = useState<Property[]>(
     [...baseProperties].map((p) => ({ ...p, uuid: crypto.randomUUID() }))
   );
   const [hashtags, setHashtags] = useState<string>("");
@@ -283,6 +283,7 @@ export default function CharacterAddTemplate({
       <ListProperties
         properties={properties}
         handler={(newValue) => {
+          if (!newValue) return;
           setProperties(newValue);
         }}
         errors={errors.properties}

@@ -29,7 +29,7 @@ export default function CharacterEditTemplate({
   colors: Property[];
   relationships?: Relationship[];
 }) {
-  const [properties, setProperties] = useState(
+  const [properties, setProperties] = useState<Property[]>(
     character?.properties.map((p) => ({ ...p, uuid: crypto.randomUUID() })) ||
       [...baseProperties].map((p) => ({ ...p, uuid: crypto.randomUUID() }))
   );
@@ -203,6 +203,7 @@ export default function CharacterEditTemplate({
           <ListProperties
             properties={properties}
             handler={(newValue) => {
+              if (!newValue) return;
               setProperties(newValue);
             }}
           />
