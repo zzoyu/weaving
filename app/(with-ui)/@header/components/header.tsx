@@ -21,7 +21,7 @@ export default async function Header() {
 
   return (
     <header className="fixed top-0 flex h-14 w-full items-center justify-between px-2 lg:px-8 bg-background-default dark:bg-neutral-900">
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center relative">
         <Link href="/">
           <Logo />
         </Link>

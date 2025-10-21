@@ -21,13 +21,14 @@ export default function MorePageItemAd({
 
   return (
     <div
-      className="w-full p-0 border border-gray-200 dark:border-white/10 bg-white h-full block relative"
+      className="flex justify-center items-center w-full relative max-w-full mt-10 mb-20"
       key={"more-page-item-ad"}
-      aria-hidden
+      aria-hidden="true"
     >
       <ins
         key={"more-page-item-ad"}
-        className="adsbygoogle w-full h-full"
+        className="adsbygoogle absolute -translate-x-1/2 left-1/2"
+        data-ad-layout="in-article"
         data-ad-client={adClient}
         data-ad-slot={adSlot}
         data-ad-format="auto"

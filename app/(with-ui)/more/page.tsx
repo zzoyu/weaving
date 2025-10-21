@@ -39,8 +39,8 @@ export default async function Page({ params }: PageProps) {
   ];
 
   return (
-    <main className="flex flex-col h-full w-full justify-center items-center">
-      <div className="grid grid-cols-2 gap-4 lg:gap-8 place-items-center w-4/5 max-w-4xl auto-rows-fr">
+    <main className="flex flex-col w-full items-center relative">
+      <div className="grid grid-cols-1 gap-4 lg:gap-8 place-items-center w-4/5 max-w-4xl auto-rows-fr lg:grid-cols-2 pt-10 pb-20 relative h-full">
         {features.map((feature, index) => (
           <article key={`${feature.href}-${index}`} className="more-list-item">
             <Link
@@ -57,8 +57,8 @@ export default async function Page({ params }: PageProps) {
             </Link>
           </article>
         ))}
-        <MorePageItemAd />
       </div>
+      <MorePageItemAd />
     </main>
   );
 }
