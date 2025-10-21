@@ -156,7 +156,6 @@ export default function ListPropertiesItem({
             type="hidden"
             name="list-properties"
             value={`${property.key}:${property.value}`}
-            className="text-base"
           />
           <input
             className="lg:w-1/3 text-center p-1 text-base border-background-muted focus:outline-none w-1/5"
@@ -174,7 +173,7 @@ export default function ListPropertiesItem({
                 ref={textareaRef}
                 minHeight={16}
                 className={cn(
-                  "w-full p-1 border-background-muted focus:outline-none bg-background-default dark:bg-neutral-900 resize-none focus:ring-0 ring-0 ",
+                  "w-full p-1 border-background-muted focus:outline-none bg-background-default dark:bg-neutral-900 resize-none focus:ring-0 ring-0 text-base",
                   {
                     "border-state-error": error,
                   }
