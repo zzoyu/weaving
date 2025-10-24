@@ -1,9 +1,12 @@
 // AdSense 관련 타입 정의
 declare global {
   interface Window {
-    adsbygoogle: any[];
+    adsbygoogle: Array<Record<string, any>>;
   }
 }
+
+// AdSense 스크립트 초기화 함수
+declare function gtag(...args: any[]): void;
 
 export interface AdSenseConfig {
   adClient: string;

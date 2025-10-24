@@ -1,3 +1,4 @@
+import AdSenseDebugPanel from "@/components/ads/adsense-debug-panel";
 import { AlertToaster } from "@/components/interactions/alert-toaster";
 import { Toaster } from "@/components/ui/toaster";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
@@ -65,12 +66,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
   const gtmScriptUrl = process.env.NEXT_PUBLIC_GTM_SCRIPT_URL;
+  const adsenseClientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
 
   return (
     <html lang="ko">
@@ -103,6 +105,7 @@ export default function RootLayout({
             <AlertToaster />
           </Suspense>
           {gaId && <GoogleAnalytics gaId={gaId} />}
+          <AdSenseDebugPanel />
         </ThemeProvider>
       </body>
     </html>

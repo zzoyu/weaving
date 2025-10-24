@@ -32,7 +32,7 @@ export default async function NewUniversePage({
   }
 
   if ((universes.length || 0) >= plan.limit.maxUniverseSlots) {
-    console.log("redirecting...");
+    console.log(universes.length, plan.limit.maxUniverseSlots);
     redirect(
       "../v?message=" +
         encodeURIComponent("세계관 생성 제한에 도달했습니다.") +

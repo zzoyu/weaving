@@ -64,14 +64,13 @@ export function ButtonAddCharacter({
 
   return (
     <div className="w-full">
-      <Button
+      <button
         type="button"
-        variant="outline"
-        className="w-full"
+        className="py-2 rounded bg-background-muted dark:bg-text-black text-sm w-full dark:text-white hover:opacity-80 hover:bg-current"
         onClick={() => setIsOpen(true)}
       >
         캐릭터 추가
-      </Button>
+      </button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent

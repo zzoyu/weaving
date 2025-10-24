@@ -95,6 +95,7 @@ export default function CharacterAddTemplate({
 
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const {
     register,
@@ -122,7 +123,7 @@ export default function CharacterAddTemplate({
   useEffect(() => {
     setValue("properties", combinedProperties);
     trigger("properties");
-  }, [properties]);
+  }, [combinedProperties, setValue, trigger]);
 
   useEffect(() => {
     setValue("relationships", relationships);
@@ -147,13 +148,14 @@ export default function CharacterAddTemplate({
     },
   };
 
-  useUnsavedChangesWarning(isDirty);
+  useUnsavedChangesWarning(isDirty && !isSubmitted);
 
   return (
     <form
       className="flex flex-col gap-2 items-center w-full lg:max-w-md p-4"
       onSubmit={handleSubmit(async (data) => {
         setIsLoading(true);
+        setIsSubmitted(true);
         try {
           const formData = new FormData();
           Object.entries(data).forEach(([key, value]) => {
@@ -198,12 +200,14 @@ export default function CharacterAddTemplate({
             });
             router.push(`/u/${slug}`);
           } else {
+            setIsSubmitted(false);
             toast({
               description: res?.message || "캐릭터 생성에 실패했습니다.",
               variant: "destructive",
             });
           }
         } catch (err) {
+          setIsSubmitted(false);
           toast({
             description:
               err instanceof Error

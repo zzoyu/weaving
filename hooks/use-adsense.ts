@@ -5,7 +5,22 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 // AdSense 스크립트 로드 확인
 export function isAdSenseLoaded(): boolean {
   if (typeof window === "undefined") return false;
-  return !!(window.adsbygoogle && Array.isArray(window.adsbygoogle));
+  
+  // adsbygoogle 배열이 존재하는지 확인
+  if (window.adsbygoogle) {
+    return Array.isArray(window.adsbygoogle);
+  }
+  
+  // 스크립트가 로드되었지만 배열이 아직 초기화되지 않은 경우
+  // adsbygoogle 스크립트 태그가 존재하는지 확인
+  const script = document.querySelector('script[src*="adsbygoogle.js"]');
+  if (script) {
+    // 스크립트가 있다면 배열 초기화
+    window.adsbygoogle = window.adsbygoogle || [];
+    return true;
+  }
+  
+  return false;
 }
 
 // 컨테이너가 유효한 크기를 가지는지 확인
@@ -109,39 +124,45 @@ export function useAdSense(
     }
 
     let timeoutId: NodeJS.Timeout;
-    let retryCount = 0;
-    const maxRetries = 50; // 5초 (100ms * 50)
+    let scriptCheckCount = 0;
+    let containerCheckCount = 0;
+    const maxScriptRetries = 100; // 10초 (100ms * 100)
+    const maxContainerRetries = 50; // 5초 (100ms * 50)
 
-    // AdSense 스크립트 로드 대기
-    const checkAdSense = () => {
-      if (window.adsbygoogle) {
-        // 컨테이너가 있는 경우 크기 확인 후 로드
+    // AdSense 스크립트 로드 대기 (더 긴 시간)
+    const checkAdSenseScript = () => {
+      if (isAdSenseLoaded()) {
+        // 스크립트가 로드되면 컨테이너 크기 확인
         if (containerRef) {
-          const checkSize = () => {
+          const checkContainerSize = () => {
             if (hasValidSize(containerRef.current)) {
               pushAd();
-            } else if (retryCount < maxRetries) {
-              retryCount++;
-              timeoutId = setTimeout(checkSize, 100);
+            } else if (containerCheckCount < maxContainerRetries) {
+              containerCheckCount++;
+              timeoutId = setTimeout(checkContainerSize, 100);
             } else {
               console.warn("AdSense: Container size check timeout");
               setHasError(true);
               setIsLoading(false);
             }
           };
-          timeoutId = setTimeout(checkSize, 100);
+          timeoutId = setTimeout(checkContainerSize, 100);
         } else {
           // 컨테이너 참조가 없는 경우 바로 로드
           timeoutId = setTimeout(pushAd, 100);
         }
+      } else if (scriptCheckCount < maxScriptRetries) {
+        scriptCheckCount++;
+        timeoutId = setTimeout(checkAdSenseScript, 100);
       } else {
-        console.warn("AdSense: window.adsbygoogle not available");
+        console.warn("AdSense: Script load timeout - script may not be included");
         setHasError(true);
         setIsLoading(false);
       }
     };
 
-    checkAdSense();
+    // 초기 지연 후 스크립트 확인 시작
+    timeoutId = setTimeout(checkAdSenseScript, 500);
 
     return () => {
       if (timeoutId) {
