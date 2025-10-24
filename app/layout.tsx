@@ -79,9 +79,9 @@ export default function RootLayout({
       <body className={clsx(fontTitle.variable, fontBody.variable)}>
         <Script
           async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8566989289200896"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClientId}`}
           crossOrigin="anonymous"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
         {/* 구조화 데이터: CreativeWork */}
         <Script
