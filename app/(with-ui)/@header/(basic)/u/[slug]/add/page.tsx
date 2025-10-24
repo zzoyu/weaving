@@ -13,7 +13,7 @@ export default async function Header({}) {
       <Link href="./">
         <button className="p-1 rounded-full h-10 flex items-center justify-center text-2xl  bg-transparent">
           <span className="text-primary-300 flex flex-row items-center gap-1">
-            <ArrowLeftIcon fill="none" stroke="currentColor" /> 닉네임 변경
+            <ArrowLeftIcon fill="none" stroke="currentColor" /> 캐릭터 추가
           </span>
         </button>
       </Link>

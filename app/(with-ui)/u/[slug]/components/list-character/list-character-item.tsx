@@ -97,11 +97,13 @@ export default function ListCharacterItem({
         <div
           className={clsx(
             character.password && "text-opacity-50",
-            character.isFavorite ? "bg-primary" : " bg-background-muted",
-            "w-full h-fit flex justify-center items-center p-2"
+            character.isFavorite
+              ? "bg-primary"
+              : " bg-background-muted dark:bg-neutral-800",
+            "w-full h-fit flex justify-center items-center p-2 "
           )}
         >
-          <p className="text-text-black truncate text-sm lg:text-base">
+          <p className="text-text-black truncate text-sm lg:text-base  dark:text-white dark:text-opacity-100">
             {character.name}
           </p>
         </div>

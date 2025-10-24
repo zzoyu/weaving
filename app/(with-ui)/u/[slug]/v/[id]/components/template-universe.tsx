@@ -33,7 +33,7 @@ export default function TemplateUniverse({
             src={getPublicUrl(universe.image[0]) || ""}
             alt={universe.name}
             fill
-            className="object-contain bg-gray-50"
+            className="object-contain"
             priority
           />
         ) : (
@@ -77,13 +77,10 @@ export default function TemplateUniverse({
       </div>
 
       {/* 해시태그 */}
-      {hashtags.length > 0 && (
-        <div className="flex flex-wrap gap-2 mt-8">
+      {hashtags && (
+        <div className="inline-flex flex-wrap gap-2 px-10">
           {hashtags.map((tag, index) => (
-            <span
-              key={index}
-              className="bg-gray-100 text-gray-500 rounded-full px-3 py-1 text-xs font-medium"
-            >
+            <span key={index} className="item-hashtag">
               #{tag}
             </span>
           ))}
