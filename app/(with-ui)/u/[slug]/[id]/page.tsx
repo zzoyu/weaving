@@ -1,8 +1,6 @@
-import { generateOgImage } from "@/actions/generate-og-image";
 import { fetchProfileByUserId } from "@/app/profile/actions";
 import MorePageResultAd from "@/components/ads/more-result-ad";
 import { EPropertyType } from "@/types/character";
-import { getPublicUrl } from "@/utils/image";
 import { createClient } from "@/utils/supabase/server";
 import { Metadata, ResolvingMetadata } from "next";
 import { cookies } from "next/headers";
@@ -40,24 +38,9 @@ export async function generateMetadata(
     return baseMetadata;
   }
 
-  const ogImage = (await generateOgImage(
-    characterData.name,
-    characterData.description || "",
-    getPublicUrl(characterData.thumbnail) || ""
-  )) as Response;
-
-  const ogImageUrl = ogImage?.url || "";
-
   return {
     ...baseMetadata,
     title: "위빙 :: " + characterData.name + " 관찰 중 🔎",
-    openGraph: {
-      images: [
-        {
-          url: ogImageUrl,
-        },
-      ],
-    },
   };
 }
 
