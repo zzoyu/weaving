@@ -76,13 +76,14 @@ export default function RootLayout({
 
   return (
     <html lang="ko">
-      <body className={clsx(fontTitle.variable, fontBody.variable)}>
-        <Script
+      <head>
+        <script
           async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClientId}`}
           crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        ></script>
+      </head>
+      <body className={clsx(fontTitle.variable, fontBody.variable)}>
         {/* 구조화 데이터: CreativeWork */}
         <Script
           id="structured-data"
