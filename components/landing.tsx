@@ -27,7 +27,11 @@ export default function Landing() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   useEffect(() => {
-    (window.adsbygoogle = window.adsbygoogle || []).push({});
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.error("Adsense error:", e);
+    }
   }, []);
 
   const features = [
@@ -302,19 +306,6 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* Adsense Ad */}
-        <ErrorBoundary fallback={<div />}>
-          <ins
-            key="landing-adsense-ad-1"
-            className="adsbygoogle bg-background-dark"
-            style={{ display: "block" }}
-            data-ad-client="ca-pub-8566989289200896"
-            data-ad-slot="1043165761"
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          ></ins>
-        </ErrorBoundary>
-
         {/* Target Users Section */}
         <section id="users" className="py-16 bg-white dark:bg-gray-900">
           <div className="container mx-auto px-4">
@@ -468,6 +459,26 @@ export default function Landing() {
                 </article>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section
+          className="py-16 bg-white dark:bg-gray-900"
+          aria-labelledby="divider-heading"
+        >
+          <div className="container mx-auto px-4 text-center">
+            {/* Adsense Ad */}
+            <ErrorBoundary fallback={<div />}>
+              <ins
+                key="landing-adsense-ad-1"
+                className="adsbygoogle bg-background-dark"
+                style={{ display: "block" }}
+                data-ad-client="ca-pub-8566989289200896"
+                data-ad-slot="1043165761"
+                data-ad-format="auto"
+                data-full-width-responsive="true"
+              ></ins>
+            </ErrorBoundary>
           </div>
         </section>
 
