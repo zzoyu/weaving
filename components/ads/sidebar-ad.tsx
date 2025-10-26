@@ -1,8 +1,8 @@
 "use client";
 
 import { useAdSense, useIntersectionObserver } from "@/hooks/use-adsense";
-import { useEffect, useRef, useState } from "react";
-import { AdContainer, AdErrorFallback, AdSkeleton } from "./ad-components";
+import { useRef, useState } from "react";
+import { AdContainer, AdSkeleton } from "./ad-components";
 
 type Props = {
   position?: "left" | "right";
@@ -28,16 +28,6 @@ export default function SidebarAd({
     },
     adRef
   );
-
-  // 스크롤 위치에 따른 sticky 상태 관리
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsSticky(window.scrollY > 100);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   // 광고가 뷰포트에 들어오지 않았을 때는 빈 공간으로 처리
   if (!isVisible && !isLoading) {
@@ -79,20 +69,13 @@ export default function SidebarAd({
               className="rounded-lg border border-gray-200"
             />
           )}
-
-          {hasError && (
-            <AdErrorFallback onRetry={retryAd} className="h-40 text-xs" />
-          )}
-
-          {!isLoading && !hasError && isVisible && (
-            <ins
-              className="adsbygoogle block w-full h-[600px] rounded-lg border border-gray-100"
-              data-ad-client={adClient}
-              data-ad-slot={adSlot}
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-            ></ins>
-          )}
+          <ins
+            className="adsbygoogle block w-full h-[600px] rounded-lg border border-gray-100"
+            data-ad-client={adClient}
+            data-ad-slot={adSlot}
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
         </AdContainer>
       </div>
     </div>

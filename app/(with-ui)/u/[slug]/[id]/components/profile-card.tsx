@@ -56,7 +56,7 @@ function PopupRelationshipGraph({
 
   return (
     <div className="fixed z-10 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white w-full h-full lg:w-5/6 lg:h-5/6 p-4 rounded-none lg:rounded-lg relative">
+      <div className="bg-white  dark:bg-text-black dark:text-white w-full h-full lg:w-5/6 lg:h-5/6 p-4 rounded-none lg:rounded-lg relative">
         <button
           className="absolute top-2 right-2 z-20"
           onClick={() => onClose()}

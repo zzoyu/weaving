@@ -1,7 +1,7 @@
 import { fetchProfileByUserId } from "@/app/profile/actions";
-import MorePageItemAd from "@/components/ads/more-item-ad";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
+import MoreListAd from "./components/more-list-ad";
 
 interface PageProps {
   params: {
@@ -40,12 +40,12 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <main className="flex flex-col w-full h-full justify-center items-center relative">
-      <div className="grid grid-cols-1 gap-4 lg:gap-8 place-items-center w-4/5 max-w-4xl auto-rows-fr lg:grid-cols-2 pt-10 pb-20 relative h-full grow-0">
+      <div className="grid grid-cols-1 gap-4 lg:gap-8 place-items-center w-4/5 max-w-4xl auto-rows-fr lg:grid-cols-2 pt-10 pb-20 relative h-fit grow-0">
         {features.map((feature, index) => (
           <article key={`${feature.href}-${index}`} className="more-list-item">
             <Link
               href={`/more/${feature.href}`}
-              className="flex flex-col justify-center h-full"
+              className="flex flex-col justify-center max-h-fit h-full"
             >
               <div className="text-3xl mb-4">{feature.icon}</div>
               <p className="text-sm lg:text-base font-bold mb-2 text-gray-900 dark:text-white">
@@ -57,8 +57,8 @@ export default async function Page({ params }: PageProps) {
             </Link>
           </article>
         ))}
+        <MoreListAd />
       </div>
-      <MorePageItemAd />
     </main>
   );
 }

@@ -2,27 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-// AdSense 스크립트 로드 확인
-export function isAdSenseLoaded(): boolean {
-  if (typeof window === "undefined") return false;
-  
-  // adsbygoogle 배열이 존재하는지 확인
-  if (window.adsbygoogle) {
-    return Array.isArray(window.adsbygoogle);
-  }
-  
-  // 스크립트가 로드되었지만 배열이 아직 초기화되지 않은 경우
-  // adsbygoogle 스크립트 태그가 존재하는지 확인
-  const script = document.querySelector('script[src*="adsbygoogle.js"]');
-  if (script) {
-    // 스크립트가 있다면 배열 초기화
-    window.adsbygoogle = window.adsbygoogle || [];
-    return true;
-  }
-  
-  return false;
-}
-
 // 컨테이너가 유효한 크기를 가지는지 확인
 export function hasValidSize(element: HTMLElement | null): boolean {
   if (!element) return false;
@@ -62,6 +41,7 @@ export interface AdConfig {
   adSlot?: string;
   adFormat?: string;
   adLayout?: string;
+  adLayoutKey?: string;
   fullWidthResponsive?: boolean;
 }
 
@@ -86,14 +66,6 @@ export function useAdSense(
           "AdSense: Invalid configuration -",
           configValidation.error
         );
-        setHasError(true);
-        setIsLoading(false);
-        return;
-      }
-
-      // 기본 요구사항 확인
-      if (!isAdSenseLoaded()) {
-        console.warn("AdSense: Script not loaded");
         setHasError(true);
         setIsLoading(false);
         return;
@@ -131,33 +103,24 @@ export function useAdSense(
 
     // AdSense 스크립트 로드 대기 (더 긴 시간)
     const checkAdSenseScript = () => {
-      if (isAdSenseLoaded()) {
-        // 스크립트가 로드되면 컨테이너 크기 확인
-        if (containerRef) {
-          const checkContainerSize = () => {
-            if (hasValidSize(containerRef.current)) {
-              pushAd();
-            } else if (containerCheckCount < maxContainerRetries) {
-              containerCheckCount++;
-              timeoutId = setTimeout(checkContainerSize, 100);
-            } else {
-              console.warn("AdSense: Container size check timeout");
-              setHasError(true);
-              setIsLoading(false);
-            }
-          };
-          timeoutId = setTimeout(checkContainerSize, 100);
-        } else {
-          // 컨테이너 참조가 없는 경우 바로 로드
-          timeoutId = setTimeout(pushAd, 100);
-        }
-      } else if (scriptCheckCount < maxScriptRetries) {
-        scriptCheckCount++;
-        timeoutId = setTimeout(checkAdSenseScript, 100);
+      // 스크립트가 로드되면 컨테이너 크기 확인
+      if (containerRef) {
+        const checkContainerSize = () => {
+          if (hasValidSize(containerRef.current)) {
+            pushAd();
+          } else if (containerCheckCount < maxContainerRetries) {
+            containerCheckCount++;
+            timeoutId = setTimeout(checkContainerSize, 100);
+          } else {
+            console.warn("AdSense: Container size check timeout");
+            setHasError(true);
+            setIsLoading(false);
+          }
+        };
+        timeoutId = setTimeout(checkContainerSize, 100);
       } else {
-        console.warn("AdSense: Script load timeout - script may not be included");
-        setHasError(true);
-        setIsLoading(false);
+        // 컨테이너 참조가 없는 경우 바로 로드
+        timeoutId = setTimeout(pushAd, 100);
       }
     };
 
@@ -187,7 +150,6 @@ export function useAdSense(
       debug: {
         configValid: configValidation.isValid,
         configError: configValidation.error,
-        adSenseLoaded: isAdSenseLoaded(),
         containerSize: containerRef?.current
           ? hasValidSize(containerRef.current)
           : null,

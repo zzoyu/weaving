@@ -76,7 +76,7 @@
   }
 
   .more-list-item {
-    @apply w-full p-8 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gradient-to-br dark:from-[#232526] dark:to-[#414345] shadow-lg hover:shadow-2xl transition-transform hover:scale-105 duration-200 flex flex-col cursor-pointer h-full;
+    @apply w-full p-8 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gradient-to-br dark:from-[#232526] dark:to-[#414345] shadow-lg hover:shadow-2xl transition-transform hover:scale-105 duration-200 flex flex-col cursor-pointer h-full max-h-fit;
   }
 }
 
@@ -136,6 +136,9 @@ svg > text {
   }
   ::-webkit-scrollbar-track {
     background: #222;
+  }
+  image.theme-sensitive {
+    filter: invert(1);
   }
 }
 

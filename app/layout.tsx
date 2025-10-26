@@ -1,4 +1,3 @@
-import AdSenseDebugPanel from "@/components/ads/adsense-debug-panel";
 import { AlertToaster } from "@/components/interactions/alert-toaster";
 import { Toaster } from "@/components/ui/toaster";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
@@ -77,11 +76,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        <script
+        <Script
           async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClientId}`}
           crossOrigin="anonymous"
-        ></script>
+        />
       </head>
       <body className={clsx(fontTitle.variable, fontBody.variable)}>
         {/* 구조화 데이터: CreativeWork */}
@@ -106,7 +105,6 @@ export default function RootLayout({
             <AlertToaster />
           </Suspense>
           {gaId && <GoogleAnalytics gaId={gaId} />}
-          <AdSenseDebugPanel />
         </ThemeProvider>
       </body>
     </html>

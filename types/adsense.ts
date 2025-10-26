@@ -33,7 +33,6 @@ export interface AdState {
 export interface AdDebugInfo {
   configValid: boolean;
   configError?: string;
-  adSenseLoaded: boolean;
   containerSize: boolean | null;
 }
 

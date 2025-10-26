@@ -31,34 +31,6 @@ interface AdErrorFallbackProps {
   className?: string;
 }
 
-export function AdErrorFallback({
-  onRetry,
-  className = "",
-}: AdErrorFallbackProps) {
-  if (!onRetry) {
-    // 에러 시 아무것도 렌더링하지 않음 (자연스럽게 사라짐)
-    return null;
-  }
-
-  return (
-    <div
-      className={`p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 ${className}`}
-    >
-      <div className="text-center">
-        <p className="text-gray-500 dark:text-gray-400 text-sm mb-2">
-          광고를 불러오는데 실패했습니다.
-        </p>
-        <button
-          onClick={onRetry}
-          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
-        >
-          다시 시도
-        </button>
-      </div>
-    </div>
-  );
-}
-
 interface AdContainerProps {
   children: React.ReactNode;
   className?: string;

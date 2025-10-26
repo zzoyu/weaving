@@ -9,7 +9,7 @@ import {
 import { getParallelLines } from "@/utils/graph";
 import { getPublicUrl } from "@/utils/image";
 import * as d3 from "d3";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export default function RelationshipGraph2({
   character,
@@ -19,6 +19,25 @@ export default function RelationshipGraph2({
   relationships: RelationshipNode[];
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // 다크모드 감지
+  useEffect(() => {
+    const checkDarkMode = () => {
+      setIsDarkMode(document.documentElement.classList.contains("dark"));
+    };
+
+    checkDarkMode();
+
+    // MutationObserver를 사용해 다크모드 변경 감지
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const width = 600;
   const height = 600;
@@ -307,6 +326,7 @@ export default function RelationshipGraph2({
               .attr("cy", position.y)
               .attr("r", xScale(1.7))
               .attr("fill", "white")
+              .attr("class", "dark:fill-text-black")
               .attr("stroke-width", 2);
 
             target
@@ -315,7 +335,8 @@ export default function RelationshipGraph2({
               .attr("width", xScale(3))
               .attr("height", xScale(3))
               .attr("x", position.x - xScale(1.5))
-              .attr("y", position.y - xScale(1.5));
+              .attr("y", position.y - xScale(1.5))
+              .style("filter", isDarkMode ? "invert(1)" : "none");
           } else {
             // relationship_in이 없는 경우 기존 위치 유지
             target
@@ -324,6 +345,7 @@ export default function RelationshipGraph2({
               .attr("cy", position.y + xScale(1.5))
               .attr("r", xScale(1.7))
               .attr("fill", "white")
+              .attr("class", "dark:fill-text-black")
               .attr("stroke-width", 2);
 
             target
@@ -332,7 +354,18 @@ export default function RelationshipGraph2({
               .attr("width", xScale(3))
               .attr("height", xScale(3))
               .attr("x", position.x)
-              .attr("y", position.y);
+              .attr("y", position.y)
+              .style("filter", isDarkMode ? "invert(1)" : "none");
+
+            target
+              .append("svg")
+              .enter()
+              .attr("xlink:href", relationshipData.url.src)
+              .attr("width", xScale(3))
+              .attr("height", xScale(3))
+              .attr("x", position.x + xScale(1.5))
+              .attr("y", position.y + xScale(1.5))
+              .style("filter", isDarkMode ? "invert(1)" : "none");
           }
         }
       });
@@ -428,7 +461,7 @@ export default function RelationshipGraph2({
     nodes.forEach((node, index) => {
       drawNodeText(svg, node, relationships[index], index);
     });
-  }, [width]);
+  }, [width, isDarkMode]);
   return (
     <svg
       ref={svgRef}

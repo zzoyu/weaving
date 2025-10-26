@@ -2,7 +2,7 @@
 
 import { useAdSense, useIntersectionObserver } from "@/hooks/use-adsense";
 import { useRef } from "react";
-import { AdContainer, AdErrorFallback, AdSkeleton } from "./ad-components";
+import { AdContainer, AdSkeleton } from "./ad-components";
 
 type Props = {
   adClient?: string;
@@ -16,7 +16,7 @@ export default function MorePageResultAd({
   const containerRef = useRef<HTMLDivElement>(null);
   const isVisible = useIntersectionObserver(containerRef, { threshold: 0.1 });
 
-  const { isLoading, hasError, retryAd } = useAdSense(
+  const { isLoading } = useAdSense(
     {
       adClient,
       adSlot,
@@ -45,20 +45,15 @@ export default function MorePageResultAd({
     >
       <AdContainer className="w-full" label="결과 페이지 광고">
         {isLoading && <AdSkeleton height="h-40" className="rounded-lg" />}
-
-        {hasError && <AdErrorFallback onRetry={retryAd} className="h-40" />}
-
-        {!isLoading && !hasError && isVisible && (
-          <div className="w-full">
-            <ins
-              className="adsbygoogle block w-full min-h-[160px] rounded-lg"
-              data-ad-client={adClient}
-              data-ad-slot={adSlot}
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-            ></ins>
-          </div>
-        )}
+        <div className="w-full h-full">
+          <ins
+            className="adsbygoogle block w-full min-h-[160px] rounded-lg"
+            data-ad-client={adClient}
+            data-ad-slot={adSlot}
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
+        </div>
       </AdContainer>
     </div>
   );
