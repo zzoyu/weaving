@@ -17,9 +17,10 @@ export default async function UILayout({
   const { data } = await supabase.auth.getUser();
   const userId = data?.user?.id;
   return (
-    <div className="layout flex flex-col !h-full pt-14 relative">
+    <div className="layout flex flex-col !h-full min-h-full pt-14 relative">
       {header}
-      <div className="w-full h-full overflow-y-auto">
+      <div className="w-full h-full overflow-y-auto grow shrink">
+        {children}
         <div className="px-2 fixed top-14 left-0  z-10 lg:w-40 h-full hidden lg:block pb-10 overflow-y-clip">
           {/* Left ad (desktop only) */}
           <SidebarAd position="left" />
@@ -27,7 +28,6 @@ export default async function UILayout({
           {/* Right ad (desktop only) */}
           <SidebarAd position="right" />
         </div>
-        {children}
       </div>
       {userId ? navigation : <NavigationSignOut />}
     </div>

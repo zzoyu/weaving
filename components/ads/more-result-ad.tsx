@@ -1,6 +1,6 @@
 "use client";
 
-import { useAdSense, useIntersectionObserver } from "@/hooks/use-adsense";
+import { useAdSense } from "@/hooks/use-adsense";
 import { useRef } from "react";
 import { AdContainer, AdSkeleton } from "./ad-components";
 
@@ -14,7 +14,6 @@ export default function MorePageResultAd({
   adSlot = "8926557427",
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const isVisible = useIntersectionObserver(containerRef, { threshold: 0.1 });
 
   const { isLoading } = useAdSense(
     {
@@ -27,7 +26,7 @@ export default function MorePageResultAd({
   );
 
   // 광고가 뷰포트에 들어오지 않았을 때 placeholder
-  if (!isVisible && !isLoading) {
+  if (!isLoading) {
     return (
       <div
         ref={containerRef}

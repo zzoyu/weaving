@@ -30,7 +30,7 @@ export default async function Header({
       className="fixed top-0 flex w-full items-center justify-between py-4 px-2 lg:px-8 bg-transparent"
       key={params.id}
     >
-      <Link href={`/u/${params.slug}`}>
+      <Link href={`/u/${params.slug}/v/`}>
         <button className="p-1 rounded-full h-10 flex items-center justify-center text-2xl bg-transparent">
           <span className="text-primary-300">← 세계관</span>
         </button>

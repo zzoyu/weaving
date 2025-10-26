@@ -1,6 +1,6 @@
 "use client";
 
-import { useAdSense, useIntersectionObserver } from "@/hooks/use-adsense";
+import { useAdSense } from "@/hooks/use-adsense";
 import { useRef, useState } from "react";
 import { AdContainer, AdSkeleton } from "./ad-components";
 
@@ -17,9 +17,8 @@ export default function SidebarAd({
 }: Props) {
   const adRef = useRef<HTMLDivElement>(null);
   const [isSticky, setIsSticky] = useState(false);
-  const isVisible = useIntersectionObserver(adRef, { threshold: 0.1 });
 
-  const { isLoading, hasError, retryAd } = useAdSense(
+  const { isLoading } = useAdSense(
     {
       adClient,
       adSlot,
@@ -29,8 +28,7 @@ export default function SidebarAd({
     adRef
   );
 
-  // 광고가 뷰포트에 들어오지 않았을 때는 빈 공간으로 처리
-  if (!isVisible && !isLoading) {
+  if (!isLoading) {
     return (
       <div
         ref={adRef}
@@ -50,7 +48,7 @@ export default function SidebarAd({
       ref={adRef}
       key={"sidebar-ad-" + position}
       className={`
-        fixed top-14 z-10 hidden xl:block
+        fixed top-14 z-10 hidden lg:block
         transition-all duration-300 ease-in-out
         ${position === "left" ? "left-2" : "right-2"}
         ${isSticky ? "opacity-90" : "opacity-100"}
