@@ -334,9 +334,9 @@ export default function RelationshipGraph2({
               .attr("xlink:href", relationshipData.url.src)
               .attr("width", xScale(3))
               .attr("height", xScale(3))
-              .attr("x", position.x - xScale(1.5))
-              .attr("y", position.y - xScale(1.5))
-              .style("filter", isDarkMode ? "invert(1)" : "none");
+              .attr("x", position.x)
+              .attr("y", position.y)
+              .attr("filter", isDarkMode ? "url(#invertFilter)" : null);
           } else {
             // relationship_in이 없는 경우 기존 위치 유지
             target
@@ -355,17 +355,7 @@ export default function RelationshipGraph2({
               .attr("height", xScale(3))
               .attr("x", position.x)
               .attr("y", position.y)
-              .style("filter", isDarkMode ? "invert(1)" : "none");
-
-            target
-              .append("svg")
-              .enter()
-              .attr("xlink:href", relationshipData.url.src)
-              .attr("width", xScale(3))
-              .attr("height", xScale(3))
-              .attr("x", position.x + xScale(1.5))
-              .attr("y", position.y + xScale(1.5))
-              .style("filter", isDarkMode ? "invert(1)" : "none");
+              .attr("filter", isDarkMode ? "url(#invertFilter)" : null);
           }
         }
       });
@@ -399,6 +389,13 @@ export default function RelationshipGraph2({
       .append("path")
       .attr("d", "M0,-5L10,0L0,5")
       .attr("fill", "gray");
+    svg
+      .append("defs")
+      .append("filter")
+      .attr("id", "invertFilter")
+      .append("feColorMatrix")
+      .attr("type", "matrix")
+      .attr("values", "-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0");
 
     // 라인(화살표) 그리기 - 원 테두리에 맞게 끝점 조정
     nodes.forEach((node, index) => {

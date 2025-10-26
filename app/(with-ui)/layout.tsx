@@ -17,7 +17,7 @@ export default async function UILayout({
   const { data } = await supabase.auth.getUser();
   const userId = data?.user?.id;
   return (
-    <div className="layout flex flex-col !h-full min-h-full pt-14 relative">
+    <div className="layout flex flex-col !h-full min-h-full max-h-full pt-14 relative">
       {header}
       <div className="w-full h-full overflow-y-auto grow shrink">
         {children}
