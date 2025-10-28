@@ -36,11 +36,11 @@ export async function fetchRandomNicknameAndSlug(metadata: TwitterMetadata) {
   const colorIndex = faker.number.int(color.ko.length - 1);
   const adjectiveIndex = faker.number.int(adjective.ko.length - 1);
 
-  const colorKo = color.ko[colorIndex];
-  const colorEn = color.en[colorIndex];
+  const colorKo = color.ko[colorIndex].replace(" ", "");
+  const colorEn = color.en[colorIndex].replace(" ", "");
 
-  const adjectiveKo = adjective.ko[adjectiveIndex];
-  const adjectiveEn = adjective.en[adjectiveIndex];
+  const adjectiveKo = adjective.ko[adjectiveIndex].replace(" ", "");
+  const adjectiveEn = adjective.en[adjectiveIndex].replace(" ", "");
 
   // const suffix = faker.string.alphanumeric({
   //   length: 5,
