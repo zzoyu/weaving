@@ -311,10 +311,9 @@ export async function updateCharacter(
       };
     });
 
-    if ((relationships?.length || 0) > 0)
-      await updateBulkRelationships(characterId, relationships);
+    await updateBulkRelationships(characterId, relationships || []);
 
-    revalidatePath("/u/[slug]", "page");
+    revalidatePath("/u/[slug]/[id]", "page");
     return { success: true };
   } catch (err) {
     Sentry.captureException(err);

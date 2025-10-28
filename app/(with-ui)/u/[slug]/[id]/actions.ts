@@ -92,7 +92,6 @@ export async function createBulkRelationships(
     name: string;
   }[]
 ) {
-  
   const supabase = createClient();
   const { data, error } = await supabase.from("relationship").insert(
     relationships.map((relationship) => ({
@@ -127,7 +126,6 @@ export async function createRelationship(
 }
 
 export async function updateRelationship(id: number, name: string) {
-  
   const supabase = createClient();
   const { data, error } = await supabase
     .from("relationship")
@@ -135,7 +133,7 @@ export async function updateRelationship(id: number, name: string) {
       name: name || "friend",
     })
     .eq("id", id);
-  
+
   if (error) {
     throw error;
   }
@@ -144,7 +142,6 @@ export async function updateRelationship(id: number, name: string) {
 }
 
 export async function deleteRelationship(id: number) {
-  
   const supabase = createClient();
   const { data, error } = await supabase
     .from("relationship")
@@ -224,6 +221,8 @@ export async function updateBulkRelationships(
 ) {
   const supabase = createClient();
 
+  console.log("Updating relationships:", { from_id, relationships });
+
   // 트랜잭션 시작
   const { error: deleteError } = await supabase
     .from("relationship")
@@ -232,6 +231,12 @@ export async function updateBulkRelationships(
 
   if (deleteError) {
     throw deleteError;
+  }
+
+  if (relationships.length === 0) {
+    console.log("No relationships to update");
+    revalidatePath("/u/[slug]/[id]", "page");
+    return;
   }
 
   // 새로운 관계 생성
@@ -249,6 +254,6 @@ export async function updateBulkRelationships(
     throw insertError;
   }
 
-  revalidatePath("/u/[slug]", "page");
+  revalidatePath("/u/[slug]/[id]", "page");
   return data;
 }
