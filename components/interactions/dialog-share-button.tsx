@@ -51,7 +51,7 @@ export function DialogShareButton({
   // 복사 버튼 클릭 핸들러
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(currentUrl);
+      await navigator.clipboard.writeText(targetPath || currentUrl);
       toast({
         title: "링크가 복사되었습니다!",
         variant: "default",

@@ -62,7 +62,8 @@ const nextConfig = {
         "https://*.ingest.us.sentry.io",
         "https://*.adtrafficquality.google",
         "https://*.weavv.in",
-        "https://googleads.g.doubleclick.net",
+        "https://*.g.doubleclick.net",
+        "https://*.kakaocdn.net",
       ],
       "style-src": [
         "'self'",
@@ -99,7 +100,8 @@ const nextConfig = {
         "https://fundingchoicesmessages.google.com",
         "https://*.weavv.in",
         "https://*.google.com",
-        "https://googleads.g.doubleclick.net",
+        "https://*.g.doubleclick.net",
+        "https://*.kakaocdn.net",
         process.env.NEXT_PUBLIC_SUPABASE_URL,
       ],
       "frame-src": [
