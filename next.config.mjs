@@ -64,6 +64,7 @@ const nextConfig = {
         "https://*.weavv.in",
         "https://*.g.doubleclick.net",
         "https://*.kakaocdn.net",
+        "https://sharer.kakao.com/picker/link",
       ],
       "style-src": [
         "'self'",
@@ -102,6 +103,7 @@ const nextConfig = {
         "https://*.google.com",
         "https://*.g.doubleclick.net",
         "https://*.kakaocdn.net",
+        "https://sharer.kakao.com/picker/link",
         process.env.NEXT_PUBLIC_SUPABASE_URL,
       ],
       "frame-src": [
