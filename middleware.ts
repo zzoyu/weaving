@@ -39,39 +39,46 @@ export async function middleware(request: NextRequest) {
 
   // 보호된 라우트에 대한 인증 체크
   if (protectedRoutes.some((route) => path.startsWith(route))) {
-    const supabase = createClient();
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser();
+    try {
+      const supabase = createClient();
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
 
-    // 인증되지 않은 사용자 또는 세션 만료 또는 프로필이 없음
-    if (!user?.id || error) {
+      // 인증되지 않은 사용자 또는 세션 만료 또는 프로필이 없음
+      if (!user?.id || error) {
+        const redirectUrl = new URL("/signin", request.url);
+        redirectUrl.searchParams.set("redirect", path);
+        return NextResponse.redirect(redirectUrl);
+      }
+
+      const profile = await fetchProfileByUserId(user.id);
+      if (!profile) {
+        const redirectUrl = new URL("/onboarding", request.url);
+        return NextResponse.redirect(redirectUrl);
+      }
+
+      // 프로필 라우트 특별 처리
+      if (path.startsWith("/profile")) {
+        const response = await supabase
+          .from("profile")
+          .select()
+          .eq("user_id", user.id)
+          .single();
+
+        if (response.error || !response?.data) {
+          return NextResponse.redirect(new URL("/", request.url));
+        }
+        return NextResponse.redirect(
+          new URL("/u/" + response.data.slug, request.url)
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching user:", error);
       const redirectUrl = new URL("/signin", request.url);
       redirectUrl.searchParams.set("redirect", path);
       return NextResponse.redirect(redirectUrl);
-    }
-
-    const profile = await fetchProfileByUserId(user.id);
-    if (!profile) {
-      const redirectUrl = new URL("/onboarding", request.url);
-      return NextResponse.redirect(redirectUrl);
-    }
-
-    // 프로필 라우트 특별 처리
-    if (path.startsWith("/profile")) {
-      const response = await supabase
-        .from("profile")
-        .select()
-        .eq("user_id", user.id)
-        .single();
-
-      if (response.error || !response?.data) {
-        return NextResponse.redirect(new URL("/", request.url));
-      }
-      return NextResponse.redirect(
-        new URL("/u/" + response.data.slug, request.url)
-      );
     }
   }
 
