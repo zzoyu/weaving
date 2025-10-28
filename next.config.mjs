@@ -124,7 +124,7 @@ const nextConfig = {
       ],
       "object-src": ["'none'"],
       "base-uri": ["'self'"],
-      "form-action": ["'self'"],
+      "form-action": ["'self'", "https://*.kakao.com"],
     };
 
     const buildCsp = (map) =>
