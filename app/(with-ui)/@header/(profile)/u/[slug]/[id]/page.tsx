@@ -68,7 +68,7 @@ export default async function Header({
                 {character?.id && !character?.password && (
                   <ButtonLock characterId={character.id} />
                 )}
-                {character?.id && character?.password?.length && (
+                {character?.id && !!character?.password?.length && (
                   <ButtonUnlock characterId={character.id} />
                 )}
                 <Link href={`${params.id}/edit`} className="context-menu-item">

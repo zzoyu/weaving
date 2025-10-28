@@ -12,6 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { clearCharacterPassword } from "../actions";
 
@@ -19,31 +20,17 @@ export function ButtonUnlock({ characterId }: { characterId: number }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const { toast } = useToast();
+
   return (
-    <AlertDialog>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <button
-          className="text-base text-gray-700 hover:text-primary-500"
-          onClick={() => setIsOpen(true)}
-        >
+        <button className="context-menu-item" onClick={() => setIsOpen(true)}>
           캐릭터 잠금 해제
         </button>
       </AlertDialogTrigger>
       <AlertDialogContent>
-        <form
-          action={(formData) => {
-            clearCharacterPassword(formData);
-            setIsOpen(false);
-            setIsSubmitting(false);
-          }}
-          onSubmit={(e) => {
-            if (isSubmitting) {
-              e.preventDefault();
-              return;
-            }
-            setIsSubmitting(true);
-          }}
-        >
+        <form>
           <input type="hidden" name="character_id" value={characterId} />
           <AlertDialogHeader>
             <AlertDialogTitle>잠금을 해제하시겠습니까?</AlertDialogTitle>
@@ -53,7 +40,25 @@ export function ButtonUnlock({ characterId }: { characterId: number }) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>아니오</AlertDialogCancel>
-            <AlertDialogAction>네</AlertDialogAction>
+            <AlertDialogAction
+              onClick={() => {
+                const formData = new FormData();
+                formData.append("character_id", characterId.toString());
+                setIsSubmitting(true);
+                clearCharacterPassword(formData)
+                  .then(() => {
+                    toast({
+                      description: "캐릭터가 잠금 해제되었습니다.",
+                    });
+                  })
+                  .finally(() => {
+                    setIsOpen(false);
+                    setIsSubmitting(false);
+                  });
+              }}
+            >
+              네
+            </AlertDialogAction>
           </AlertDialogFooter>
           {isSubmitting ? (
             <OverlayLoading message="잠금 해제 중입니다..." />
