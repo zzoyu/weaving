@@ -3,6 +3,7 @@
 import AddIcon from "@/public/assets/icons/add.svg";
 import { EPropertyType, Property } from "@/types/character";
 
+import { cn } from "@/lib/utils";
 import { DragDropProvider } from "@dnd-kit/react";
 import { useSortable } from "@dnd-kit/react/sortable";
 import {
@@ -191,7 +192,10 @@ function SortableItem({
   return (
     <div
       ref={ref}
-      className={isDragging ? "mb-4 relative h-20 opacity-40" : "mb-2 relative"}
+      className={cn(
+        isDragging ? "mb-4 relative h-20 opacity-40" : "mb-2 relative",
+        "pointer-events-none lg:pointer-events-auto"
+      )}
     >
       {isDragging === false ? (
         <ListPropertiesItem

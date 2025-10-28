@@ -58,8 +58,6 @@ export default function ListPropertiesItem({
   const textareaRef = useRef<AutosizeTextAreaRef | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  console.log("rendering item", property, isDragging, attributes, listeners);
-
   useEffect(() => {
     if (isExpanded) {
       // AutosizeTextarea exposes an imperative handle with a `focus` method
@@ -128,7 +126,7 @@ export default function ListPropertiesItem({
       <div className="w-full flex gap-4 items-center relative">
         <button
           type="button"
-          className="p-2 absolute left-0 h-full items-center justify-center lg:flex hidden"
+          className="p-2 absolute left-0 h-full items-center justify-center lg:flex hidden pointer-events-none lg:pointer-events-auto"
           aria-label="drag-handle"
           {...(listeners || {})}
         >
