@@ -1,7 +1,13 @@
-import { EPropertyType, Property } from "@/types/character";
+import { Property } from "@/types/character";
 import { PlanLimit } from "@/types/plan";
 import { Relationship } from "@/types/relationship";
 import { z } from "zod";
+
+enum EPropertyType {
+  STRING = "string",
+  COLOR = "color",
+  DATE = "date",
+}
 
 const propertySchema = z.object({
   key: z
@@ -21,14 +27,13 @@ const relationshipSchema = z.object({
   name: z.string().min(1, "관계 이름은 필수입니다"),
 });
 
-export const createCharacterSchema = (planLimit: PlanLimit) =>
+export const updateCharacterSchema = (planLimit: PlanLimit) =>
   z.object({
     name: z
       .string()
       .min(1, "이름은 필수입니다")
       .max(20, "이름은 20자 이하여야 합니다"),
     description: z.string().max(30, "설명은 30자 이하여야 합니다").optional(),
-    profile_slug: z.string(),
     properties: z
       .array(propertySchema)
       .refine((value) => {
@@ -68,10 +73,9 @@ export const createCharacterSchema = (planLimit: PlanLimit) =>
     }, "해시태그는 최대 20개까지 추가할 수 있습니다"),
   });
 
-export type CreateCharacterFormData = {
+export type UpdateCharacterFormData = {
   name: string;
   description?: string;
-  profile_slug: string;
   properties: Property[];
   relationships: Relationship[];
   hashtags?: string;

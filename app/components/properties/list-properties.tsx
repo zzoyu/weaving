@@ -86,6 +86,14 @@ export default function ListProperties({
                     index={index}
                     property={property}
                     error={errors ? (errors[index] as any)?.message : undefined}
+                    keyError={
+                      errors ? (errors[index] as any)?.key?.message : undefined
+                    }
+                    valueError={
+                      errors
+                        ? (errors[index] as any)?.value?.message
+                        : undefined
+                    }
                     onChange={(newProperty) => {
                       const newProperties = [...localProperties];
                       newProperties[index] = {
@@ -159,6 +167,8 @@ function SortableItem({
   index,
   property,
   error,
+  keyError,
+  valueError,
   onChange,
   onDelete,
   handleMove,
@@ -167,6 +177,8 @@ function SortableItem({
   index: number;
   property: Property;
   error?: string;
+  keyError?: string;
+  valueError?: string;
   onChange: (property: Property) => void;
   onDelete: (property: Property) => void;
   handleMove: (index: number, amount: number) => void;
@@ -185,6 +197,8 @@ function SortableItem({
         <ListPropertiesItem
           property={property}
           error={error}
+          keyError={keyError}
+          valueError={valueError}
           onChange={onChange}
           onDelete={onDelete}
           handleMove={(amount) => {

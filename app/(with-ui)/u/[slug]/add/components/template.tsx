@@ -2,7 +2,6 @@
 
 import InputHashtag from "@/app/components/input-hashtag";
 import { ColorProperties } from "@/app/components/properties/color-properties";
-import ListProperties from "@/app/components/properties/list-properties";
 import OverlayLoading from "@/components/overlay-loading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
@@ -20,8 +19,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { createCharacter } from "../actions";
+import { usePropertyValidation } from "../hooks/use-property-validation";
 import { createCharacterSchema } from "../schema";
 import { ButtonAddRelationship } from "./button-add-relationship";
+import ListPropertiesWithValidation from "./list-properties-with-validation";
 import UploadImage from "./upload-image/upload-image";
 
 export default function CharacterAddTemplate({
@@ -125,6 +126,16 @@ export default function CharacterAddTemplate({
     trigger("properties");
   }, [combinedProperties, setValue, trigger]);
 
+  // properties 개별 항목 변경 시 실시간 validation
+  useEffect(() => {
+    if (isInitialized) {
+      const timeoutId = setTimeout(() => {
+        trigger("properties");
+      }, 300); // 300ms 디바운스
+      return () => clearTimeout(timeoutId);
+    }
+  }, [properties, trigger, isInitialized]);
+
   useEffect(() => {
     setValue("relationships", relationships);
     // if (isInitialized) {
@@ -149,6 +160,10 @@ export default function CharacterAddTemplate({
   };
 
   useUnsavedChangesWarning(isDirty && !isSubmitted);
+
+  // Custom property validation
+  const { validationErrors, hasErrors, getPropertyError } =
+    usePropertyValidation(combinedProperties);
 
   return (
     <form
@@ -284,14 +299,34 @@ export default function CharacterAddTemplate({
         )}
       </div>
 
-      <ListProperties
-        properties={properties}
-        handler={(newValue) => {
-          if (!newValue) return;
-          setProperties(newValue);
-        }}
-        errors={errors.properties}
-      />
+      <div className="w-full">
+        <ListPropertiesWithValidation
+          properties={properties}
+          handler={(newValue: Property[]) => {
+            if (!newValue) return;
+            setProperties(newValue);
+            // 즉시 validation 실행
+            if (isInitialized) {
+              setTimeout(() => trigger("properties"), 100);
+            }
+          }}
+          getPropertyError={getPropertyError}
+        />
+        {/* react-hook-form errors 표시 */}
+        {errors.properties && typeof errors.properties.message === "string" && (
+          <span className="text-red-500 text-sm flex items-center gap-1 justify-center mt-2">
+            <CircleAlert className="w-4 h-4" />
+            {errors.properties.message}
+          </span>
+        )}
+        {/* Custom validation errors 표시 */}
+        {hasErrors && (
+          <span className="text-red-500 text-sm flex items-center gap-1 justify-center mt-2">
+            <CircleAlert className="w-4 h-4" />
+            입력값을 확인해 주세요
+          </span>
+        )}
+      </div>
       <div className=" px-10 w-full">
         <ColorProperties properties={colors} handler={setColors} editable />
       </div>

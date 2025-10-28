@@ -1,3 +1,5 @@
+import { fetchPlanById } from "@/app/actions/plan";
+import { fetchProfileByUserId } from "@/app/profile/actions";
 import { createClient } from "@/utils/supabase/server";
 import { notFound, redirect } from "next/navigation";
 import { fetchCharacter, fetchRelationships } from "../actions";
@@ -18,6 +20,20 @@ export default async function EditPage({
   if (!data) {
     notFound();
   }
+
+  // Get user's profile and plan limit
+  const myProfile = await fetchProfileByUserId(
+    currentUser?.data?.user?.id as string
+  );
+  if (!myProfile || myProfile.slug !== params.slug) {
+    redirect("/");
+  }
+
+  const userPlan = await fetchPlanById(myProfile.plan_id as number);
+  if (!userPlan) {
+    notFound();
+  }
+
   const colorProperties = data?.properties?.filter(
     (property) => property.type === "color"
   );
@@ -35,6 +51,7 @@ export default async function EditPage({
           character={data}
           colors={colorProperties}
           relationships={relationships || []}
+          planLimit={userPlan.limit}
         />
       )}
     </main>

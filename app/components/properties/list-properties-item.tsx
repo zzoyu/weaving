@@ -36,6 +36,8 @@ export default function ListPropertiesItem({
   onChange,
   onDelete,
   error,
+  keyError,
+  valueError,
   isDragging = false,
   listeners,
   attributes,
@@ -45,6 +47,8 @@ export default function ListPropertiesItem({
   onChange: (property: Property) => void;
   onDelete: (property: Property) => void;
   error?: string;
+  keyError?: string;
+  valueError?: string;
   isDragging?: boolean;
   listeners?: DraggableSyntheticListeners;
   attributes?: DraggableAttributes;
@@ -157,15 +161,28 @@ export default function ListPropertiesItem({
             name="list-properties"
             value={`${property.key}:${property.value}`}
           />
-          <input
-            className="lg:w-1/3 text-center p-1 text-base border-background-muted focus:outline-none w-1/5"
-            type="text"
-            value={property.key}
-            ref={inputRef}
-            onChange={(event) => {
-              onChange({ ...property, key: event.target.value });
-            }}
-          />
+          <div className="lg:w-1/3 w-1/5 flex flex-col">
+            <input
+              className={cn(
+                "text-center p-1 text-base border-background-muted focus:outline-none w-full",
+                {
+                  "border-red-500": keyError || (error && !valueError),
+                }
+              )}
+              type="text"
+              value={property.key}
+              ref={inputRef}
+              onChange={(event) => {
+                onChange({ ...property, key: event.target.value });
+              }}
+            />
+            {keyError && (
+              <span className="text-red-500 text-xs flex items-center gap-1 mt-1">
+                <CircleAlert className="w-3 h-3" />
+                {keyError}
+              </span>
+            )}
+          </div>
 
           <div className="flex relative flex-1 flex-col">
             <div className="flex items-center">
@@ -175,7 +192,7 @@ export default function ListPropertiesItem({
                 className={cn(
                   "w-full p-1 border-background-muted focus:outline-none bg-background-default dark:bg-neutral-900 resize-none focus:ring-0 ring-0 text-base",
                   {
-                    "border-state-error": error,
+                    "border-red-500": valueError || (error && !keyError),
                   }
                 )}
                 value={property.value}
@@ -197,9 +214,15 @@ export default function ListPropertiesItem({
                 />
               </button>
             </div>
-            {error && (
-              <span className="text-red-500 text-sm flex items-center gap-1">
-                <CircleAlert className="inline w-4 h-4" />
+            {valueError && (
+              <span className="text-red-500 text-xs flex items-center gap-1 mt-1">
+                <CircleAlert className="inline w-3 h-3" />
+                {valueError}
+              </span>
+            )}
+            {error && !keyError && !valueError && (
+              <span className="text-red-500 text-xs flex items-center gap-1 mt-1">
+                <CircleAlert className="inline w-3 h-3" />
                 {error}
               </span>
             )}
