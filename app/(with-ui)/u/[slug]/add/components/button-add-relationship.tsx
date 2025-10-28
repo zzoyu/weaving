@@ -184,13 +184,10 @@ export function ButtonAddRelationship({
 
   // 컴포넌트 마운트 시 한 번만 데이터 로드
   React.useEffect(() => {
-    let isMounted = true;
-
     const loadCharacters = async () => {
       try {
         // 내 프로필 캐릭터 가져오기
         const { data: myData } = await fetchCharactersByProfileId(profileId);
-        if (!isMounted) return;
 
         if (myData) {
           const filteredMyData = myData.filter(
@@ -204,7 +201,6 @@ export function ButtonAddRelationship({
         const friendData = await fetchCharactersFromFriendsByProfileId(
           profileId
         );
-        if (!isMounted) return;
 
         if (friendData) {
           setFriendCharacters(friendData);
@@ -212,18 +208,12 @@ export function ButtonAddRelationship({
         setIsFriendCharactersLoading(false);
       } catch (error) {
         console.error("Failed to fetch characters:", error);
-        if (isMounted) {
-          setIsMyCharactersLoading(false);
-          setIsFriendCharactersLoading(false);
-        }
+        setIsMyCharactersLoading(false);
+        setIsFriendCharactersLoading(false);
       }
     };
 
     loadCharacters();
-
-    return () => {
-      isMounted = false;
-    };
   }, [profileId, character?.id]);
 
   const openModal = (isMine: boolean) => {
@@ -321,7 +311,7 @@ export function ButtonAddRelationship({
               relationshipTypeData[relationship.name as ERelationshipType];
             return (
               <div
-                key={relationship.id}
+                key={`${relationship.id}-${index}`}
                 className="flex items-center justify-between py-2 border-b last:border-b-0"
               >
                 <input

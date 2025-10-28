@@ -221,39 +221,51 @@ export async function updateBulkRelationships(
 ) {
   const supabase = createClient();
 
-  console.log("Updating relationships:", { from_id, relationships });
+  console.log("🔄 updateBulkRelationships 시작:", { from_id, relationships });
 
-  // 트랜잭션 시작
-  const { error: deleteError } = await supabase
-    .from("relationship")
-    .delete()
-    .eq("from_id", from_id);
+  try {
+    // 기존 관계 삭제
+    console.log("🗑️ 기존 관계 삭제 중...");
+    const { error: deleteError } = await supabase
+      .from("relationship")
+      .delete()
+      .eq("from_id", from_id);
 
-  if (deleteError) {
-    throw deleteError;
-  }
+    if (deleteError) {
+      console.error("❌ 기존 관계 삭제 실패:", deleteError);
+      throw deleteError;
+    }
+    console.log("✅ 기존 관계 삭제 완료");
 
-  if (relationships.length === 0) {
-    console.log("No relationships to update");
+    if (relationships.length === 0) {
+      console.log("📝 새로운 관계가 없음 - 작업 완료");
+      revalidatePath("/u/[slug]/[id]", "page");
+      return;
+    }
+
+    // 새로운 관계 생성
+    const insertData = relationships.map((relationship) => ({
+      from_id,
+      to_id: relationship.to_id,
+      name: relationship.name || "friend",
+    }));
+
+    console.log("➕ 새로운 관계 생성 중:", insertData);
+
+    const { data, error: insertError } = await supabase
+      .from("relationship")
+      .insert(insertData);
+
+    if (insertError) {
+      console.error("❌ 새로운 관계 생성 실패:", insertError);
+      throw insertError;
+    }
+
+    console.log("✅ 새로운 관계 생성 완료:", data);
     revalidatePath("/u/[slug]/[id]", "page");
-    return;
+    return data;
+  } catch (error) {
+    console.error("🚨 updateBulkRelationships 오류:", error);
+    throw error;
   }
-
-  // 새로운 관계 생성
-  const { data, error: insertError } = await supabase
-    .from("relationship")
-    .insert(
-      relationships.map((relationship) => ({
-        from_id,
-        to_id: relationship.to_id,
-        name: relationship.name || "friend",
-      }))
-    );
-
-  if (insertError) {
-    throw insertError;
-  }
-
-  revalidatePath("/u/[slug]/[id]", "page");
-  return data;
 }

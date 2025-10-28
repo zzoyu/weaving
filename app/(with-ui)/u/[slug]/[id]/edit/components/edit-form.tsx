@@ -231,10 +231,17 @@ export default function CharacterEditTemplate({
                 formData.append("half-thumbnail", halfThumbnailInput.files[0]);
               }
 
+              console.log("🎯 클라이언트에서 updateCharacter 호출 시작");
+              console.log("📋 FormData 내용:", Array.from(formData.entries()));
+              console.log("🔧 Properties:", combinedProperties);
+
               const result = await updateCharacter(
                 formData,
                 combinedProperties
               );
+
+              console.log("📤 updateCharacter 결과:", result);
+
               if (result) {
                 toast({
                   description: "캐릭터가 수정되었습니다.",

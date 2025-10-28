@@ -21,8 +21,10 @@ export async function createCharacter(
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
     const profile_id = Number(formData.get("profile_id") as string);
-    const relationship_to = formData.getAll("relationship_to") as string[];
-    const relationship_name = formData.getAll("relationship_name") as string[];
+    const rawRelationshipData = formData.get("relationships");
+    const relationships: { to_id: number; name: string }[] = JSON.parse(
+      rawRelationshipData as string
+    );
 
     // Get user's plan and check character limit
     const userPlan = await fetchPlanByProfileId(profile_id);
@@ -57,7 +59,7 @@ export async function createCharacter(
     }
 
     // Check relationship count
-    if (relationship_to.length > userPlan.limit.maxRelationshipsPerCharacter) {
+    if (relationships.length > userPlan.limit.maxRelationshipsPerCharacter) {
       const err = new Error(
         `캐릭터당 관계 한도(${userPlan.limit.maxRelationshipsPerCharacter}개)를 초과했습니다.`
       );
@@ -148,20 +150,6 @@ export async function createCharacter(
       return { success: false, message: "캐릭터 생성에 실패했습니다." };
     }
 
-    const relationships = relationship_to.map((to, index) => {
-      const name = relationship_name[index];
-      const to_id = Number(to);
-      if (!to_id) {
-        const err = new Error("To ID is required");
-        Sentry.captureException(err);
-        throw err;
-      }
-      return {
-        to_id,
-        name,
-      };
-    });
-
     if ((relationships?.length || 0) > 0)
       await createBulkRelationships(data.id, relationships);
 
@@ -182,6 +170,12 @@ export async function updateCharacter(
   formData: FormData,
   properties: Property[]
 ) {
+  console.log("🚀 updateCharacter 함수 호출됨!");
+  console.log("📝 받은 데이터:", {
+    formDataEntries: Array.from(formData.entries()),
+    propertiesLength: properties.length,
+  });
+
   try {
     const supabase = createClient();
     const name = formData.get("name") as string;
@@ -218,22 +212,37 @@ export async function updateCharacter(
       formData.get("full-image") as File,
     ];
 
-    if (!imageFiles[0] && !isHalfEdited) {
+    const originalImages = formData.getAll("original_image[]") as string[];
+
+    console.log("🖼️ 이미지 검증:", {
+      isHalfEdited,
+      isFullEdited,
+      halfImageExists: !!imageFiles[0] && imageFiles[0].size > 0,
+      fullImageExists: !!imageFiles[1] && imageFiles[1].size > 0,
+      thumbnailExists: !!thumbnail && thumbnail.size > 0,
+      originalThumbnail: !!originalThumbnail,
+      imageFilesLength: imageFiles.length,
+    });
+
+    // 상반신 이미지 체크: 새 파일이 있거나 기존 이미지가 유지되어야 함
+    if (!originalImages[0] && !isHalfEdited) {
       const err = new Error("Image is required");
       Sentry.captureException(err);
       return { success: false, message: "이미지가 필요합니다." };
     }
+
+    // 썸네일 체크: 새 썸네일이 있거나 기존 썸네일이 있어야 함
     if (!thumbnail && !originalThumbnail) {
       const err = new Error("Thumbnail is required");
       Sentry.captureException(err);
       return { success: false, message: "썸네일이 필요합니다." };
     }
-    if (imageFiles.length === 0) {
-      const err = new Error("Image is required");
-      Sentry.captureException(err);
-      return { success: false, message: "이미지가 필요합니다." };
-    }
-    if (imageFiles.length > 3) {
+
+    // 실제 파일이 있는 이미지만 필터링
+    const validImageFiles = imageFiles.filter((file) => file && file.size > 0);
+    console.log("✅ 유효한 이미지 파일 수:", validImageFiles.length);
+
+    if (validImageFiles.length > 3) {
       const err = new Error("Image is too many");
       Sentry.captureException(err);
       return { success: false, message: "이미지 개수가 너무 많습니다." };
@@ -249,7 +258,6 @@ export async function updateCharacter(
       : originalThumbnail;
 
     const imageFlag = [isHalfEdited, isFullEdited];
-    const originalImages = formData.getAll("original_image[]") as string[];
 
     const imageUrls = await Promise.all(
       imageFiles.map(async (image, index) => {
@@ -294,24 +302,21 @@ export async function updateCharacter(
       return { success: false, message: "캐릭터 수정에 실패했습니다." };
     }
 
-    const relationship_to = formData.getAll("relationship_to") as string[];
-    const relationship_name = formData.getAll("relationship_name") as string[];
+    const rawRelationshipData = formData.get("relationships");
+    const relationships: { to_id: number; name: string }[] = JSON.parse(
+      rawRelationshipData as string
+    );
 
-    const relationships = relationship_to.map((to, index) => {
-      const name = relationship_name[index];
-      const to_id = Number(to);
-      if (!to_id) {
-        const err = new Error("To ID is required");
-        Sentry.captureException(err);
-        throw err;
-      }
-      return {
-        to_id,
-        name,
-      };
-    });
+    console.log("🔄 관계 업데이트 준비:", { characterId, relationships });
 
-    await updateBulkRelationships(characterId, relationships || []);
+    try {
+      await updateBulkRelationships(characterId, relationships || []);
+      console.log("✅ 관계 업데이트 완료");
+    } catch (error) {
+      console.error("❌ 관계 업데이트 실패:", error);
+      // 관계 업데이트 실패해도 캐릭터 업데이트는 성공으로 처리
+      // 사용자에게 부분적 실패 알림을 줄 수도 있음
+    }
 
     revalidatePath("/u/[slug]/[id]", "page");
     return { success: true };
