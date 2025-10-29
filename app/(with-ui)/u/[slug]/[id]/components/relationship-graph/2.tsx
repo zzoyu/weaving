@@ -460,13 +460,15 @@ export default function RelationshipGraph2({
     });
   }, [width, isDarkMode]);
   return (
-    <svg
-      ref={svgRef}
-      width={width}
-      height={height}
-      viewBox={`0 0 ${width} ${height}`}
-      preserveAspectRatio="xMidYMax meet"
-      className="w-full h-full lg:w-[800px] lg:h-[800px]"
-    ></svg>
+    <div className="flex items-center justify-center w-full h-full">
+      <svg
+        ref={svgRef}
+        width={width}
+        height={height}
+        viewBox={`0 0 ${width} ${height}`}
+        preserveAspectRatio="xMidYMid meet"
+        className="w-full h-full max-w-[600px] max-h-[600px] lg:max-w-[800px] lg:max-h-[800px]"
+      ></svg>
+    </div>
   );
 }
