@@ -35,8 +35,14 @@ export function getPublicUrl(fileName?: string): string {
   // 파일이 Blob인 경우
   // Allow blob: URLs, but block dangerous code schemes
   if (fileName.trim().toLowerCase().startsWith("blob:")) {
-    // Optionally, validate that blob: looks legit
-    return fileName;
+    // Validate that blob: URL matches expected format "blob:<origin>/<uuid>"
+    // Typical blob: URL: blob:http(s)://origin/id
+    const blobUrlRegex = /^blob:(https?:\/\/)?[\w\-\.:]+\/[a-fA-F0-9\-]+$/;
+    if (blobUrlRegex.test(fileName.trim())) {
+      return fileName;
+    } else {
+      return "";
+    }
   }
   // Block dangerous schemes: data:, javascript:, vbscript:
   const lowered = fileName.trim().toLowerCase();
