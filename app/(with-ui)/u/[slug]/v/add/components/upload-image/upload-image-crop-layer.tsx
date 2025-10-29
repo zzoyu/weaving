@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import ReactCrop, { Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
+import { isAllowedExternalUrl } from "@/utils/image";
 
 interface UploadImageCropLayerProps {
   src: string;
@@ -86,6 +87,12 @@ export default function UploadImageCropLayer({
     height: 180, // 16:9 비율
   });
 
+  // Runtime validation of src
+  const isAllowedSrc =
+    typeof src === "string" &&
+    ((src.startsWith("blob:") && /^blob:(https?:\/\/)?[\w\-.:]+\/[a-fA-F0-9\-]+$/.test(src)) ||
+      isAllowedExternalUrl(src));
+
   return (
     <div className="fixed z-50 inset-0 w-full h-full flex flex-col items-center justify-center gap-10 bg-background-default">
       <small
@@ -106,12 +113,18 @@ export default function UploadImageCropLayer({
           aspect={aspectRatio || 16 / 9}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className="w-fit h-fit object-contain rounded-lg"
-            src={src}
-            alt="이미지"
-            ref={imageRef}
-          />
+          {isAllowedSrc ? (
+            <img
+              className="w-fit h-fit object-contain rounded-lg"
+              src={src}
+              alt="이미지"
+              ref={imageRef}
+            />
+          ) : (
+            <div className="w-fit h-fit rounded-lg bg-gray-200 flex items-center justify-center text-red-500">
+              이미지 로드 불가
+            </div>
+          )}
         </ReactCrop>
       </div>
       <div className="flex flex-row gap-2 fixed bottom-16 justify-stretch lg:justify-center w-full lg:w-auto lg:bottom-24 left-1/2 transform -translate-x-1/2 px-4">
