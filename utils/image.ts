@@ -33,18 +33,17 @@ export function getPublicUrl(fileName?: string): string {
   }
 
   // 파일이 Blob인 경우
-  // Block data: or javascript: as src
-  if (
-    fileName.startsWith("blob:")
+  // Allow blob: URLs, but block dangerous code schemes
+  if (fileName.trim().toLowerCase().startsWith("blob:")) {
     // Optionally, validate that blob: looks legit
-  ) {
     return fileName;
   }
-  // Explicitly block data: and javascript: URIs
+  // Block dangerous schemes: data:, javascript:, vbscript:
+  const lowered = fileName.trim().toLowerCase();
   if (
-    fileName.trim().toLowerCase().startsWith("data:") ||
-    fileName.trim().toLowerCase().startsWith("javascript:") ||
-    fileName.trim().toLowerCase().startsWith("vbscript:")
+    lowered.startsWith("data:") ||
+    lowered.startsWith("javascript:") ||
+    lowered.startsWith("vbscript:")
   ) {
     return "";
   }
