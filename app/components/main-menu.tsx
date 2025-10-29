@@ -27,10 +27,10 @@ export default function MainMenu() {
 
   useEffect(() => {
     // 초기 세션 상태 확인
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
         setIsSignedIn(true);
-        setUser(session.user);
+        setUser(user);
       }
     });
 
@@ -43,7 +43,7 @@ export default function MainMenu() {
           setIsSignedIn(true);
           setUser(session.user);
           // 리다이렉트 경로가 있으면 해당 경로로, 없으면 프로필 페이지로
-          router.replace(redirectPath || "/profile");
+          router.replace(redirectPath || "/");
         } else {
           setIsSignedIn(false);
           setUser(undefined);
@@ -85,7 +85,7 @@ export default function MainMenu() {
       )}
       {isSignedIn && (
         <>
-          <Link href="/profile">
+          <Link href="/">
             <ProfileImage src={user?.user_metadata?.avatar_url} />
           </Link>
 

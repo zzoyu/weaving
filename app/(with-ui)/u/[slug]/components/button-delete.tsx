@@ -46,7 +46,7 @@ export default function ButtonDelete({
                     toast({
                       description: "캐릭터가 삭제되었습니다.",
                     });
-                    router.replace("/profile");
+                    router.replace("./");
                   }
                 })
                 .catch((error) => {

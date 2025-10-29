@@ -50,7 +50,7 @@ export default function ButtonDeleteUniverse({
                     toast({
                       description: "세계관이 삭제되었습니다.",
                     });
-                    router.replace("/profile");
+                    router.replace("./");
                   }
                 })
                 .catch((error: Error) => {
@@ -68,4 +68,4 @@ export default function ButtonDeleteUniverse({
       </AlertDialogContent>
     </AlertDialog>
   );
-} 
+}

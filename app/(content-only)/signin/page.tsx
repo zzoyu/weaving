@@ -19,7 +19,7 @@ export default async function Home({
 
   // 인증된 사용자이고 리다이렉트 URL이 없는 경우
   if (data?.user?.id) {
-    redirect("/profile");
+    redirect("/");
   }
 
   return (

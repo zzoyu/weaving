@@ -1,13 +1,14 @@
 import { updateSession } from "@/utils/supabase/middleware";
 import { NextResponse, type NextRequest } from "next/server";
-import { fetchProfileByUserId } from "./app/profile/actions";
 import { createClient } from "./utils/supabase/server";
 
 // 인증이 필요한 라우트 패턴
 const protectedRoutes = [
-  "/profile",
   "/mypage",
   "/u/:slug/add",
+  "/u/:slug/:id/edit",
+  "/u/:slug/v/:id/edit",
+
   // 추가 보호 라우트...
 ];
 
@@ -18,6 +19,8 @@ const publicRoutes = [
   "/login",
   "/onboarding",
   "/u/:slug",
+  "/u/:slug/v",
+  "/u/:slug/v/:id",
   "/posts/:id",
   "/terms",
   "/privacy",
@@ -51,28 +54,6 @@ export async function middleware(request: NextRequest) {
         const redirectUrl = new URL("/signin", request.url);
         redirectUrl.searchParams.set("redirect", path);
         return NextResponse.redirect(redirectUrl);
-      }
-
-      const profile = await fetchProfileByUserId(user.id);
-      if (!profile) {
-        const redirectUrl = new URL("/onboarding", request.url);
-        return NextResponse.redirect(redirectUrl);
-      }
-
-      // 프로필 라우트 특별 처리
-      if (path.startsWith("/profile")) {
-        const response = await supabase
-          .from("profile")
-          .select()
-          .eq("user_id", user.id)
-          .single();
-
-        if (response.error || !response?.data) {
-          return NextResponse.redirect(new URL("/", request.url));
-        }
-        return NextResponse.redirect(
-          new URL("/u/" + response.data.slug, request.url)
-        );
       }
     } catch (error) {
       console.error("Error fetching user:", error);
