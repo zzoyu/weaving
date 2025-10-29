@@ -43,7 +43,8 @@ export function getPublicUrl(fileName?: string): string {
   // Explicitly block data: and javascript: URIs
   if (
     fileName.trim().toLowerCase().startsWith("data:") ||
-    fileName.trim().toLowerCase().startsWith("javascript:")
+    fileName.trim().toLowerCase().startsWith("javascript:") ||
+    fileName.trim().toLowerCase().startsWith("vbscript:")
   ) {
     return "";
   }
