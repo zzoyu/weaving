@@ -33,8 +33,19 @@ export function getPublicUrl(fileName?: string): string {
   }
 
   // 파일이 Blob인 경우
-  if (fileName.startsWith("blob:")) {
+  // Block data: or javascript: as src
+  if (
+    fileName.startsWith("blob:")
+    // Optionally, validate that blob: looks legit
+  ) {
     return fileName;
+  }
+  // Explicitly block data: and javascript: URIs
+  if (
+    fileName.trim().toLowerCase().startsWith("data:") ||
+    fileName.trim().toLowerCase().startsWith("javascript:")
+  ) {
+    return "";
   }
 
   // 파일 이름이 절대경로 시작하면 그대로 반환
