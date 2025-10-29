@@ -104,6 +104,7 @@ const nextConfig = {
         "https://*.g.doubleclick.net",
         "https://*.kakaocdn.net",
         "https://sharer.kakao.com/picker/link",
+        "https://*.kakao.com",
         process.env.NEXT_PUBLIC_SUPABASE_URL,
       ],
       "frame-src": [
