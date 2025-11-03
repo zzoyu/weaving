@@ -20,14 +20,12 @@ export default async function UILayout({
     <div className="layout flex flex-col !h-full min-h-full max-h-full pt-14 relative">
       {header}
       <div className="w-full h-full overflow-y-auto grow shrink">
-        <div className="mx-auto max-h-20">
+        <div className="mx-auto w-full flex justify-center items-center overflow-hidden" style={{ height: "100px" }}>
           <ins
-            className="adsbygoogle w-full h-full block mx-auto max-w-xl max-h-20"
+            className="adsbygoogle block"
             data-ad-client="ca-pub-8566989289200896"
             data-ad-slot="3734400914"
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-            style={{ display: "block", height: "80px" }}
+            style={{ display: "block", width: "320px", height: "50px" }}
           ></ins>
         </div>
         {children}
