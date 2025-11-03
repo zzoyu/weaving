@@ -58,7 +58,7 @@ export default function SidebarAd({
           )}
           <ins
             className="adsbygoogle block w-full h-[600px] rounded-lg border border-gray-100"
-            style={{ display: isLoading ? "none" : "block" }}
+            style={{ display: "block" }}
             data-ad-client={adClient}
             data-ad-slot={adSlot}
             data-ad-format="auto"
