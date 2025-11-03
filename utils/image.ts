@@ -3,6 +3,8 @@ const ALLOWED_THUMBNAIL_HOSTS = [
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.NEXT_PUBLIC_OCI_READ_URL,
   process.env.NEXT_PUBLIC_BASE_URL,
+  "https://abs.twimg.com",
+  "https://pbs.twimg.com",
 ]
   .filter(Boolean)
   .map((entry) => {

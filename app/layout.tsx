@@ -76,10 +76,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        <script
-          async
+        <Script
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClientId}`}
           crossOrigin="anonymous"
+          strategy="afterInteractive"
         />
       </head>
       <body className={clsx(fontTitle.variable, fontBody.variable)}>
