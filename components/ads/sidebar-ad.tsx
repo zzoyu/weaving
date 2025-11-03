@@ -18,7 +18,7 @@ export default function SidebarAd({
   const adRef = useRef<HTMLDivElement>(null);
   const [isSticky, setIsSticky] = useState(false);
 
-  const { isLoading } = useAdSense(
+  const { isLoading, hasError } = useAdSense(
     {
       adClient,
       adSlot,
@@ -28,19 +28,8 @@ export default function SidebarAd({
     adRef
   );
 
-  if (!isLoading) {
-    return (
-      <div
-        ref={adRef}
-        key={"sidebar-ad-" + position}
-        className={`
-          fixed top-14 z-10 hidden xl:block
-          ${position === "left" ? "left-2" : "right-2"}
-        `}
-        style={{ width: "160px", height: "calc(100vh - 56px)" }}
-        aria-hidden="true"
-      />
-    );
+  if (hasError) {
+    return null;
   }
 
   return (
@@ -69,6 +58,7 @@ export default function SidebarAd({
           )}
           <ins
             className="adsbygoogle block w-full h-[600px] rounded-lg border border-gray-100"
+            style={{ display: isLoading ? "none" : "block" }}
             data-ad-client={adClient}
             data-ad-slot={adSlot}
             data-ad-format="auto"
