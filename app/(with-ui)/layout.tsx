@@ -1,6 +1,7 @@
 import SidebarAd from "@/components/ads/sidebar-ad";
 import { createClient } from "@/utils/supabase/server";
 import { NavigationSignOut } from "./@navigation/components/navigation";
+import HeaderAd from "./components/header-ad";
 
 export default async function UILayout({
   children,
@@ -20,14 +21,7 @@ export default async function UILayout({
     <div className="layout flex flex-col !h-full min-h-full max-h-full pt-14 relative">
       {header}
       <div className="w-full h-full overflow-y-auto grow shrink">
-        <div className="mx-auto w-full flex justify-center items-center overflow-hidden" style={{ height: "100px" }}>
-          <ins
-            className="adsbygoogle block"
-            data-ad-client="ca-pub-8566989289200896"
-            data-ad-slot="3734400914"
-            style={{ display: "block", width: "320px", height: "50px" }}
-          ></ins>
-        </div>
+        <HeaderAd />
         {children}
         <div className="px-2 fixed top-14 left-0  z-10 lg:w-40 h-full hidden lg:block pb-10 overflow-y-clip">
           {/* Left ad (desktop only) */}
