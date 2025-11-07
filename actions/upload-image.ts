@@ -108,7 +108,7 @@ export async function uploadImage(
     return url;
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: fileData, error: fileError } = await supabase.storage
     .from("assets")

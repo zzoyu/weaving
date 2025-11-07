@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 
 export async function isGrantedUserByProfileSlug(slug: string | null) {
   if (!slug) return false;
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const currentUser = await supabase.auth.getUser();
 

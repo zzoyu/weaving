@@ -2,7 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { MetadataRoute } from "next";
 
 async function getSlugs() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.from("profile").select("slug");
   if (error) {
     console.error(error);
@@ -12,7 +12,7 @@ async function getSlugs() {
 }
 
 async function getIdsAndSlugs() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("character")
     .select("id, profile_id, profile:profile_id(slug)");
@@ -38,7 +38,7 @@ async function getIdsAndSlugs() {
 }
 
 async function getBlogArticlesIds() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.from("articles").select("id");
   if (error) {
     console.error(error);

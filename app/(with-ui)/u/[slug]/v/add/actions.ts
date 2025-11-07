@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
 
 export async function createUniverse(formData: FormData) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();

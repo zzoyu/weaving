@@ -65,7 +65,7 @@ export function usePropertyValidation(properties: Property[]) {
           if (!errors[index]) {
             errors[index] = {};
           }
-          errors[index].key = "중복된 키입니다";
+          errors[index].key = "중복된 속성입니다";
         });
       }
     });
@@ -73,15 +73,37 @@ export function usePropertyValidation(properties: Property[]) {
     return errors;
   }, [properties]);
 
-  const hasErrors = Object.keys(validationErrors).length > 0;
+  const lengthError = useMemo(() => {
+    const count = properties.filter(
+      (p) => p.type !== EPropertyType.COLOR
+    ).length;
+    if (count > 25) {
+      return "속성은 최대 25개까지 추가할 수 있습니다";
+    }
+    return null;
+  }, [properties]);
+
+  const hasErrors =
+    Object.keys(validationErrors).length > 0 || lengthError !== null;
 
   const getPropertyError = (index: number, field: "key" | "value") => {
     return validationErrors[index]?.[field];
+  };
+
+  const getLengthError = () => {
+    return lengthError;
   };
 
   return {
     validationErrors,
     hasErrors,
     getPropertyError,
+    getLengthError,
   };
 }
+export type PropertyValidationErrors = {
+  [index: number]: {
+    key?: string;
+    value?: string;
+  };
+};

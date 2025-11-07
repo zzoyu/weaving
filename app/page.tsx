@@ -7,8 +7,9 @@ export default async function Home({
 }: {
   searchParams: { redirect?: string };
 }) {
-  const client = createClient();
-  const { data, error } = await client.auth?.getUser?.();
+  const client = await createClient();
+  const response = await client.auth?.getUser?.();
+  const { data } = response;
 
   // 인증된 사용자이고 리다이렉트 URL이 있는 경우
   if (data?.user?.id && searchParams.redirect) {

@@ -16,7 +16,7 @@ interface NoticePageProps {
 export default async function NoticePage({ searchParams }: NoticePageProps) {
   const currentPage = parseInt(searchParams.page || "1", 10);
   const noticeData = await fetchNoticeList(currentPage, 5);
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
   const profileResponse = await fetchProfileByUserId(data?.user?.id as string);
   const { hasNotifications } = (await fetchHasNotificationsByProfileId(

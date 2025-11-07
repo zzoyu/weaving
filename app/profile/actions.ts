@@ -9,7 +9,7 @@ export async function fetchProfileByUserId(
   if (!user_id) {
     return null;
   }
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data } = await supabase
     .from("profile")
@@ -21,7 +21,7 @@ export async function fetchProfileByUserId(
 }
 
 export async function fetchProfileBySlug(slug: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("profile")
     .select("*")
@@ -35,7 +35,7 @@ export async function updateProfileById(
   id: number,
   updates: Partial<Pick<Profile, "nickname" | "profile_image" | "slug">>
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("profile")
     .update(updates)

@@ -5,7 +5,7 @@ import * as Sentry from "@sentry/nextjs";
 
 export async function createProfile(payload: Profile) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const newProfile: Profile = {
       user_id: payload.user_id,
       nickname: payload.nickname as string,

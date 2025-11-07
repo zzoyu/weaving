@@ -22,7 +22,10 @@ export const createCharacterSchema = (planLimit: PlanLimit) =>
       .max(50, "이름은 50자 이하여야 합니다"),
     description: z.string().max(200, "설명은 200자 이하여야 합니다").optional(),
     profile_slug: z.string(),
-    properties: z.array(propertySchema),
+    properties: z.array(propertySchema).max(
+      planLimit.maxPropertiesPerCharacter + 3, // 색상 값 제외
+      `속성은 최대 ${planLimit.maxPropertiesPerCharacter}개까지 추가할 수 있습니다`
+    ),
     relationships: z
       .array(relationshipSchema)
       .max(

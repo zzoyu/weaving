@@ -16,7 +16,7 @@ export async function fetchNoticeList(
   totalCount: number;
   totalPages: number;
 } | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   // 전체 개수 조회
   const { count } = await supabase
@@ -51,7 +51,7 @@ export async function fetchNoticeItem(id: number): Promise<{
   content: string;
   created_at: string;
 } | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data } = await supabase
     .from("notice")

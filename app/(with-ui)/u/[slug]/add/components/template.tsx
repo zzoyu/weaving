@@ -162,7 +162,7 @@ export default function CharacterAddTemplate({
   useUnsavedChangesWarning(isDirty && !isSubmitted);
 
   // Custom property validation
-  const { validationErrors, hasErrors, getPropertyError } =
+  const { validationErrors, hasErrors, getPropertyError, getLengthError } =
     usePropertyValidation(combinedProperties);
 
   return (
@@ -311,6 +311,7 @@ export default function CharacterAddTemplate({
             }
           }}
           getPropertyError={getPropertyError}
+          getLengthError={getLengthError}
         />
         {/* react-hook-form errors 표시 */}
         {errors.properties && typeof errors.properties.message === "string" && (

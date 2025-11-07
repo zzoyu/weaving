@@ -56,7 +56,7 @@ export default async function CharacterPage({
 
   const relationships = await fetchRelationships(Number(id));
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const currentUser = await supabase.auth.getUser();
 

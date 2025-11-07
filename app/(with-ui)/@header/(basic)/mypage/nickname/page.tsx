@@ -7,7 +7,7 @@ import Link from "next/link";
 export default async function Header({}) {
   return (
     <header
-      className="fixed top-0 flex w-full items-center justify-between py-4 px-2 lg:px-8 bg-transparent"
+      className="fixed top-0 flex w-full items-center justify-between py-4 px-2 lg:px-8 bg-transparent h-14"
       key={randomUUID()}
     >
       <Link href="./">

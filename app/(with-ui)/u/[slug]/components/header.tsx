@@ -6,7 +6,7 @@ import Link from "next/link";
 import ProfileBadge from "../../../@header/components/profile-badge";
 
 export async function Header() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
 
   const profile = await fetchProfileByUserId(data?.user?.id as string);

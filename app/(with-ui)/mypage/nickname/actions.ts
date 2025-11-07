@@ -16,7 +16,7 @@ export async function handleUpdateNickname(formData: FormData) {
 export async function updateMyProfileNickname(
   nickname: string
 ): Promise<{ success: boolean; nickname?: string; lastChangedAt?: Date }> {
-  const supabase = createClient();
+  const supabase = await createClient();
   const id = (await supabase.auth.getUser()).data.user?.id;
   if (!id) {
     throw new Error("User not found");

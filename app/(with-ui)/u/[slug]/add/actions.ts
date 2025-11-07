@@ -17,7 +17,7 @@ export async function createCharacter(
   properties: Property[]
 ) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
     const profile_id = Number(formData.get("profile_id") as string);
@@ -177,7 +177,7 @@ export async function updateCharacter(
   });
 
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const name = formData.get("name") as string;
     const description = formData.get("description") as string;
     const profile_id = Number(formData.get("profile_id") as string);

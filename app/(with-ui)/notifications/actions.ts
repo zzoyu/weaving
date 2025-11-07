@@ -5,7 +5,7 @@ export async function fetchFriendRequestsByProfileId(id?: number) {
   if (!id) {
     throw new Error("id is required");
   }
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: friendRequests, error } = await supabase
     .from("profile_friend")
@@ -13,7 +13,6 @@ export async function fetchFriendRequestsByProfileId(id?: number) {
     .eq("to_profile_id", id)
     .is("is_approved", null)
     .order("id", { ascending: false });
-
 
   if (error) {
     throw error;
@@ -26,7 +25,7 @@ export async function fetchHasNotificationsByProfileId(
   profileId?: number
 ): Promise<{ hasNotifications: boolean }> {
   if (!profileId) return { hasNotifications: false };
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: notifications, error: notificationsError } = await supabase
     .from("notification")
@@ -45,7 +44,7 @@ export async function fetchNotificationsByProfileId(
   profileId?: number
 ): Promise<{ notifications: Notification[] }> {
   if (!profileId) return { notifications: [] };
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: notifications, error: notificationsError } = await supabase
     .from("notification")

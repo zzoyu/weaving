@@ -8,7 +8,7 @@ import { uploadImage } from "./upload-image";
 
 export async function changeProfileImage(slug: string, payload: FormData) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const newImage = payload.get("profile_image") as File;
     if (slug && newImage?.size > 0) {
       try {
@@ -45,6 +45,10 @@ export async function changeProfileImage(slug: string, payload: FormData) {
     return { success: true };
   } catch (err) {
     Sentry.captureException(err);
-    return { success: false, message: err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다." };
+    return {
+      success: false,
+      message:
+        err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다.",
+    };
   }
 }

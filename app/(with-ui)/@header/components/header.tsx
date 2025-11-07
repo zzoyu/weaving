@@ -13,7 +13,7 @@ import Logo from "./logo";
 import ProfileBadge from "./profile-badge";
 
 export default async function Header() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
 
   const profile = await fetchProfileByUserId(data?.user?.id as string);

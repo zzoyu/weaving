@@ -26,7 +26,7 @@ export default async function Header({
 }: {
   params: { slug: string; id: string };
 }) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
 
   const profile = await fetchProfileByUserId(data?.user?.id as string);
@@ -38,7 +38,7 @@ export default async function Header({
 
   return (
     <header
-      className="fixed top-0 flex w-full items-center justify-between py-4 px-2 lg:px-8 bg-transparent"
+      className="fixed top-0 flex w-full items-center justify-between py-4 px-2 lg:px-8 bg-transparent h-14"
       key={params.id}
     >
       <Link href="./">

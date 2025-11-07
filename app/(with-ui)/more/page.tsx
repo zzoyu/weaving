@@ -10,7 +10,7 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: currentUser } = await supabase.auth.getUser();
 
   const myProfile = currentUser?.user?.id

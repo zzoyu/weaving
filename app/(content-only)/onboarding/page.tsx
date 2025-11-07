@@ -5,7 +5,7 @@ import { fetchRandomNicknameAndSlug } from "./actions";
 import Onboarding from "./components/onboarding";
 
 export default async function OnboardingPage() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: userData } = await supabase.auth.getUser();
   if (!userData?.user?.id) {
     redirect("/signin");

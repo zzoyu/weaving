@@ -14,7 +14,7 @@ export default async function UILayout({
   navigation: React.ReactNode;
   params: { slug: string; id: string };
 }>) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
   const userId = data?.user?.id;
   return (

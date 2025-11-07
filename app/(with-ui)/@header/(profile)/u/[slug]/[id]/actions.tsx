@@ -9,7 +9,7 @@ export async function setCharacterPassword(formData: FormData): Promise<void> {
   if (!password) throw new Error("Password is required");
   if (!characterId) throw new Error("Character ID is required");
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase
     .from("character")
     .update({ password })
@@ -28,7 +28,7 @@ export async function clearCharacterPassword(
   const characterId = formData.get("character_id") as string;
   if (!characterId) throw new Error("Character ID is required");
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { error } = await supabase
     .from("character")
@@ -44,7 +44,7 @@ export async function clearCharacterPassword(
 
 export async function deleteCharacterById(id: number) {
   if (!id) throw new Error("Character ID is required");
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("character")

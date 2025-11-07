@@ -10,7 +10,7 @@ export default async function EditPage({
 }: {
   params: { slug: string; id: number };
 }) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const currentUser = await supabase.auth.getUser();
   if (!currentUser?.data?.user) {
     redirect("/");

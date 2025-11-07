@@ -12,7 +12,7 @@ const faker = new Faker({
 });
 
 export async function createSurveyResponse(choices: string[]) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: userData } = await supabase.auth.getUser();
   if (!userData) {
@@ -57,7 +57,7 @@ export async function fetchRandomNicknameAndSlug(metadata: TwitterMetadata) {
   const slug = `${adjectiveEn}-${colorEn}-`; // + suffix
   const slugCandidates = candidates.map((candidate) => `${slug}${candidate}`);
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: existingSlugs } = await supabase
     .from("profiles")
     .select("slug")

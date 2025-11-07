@@ -6,7 +6,7 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
 export async function fetchProfileBySlug(slug: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = (await supabase
     .from("profile")
     .select()
@@ -18,7 +18,7 @@ export async function fetchProfileBySlug(slug: string) {
 
 export async function fetchProfileById(id?: number) {
   if (!id) return null;
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = (await supabase
     .from("profile")
     .select()
@@ -38,7 +38,7 @@ export async function fetchProfilesByIds(ids: number[]): Promise<{
   if (!ids || ids.length === 0) {
     return { requestedProfiles: [], error: null };
   }
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("profile")
     .select("nickname, profile_image, id, slug")
@@ -52,7 +52,7 @@ export async function fetchProfilesByIds(ids: number[]): Promise<{
 }
 
 export async function fetchCharactersByProfileId(profileId: number) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = (await supabase
     .from("character")
     .select()
@@ -70,7 +70,7 @@ export async function fetchCharactersByProfileId(profileId: number) {
 export async function fetchCharactersFromFriendsByProfileId(
   profileId: number
 ): Promise<Character[]> {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("profile_friend")
     .select("to_profile_id,from_profile_id")
@@ -110,7 +110,7 @@ export async function requestFriendByProfileId(
   }
 ) {
   const { landing_url, content } = payload;
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data, error } = await supabase.from("profile_friend").upsert(
     [
@@ -146,7 +146,7 @@ export async function requestFriendByProfileId(
 }
 
 export async function removeFriendByProfileId(from: number, to: number) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const orFilter = `and(from_profile_id.eq.${from},to_profile_id.eq.${to}),and(from_profile_id.eq.${to},to_profile_id.eq.${from})`;
   const { data, error } = await supabase
@@ -164,7 +164,7 @@ export async function removeFriendByProfileId(from: number, to: number) {
 }
 
 export async function fetchExactFriendById(from: number, to: number) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("profile_friend")
     .select("*")
@@ -181,7 +181,7 @@ export async function fetchExactFriendById(from: number, to: number) {
 
 export async function fetchIsFriendByIds(id1?: number, id2?: number) {
   if (!id1 || !id2) return false;
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("profile_friend")
     .select()
@@ -196,7 +196,7 @@ export async function fetchIsFriendByIds(id1?: number, id2?: number) {
 }
 
 export async function updateFriendAccepted(from: number, to: number) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("profile_friend")
     .update({ is_approved: true })
@@ -229,7 +229,7 @@ export async function updateFriendAccepted(from: number, to: number) {
 }
 
 export async function deleteFriend(from: number, to: number) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const orFilter = `and(from_profile_id.eq.${from},to_profile_id.eq.${to}),and(from_profile_id.eq.${to},to_profile_id.eq.${from})`;
   const { data, error } = await supabase
@@ -252,7 +252,7 @@ export async function fetchFavoriteCharactersByProfileId(
   if (!profileId) {
     return [];
   }
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("character_favorite")
     .select("character_id")
@@ -270,7 +270,7 @@ export async function addFavoriteCharacter(
   profile_id: number,
   character_id: number
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.from("character_favorite").insert([
     {
       profile_id,
@@ -287,7 +287,7 @@ export async function removeFavoriteCharacter(
   profile_id: number,
   character_id: number
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("character_favorite")
     .delete()

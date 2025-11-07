@@ -57,7 +57,7 @@ export default async function UniversePage({
     console.error("Error fetching characters:", charactersError);
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const currentUser = await supabase.auth.getUser();
   const profile = await fetchProfileBySlug(slug);
 

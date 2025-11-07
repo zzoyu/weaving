@@ -7,7 +7,7 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function fetchCharacter(id: number): Promise<Character | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("character")
     .select()
@@ -23,7 +23,7 @@ export async function fetchCharacter(id: number): Promise<Character | null> {
 export async function fetchRelationships(
   id: number
 ): Promise<Relationship[] | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("relationship")
     .select(
@@ -44,7 +44,7 @@ export async function fetchRelationships(
 export async function fetchRelationshipsWithDepth(
   id: number
 ): Promise<RelationshipNode[] | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.rpc("relationship_with_depth", {
     start_id: id,
     max_depth: 3,
@@ -65,7 +65,7 @@ export async function fetchRelationshipsWithDepth(
 export async function fetchRelationshipsWithDepthExtended(
   id: number
 ): Promise<RelationshipNode[] | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.rpc(
     "relationship_with_depth_extended",
     {
@@ -93,7 +93,7 @@ export async function createBulkRelationships(
     name: string;
   }[]
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.from("relationship").insert(
     relationships.map((relationship) => ({
       from_id,
@@ -113,7 +113,7 @@ export async function createRelationship(
   to_id: number,
   name: string
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.from("relationship").insert({
     from_id,
     to_id,
@@ -127,7 +127,7 @@ export async function createRelationship(
 }
 
 export async function updateRelationship(id: number, name: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("relationship")
     .update({
@@ -143,7 +143,7 @@ export async function updateRelationship(id: number, name: string) {
 }
 
 export async function deleteRelationship(id: number) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("relationship")
     .delete()
@@ -160,7 +160,7 @@ export async function fetchIsFavoriteById(
   character_id?: number
 ): Promise<boolean> {
   if (!profile_id || !character_id) return false;
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("character_favorite")
     .select()
@@ -180,7 +180,7 @@ export async function updateCharacterPassword(
   character_id: number,
   password: string
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("character")
     .update({ password })
@@ -199,7 +199,7 @@ export async function compareCharacterPassword(
   if (!password) {
     return false;
   }
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("character")
     .select()
@@ -220,7 +220,7 @@ export async function updateBulkRelationships(
     name: string;
   }[]
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   // 트랜잭션 시작
   const { error: deleteError } = await supabase

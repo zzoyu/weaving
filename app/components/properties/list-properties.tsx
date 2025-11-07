@@ -19,10 +19,14 @@ export default function ListProperties({
   properties,
   handler,
   errors,
+  disabled,
 }: {
   properties: Property[];
   handler: (properties: Property[]) => void;
-  errors?: Merge<FieldError, FieldErrorsImpl<Property[]>>;
+  errors?: Merge<FieldError, FieldErrorsImpl<Property[]>>[] & {
+    lengthError?: { message: string };
+  };
+  disabled?: boolean;
 }) {
   const [localProperties, setLocalProperties] =
     useState<Property[]>(properties);
@@ -74,6 +78,7 @@ export default function ListProperties({
             <SortableContext
               items={localProperties.map((p) => `property-${p.uuid}`)}
               strategy={verticalListSortingStrategy}
+              disabled={disabled}
             >
               {localProperties.map((property, index) => (
                 <motion.div
@@ -128,7 +133,11 @@ export default function ListProperties({
                   />
                 </motion.div>
               ))}
+              {errors?.lengthError && (
+                <p className="text-red-500">{errors.lengthError.message}</p>
+              )}
               <ButtonAddProperty
+                disabled={errors?.lengthError != null}
                 clickHandler={() => {
                   setLocalProperties([
                     ...localProperties,
@@ -149,10 +158,16 @@ export default function ListProperties({
   );
 }
 
-function ButtonAddProperty({ clickHandler }: { clickHandler: () => void }) {
+function ButtonAddProperty({
+  clickHandler,
+  disabled = false,
+}: {
+  clickHandler: () => void;
+  disabled?: boolean;
+}) {
   return (
     <div className="flex justify-center p-2">
-      <button type="button" onClick={clickHandler}>
+      <button type="button" onClick={clickHandler} disabled={disabled}>
         <AddIcon
           className="text-primary-200 text-background-dark"
           width={28}
@@ -193,8 +208,7 @@ function SortableItem({
     <div
       ref={ref}
       className={cn(
-        isDragging ? "mb-4 relative h-20 opacity-40" : "mb-2 relative",
-        "pointer-events-none lg:pointer-events-auto"
+        isDragging ? "mb-4 relative h-20 opacity-40" : "mb-2 relative"
       )}
     >
       {isDragging === false ? (

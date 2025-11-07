@@ -10,7 +10,7 @@ export default async function NewCharacterPage({
   params: { slug: string };
 }) {
   // if not logged in, redirect to login page.
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: user, error } = await supabase.auth.getUser();
 

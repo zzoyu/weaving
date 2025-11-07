@@ -9,6 +9,7 @@ export interface PlanLimit {
   maxImagesPerCharacter: number;
   maxRelationshipsPerCharacter: number;
   maxCharactersInUniverse: number;
+  maxPropertiesPerCharacter: number;
 }
 
 export interface Plan {

@@ -58,7 +58,7 @@ export default async function PublicProfilePage({
     throw error;
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   let myProfile: Profile | null = null;
   const currentUser = await supabase.auth.getUser();

@@ -16,7 +16,7 @@ export default async function UniversePage({
     throw new Error("프로필을 찾을 수 없습니다.");
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

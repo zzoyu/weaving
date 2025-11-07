@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 export async function fetchCharactersByProfileId(
   profileId: number
 ): Promise<Character[]> {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase
     .from("character")
     .select("*")

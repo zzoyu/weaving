@@ -11,7 +11,7 @@ export default async function EditPage({
 }: {
   params: { slug: string; id: string };
 }) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const isGranted = await isGrantedUserByProfileSlug(params.slug);
   if (!isGranted) {
     redirect("/");
@@ -37,7 +37,7 @@ export default async function EditPage({
         plan={plan}
         onSubmit={async (data: Universe) => {
           "use server";
-          const supabase = createClient();
+          const supabase = await createClient();
 
           // 이미지가 변경되었는지 확인 (URL이 blob:으로 시작하는 경우)
           let image = data.image;

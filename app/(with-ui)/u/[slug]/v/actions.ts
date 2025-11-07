@@ -9,7 +9,7 @@ export async function addFavoriteUniverse(
   profileId: number,
   universeId: number
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase
     .from("favorite_universes")
     .insert({ profile_id: profileId, universe_id: universeId });
@@ -21,7 +21,7 @@ export async function removeFavoriteUniverse(
   profileId: number,
   universeId: number
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase
     .from("favorite_universes")
     .delete()
@@ -31,7 +31,7 @@ export async function removeFavoriteUniverse(
 }
 
 export async function fetchFavoriteUniverses(profileId: number) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("favorite_universes")
     .select("universe_id")
@@ -41,7 +41,7 @@ export async function fetchFavoriteUniverses(profileId: number) {
 }
 
 export async function fetchUniversesByProfileId(profileId: number) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("universes")
     .select("*")
@@ -51,7 +51,7 @@ export async function fetchUniversesByProfileId(profileId: number) {
 }
 
 export async function fetchUniverseById(id: number): Promise<Universe | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("universes")
     .select("*")
@@ -67,7 +67,7 @@ export async function fetchUniverseById(id: number): Promise<Universe | null> {
 }
 
 export async function deleteUniverseById(universeId: number) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase
     .from("universes")
     .delete()
@@ -80,7 +80,7 @@ export async function updateUniverseById(
   universeId: number,
   data: Partial<Universe>
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase
     .from("universes")
     .update(data)
@@ -100,14 +100,14 @@ export async function createUniverse(
       message: "사용 가능한 세계관 생성 슬롯이 부족합니다.",
     };
   }
-  const supabase = createClient();
+  const supabase = await createClient();
   const { error } = await supabase.from("universes").insert(data);
   if (error) throw error;
   return { success: true, message: "세계관이 생성되었습니다." };
 }
 
 export async function fetchCharacterUniversesByUniverseId(universeId: number) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("universes_characters")
     .select("*")
@@ -124,7 +124,7 @@ export async function fetchCharacterUniversesByUniverseId(universeId: number) {
 export async function fetchCharactersByUniverseId(
   universeId: number
 ): Promise<{ characters: CharacterWithProfile[]; error: any }> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   // 1. 먼저 universe_id로 universes_characters 테이블에서 character_id 목록을 가져옴
   const { data: characterUniverses, error: cuError } = await supabase

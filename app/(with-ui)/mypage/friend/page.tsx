@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { fetchFriendsByProfileId, fetchProfilesByIds } from "../actions";
 
 export default async function FriendPage() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const user = await supabase.auth.getUser();
   const profile = await fetchProfileByUserId(user?.data?.user?.id as string);
 

@@ -11,7 +11,7 @@ interface PageProps {
 }
 
 export default async function ThemeColorPage({ params }: PageProps) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: currentUser } = await supabase.auth.getUser();
 
   if (!currentUser?.user?.id) {

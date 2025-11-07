@@ -6,7 +6,7 @@ import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 
 export async function Header() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data } = await supabase.auth.getUser();
 
   const profile = await fetchProfileByUserId(data?.user?.id as string);

@@ -3,7 +3,7 @@ import { createClient } from "@/utils/supabase/server";
 import { fetchProfileById } from "../(with-ui)/u/[slug]/actions";
 
 export async function fetchPlanById(id: number): Promise<Plan | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("plan")
@@ -22,7 +22,7 @@ export async function fetchPlanById(id: number): Promise<Plan | null> {
 export async function fetchPlanByProfileId(
   profileId: number
 ): Promise<Plan | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const profile = await fetchProfileById(profileId);
   return await fetchPlanById(profile?.data?.plan_id as number);
@@ -32,7 +32,7 @@ export async function fetchCurrentPlanUsage(
   profileId: number,
   tables: string[] = ["character", "universe"]
 ): Promise<{ characterCount?: number; universeCount?: number } | null> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   for (const table of tables) {
     if (table === "character") {
