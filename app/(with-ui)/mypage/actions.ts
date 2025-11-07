@@ -40,7 +40,7 @@ export async function fetchFriendsByProfileId(id?: number) {
   if (!id) {
     throw new Error("Profile ID is required");
   }
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const { data, error } = await supabase
     .from("profile_friend")
     .select("to_profile_id,from_profile_id")
@@ -55,7 +55,7 @@ export async function fetchFriendsByProfileId(id?: number) {
 }
 
 export async function fetchProfilesByIds(ids: number[]) {
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const { data, error } = await supabase
     .from("profile")
     .select("*")
@@ -69,7 +69,7 @@ export async function fetchProfilesByIds(ids: number[]) {
 }
 
 export async function fetchMyProfileNickname() {
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
