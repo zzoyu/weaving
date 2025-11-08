@@ -19,14 +19,14 @@ export function usePropertyValidation(properties: Property[]) {
       if (property.type !== EPropertyType.COLOR) {
         if (!property.key || property.key.trim().length === 0) {
           if (property.value && property.value.trim().length > 0) {
-            propertyErrors.key = "키는 필수입니다";
+            propertyErrors.key = "필수 입력값입니다";
           }
         } else {
           if (property.key.length > 50) {
-            propertyErrors.key = "키는 50자 이하여야 합니다";
+            propertyErrors.key = "50자 이하여야 합니다";
           }
           if (property.key.trim().length === 0) {
-            propertyErrors.key = "키는 공백만 입력할 수 없습니다";
+            propertyErrors.key = "공백만 입력할 수 없습니다";
           }
         }
       }

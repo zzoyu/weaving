@@ -3,7 +3,6 @@
 import UploadImage from "@/app/(with-ui)/u/[slug]/v/add/components/upload-image/upload-image";
 import { ButtonAddCharacter } from "@/app/components/button-add-character";
 import InputHashtag from "@/app/components/input-hashtag";
-import ListProperties from "@/app/components/properties/list-properties";
 import OverlayLoading from "@/components/overlay-loading";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -16,8 +15,14 @@ import {
 import { Plan } from "@/types/plan";
 import { Universe } from "@/types/universe";
 import { getPublicUrl } from "@/utils/image";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CircleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import ListPropertiesWithUniverseValidation from "./list-properties-with-universe-validation";
+import { UniverseFormData, universeFormSchema } from "./universe-form-schema";
+import { useUniversePropertyValidation } from "./use-universe-property-validation";
 
 interface UniverseFormProps {
   mode: "create" | "edit";
@@ -70,6 +75,7 @@ export default function UniverseForm({
   const { toast } = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
   const [hashtags, setHashtags] = useState<string>(
     mode === "edit" ? universe?.hashtags || "" : ""
   );
@@ -90,6 +96,24 @@ export default function UniverseForm({
       : []
   );
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isDirty },
+    setValue,
+    trigger,
+  } = useForm<UniverseFormData>({
+    resolver: zodResolver(universeFormSchema(plan)),
+    mode: "onChange",
+    defaultValues: {
+      name: mode === "edit" ? universe?.name || "" : "",
+      description: mode === "edit" ? universe?.description || "" : "",
+      properties: listProperties,
+      characterUniverses: characterUniverses,
+      hashtags: hashtags.trim(),
+    },
+  });
+
   const previewHashtags = useMemo(() => {
     if (!hashtags) return [];
     return hashtags
@@ -97,6 +121,10 @@ export default function UniverseForm({
       .split(" ")
       .map((tag) => tag.trim());
   }, [hashtags]);
+
+  // Custom property validation
+  const { validationErrors, hasErrors, getPropertyError } =
+    useUniversePropertyValidation(listProperties);
 
   const handleAddCharacter = (
     characterIds: {
@@ -106,103 +134,115 @@ export default function UniverseForm({
     setCharacterUniverses(() => [...characterIds]);
   };
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      const form = event.currentTarget;
-
-      if (mode === "create") {
-        // 새로 생성하는 경우 FormData 사용
-        const formData = new FormData();
-
-        // 기본 필드 추가
-        if (profileId) {
-          formData.append("profile_id", profileId.toString());
-        }
-        const nameInput = form.querySelector(
-          'input[name="name"]'
-        ) as HTMLInputElement;
-        const descriptionInput = form.querySelector(
-          'input[name="description"]'
-        ) as HTMLInputElement;
-        formData.append("name", nameInput?.value || "");
-        formData.append("description", descriptionInput?.value || "");
-
-        // 이미지 관련 필드는 UploadImage 컴포넌트에서 자동으로 추가됨
-        const imageFile = form["universe-image"] as HTMLInputElement;
-        const thumbnailFile = form["universe-thumbnail"] as HTMLInputElement;
-
-        if (imageFile?.files?.[0]) {
-          formData.append("universe-image", imageFile.files[0]);
-        }
-        if (thumbnailFile?.files?.[0]) {
-          formData.append("universe-thumbnail", thumbnailFile.files[0]);
-        }
-
-        // JSON 데이터 추가
-        formData.append("list_properties", JSON.stringify(listProperties));
-        formData.append(
-          "universes_characters",
-          JSON.stringify(characterUniverses)
-        );
-        formData.append("hashtags", hashtags);
-
-        await onSubmit(formData);
-      } else {
-        // 수정하는 경우 객체 데이터 사용
-        const formData = {
-          ...universe,
-          name:
-            (form.querySelector('input[name="name"]') as HTMLInputElement)
-              ?.value || "",
-          description:
-            (
-              form.querySelector(
-                'input[name="description"]'
-              ) as HTMLInputElement
-            )?.value || "",
-          properties: listProperties,
-          hashtags: hashtags,
-          characterUniverses: characterUniverses,
-        };
-
-        await onSubmit(formData);
-      }
-
-      toast({
-        description:
-          mode === "create"
-            ? "세계관이 저장되었습니다."
-            : "세계관이 수정되었습니다.",
-      });
-
-      if (mode === "create" && slug) {
-        router.push(`/u/${slug}/v`);
-        router.refresh();
-      }
-    } catch (error) {
-      console.error("Error submitting universe:", error);
-      toast({
-        description:
-          error instanceof Error ? error.message : "잠시 후 다시 시도해주세요.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
-
   useEffect(() => {
     if (mode === "create") {
       window.scrollTo(0, 0);
     }
+    setIsInitialized(true);
   }, [mode]);
+
+  // properties가 바뀔 때마다 react-hook-form에 값 할당 (validation용)
+  useEffect(() => {
+    setValue("properties", listProperties);
+    if (isInitialized) {
+      trigger("properties");
+    }
+  }, [listProperties, setValue, trigger, isInitialized]);
+
+  // characterUniverses가 바뀔 때마다 react-hook-form에 값 할당 (validation용)
+  useEffect(() => {
+    setValue("characterUniverses", characterUniverses);
+    if (isInitialized) {
+      trigger("characterUniverses");
+    }
+  }, [characterUniverses, setValue, trigger, isInitialized]);
+
+  // hashtags가 바뀔 때마다 react-hook-form에 값 할당 (validation용)
+  useEffect(() => {
+    setValue("hashtags", hashtags);
+    if (isInitialized) {
+      trigger("hashtags");
+    }
+  }, [hashtags, setValue, trigger, isInitialized]);
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(async (data) => {
+        setIsSubmitting(true);
+
+        try {
+          if (mode === "create") {
+            // 새로 생성하는 경우 FormData 사용
+            const formData = new FormData();
+
+            // 기본 필드 추가
+            if (profileId) {
+              formData.append("profile_id", profileId.toString());
+            }
+            formData.append("name", data.name);
+            formData.append("description", data.description || "");
+
+            // 이미지 관련 필드는 UploadImage 컴포넌트에서 자동으로 추가됨
+            const form = document.querySelector("form") as HTMLFormElement;
+            const imageFile = form["universe-image"] as HTMLInputElement;
+            const thumbnailFile = form[
+              "universe-thumbnail"
+            ] as HTMLInputElement;
+
+            if (imageFile?.files?.[0]) {
+              formData.append("universe-image", imageFile.files[0]);
+            }
+            if (thumbnailFile?.files?.[0]) {
+              formData.append("universe-thumbnail", thumbnailFile.files[0]);
+            }
+
+            // JSON 데이터 추가
+            formData.append("list_properties", JSON.stringify(data.properties));
+            formData.append(
+              "universes_characters",
+              JSON.stringify(data.characterUniverses)
+            );
+            formData.append("hashtags", data.hashtags);
+
+            await onSubmit(formData);
+          } else {
+            // 수정하는 경우 객체 데이터 사용
+            const formData = {
+              ...universe,
+              name: data.name,
+              description: data.description || "",
+              properties: data.properties,
+              hashtags: data.hashtags,
+              characterUniverses: data.characterUniverses,
+            };
+
+            await onSubmit(formData);
+          }
+
+          toast({
+            description:
+              mode === "create"
+                ? "세계관이 저장되었습니다."
+                : "세계관이 수정되었습니다.",
+          });
+
+          if (mode === "create" && slug) {
+            router.push(`/u/${slug}/v`);
+            router.refresh();
+          }
+        } catch (error) {
+          console.error("Error submitting universe:", error);
+          toast({
+            description:
+              error instanceof Error
+                ? error.message
+                : "잠시 후 다시 시도해주세요.",
+            variant: "destructive",
+          });
+        } finally {
+          setIsSubmitting(false);
+        }
+      })}
       className="flex flex-col gap-4 items-center w-full lg:max-w-md p-4"
     >
       <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
@@ -218,36 +258,71 @@ export default function UniverseForm({
 
       <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
         <input
-          className={`text-2xl w-full max-w-72 text-center border-primary focus:outline-none ${
+          className={`text-2xl w-full max-w-72 text-center focus:outline-none ${
+            errors.name ? "border-red-500" : "border-primary"
+          } ${
             mode === "create"
               ? "placeholder:text-gray-400 placeholder:text-base"
               : ""
           }`}
           type="text"
-          name="name"
+          {...register("name")}
           placeholder="이름"
-          defaultValue={mode === "edit" ? universe?.name : ""}
-          required
         />
+        {errors.name && (
+          <span className="text-red-500 text-sm flex items-center gap-1">
+            <CircleAlert className="text-red-500 w-4 h-4" />
+            {errors.name.message}
+          </span>
+        )}
         <input
           type="text"
-          name="description"
-          className={`text-xl w-full max-w-72 text-center border-primary focus:outline-none mb-4 ${
+          {...register("description")}
+          className={`text-xl w-full max-w-72 text-center focus:outline-none mb-4 ${
+            errors.description ? "border-red-500" : "border-primary"
+          } ${
             mode === "create"
               ? "placeholder:text-gray-400 placeholder:text-sm"
               : ""
           }`}
           placeholder="세계관에 대한 설명"
-          defaultValue={mode === "edit" ? universe?.description || "" : ""}
         />
+        {errors.description && (
+          <span className="text-red-500 text-sm flex items-center gap-1">
+            <CircleAlert className="text-red-500 w-4 h-4" />
+            {errors.description.message}
+          </span>
+        )}
       </div>
 
       <div className="w-full px-4">
         <h2 className="text-xl font-bold mb-2">속성</h2>
-        <ListProperties
+        <ListPropertiesWithUniverseValidation
           properties={listProperties}
-          handler={setListProperties}
+          handler={(newValue: Property[]) => {
+            if (!newValue) return;
+            setListProperties(newValue);
+            // 즉시 validation 실행
+            if (isInitialized) {
+              setTimeout(() => trigger("properties"), 100);
+            }
+          }}
+          getPropertyError={getPropertyError}
         />
+        {/* react-hook-form errors 표시 */}
+        {errors.properties && typeof errors.properties.message === "string" && (
+          <span className="text-red-500 text-sm flex items-center gap-1 justify-center mt-2">
+            <CircleAlert className="w-4 h-4" />
+            {errors.properties.message}
+          </span>
+        )}
+        {/* Custom validation errors 표시 */}
+        {hasErrors && (
+          <span className="text-red-500 text-sm flex items-center gap-1 justify-center mt-2">
+            <CircleAlert className="w-4 h-4" />
+            입력값을 확인해 주세요
+          </span>
+        )}
       </div>
 
       <div className="w-full px-4">
@@ -293,11 +368,18 @@ export default function UniverseForm({
             onAdd={handleAddCharacter}
             maxSelectableCharacters={plan.limit.maxCharactersInUniverse}
           />
+          {errors.characterUniverses && (
+            <span className="text-red-500 text-sm flex items-center gap-1 justify-center mt-2">
+              <CircleAlert className="w-4 h-4" />
+              {errors.characterUniverses.message}
+            </span>
+          )}
         </div>
       </div>
 
       <div className="w-full px-4">
         <InputHashtag
+          error={errors.hashtags}
           value={currentHashtag}
           hashtags={previewHashtags}
           onChange={(newValue: string) => {
@@ -317,6 +399,18 @@ export default function UniverseForm({
           }}
         />
       </div>
+
+      <input
+        type="hidden"
+        {...register("properties")}
+        value={JSON.stringify(listProperties)}
+      />
+      <input
+        type="hidden"
+        {...register("characterUniverses")}
+        value={JSON.stringify(characterUniverses)}
+      />
+      <input type="hidden" {...register("hashtags")} value={hashtags} />
 
       <button
         type="submit"

@@ -1,6 +1,5 @@
 import { Property } from "@/types/character";
-import { PlanLimit } from "@/types/plan";
-import { Relationship } from "@/types/relationship";
+import { Plan } from "@/types/plan";
 import { z } from "zod";
 
 enum EPropertyType {
@@ -12,31 +11,27 @@ enum EPropertyType {
 const propertySchema = z.object({
   key: z
     .string()
-    .min(1, "필수입니다")
+    .min(1, "필수 입력입니다")
     .max(50, "50자 이하여야 합니다")
     .refine((value) => value.trim().length > 0, "공백만 입력할 수 없습니다"),
   value: z.string().max(1500, "최대 1500자 이하여야 합니다"),
   type: z.nativeEnum(EPropertyType),
 });
 
-const relationshipSchema = z.object({
-  to_id: z.number(),
-  name: z.string().min(1, "관계 이름은 필수입니다"),
+const characterUniverseSchema = z.object({
+  character_id: z.number(),
 });
 
-export const updateCharacterSchema = (planLimit: PlanLimit) =>
+export const universeFormSchema = (plan: Plan) =>
   z.object({
     name: z
       .string()
-      .min(1, "이름은 필수입니다")
-      .max(20, "이름은 20자 이하여야 합니다"),
-    description: z.string().max(30, "설명은 30자 이하여야 합니다").optional(),
+      .min(1, "세계관 이름은 필수입니다")
+      .max(50, "세계관 이름은 50자 이하여야 합니다"),
+    description: z.string().max(200, "설명은 200자 이하여야 합니다").optional(),
     properties: z
       .array(propertySchema)
-      .refine((value) => {
-        const filtered = value.filter((i) => i.type !== EPropertyType.COLOR);
-        return filtered.length <= 25;
-      }, "속성은 최대 25개까지 추가할 수 있습니다")
+      .max(25, "속성은 최대 25개까지 추가할 수 있습니다")
       .refine((value) => {
         // 중복 키 체크 (빈 키는 제외)
         const keys = value
@@ -57,23 +52,23 @@ export const updateCharacterSchema = (planLimit: PlanLimit) =>
         );
         return !hasInvalidProperty;
       }, "키가 비어있는 속성은 값도 비워야 합니다"),
-    relationships: z
-      .array(relationshipSchema)
+    characterUniverses: z
+      .array(characterUniverseSchema)
       .max(
-        planLimit.maxRelationshipsPerCharacter,
-        `관계는 최대 ${planLimit.maxRelationshipsPerCharacter}개까지 추가할 수 있습니다`
+        plan.limit.maxCharactersInUniverse,
+        `최대 ${plan.limit.maxCharactersInUniverse}개의 캐릭터만 추가할 수 있습니다`
       ),
     hashtags: z.string().refine((value) => {
       if (!value) return true;
-      const tags = value.split(" ");
+      const tags = value.trim().split(" ");
       return tags.length <= 20;
     }, "해시태그는 최대 20개까지 추가할 수 있습니다"),
   });
 
-export type UpdateCharacterFormData = {
+export type UniverseFormData = {
   name: string;
   description?: string;
   properties: Property[];
-  relationships: Relationship[];
-  hashtags?: string;
+  characterUniverses: { character_id: number }[];
+  hashtags: string;
 };

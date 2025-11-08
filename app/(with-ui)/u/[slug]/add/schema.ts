@@ -6,12 +6,9 @@ import { z } from "zod";
 const propertySchema = z.object({
   key: z
     .string()
-    .min(1, "키는 필수입니다")
-    .max(50, "키는 50자 이하여야 합니다")
-    .refine(
-      (value) => value.trim().length > 0,
-      "키는 공백만 입력할 수 없습니다"
-    ),
+    .min(1, "필수 입력값입니다")
+    .max(50, "50자 이하여야 합니다")
+    .refine((value) => value.trim().length > 0, "공백만 입력할 수 없습니다"),
   value: z.string().max(1500, "최대 1500자 이하여야 합니다"),
   type: z.nativeEnum(EPropertyType),
 });

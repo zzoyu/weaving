@@ -27,7 +27,6 @@ export default function ProfileEditForm({ profile }: { profile: Profile }) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setIsSubmitting(true);
     setIsSubmitting(false);
     setIsEditing(false);
   }

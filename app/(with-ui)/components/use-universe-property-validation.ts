@@ -7,7 +7,7 @@ enum EPropertyType {
   DATE = "date",
 }
 
-export function usePropertyValidation(properties: Property[]) {
+export function useUniversePropertyValidation(properties: Property[]) {
   const validationErrors = useMemo(() => {
     const errors: { [index: number]: { key?: string; value?: string } } = {};
 
