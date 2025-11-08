@@ -381,6 +381,7 @@ export default function CharacterEditTemplate({
             editable
             profileId={character.profile_id}
             error={errors?.relationships}
+            character={character}
           />
           <InputHashtag
             error={errors.hashtags}

@@ -25,13 +25,13 @@ export default async function Page({ params }: PageProps) {
       icon: "🎨",
     },
     {
-      title: "추가 기능 1",
-      description: "곧 추가될 기능입니다",
-      href: "feature-1",
-      icon: "✨",
+      title: "랜덤 캐릭터 생성기",
+      description: "하나하나 적은 100% 수제 데이터베이스",
+      href: "random-character",
+      icon: "🎰",
     },
     {
-      title: "추가 기능 2",
+      title: "추가 기능 준비 중",
       description: "곧 추가될 기능입니다",
       href: "feature-2",
       icon: "🌟",
