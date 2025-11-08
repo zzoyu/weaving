@@ -1,5 +1,6 @@
 import { isGrantedUserByProfileSlug } from "@/actions/is-granted-user";
 import { fetchPlanByProfileId } from "@/app/actions/plan";
+import { fetchCharactersByProfileId } from "@/app/character/actions";
 import { Universe } from "@/types/universe";
 import { createClient } from "@/utils/supabase/server";
 import { notFound, redirect } from "next/navigation";
@@ -22,7 +23,17 @@ export default async function EditPage({
     notFound();
   }
 
+  const charactersOfProfile = await fetchCharactersByProfileId(
+    universe.profile_id
+  );
   const { characters } = await fetchCharactersByUniverseId(Number(params.id));
+  console.log(
+    "characters:",
+    characters,
+    params.id,
+    universe,
+    charactersOfProfile
+  );
 
   const plan = await fetchPlanByProfileId(universe.profile_id);
   if (!plan) {
@@ -33,9 +44,12 @@ export default async function EditPage({
     <main className="flex flex-col justify-center items-center pt-10 w-full lg:max-w-[40rem] mx-auto gap-10">
       <EditUniverse
         universe={universe}
-        characters={characters}
+        initialCharacters={characters}
+        characters={charactersOfProfile}
         plan={plan}
-        onSubmit={async (data: Universe) => {
+        onSubmit={async (
+          data: Universe & { characterUniverses?: { character_id: number }[] }
+        ) => {
           "use server";
           const supabase = await createClient();
 
@@ -60,6 +74,29 @@ export default async function EditPage({
 
           if (error) {
             throw new Error("세계관 수정 중 오류가 발생했습니다.");
+          }
+
+          // 기존 캐릭터-세계관 관계 삭제
+          await supabase
+            .from("universes_characters")
+            .delete()
+            .eq("universe_id", universe.id);
+
+          // 새로운 캐릭터-세계관 관계 생성
+          const characterUniverses = data.characterUniverses || [];
+          if (characterUniverses.length > 0) {
+            const { error: relationError } = await supabase
+              .from("universes_characters")
+              .insert(
+                characterUniverses.map((cu) => ({
+                  character_id: cu.character_id,
+                  universe_id: universe.id,
+                }))
+              );
+
+            if (relationError) {
+              throw new Error("캐릭터-세계관 관계 생성에 실패했습니다.");
+            }
           }
 
           redirect(`/u/${params.slug}/v/${params.id}`);

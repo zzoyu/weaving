@@ -155,7 +155,7 @@ export function ProfileCard({
         <div className="text-gray-700 w-full px-10">
           {otherProperties?.map?.((property: Property, index) => (
             <CharacterProfileField
-              key={`property-${index}`}
+              key={`property-${index}-${property.key}`}
               property={property}
             />
           ))}

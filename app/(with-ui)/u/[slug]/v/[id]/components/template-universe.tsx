@@ -62,7 +62,7 @@ export default function TemplateUniverse({
             <div className="w-full flex flex-col gap-3 mt-2">
               {universe.properties.map((property, idx) => (
                 <CharacterProfileField
-                  key={`property-${idx}`}
+                  key={`property-${idx}-${property.key}`}
                   property={property}
                 />
               ))}

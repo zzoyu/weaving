@@ -25,6 +25,7 @@ interface UniverseFormProps {
   characters: Character[] | CharacterWithProfile[];
   plan: Plan;
   slug?: string;
+  initialCharacters?: CharacterWithProfile[];
   profileId?: number;
   onSubmit: (data: any) => Promise<void>;
 }
@@ -59,6 +60,7 @@ const defaultProperties: Property[] = [
 export default function UniverseForm({
   mode,
   universe,
+  initialCharacters,
   characters,
   plan,
   slug,
@@ -73,11 +75,16 @@ export default function UniverseForm({
   );
   const [currentHashtag, setCurrentHashtag] = useState<string>("");
   const [listProperties, setListProperties] = useState<Property[]>(
-    mode === "edit" ? universe?.properties || [] : defaultProperties
+    mode === "edit"
+      ? universe?.properties?.map((p) => ({
+          ...p,
+          uuid: crypto.randomUUID(),
+        })) || []
+      : defaultProperties
   );
   const [characterUniverses, setCharacterUniverses] = useState<
     { character_id: number }[]
-  >(mode === "edit" ? characters.map((c) => ({ character_id: c.id })) : []);
+  >(mode === "edit" && initialCharacters ? initialCharacters.map((c) => ({ character_id: c.id })) : []);
 
   const previewHashtags = useMemo(() => {
     if (!hashtags) return [];

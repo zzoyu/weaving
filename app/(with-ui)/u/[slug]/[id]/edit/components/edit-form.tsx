@@ -39,8 +39,7 @@ export default function CharacterEditTemplate({
   planLimit: PlanLimit;
 }) {
   const [properties, setProperties] = useState<Property[]>(
-    character?.properties.map((p) => ({ ...p, uuid: crypto.randomUUID() })) ||
-      [...baseProperties].map((p) => ({ ...p, uuid: crypto.randomUUID() }))
+    character?.properties.map((p) => ({ ...p, uuid: crypto.randomUUID() }))
   );
   const [hashtags, setHashtags] = useState<string>(
     character.hashtags?.length || 0 > 0 ? character.hashtags + " " : ""

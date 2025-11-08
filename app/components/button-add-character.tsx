@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Character } from "@/types/character";
@@ -80,7 +80,9 @@ export function ButtonAddCharacter({
           <div className="flex flex-col h-full">
             <div className="p-4 border-b">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold">캐릭터 추가</h2>
+                <DialogTitle className="text-xl font-semibold">
+                  캐릭터 추가
+                </DialogTitle>
               </div>
               <Input
                 placeholder="캐릭터 검색"
