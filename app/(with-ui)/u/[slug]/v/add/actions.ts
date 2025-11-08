@@ -43,32 +43,32 @@ export async function createUniverse(formData: FormData) {
       Sentry.captureException(err);
       return { success: false, message: "이름은 필수입니다." };
     }
-    if (!image) {
-      const err = new Error("이미지는 필수입니다.");
-      Sentry.captureException(err);
-      return { success: false, message: "이미지는 필수입니다." };
-    }
-    if (!thumbnail) {
+    if (image && !thumbnail) {
       const err = new Error("썸네일은 필수입니다.");
       Sentry.captureException(err);
       return { success: false, message: "썸네일은 필수입니다." };
     }
 
-    // 이미지 업로드
-    const imageUrl = await uploadImage(
-      image,
-      `${profileId}_${Math.floor(Math.random() * 10000).toString()}`,
-      ImagePath.UNIVERSE,
-      true
-    );
+    let imageUrl = "";
+    let thumbnailUrl = "";
 
-    const thumbnailUrl = await uploadImage(
-      thumbnail,
-      `${profileId}_${Math.floor(Math.random() * 10000).toString()}`,
-      ImagePath.UNIVERSE_THUMBNAIL,
-      true,
-      false
-    );
+    if (image && thumbnail) {
+      // 이미지 업로드
+      imageUrl = await uploadImage(
+        image,
+        `${profileId}_${Math.floor(Math.random() * 10000).toString()}`,
+        ImagePath.UNIVERSE,
+        true
+      );
+
+      thumbnailUrl = await uploadImage(
+        thumbnail,
+        `${profileId}_${Math.floor(Math.random() * 10000).toString()}`,
+        ImagePath.UNIVERSE_THUMBNAIL,
+        true,
+        false
+      );
+    }
 
     // 세계관 생성
     const { data: universe, error: universeError } = await supabase

@@ -26,22 +26,24 @@ export default function TemplateUniverse({
   return (
     <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-8 pb-20">
       {/* 상단 이미지 */}
-      <div className="h-48 relative flex items-center justify-center mt-8 mb-2 w-full">
-        {universe.image && universe.image.length > 0 ? (
-          <Image
-            unoptimized
-            src={getPublicUrl(universe.image[0]) || ""}
-            alt={universe.name}
-            fill
-            className="object-contain"
-            priority
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50">
-            <ImageIcon className="w-16 h-16 text-muted-foreground" />
-          </div>
-        )}
-      </div>
+      {universe?.image?.[0] && (
+        <div className="h-48 relative flex items-center justify-center mt-8 mb-2 w-full">
+          {universe.image && universe.image.length > 0 ? (
+            <Image
+              unoptimized
+              src={getPublicUrl(universe.image[0]) || ""}
+              alt={universe.name}
+              fill
+              className="object-contain"
+              priority
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center rounded-xl border border-gray-200 bg-gray-50">
+              <ImageIcon className="w-16 h-16 text-muted-foreground" />
+            </div>
+          )}
+        </div>
+      )}
 
       {/* 이름, 설명, 수정/관계도 버튼 */}
       <div className="w-full flex flex-col items-center gap-2">

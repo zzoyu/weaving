@@ -25,7 +25,10 @@ export default function ListUniverseItem({
         <div className="w-full aspect-[16/9] relative">
           <Image
             unoptimized
-            src={getPublicUrl(universe.thumbnail || universe?.image?.[0] || "")}
+            src={
+              getPublicUrl(universe.thumbnail || universe?.image?.[0]) ||
+              `/assets/images/og/with-logo.jpg`
+            }
             alt={universe.name}
             fill
             className="object-cover rounded-md"
