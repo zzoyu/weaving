@@ -84,7 +84,11 @@ export default function UniverseForm({
   );
   const [characterUniverses, setCharacterUniverses] = useState<
     { character_id: number }[]
-  >(mode === "edit" && initialCharacters ? initialCharacters.map((c) => ({ character_id: c.id })) : []);
+  >(
+    mode === "edit" && initialCharacters
+      ? initialCharacters.map((c) => ({ character_id: c.id }))
+      : []
+  );
 
   const previewHashtags = useMemo(() => {
     if (!hashtags) return [];
