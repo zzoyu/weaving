@@ -23,6 +23,9 @@ export default function Page2({
   const { toast } = useToast();
   const router = useRouter();
 
+  const url =
+    process.env.NEXT_PUBLIC_BASE_URL + "/more/random-character/" + uuid;
+
   return (
     <div className="flex flex-col items-center justify-center w-full">
       <h1 className="text-2xl font-bold mb-8 text-center">캐릭터 생성 결과</h1>
@@ -66,12 +69,10 @@ export default function Page2({
                 resultCommon.resultFullText +
                 "\n" +
                 resultAdditional.resultText,
+              REGI_WEB_DOMAIN: url,
+              PATH: url,
             }}
-            targetPath={
-              process.env.NEXT_PUBLIC_BASE_URL +
-              "/more/random-character/" +
-              uuid
-            }
+            targetPath={url}
             templateId={Number(
               process.env.NEXT_PUBLIC_KAKAO_MESSAGE_TEMPLATE_ID_RANDOM_CHARACTER
             )}
