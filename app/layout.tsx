@@ -1,6 +1,7 @@
 import { AlertToaster } from "@/components/interactions/alert-toaster";
 import { Toaster } from "@/components/ui/toaster";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
+import * as Sentry from "@sentry/nextjs";
 import clsx from "clsx";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
@@ -62,6 +63,16 @@ export const metadata: Metadata = {
     "google-adsense-account": "ca-pub-8566989289200896",
   },
 };
+
+// Add or edit your "generateMetadata" to include the Sentry trace data:
+export function generateMetadata(): Metadata {
+  return {
+    // ... your existing metadata
+    other: {
+      ...Sentry.getTraceData(),
+    },
+  };
+}
 
 export default function RootLayout({
   children,
