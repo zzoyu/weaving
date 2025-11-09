@@ -32,43 +32,36 @@ const fontBody = localFont({
   variable: "--font-pretendard",
 });
 
-export const metadata: Metadata = {
-  title: "위빙",
-  description: "우리의 세계가 만나는 곳",
-  applicationName: "위빙",
-  openGraph: {
-    type: "website",
-    title: "위빙",
-    siteName: "위빙",
-    description: "우리의 세계가 만나는 곳",
-    images: [
-      {
-        url: `${baseUrl}/assets/images/og/with-logo.jpg`,
-        width: 1200,
-        height: 630,
-        alt: "위빙 - 우리의 세계가 만나는 곳",
-      },
-    ],
-    locale: "ko_KR",
-  },
-
-  creator: "파인딩벤자민",
-  authors: [{ name: "파인딩벤자민" }],
-  keywords: ["위빙", "weaving", "창작자", "콘텐츠 공유"],
-  robots: {
-    index: true,
-    follow: true,
-  },
-  other: {
-    "google-adsense-account": "ca-pub-8566989289200896",
-  },
-};
-
 // Add or edit your "generateMetadata" to include the Sentry trace data:
 export function generateMetadata(): Metadata {
   return {
-    // ... your existing metadata
+    title: "위빙",
+    description: "우리의 세계가 만나는 곳",
+    applicationName: "위빙",
+    openGraph: {
+      type: "website",
+      title: "위빙",
+      siteName: "위빙",
+      description: "우리의 세계가 만나는 곳",
+      images: [
+        {
+          url: `${baseUrl}/assets/images/og/with-logo.jpg`,
+          width: 1200,
+          height: 630,
+          alt: "위빙 - 우리의 세계가 만나는 곳",
+        },
+      ],
+      locale: "ko_KR",
+    },
+    creator: "파인딩벤자민",
+    authors: [{ name: "파인딩벤자민" }],
+    keywords: ["위빙", "weaving", "창작자", "콘텐츠 공유"],
+    robots: {
+      index: true,
+      follow: true,
+    },
     other: {
+      "google-adsense-account": "ca-pub-8566989289200896",
       ...Sentry.getTraceData(),
     },
   };
