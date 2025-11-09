@@ -99,28 +99,41 @@ export default function Page2({
           </DialogShareButton>
         </div>
 
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button
-              className="w-full bg-primary text-text-black hover:bg-primary/90"
-              size="lg"
-              type="button"
-            >
-              다시 생성하기 ({count}/5)
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                오늘 생성 가능 횟수를 전부 소진했어요!
-              </AlertDialogTitle>
-              <AlertDialogDescription>내일 다시 만나요.</AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel type="button">닫기</AlertDialogCancel>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        {count === 0 ? (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                className="w-full bg-primary text-text-black hover:bg-primary/90"
+                size="lg"
+                type="button"
+              >
+                다시 생성하기 ({count}/5)
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  오늘 생성 가능 횟수를 전부 소진했어요!
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  내일 다시 만나요.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel type="button">닫기</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        ) : (
+          <Button
+            className="w-full bg-primary text-text-black hover:bg-primary/90"
+            size="lg"
+            type="button"
+            onClick={() => router.back()}
+          >
+            다시 생성하기 ({count}/5)
+          </Button>
+        )}
       </div>
     </div>
   );
