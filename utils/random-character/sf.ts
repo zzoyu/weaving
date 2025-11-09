@@ -138,7 +138,7 @@ function getRandomParameters() {
 }
 
 export function GenerateSciFiResult() {
-  const { world, ratio, affiliation_sf, goal } = getRandomParameters();
+  const { world, ratio, affiliation_sf, role, goal } = getRandomParameters();
   return {
     resultText: `${world}에서, 신체의 ${ratio}를 기계로 대체한 그는 ${affiliation_sf} 소속의 ${role}로 살아가고 있습니다. 여러 가지 큰 사건을 겪은 그는 오직 ${goal} 만을 인생의 목표로 삼게 됩니다.`,
     resultParameters: {
