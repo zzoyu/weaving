@@ -1,9 +1,8 @@
 "use client";
 
 import { Character } from "@/types/character";
-import { colorHexMap, colorNameMap } from "@/types/color";
+import { colorHexMap } from "@/types/color";
 import Image from "next/image";
-import { useState } from "react";
 import {
   Bar,
   BarChart,
@@ -13,28 +12,11 @@ import {
   YAxis,
 } from "recharts";
 
-interface ChartData {
-  name: string;
-  value: number;
-}
-
-interface LabelProps {
-  name: string;
-  percent: number;
-  cx: number;
-  cy: number;
-  midAngle: number;
-  innerRadius: number;
-  outerRadius: number;
-}
-
 interface ThemeColorChartProps {
   characters: Character[];
 }
 
 export default function ThemeColorChart({ characters }: ThemeColorChartProps) {
-  const [labelVisible, setLabelVisible] = useState(false);
-
   // themeColor가 falsy하지 않은 값만 필터링
   const filteredCharacters = characters.filter((char) => {
     const themeColorProp = char.properties.find(
@@ -83,85 +65,6 @@ export default function ThemeColorChart({ characters }: ThemeColorChartProps) {
       </h1>
     );
   }
-
-  const renderCustomizedLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-    name,
-  }: any) => {
-    const RADIAN = Math.PI / 180;
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.55;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    // 박스 크기 및 위치 (더 작게)
-    const boxWidth = 60;
-    const boxHeight = 40;
-    const boxX = x - boxWidth / 2;
-    const boxY = y - boxHeight / 2;
-    const color = colorHexMap[name] || "#e5e7eb";
-
-    return (
-      <g
-        style={{
-          opacity: labelVisible ? 1 : 0,
-          transform: labelVisible ? "scale(1)" : "scale(0.95)",
-          transition:
-            "opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1)",
-        }}
-      >
-        <rect
-          x={boxX}
-          y={boxY}
-          width={boxWidth}
-          height={boxHeight}
-          rx={10}
-          fill={
-            typeof window !== "undefined" &&
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? "#18181b"
-              : "rgba(255,255,255,0.96)"
-          }
-          style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.13))" }}
-        />
-        <text
-          x={x}
-          y={y - 4}
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fontSize={13}
-          fill="#333"
-          style={{
-            pointerEvents: "none",
-            fontFamily: "inherit",
-            letterSpacing: 0.2,
-          }}
-        >
-          {colorNameMap[name] || name}
-        </text>
-        <text
-          x={x}
-          y={y + 10}
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fontSize={11}
-          fill="#888"
-          style={{
-            pointerEvents: "none",
-            fontFamily: "inherit",
-            letterSpacing: 0.2,
-          }}
-        >
-          {`${(percent * 100).toFixed(0)}%`}
-        </text>
-      </g>
-    );
-  };
 
   const mainColor = Object.keys(colorCounts).sort(
     (a, b) => colorCounts[b] - colorCounts[a]
@@ -237,7 +140,6 @@ export default function ThemeColorChart({ characters }: ThemeColorChartProps) {
                   <LabelList
                     dataKey={key}
                     position="center"
-                    content={renderCustomizedLabel}
                     formatter={(value: number) => {
                       if (!value || totalValue === 0) return "";
                       const percent = Math.round((value / totalValue) * 100);
