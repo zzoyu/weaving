@@ -41,6 +41,7 @@ export default function ListPropertiesItem({
   isDragging = false,
   listeners,
   attributes,
+  dragHandleRef,
   handleMove,
 }: {
   property: Property;
@@ -52,6 +53,7 @@ export default function ListPropertiesItem({
   isDragging?: boolean;
   listeners?: DraggableSyntheticListeners;
   attributes?: DraggableAttributes;
+  dragHandleRef?: (element: Element | null) => void;
   handleMove: (amount: number) => void;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -92,6 +94,7 @@ export default function ListPropertiesItem({
         <div className="w-full flex gap-2 items-center relative px-4">
           <button
             type="button"
+            ref={dragHandleRef}
             {...(listeners || {})}
             className="flex-shrink-0"
             aria-label="drag-handle"
@@ -126,6 +129,7 @@ export default function ListPropertiesItem({
       <div className="w-full flex gap-4 items-center relative">
         <button
           type="button"
+          ref={dragHandleRef}
           className="p-2 absolute left-0 h-full items-center justify-center lg:flex hidden pointer-events-none lg:pointer-events-auto"
           aria-label="drag-handle"
           {...(listeners || {})}

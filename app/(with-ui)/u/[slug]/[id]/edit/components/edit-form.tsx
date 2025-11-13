@@ -22,10 +22,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { updateCharacter } from "../../../add/actions";
 import { ButtonAddRelationship } from "../../../add/components/button-add-relationship";
+import ListPropertiesWithValidation from "../../../add/components/list-properties-with-validation";
 import UploadImage from "../../../add/components/upload-image/upload-image";
-import { usePropertyValidation } from "../hooks/use-property-validation";
+import { usePropertyValidation } from "../../../add/hooks/use-property-validation";
 import { updateCharacterSchema } from "../schema";
-import ListPropertiesWithValidation from "./list-properties-with-validation";
 
 // 간단한 ID 생성 함수
 const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -213,7 +213,7 @@ export default function CharacterEditTemplate({
   useUnsavedChangesWarning(isDirty && !isSubmitted);
 
   // Custom property validation
-  const { validationErrors, hasErrors, getPropertyError } =
+  const { validationErrors, hasErrors, getPropertyError, getLengthError } =
     usePropertyValidation(combinedProperties);
 
   return (
@@ -381,6 +381,7 @@ export default function CharacterEditTemplate({
               }
             }}
             getPropertyError={getPropertyError}
+            getLengthError={getLengthError}
           />
           {/* react-hook-form errors 표시 */}
           {errors.properties &&
