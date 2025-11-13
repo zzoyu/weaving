@@ -406,12 +406,14 @@ export default function CharacterEditTemplate({
             editable
           />
         </div>
-        <StatsProperties
-          properties={stats}
-          handler={(newValue) => {
-            setStats(newValue);
-          }}
-        />
+        {planLimit.availableFeatures.includes("character.stats") && (
+          <StatsProperties
+            properties={stats}
+            handler={(newValue) => {
+              setStats(newValue);
+            }}
+          />
+        )}
         <ButtonAddRelationship
           relationships={relationshipsState}
           onChange={setRelationships}
