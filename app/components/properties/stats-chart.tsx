@@ -4,6 +4,7 @@ import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 
 interface StatsChartProps {
   data: {
+    id: string;
     name: string;
     value: number;
     fullMark: number;
@@ -22,7 +23,24 @@ export default function StatsChart({ data }: StatsChartProps) {
         data={data}
       >
         <PolarGrid />
-        <PolarAngleAxis dataKey="name" />
+        <PolarAngleAxis
+          dataKey="id"
+          tick={(props) => {
+            const item = data.find((d) => d.id === props.payload.value);
+            return (
+              <text
+                x={props.x}
+                y={props.y}
+                textAnchor={props.textAnchor}
+                dominantBaseline="central"
+                className="text-xs fill-current"
+              >
+                {item?.name || props.payload.value}
+              </text>
+            );
+          }}
+        />
+
         <Radar
           dataKey="value"
           name="Stats"
