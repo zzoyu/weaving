@@ -1,4 +1,7 @@
-export type PlanFeature = "character.lock";
+export type PlanFeature =
+  | "character.lock"
+  | "character.custom-color"
+  | "character.stats";
 // 필요한 다른 feature들 추가
 
 export interface PlanLimit {

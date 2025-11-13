@@ -237,6 +237,7 @@ export default function ThemeColorChart({ characters }: ThemeColorChartProps) {
                   <LabelList
                     dataKey={key}
                     position="center"
+                    content={renderCustomizedLabel}
                     formatter={(value: number) => {
                       if (!value || totalValue === 0) return "";
                       const percent = Math.round((value / totalValue) * 100);

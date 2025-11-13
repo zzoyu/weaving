@@ -95,13 +95,16 @@ export function ProfileCard({
   isMine?: boolean;
 }) {
   const [isOpenRelationshipGraph, setIsOpenRelationshipGraph] = useState(false);
-  const ColorProperties = character.properties?.filter((property) =>
-    ["themeColor", "eyeColor", "hairColor"].includes(property.key)
-  );
-  const otherProperties = character.properties?.filter(
-    (property) =>
-      !["themeColor", "eyeColor", "hairColor"].includes(property.key)
-  );
+  const ColorProperties =
+    character.properties?.filter((property) =>
+      ["themeColor", "eyeColor", "hairColor"].includes(property.key)
+    ) || [];
+  const otherProperties =
+    character.properties?.filter(
+      (property) =>
+        !["themeColor", "eyeColor", "hairColor"].includes(property.key) &&
+        property.type !== "stat"
+    ) || [];
   return (
     <div className="flex flex-col items-center gap-4 w-full">
       {isOpenRelationshipGraph && (

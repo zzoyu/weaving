@@ -15,6 +15,9 @@ import { useEffect, useState } from "react";
 import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 import ListPropertiesItem, { SmallPreview } from "./list-properties-item";
 
+// 간단한 ID 생성 함수
+const generateId = () => Math.random().toString(36).substr(2, 9);
+
 export default function ListProperties({
   properties,
   handler,
@@ -145,7 +148,7 @@ export default function ListProperties({
                       key: "",
                       value: "",
                       type: EPropertyType.STRING,
-                      uuid: crypto.randomUUID(),
+                      uuid: generateId(),
                     },
                   ]);
                 }}

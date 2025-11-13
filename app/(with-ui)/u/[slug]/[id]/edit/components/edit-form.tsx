@@ -2,6 +2,7 @@
 
 import InputHashtag from "@/app/components/input-hashtag";
 import { ColorProperties } from "@/app/components/properties/color-properties";
+import StatsProperties from "@/app/components/properties/stats-properties";
 import OverlayLoading from "@/components/overlay-loading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
@@ -9,7 +10,7 @@ import { useUnsavedChangesWarning } from "@/hooks/use-unsaved-changes-warning";
 import { baseProperties } from "@/lib/base-properties";
 import IconFull from "@/public/assets/icons/image/full.svg";
 import IconHalf from "@/public/assets/icons/image/half.svg";
-import { Character, Property } from "@/types/character";
+import { Character, EPropertyType, Property } from "@/types/character";
 import { PlanLimit } from "@/types/plan";
 import { Relationship } from "@/types/relationship";
 import { getPublicUrl } from "@/utils/image";
@@ -17,15 +18,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 import { CircleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { updateCharacter } from "../../../add/actions";
 import { ButtonAddRelationship } from "../../../add/components/button-add-relationship";
 import UploadImage from "../../../add/components/upload-image/upload-image";
-import Loading from "../../loading";
 import { usePropertyValidation } from "../hooks/use-property-validation";
 import { updateCharacterSchema } from "../schema";
 import ListPropertiesWithValidation from "./list-properties-with-validation";
+
+// 간단한 ID 생성 함수
+const generateId = () => Math.random().toString(36).substr(2, 9);
 
 export default function CharacterEditTemplate({
   character,
@@ -38,8 +41,13 @@ export default function CharacterEditTemplate({
   relationships?: Relationship[];
   planLimit: PlanLimit;
 }) {
+  const propertiesWithoutStats =
+    character?.properties?.filter(
+      (property) => property.type !== EPropertyType.STAT
+    ) || [];
+
   const [properties, setProperties] = useState<Property[]>(
-    character?.properties.map((p) => ({ ...p, uuid: crypto.randomUUID() }))
+    propertiesWithoutStats.map((p) => ({ ...p, uuid: generateId() }))
   );
   const [hashtags, setHashtags] = useState<string>(
     character.hashtags?.length || 0 > 0 ? character.hashtags + " " : ""
@@ -54,15 +62,43 @@ export default function CharacterEditTemplate({
   }, [hashtags]);
 
   const [currentColors, setCurrentColors] = useState<Property[]>(colors);
-  const combinedProperties = useMemo(() => {
+  const initialStats =
+    character?.properties
+      ?.filter((p) => p.type === EPropertyType.STAT)
+      .map((stat) => ({
+        name: stat.key,
+        value: parseInt(stat.value) || 0,
+        fullMark: 10,
+      })) || [];
+
+  const [stats, setStats] = useState([
+    ...initialStats,
+    ...Array.from({ length: 6 - initialStats.length }, () => ({
+      name: "",
+      value: 0,
+      fullMark: 10,
+    })),
+  ]);
+
+  const combinedProperties = useMemo<Property[]>(() => {
     const colorProperties = currentColors.map((color) => ({
       key: color.key,
       value: color.value,
       type: color.type,
     }));
 
-    return [...properties, ...colorProperties];
-  }, [properties, currentColors]);
+    return [
+      ...properties,
+      ...colorProperties,
+      ...stats
+        .filter((stat) => stat.name.trim?.() !== "")
+        .map((stat) => ({
+          key: stat.name,
+          value: stat.value?.toString() ?? "0",
+          type: EPropertyType.STAT,
+        })),
+    ];
+  }, [properties, currentColors, stats]);
 
   const [relationshipsState, setRelationships] = useState<Relationship[]>(
     relationships || []
@@ -182,252 +218,251 @@ export default function CharacterEditTemplate({
 
   return (
     <main className="flex flex-col justify-start items-center pt-2 lg:pt-10 w-full lg:max-w-[40rem] mx-auto h-full pb-10 min-h-fit">
-      <Suspense fallback={<Loading />}>
-        <form
-          className="flex flex-col gap-2 items-center w-full lg:max-w-md p-4"
-          onSubmit={handleSubmit(async (data) => {
-            setIsLoading(true);
-            setIsSubmitted(true);
-            try {
-              const formData = new FormData();
-              Object.entries(data).forEach(([key, value]) => {
-                if (value instanceof File) {
-                  formData.append(key, value);
-                } else if (typeof value === "string") {
-                  formData.append(key, value);
-                } else if (Array.isArray(value)) {
-                  formData.append(key, JSON.stringify(value));
-                }
+      <form
+        className="flex flex-col gap-2 items-center w-full lg:max-w-md p-4"
+        onSubmit={handleSubmit(async (data) => {
+          setIsLoading(true);
+          setIsSubmitted(true);
+          try {
+            const formData = new FormData();
+            Object.entries(data).forEach(([key, value]) => {
+              if (value instanceof File) {
+                formData.append(key, value);
+              } else if (typeof value === "string") {
+                formData.append(key, value);
+              } else if (Array.isArray(value)) {
+                formData.append(key, JSON.stringify(value));
+              }
+            });
+
+            // Add character info to FormData
+            formData.append("profile_id", character.profile_id.toString());
+            formData.append("character_id", character.id.toString());
+
+            // Add original image info
+            formData.append("original_image[]", character.image?.[0] || "");
+            formData.append("original_image[]", character.image?.[1] || "");
+            formData.append("original_thumbnail", character.thumbnail || "");
+
+            // Add image files from UploadImage component
+            const halfImageInput = document.querySelector(
+              'input[name="half-image"]'
+            ) as HTMLInputElement;
+            const fullImageInput = document.querySelector(
+              'input[name="full-image"]'
+            ) as HTMLInputElement;
+            const halfThumbnailInput = document.querySelector(
+              'input[name="half-thumbnail"]'
+            ) as HTMLInputElement;
+
+            if (halfImageInput?.files?.[0]) {
+              formData.append("half-image", halfImageInput.files[0]);
+            }
+            if (fullImageInput?.files?.[0]) {
+              formData.append("full-image", fullImageInput.files[0]);
+            }
+            if (halfThumbnailInput?.files?.[0]) {
+              formData.append("half-thumbnail", halfThumbnailInput.files[0]);
+            }
+
+            console.log("🎯 클라이언트에서 updateCharacter 호출 시작");
+            console.log("📋 FormData 내용:", Array.from(formData.entries()));
+            console.log("🔧 Properties:", combinedProperties);
+
+            const result = await updateCharacter(formData, combinedProperties);
+
+            console.log("📤 updateCharacter 결과:", result);
+
+            if (result) {
+              toast({
+                description: "캐릭터가 수정되었습니다.",
+                variant: "default",
               });
-
-              // Add character info to FormData
-              formData.append("profile_id", character.profile_id.toString());
-              formData.append("character_id", character.id.toString());
-
-              // Add original image info
-              formData.append("original_image[]", character.image?.[0] || "");
-              formData.append("original_image[]", character.image?.[1] || "");
-              formData.append("original_thumbnail", character.thumbnail || "");
-
-              // Add image files from UploadImage component
-              const halfImageInput = document.querySelector(
-                'input[name="half-image"]'
-              ) as HTMLInputElement;
-              const fullImageInput = document.querySelector(
-                'input[name="full-image"]'
-              ) as HTMLInputElement;
-              const halfThumbnailInput = document.querySelector(
-                'input[name="half-thumbnail"]'
-              ) as HTMLInputElement;
-
-              if (halfImageInput?.files?.[0]) {
-                formData.append("half-image", halfImageInput.files[0]);
-              }
-              if (fullImageInput?.files?.[0]) {
-                formData.append("full-image", fullImageInput.files[0]);
-              }
-              if (halfThumbnailInput?.files?.[0]) {
-                formData.append("half-thumbnail", halfThumbnailInput.files[0]);
-              }
-
-              console.log("🎯 클라이언트에서 updateCharacter 호출 시작");
-              console.log("📋 FormData 내용:", Array.from(formData.entries()));
-              console.log("🔧 Properties:", combinedProperties);
-
-              const result = await updateCharacter(
-                formData,
-                combinedProperties
-              );
-
-              console.log("📤 updateCharacter 결과:", result);
-
-              if (result) {
-                toast({
-                  description: "캐릭터가 수정되었습니다.",
-                  variant: "default",
-                });
-                router.push(`./`);
-              } else {
-                setIsSubmitted(false);
-                toast({
-                  description: "캐릭터 수정에 실패했습니다.",
-                  variant: "destructive",
-                });
-              }
-            } catch (err) {
+              router.push(`./`);
+            } else {
               setIsSubmitted(false);
               toast({
-                description:
-                  err instanceof Error
-                    ? err.message
-                    : "캐릭터 수정에 실패했습니다.",
+                description: "캐릭터 수정에 실패했습니다.",
                 variant: "destructive",
               });
-            } finally {
-              setIsLoading(false);
             }
-          })}
+          } catch (err) {
+            setIsSubmitted(false);
+            toast({
+              description:
+                err instanceof Error
+                  ? err.message
+                  : "캐릭터 수정에 실패했습니다.",
+              variant: "destructive",
+            });
+          } finally {
+            setIsLoading(false);
+          }
+        })}
+      >
+        <input type="hidden" name="profile_id" value={character.profile_id} />
+        <input type="hidden" name="character_id" value={character.id} />
+
+        <Tabs
+          defaultValue="half"
+          className="w-full flex flex-col justify-center items-center"
         >
-          <input type="hidden" name="profile_id" value={character.profile_id} />
-          <input type="hidden" name="character_id" value={character.id} />
-
-          <Tabs
-            defaultValue="half"
-            className="w-full flex flex-col justify-center items-center"
+          <TabsList>
+            <TabsTrigger value="half">상반신*</TabsTrigger>
+            <TabsTrigger value="full">전신</TabsTrigger>
+          </TabsList>
+          <TabsContent
+            value="half"
+            forceMount
+            className="hidden data-[state=active]:block"
           >
-            <TabsList>
-              <TabsTrigger value="half">상반신*</TabsTrigger>
-              <TabsTrigger value="full">전신</TabsTrigger>
-            </TabsList>
-            <TabsContent
-              value="half"
-              forceMount
-              className="hidden data-[state=active]:block"
-            >
-              <UploadImage
-                name={"half"}
-                isEdit
-                useThumbnail
-                icon={<IconHalf className="w-32 h-32" />}
-                imageUrl={currentHalfImage}
-                thumbnailUrl={currentThumbnail}
-              />
-            </TabsContent>
-            <TabsContent
-              value="full"
-              forceMount
-              className="hidden data-[state=active]:block"
-            >
-              <UploadImage
-                name={"full"}
-                isEdit
-                icon={<IconFull className="w-32 h-32" />}
-                imageUrl={currentFullImage}
-              />
-            </TabsContent>
-          </Tabs>
-          <div className="flex flex-col gap-2 w-full justify-center items-center mt-6 mb-4">
-            <input
-              className={clsx(
-                errors.name ? variants.input.error : variants.input.default
-              )}
-              type="text"
-              {...register("name")}
-              placeholder="이름"
+            <UploadImage
+              name={"half"}
+              isEdit
+              useThumbnail
+              icon={<IconHalf className="w-32 h-32" />}
+              imageUrl={currentHalfImage}
+              thumbnailUrl={currentThumbnail}
             />
-            {errors.name && (
-              <span className="text-red-500 text-sm flex items-center gap-1">
-                <CircleAlert className="text-red-500 w-4 h-4" />
-                {errors.name.message}
-              </span>
-            )}
-            <input
-              type="text"
-              {...register("description")}
-              className={clsx(
-                errors.description
-                  ? variants.input.error
-                  : variants.input.default
-              )}
-              placeholder="캐릭터의 한 마디"
+          </TabsContent>
+          <TabsContent
+            value="full"
+            forceMount
+            className="hidden data-[state=active]:block"
+          >
+            <UploadImage
+              name={"full"}
+              isEdit
+              icon={<IconFull className="w-32 h-32" />}
+              imageUrl={currentFullImage}
             />
-            {errors.description && (
-              <span className="text-red-500 text-sm flex items-center gap-1">
-                <CircleAlert className="inline w-4 h-4" />
-                {errors.description.message}
-              </span>
+          </TabsContent>
+        </Tabs>
+        <div className="flex flex-col gap-2 w-full justify-center items-center mt-6 mb-4">
+          <input
+            className={clsx(
+              errors.name ? variants.input.error : variants.input.default
             )}
-          </div>
+            type="text"
+            {...register("name")}
+            placeholder="이름"
+          />
+          {errors.name && (
+            <span className="text-red-500 text-sm flex items-center gap-1">
+              <CircleAlert className="text-red-500 w-4 h-4" />
+              {errors.name.message}
+            </span>
+          )}
+          <input
+            type="text"
+            {...register("description")}
+            className={clsx(
+              errors.description ? variants.input.error : variants.input.default
+            )}
+            placeholder="캐릭터의 한 마디"
+          />
+          {errors.description && (
+            <span className="text-red-500 text-sm flex items-center gap-1">
+              <CircleAlert className="inline w-4 h-4" />
+              {errors.description.message}
+            </span>
+          )}
+        </div>
 
-          <div className="w-full">
-            <ListPropertiesWithValidation
-              properties={properties}
-              handler={(newValue: Property[]) => {
-                if (!newValue) return;
-                setProperties(newValue);
-                // 즉시 validation 실행
-                if (isInitialized) {
-                  setTimeout(() => trigger("properties"), 100);
-                }
-              }}
-              getPropertyError={getPropertyError}
-            />
-            {/* react-hook-form errors 표시 */}
-            {errors.properties &&
-              typeof errors.properties.message === "string" && (
-                <span className="text-red-500 text-sm flex items-center gap-1 justify-center mt-2">
-                  <CircleAlert className="w-4 h-4" />
-                  {errors.properties.message}
-                </span>
-              )}
-            {/* Custom validation errors 표시 */}
-            {hasErrors && (
+        <div className="w-full">
+          <ListPropertiesWithValidation
+            properties={propertiesWithoutStats}
+            handler={(newValue: Property[]) => {
+              if (!newValue) return;
+              setProperties(newValue);
+              // 즉시 validation 실행
+              if (isInitialized) {
+                setTimeout(() => trigger("properties"), 100);
+              }
+            }}
+            getPropertyError={getPropertyError}
+          />
+          {/* react-hook-form errors 표시 */}
+          {errors.properties &&
+            typeof errors.properties.message === "string" && (
               <span className="text-red-500 text-sm flex items-center gap-1 justify-center mt-2">
                 <CircleAlert className="w-4 h-4" />
-                입력값을 확인해 주세요
+                {errors.properties.message}
               </span>
             )}
-          </div>
-          <div className=" px-10 w-full">
-            <ColorProperties
-              properties={currentColors}
-              handler={setCurrentColors}
-              editable
-            />
-          </div>
-          <ButtonAddRelationship
-            relationships={relationshipsState}
-            onChange={setRelationships}
+          {/* Custom validation errors 표시 */}
+          {hasErrors && (
+            <span className="text-red-500 text-sm flex items-center gap-1 justify-center mt-2">
+              <CircleAlert className="w-4 h-4" />
+              입력값을 확인해 주세요
+            </span>
+          )}
+        </div>
+        <div className=" px-10 w-full">
+          <ColorProperties
+            properties={currentColors}
+            handler={setCurrentColors}
             editable
-            profileId={character.profile_id}
-            error={errors?.relationships}
-            character={character}
           />
-          <InputHashtag
-            error={errors.hashtags}
-            value={currentHashtag}
-            hashtags={previewHashtags}
-            onChange={(newValue) => {
-              if (newValue[newValue.length - 1] === " ") {
-                setHashtags(hashtags + newValue);
-                setCurrentHashtag("");
-              } else setCurrentHashtag(newValue);
-            }}
-            onDelete={(index) => {
-              setHashtags(
-                hashtags
-                  .trim()
-                  .split(" ")
-                  .filter((_, i) => i !== index)
-                  .join(" ")
-              );
-            }}
-          />
+        </div>
+        <StatsProperties
+          properties={stats}
+          handler={(newValue) => {
+            setStats(newValue);
+          }}
+        />
+        <ButtonAddRelationship
+          relationships={relationshipsState}
+          onChange={setRelationships}
+          editable
+          profileId={character.profile_id}
+          error={errors?.relationships}
+          character={character}
+        />
+        <InputHashtag
+          error={errors.hashtags}
+          value={currentHashtag}
+          hashtags={previewHashtags}
+          onChange={(newValue) => {
+            if (newValue[newValue.length - 1] === " ") {
+              setHashtags(hashtags + newValue);
+              setCurrentHashtag("");
+            } else setCurrentHashtag(newValue);
+          }}
+          onDelete={(index) => {
+            setHashtags(
+              hashtags
+                .trim()
+                .split(" ")
+                .filter((_, i) => i !== index)
+                .join(" ")
+            );
+          }}
+        />
 
-          <input
-            type="hidden"
-            {...register("properties")}
-            value={JSON.stringify(combinedProperties)}
-          />
-          <input
-            type="hidden"
-            {...register("relationships")}
-            value={JSON.stringify(relationshipsState)}
-          />
-          <input type="hidden" {...register("hashtags")} value={hashtags} />
+        <input
+          type="hidden"
+          {...register("properties")}
+          value={JSON.stringify(combinedProperties)}
+        />
+        <input
+          type="hidden"
+          {...register("relationships")}
+          value={JSON.stringify(relationshipsState)}
+        />
+        <input type="hidden" {...register("hashtags")} value={hashtags} />
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="text-background-default bg-text-black rounded w-full text-xl p-2"
-          >
-            저장하기
-          </button>
-          {isLoading ? (
-            <OverlayLoading message="캐릭터를 저장 중입니다..." />
-          ) : null}
-        </form>
-      </Suspense>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="text-background-default bg-text-black rounded w-full text-xl p-2"
+        >
+          저장하기
+        </button>
+        {isLoading ? (
+          <OverlayLoading message="캐릭터를 저장 중입니다..." />
+        ) : null}
+      </form>
     </main>
   );
 }

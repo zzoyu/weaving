@@ -1,3 +1,4 @@
+import { captureException } from "@sentry/nextjs";
 import { redirect } from "next/navigation";
 import { fetchMyProfileNickname } from "../actions";
 import NicknameTemplate from "./components/nickname-template";
@@ -8,9 +9,9 @@ export default async function NicknamePage() {
 
   try {
     ({ nickname, lastChangedAt } = await fetchMyProfileNickname());
-    console.log(nickname);
   } catch (error) {
     console.error("Failed to fetch nickname:", error);
+    captureException(error);
     redirect("/mypage");
   }
 

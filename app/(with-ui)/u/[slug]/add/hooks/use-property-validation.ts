@@ -5,6 +5,7 @@ enum EPropertyType {
   STRING = "string",
   COLOR = "color",
   DATE = "date",
+  STAT = "stat",
 }
 
 export function usePropertyValidation(properties: Property[]) {
@@ -16,7 +17,10 @@ export function usePropertyValidation(properties: Property[]) {
       const propertyErrors: { key?: string; value?: string } = {};
 
       // key validation
-      if (property.type !== EPropertyType.COLOR) {
+      if (
+        property.type !== EPropertyType.COLOR &&
+        property.type !== EPropertyType.STAT
+      ) {
         if (!property.key || property.key.trim().length === 0) {
           if (property.value && property.value.trim().length > 0) {
             propertyErrors.key = "필수 입력값입니다";
@@ -43,7 +47,7 @@ export function usePropertyValidation(properties: Property[]) {
 
     // 중복 키 validation
     const nonColorProperties = properties.filter(
-      (p) => p.type !== EPropertyType.COLOR
+      (p) => p.type !== EPropertyType.COLOR && p.type !== EPropertyType.STAT
     );
     const keyMap = new Map<string, number[]>();
 
@@ -75,7 +79,7 @@ export function usePropertyValidation(properties: Property[]) {
 
   const lengthError = useMemo(() => {
     const count = properties.filter(
-      (p) => p.type !== EPropertyType.COLOR
+      (p) => p.type !== EPropertyType.COLOR && p.type !== EPropertyType.STAT
     ).length;
     if (count > 25) {
       return "속성은 최대 25개까지 추가할 수 있습니다";

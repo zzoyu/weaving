@@ -62,8 +62,6 @@ export async function fetchCharactersByProfileId(profileId: number) {
     error: any;
   };
 
-  console.log("fetchCharactersByProfileId data:", data);
-
   return { data: data ?? [], error };
 }
 

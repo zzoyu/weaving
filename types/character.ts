@@ -2,6 +2,7 @@ enum EPropertyType {
   STRING = "string",
   COLOR = "color",
   DATE = "date",
+  STAT = "stat",
 }
 
 type Property = {
