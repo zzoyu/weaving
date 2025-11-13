@@ -2,6 +2,7 @@ import { ColorProperties } from "@/app/components/properties/color-properties";
 import StatsChart from "@/app/components/properties/stats-chart";
 import { Character, Property } from "@/types/character";
 import { Relationship } from "@/types/relationship";
+import { generateId } from "@/utils/random-character/common";
 import { ProfileCard } from "./profile-card";
 import { RelationshipCard } from "./relationship-card";
 
@@ -29,6 +30,7 @@ export default function TemplateProfile({
       ?.filter((property) => property.type === "stat")
       .filter((property) => property.key?.trim?.())
       .map((stat) => ({
+        id: stat.uuid || stat.key || generateId(),
         name: stat.key,
         value: parseInt(stat.value) || 0,
         fullMark: 10,

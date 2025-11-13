@@ -1,4 +1,5 @@
 import StatsChart from "@/app/components/properties/stats-chart";
+import { generateId } from "@/utils/random-character/common";
 import type { Meta, StoryObj } from "@storybook/react";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
@@ -24,6 +25,6 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Demo: Story = {
   args: {
-    data: [{ name: "어쩌고1", value: 10, fullMark: 10 }],
+    data: [{ id: generateId(), name: "어쩌고1", value: 10, fullMark: 10 }],
   },
 };

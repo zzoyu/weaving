@@ -79,9 +79,9 @@ export default function StatsProperties({
   properties,
   handler,
 }: {
-  properties?: { id?: string; name: string; value: number; fullMark: number }[];
+  properties?: { name: string; value: number; fullMark: number }[];
   handler?: (
-    properties: { id?: string; name: string; value: number; fullMark: number }[]
+    properties: { name: string; value: number; fullMark: number }[]
   ) => void;
 }) {
   const initialProperties = Array.from({ length: 6 }, () => ({
@@ -94,7 +94,7 @@ export default function StatsProperties({
   const [currentProperties, setProperties] = useState(
     initialProperties.map((prop, index) => {
       if (properties && properties[index]) {
-        return properties[index];
+        return { ...properties[index], id: generateId() };
       }
       return prop;
     })

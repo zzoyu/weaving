@@ -15,6 +15,7 @@ import {
 import { Plan } from "@/types/plan";
 import { Universe } from "@/types/universe";
 import { getPublicUrl } from "@/utils/image";
+import { generateId } from "@/utils/random-character/common";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -23,9 +24,6 @@ import { useForm } from "react-hook-form";
 import ListPropertiesWithUniverseValidation from "./list-properties-with-universe-validation";
 import { UniverseFormData, universeFormSchema } from "./universe-form-schema";
 import { useUniversePropertyValidation } from "./use-universe-property-validation";
-
-// 간단한 ID 생성 함수
-const generateId = () => Math.random().toString(36).substr(2, 9);
 
 interface UniverseFormProps {
   mode: "create" | "edit";

@@ -66,6 +66,7 @@ export default function CharacterEditTemplate({
     character?.properties
       ?.filter((p) => p.type === EPropertyType.STAT)
       .map((stat) => ({
+        id: stat.uuid || generateId(),
         name: stat.key,
         value: parseInt(stat.value) || 0,
         fullMark: 10,
