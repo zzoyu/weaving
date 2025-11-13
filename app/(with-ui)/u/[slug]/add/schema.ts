@@ -29,14 +29,19 @@ export const createCharacterSchema = (planLimit: PlanLimit) =>
     properties: z
       .array(propertySchema)
       .refine((value) => {
-        const filtered = value.filter((i) => i.type !== EPropertyType.COLOR);
+        const filtered = value.filter(
+          (i) => i.type !== EPropertyType.COLOR && i.type !== EPropertyType.STAT
+        );
         return filtered.length <= 25;
       }, "속성은 최대 25개까지 추가할 수 있습니다")
       .refine((value) => {
         // 중복 키 체크 (빈 키는 제외)
         const keys = value
           .filter(
-            (i) => i.type !== EPropertyType.COLOR && i.key.trim().length > 0
+            (i) =>
+              i.type !== EPropertyType.COLOR &&
+              i.type !== EPropertyType.STAT &&
+              i.key.trim().length > 0
           )
           .map((i) => i.key.trim().toLowerCase());
         const uniqueKeys = new Set(keys);
@@ -47,6 +52,7 @@ export const createCharacterSchema = (planLimit: PlanLimit) =>
         const hasInvalidProperty = value.some(
           (i) =>
             i.type !== EPropertyType.COLOR &&
+            i.type !== EPropertyType.STAT &&
             i.key.trim().length === 0 &&
             i.value.trim().length > 0
         );

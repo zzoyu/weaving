@@ -42,7 +42,6 @@ export default function Onboarding({
       key="step1"
       profile={profileToCreate}
       onNext={(nickname: string) => {
-        console.log("닉네임:", nickname);
         setProfileToCreate((prev) => ({ ...prev, nickname }));
         handleNextStep();
       }}

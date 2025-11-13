@@ -1,5 +1,6 @@
 import { AlertToaster } from "@/components/interactions/alert-toaster";
 import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import * as Sentry from "@sentry/nextjs";
 import clsx from "clsx";
@@ -103,7 +104,7 @@ export default function RootLayout({
         </Script>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {gtmId && <GoogleTagManager gtmId={gtmId} />}
-          {children}
+          <TooltipProvider>{children}</TooltipProvider>
           <Toaster />
           <Suspense>
             <AlertToaster />

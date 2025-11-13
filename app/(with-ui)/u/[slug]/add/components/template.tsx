@@ -2,6 +2,7 @@
 
 import InputHashtag from "@/app/components/input-hashtag";
 import { ColorProperties } from "@/app/components/properties/color-properties";
+import StatsProperties from "@/app/components/properties/stats-properties";
 import OverlayLoading from "@/components/overlay-loading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
@@ -25,6 +26,9 @@ import { ButtonAddRelationship } from "./button-add-relationship";
 import ListPropertiesWithValidation from "./list-properties-with-validation";
 import UploadImage from "./upload-image/upload-image";
 
+// 간단한 ID 생성 함수
+const generateId = () => Math.random().toString(36).substr(2, 9);
+
 export default function CharacterAddTemplate({
   slug,
   profileId,
@@ -37,7 +41,7 @@ export default function CharacterAddTemplate({
   planLimit: PlanLimit;
 }) {
   const [properties, setProperties] = useState<Property[]>(
-    [...baseProperties].map((p) => ({ ...p, uuid: crypto.randomUUID() }))
+    [...baseProperties].map((p) => ({ ...p, uuid: generateId() }))
   );
   const [hashtags, setHashtags] = useState<string>("");
   const [currentHashtag, setCurrentHashtag] = useState<string>("");
@@ -58,6 +62,16 @@ export default function CharacterAddTemplate({
       { key: "hairColor", value: "", type: EPropertyType.COLOR },
     ]
   );
+
+  const [stats, setStats] = useState<Property[]>([
+    { key: "", value: "0", type: EPropertyType.STAT },
+    { key: "", value: "0", type: EPropertyType.STAT },
+    { key: "", value: "0", type: EPropertyType.STAT },
+    { key: "", value: "0", type: EPropertyType.STAT },
+    { key: "", value: "0", type: EPropertyType.STAT },
+    { key: "", value: "0", type: EPropertyType.STAT },
+  ]);
+
   const combinedProperties = useMemo(() => {
     const colorProperties = colors.map((color) => ({
       key: color.key,
@@ -65,8 +79,10 @@ export default function CharacterAddTemplate({
       type: color.type,
     }));
 
-    return [...properties, ...colorProperties];
-  }, [properties, colors]);
+    const statsProperties = stats.filter((stat) => stat.key.trim?.() !== "");
+
+    return [...properties, ...colorProperties, ...statsProperties];
+  }, [properties, colors, stats]);
 
   const [relationships, setRelationships] = useState<Relationship[]>([]);
   const handleRelationshipNameChange = (character: Character) => {
@@ -169,6 +185,7 @@ export default function CharacterAddTemplate({
     <form
       className="flex flex-col gap-2 items-center w-full lg:max-w-md p-4"
       onSubmit={handleSubmit(async (data) => {
+        console.log("Submitting data:", data);
         setIsLoading(true);
         setIsSubmitted(true);
         try {
@@ -328,9 +345,38 @@ export default function CharacterAddTemplate({
           </span>
         )}
       </div>
-      <div className=" px-10 w-full">
+
+      <div className="px-10 w-full mb-4">
         <ColorProperties properties={colors} handler={setColors} editable />
       </div>
+      {planLimit.availableFeatures.includes("character.stats") && (
+        <StatsProperties
+          properties={stats.map((stat, index) => ({
+            id: generateId(),
+            name: stat.key,
+            value: parseInt(stat.value) || 0,
+            fullMark: 10,
+          }))}
+          handler={(
+            newValue: {
+              id?: string;
+              name: string;
+              value: number;
+              fullMark: number;
+            }[]
+          ) => {
+            const updatedStats = newValue
+              .filter((stat) => stat.name.trim() !== "")
+              .map((stat) => ({
+                key: stat?.name || "",
+                value: stat?.value.toString() || "0",
+                type: EPropertyType.STAT,
+              }));
+            setStats(updatedStats);
+          }}
+        />
+      )}
+
       <ButtonAddRelationship
         relationships={relationships}
         onChange={setRelationships}

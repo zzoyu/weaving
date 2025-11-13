@@ -69,6 +69,10 @@ function ColorPicker({
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
+  // 안전한 colorList 키 접근
+  const colorKey = property?.value as string;
+  const colorClass = colorList[colorKey];
+
   return (
     <div className="p-4 flex justify-center items-center">
       <ColorModal
@@ -84,8 +88,8 @@ function ColorPicker({
       <button
         type="button"
         className={clsx(
-          "relative w-10 h-10 border-background-muted border",
-          colorList?.[(property?.value as string) || "white dark:bg-neutral-900"]
+          "relative w-10 h-10 border-background-muted dark:bg-transparent border",
+          colorClass
         )}
         onClick={() => {
           if (editable) setIsOpen(true);
@@ -111,6 +115,11 @@ export function ColorProperties({
   handler?: (properties: Property[]) => void;
   editable?: boolean;
 }) {
+  // 안전한 배열 접근을 위한 기본값 제공
+  const getPropertyAt = (index: number): Property => {
+    return properties[index] || { key: "", value: "", type: "" };
+  };
+
   return (
     <div className="w-full grid grid-cols-3">
       <div className="text-text-black dark:text-white bg-background-muted dark:bg-neutral-800 text-center py-1">
@@ -125,7 +134,7 @@ export function ColorProperties({
 
       <ColorPicker
         editable={editable}
-        property={properties[0]}
+        property={getPropertyAt(0)}
         handler={(property) => {
           const newProperties = [...properties];
           newProperties[0] = property;
@@ -134,7 +143,7 @@ export function ColorProperties({
       />
       <ColorPicker
         editable={editable}
-        property={properties[1]}
+        property={getPropertyAt(1)}
         handler={(property) => {
           const newProperties = [...properties];
           newProperties[1] = property;
@@ -143,7 +152,7 @@ export function ColorProperties({
       />
       <ColorPicker
         editable={editable}
-        property={properties[2]}
+        property={getPropertyAt(2)}
         handler={(property) => {
           const newProperties = [...properties];
           newProperties[2] = property;
@@ -152,4 +161,4 @@ export function ColorProperties({
       />
     </div>
   );
-} 
+}

@@ -6,6 +6,7 @@ enum EPropertyType {
   STRING = "string",
   COLOR = "color",
   DATE = "date",
+  STAT = "stat",
 }
 
 const propertySchema = z.object({
@@ -36,7 +37,10 @@ export const universeFormSchema = (plan: Plan) =>
         // 중복 키 체크 (빈 키는 제외)
         const keys = value
           .filter(
-            (i) => i.type !== EPropertyType.COLOR && i.key.trim().length > 0
+            (i) =>
+              i.type !== EPropertyType.COLOR &&
+              i.type !== EPropertyType.STAT &&
+              i.key.trim().length > 0
           )
           .map((i) => i.key.trim().toLowerCase());
         const uniqueKeys = new Set(keys);
@@ -47,6 +51,7 @@ export const universeFormSchema = (plan: Plan) =>
         const hasInvalidProperty = value.some(
           (i) =>
             i.type !== EPropertyType.COLOR &&
+            i.type !== EPropertyType.STAT &&
             i.key.trim().length === 0 &&
             i.value.trim().length > 0
         );

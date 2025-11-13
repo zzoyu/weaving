@@ -1,18 +1,18 @@
 export const colorList: {
   [key: string]: string;
 } = {
-  black: "bg-black",
-  white: "bg-white dark:bg-neutral-950",
-  yellow: "bg-yellow-400",
-  gray: "bg-gray-200",
-  brown: "bg-yellow-700",
-  red: "bg-red-500",
-  pink: "bg-pink-300",
-  orange: "bg-orange-400",
-  purple: "bg-purple-400",
-  blue: "bg-preset-blue",
-  skyblue: "bg-preset-skyblue",
-  green: "bg-green-500",
+  black: "bg-black dark:bg-black",
+  white: "bg-white dark:bg-white",
+  yellow: "bg-yellow-400 dark:bg-yellow-400",
+  gray: "bg-gray-200 dark:bg-gray-600",
+  brown: "bg-yellow-700 dark:bg-yellow-700",
+  red: "bg-red-500 dark:bg-red-500",
+  pink: "bg-pink-300 dark:bg-pink-300",
+  orange: "bg-orange-400 dark:bg-orange-400",
+  purple: "bg-purple-400 dark:bg-purple-400",
+  blue: "bg-preset-blue dark:bg-preset-blue",
+  skyblue: "bg-preset-skyblue dark:bg-preset-skyblue",
+  green: "bg-green-500 dark:bg-green-500",
 };
 
 export const colorHexMap: { [key: string]: string } = {

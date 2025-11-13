@@ -4,6 +4,7 @@ import { Character } from "@/types/character";
 import { Relationship, RelationshipNode } from "@/types/relationship";
 import { buildRelationshipTree } from "@/utils/relationship";
 import { createClient } from "@/utils/supabase/server";
+import { captureException } from "@sentry/nextjs";
 import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function fetchCharacter(id: number): Promise<Character | null> {
@@ -221,8 +222,6 @@ export async function updateBulkRelationships(
 ) {
   const supabase = await createClient();
 
-  console.log("🔄 updateBulkRelationships 시작:", { from_id, relationships });
-
   try {
     // 기존 관계 삭제
     console.log("🗑️ 기존 관계 삭제 중...");
@@ -233,6 +232,7 @@ export async function updateBulkRelationships(
 
     if (deleteError) {
       console.error("❌ 기존 관계 삭제 실패:", deleteError);
+      captureException(deleteError);
       throw deleteError;
     }
     console.log("✅ 기존 관계 삭제 완료");
@@ -250,22 +250,21 @@ export async function updateBulkRelationships(
       name: relationship.name || "friend",
     }));
 
-    console.log("➕ 새로운 관계 생성 중:", insertData);
-
     const { data, error: insertError } = await supabase
       .from("relationship")
       .insert(insertData);
 
     if (insertError) {
       console.error("❌ 새로운 관계 생성 실패:", insertError);
+      captureException(insertError);
       throw insertError;
     }
 
-    console.log("✅ 새로운 관계 생성 완료:", data);
     revalidatePath("/u/[slug]/[id]", "page");
     return data;
   } catch (error) {
     console.error("🚨 updateBulkRelationships 오류:", error);
+    captureException(error);
     throw error;
   }
 }

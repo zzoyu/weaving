@@ -24,6 +24,9 @@ import ListPropertiesWithUniverseValidation from "./list-properties-with-univers
 import { UniverseFormData, universeFormSchema } from "./universe-form-schema";
 import { useUniversePropertyValidation } from "./use-universe-property-validation";
 
+// 간단한 ID 생성 함수
+const generateId = () => Math.random().toString(36).substr(2, 9);
+
 interface UniverseFormProps {
   mode: "create" | "edit";
   universe?: Universe;
@@ -40,25 +43,25 @@ const defaultProperties: Property[] = [
     key: "장르",
     value: "",
     type: EPropertyType.STRING,
-    uuid: crypto.randomUUID(),
+    uuid: generateId(),
   },
   {
     key: "사회구조",
     value: "",
     type: EPropertyType.STRING,
-    uuid: crypto.randomUUID(),
+    uuid: generateId(),
   },
   {
     key: "주요 사건",
     value: "",
     type: EPropertyType.STRING,
-    uuid: crypto.randomUUID(),
+    uuid: generateId(),
   },
   {
     key: "규칙",
     value: "",
     type: EPropertyType.STRING,
-    uuid: crypto.randomUUID(),
+    uuid: generateId(),
   },
 ];
 
@@ -84,7 +87,7 @@ export default function UniverseForm({
     mode === "edit"
       ? universe?.properties?.map((p) => ({
           ...p,
-          uuid: crypto.randomUUID(),
+          uuid: generateId(),
         })) || []
       : defaultProperties
   );
@@ -103,7 +106,7 @@ export default function UniverseForm({
     setValue,
     trigger,
   } = useForm<UniverseFormData>({
-    resolver: zodResolver(universeFormSchema(plan)),
+    resolver: zodResolver(universeFormSchema(plan)) as any,
     mode: "onChange",
     defaultValues: {
       name: mode === "edit" ? universe?.name || "" : "",

@@ -79,9 +79,10 @@ export default async function CharacterPage({
     isMyProfile = true;
   }
 
-  const colorProperties = characterData.properties.filter(
-    (property) => property.type === EPropertyType.COLOR
-  );
+  const colorProperties =
+    characterData.properties?.filter(
+      (property) => property.type === EPropertyType.COLOR
+    ) || [];
 
   const cookie = await cookies();
   const responseIsPasswordCorrect = await compareCharacterPassword(

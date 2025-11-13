@@ -13,7 +13,10 @@ import {
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
-import ListPropertiesItem, { SmallPreview } from "./list-properties-item";
+import ListPropertiesItem from "./list-properties-item";
+
+// 간단한 ID 생성 함수
+const generateId = () => Math.random().toString(36).substr(2, 9);
 
 export default function ListProperties({
   properties,
@@ -31,6 +34,25 @@ export default function ListProperties({
   const [localProperties, setLocalProperties] =
     useState<Property[]>(properties);
   const [activeId, setActiveId] = useState<string | null>(null);
+
+  // Move property function
+  const moveProperty = (fromIndex: number, amount: number) => {
+    console.log("moveProperty called:", fromIndex, amount);
+    const newProperties = [...localProperties];
+    const targetIndex = Math.min(
+      Math.max(fromIndex + amount, 0),
+      newProperties.length - 1
+    );
+
+    console.log("moving from", fromIndex, "to", targetIndex);
+
+    if (fromIndex !== targetIndex) {
+      const [movedItem] = newProperties.splice(fromIndex, 1);
+      newProperties.splice(targetIndex, 0, movedItem);
+      setLocalProperties(newProperties);
+      handler(newProperties);
+    }
+  };
 
   useEffect(() => {
     setLocalProperties(properties);
@@ -116,20 +138,7 @@ export default function ListProperties({
                       setLocalProperties(newProperties);
                       handler(newProperties);
                     }}
-                    handleMove={(index: number, amount: number) => {
-                      const newProperties = [...localProperties];
-                      const [movedItem] = newProperties.splice(index, 1);
-                      newProperties.splice(
-                        Math.min(
-                          Math.max(index + amount, 0),
-                          newProperties.length
-                        ),
-                        0,
-                        movedItem
-                      );
-                      setLocalProperties(newProperties);
-                      handler(newProperties);
-                    }}
+                    moveProperty={moveProperty}
                   />
                 </motion.div>
               ))}
@@ -145,7 +154,7 @@ export default function ListProperties({
                       key: "",
                       value: "",
                       type: EPropertyType.STRING,
-                      uuid: crypto.randomUUID(),
+                      uuid: generateId(),
                     },
                   ]);
                 }}
@@ -187,7 +196,7 @@ function SortableItem({
   valueError,
   onChange,
   onDelete,
-  handleMove,
+  moveProperty,
 }: {
   id: string;
   index: number;
@@ -197,9 +206,9 @@ function SortableItem({
   valueError?: string;
   onChange: (property: Property) => void;
   onDelete: (property: Property) => void;
-  handleMove: (index: number, amount: number) => void;
+  moveProperty: (fromIndex: number, amount: number) => void;
 }) {
-  const { ref, isDragging } = useSortable({
+  const { ref, isDragging, handleRef } = useSortable({
     id,
     index,
   });
@@ -207,26 +216,27 @@ function SortableItem({
   return (
     <div
       ref={ref}
-      className={cn(
-        isDragging ? "mb-4 relative h-20 opacity-40" : "mb-2 relative"
-      )}
+      className={cn(isDragging ? "mb-4 relative opacity-40" : "mb-2 relative")}
     >
-      {isDragging === false ? (
-        <ListPropertiesItem
-          property={property}
-          error={error}
-          keyError={keyError}
-          valueError={valueError}
-          onChange={onChange}
-          onDelete={onDelete}
-          handleMove={(amount) => {
-            handleMove(index, amount);
-          }}
-        />
-      ) : (
-        <SmallPreview property={property} />
-        // <div className="h-20 bg-background-dark rounded" />
-      )}
+      <ListPropertiesItem
+        property={property}
+        error={error}
+        keyError={keyError}
+        valueError={valueError}
+        onChange={onChange}
+        onDelete={onDelete}
+        isDragging={isDragging}
+        dragHandleRef={handleRef}
+        handleMove={(amount) => {
+          console.log(
+            "SortableItem handleMove called with amount:",
+            amount,
+            "index:",
+            index
+          );
+          moveProperty(index, amount);
+        }}
+      />
     </div>
   );
 }
