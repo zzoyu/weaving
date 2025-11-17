@@ -18,6 +18,22 @@ export async function signInWithTwitter() {
   return { data, error };
 }
 
+export async function signInWithGoogle() {
+  const supabase = createClient();
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: process.env.NEXT_PUBLIC_BASE_URL + "/auth/callback",
+      queryParams: {
+        next: "/",
+      },
+    },
+  });
+
+  return { data, error };
+}
+
 export async function signOut() {
   const supabase = createClient();
   const { error } = await supabase.auth.signOut();

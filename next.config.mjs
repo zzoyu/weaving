@@ -43,6 +43,10 @@ const nextConfig = {
         hostname: "picsum.photos",
         protocol: "https",
       },
+      {
+        hostname: "*.googleusercontent.com",
+        protocol: "https",
+      },
     ],
   },
   // Content Security Policy header for third-party analytics/ads
@@ -89,6 +93,7 @@ const nextConfig = {
         "https://googleads.g.doubleclick.net",
         "https://*.google.com",
         "https://www.googletagmanager.com",
+        "https://*.googleusercontent.com/",
         process.env.NEXT_PUBLIC_SUPABASE_URL,
       ],
       "connect-src": [
@@ -106,6 +111,7 @@ const nextConfig = {
         "https://*.kakaocdn.net",
         "https://sharer.kakao.com/picker/link",
         "https://*.kakao.com",
+        "https://*.googleusercontent.com/",
         process.env.NEXT_PUBLIC_SUPABASE_URL,
       ],
       "frame-src": [
