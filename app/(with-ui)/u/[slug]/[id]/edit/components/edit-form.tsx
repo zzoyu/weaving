@@ -372,7 +372,7 @@ export default function CharacterEditTemplate({
 
         <div className="w-full">
           <ListPropertiesWithValidation
-            properties={propertiesWithoutStats}
+            properties={properties}
             handler={(newValue: Property[]) => {
               if (!newValue) return;
               setProperties(newValue);
