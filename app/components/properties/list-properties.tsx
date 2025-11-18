@@ -37,14 +37,11 @@ export default function ListProperties({
 
   // Move property function
   const moveProperty = (fromIndex: number, amount: number) => {
-    console.log("moveProperty called:", fromIndex, amount);
     const newProperties = [...localProperties];
     const targetIndex = Math.min(
       Math.max(fromIndex + amount, 0),
       newProperties.length - 1
     );
-
-    console.log("moving from", fromIndex, "to", targetIndex);
 
     if (fromIndex !== targetIndex) {
       const [movedItem] = newProperties.splice(fromIndex, 1);
