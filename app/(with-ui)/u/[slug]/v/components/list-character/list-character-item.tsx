@@ -73,23 +73,19 @@ export default function ListCharacterItem({
                   <IconLocked width={48} height={48} />
                 </div>
               )}
-              <Image
-                unoptimized
-                src={
-                  getPublicUrl(character.thumbnail) ||
-                  getPublicUrl(character?.image?.[0]) ||
-                  ""
-                }
-                alt={character.name}
-                width={100}
-                height={100}
-                style={{
-                  filter:
-                    !isMine && character.password
-                      ? "grayscale(50%) blur(4px)"
-                      : "",
-                }}
-              />
+              {(isMine || !character.password) && (
+                <Image
+                  unoptimized
+                  src={
+                    getPublicUrl(character.thumbnail) ||
+                    getPublicUrl(character?.image?.[0]) ||
+                    ""
+                  }
+                  alt={character.name}
+                  width={100}
+                  height={100}
+                />
+              )}
             </div>
           </div>
         </div>

@@ -190,7 +190,7 @@ function FilterPopup({
                 <h3 className="text-lg lg:text-base mb-4 font-semibold">
                   색상
                 </h3>
-                <div className="grid grid-cols-5 gap-2">
+                <div className="grid grid-cols-5 gap-2 place-items-center">
                   {Object.entries(colorList).map((item, index) => (
                     <button
                       key={index}

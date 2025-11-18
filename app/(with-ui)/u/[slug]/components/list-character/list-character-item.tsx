@@ -59,7 +59,7 @@ export default function ListCharacterItem({
           ))}
         <div>
           <div className="relative w-fit h-fit">
-            {themeColor && (
+            {themeColor && !character.password && (
               <div
                 className={clsx(
                   colorList?.[themeColor || "white"],
@@ -70,26 +70,24 @@ export default function ListCharacterItem({
             <div className="rounded-full overflow-hidden m-2 relative">
               {!isMine && character.password && (
                 <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center z-30 opacity-80">
-                  <IconLocked width={48} height={48} />
+                  <IconLocked width={64} height={64} />
                 </div>
               )}
-              <Image
-                unoptimized
-                src={
-                  getPublicUrl(character.thumbnail) ||
-                  getPublicUrl(character?.image?.[0]) ||
-                  ""
-                }
-                alt={character.name}
-                width={100}
-                height={100}
-                style={{
-                  filter:
-                    !isMine && character.password
-                      ? "grayscale(50%) blur(4px)"
-                      : "",
-                }}
-              />
+              {isMine || !character.password ? (
+                <Image
+                  unoptimized
+                  src={
+                    getPublicUrl(character.thumbnail) ||
+                    getPublicUrl(character?.image?.[0]) ||
+                    ""
+                  }
+                  alt={character.name}
+                  width={100}
+                  height={100}
+                />
+              ) : (
+                <div className="w-[100px] h-[100px]"></div>
+              )}
             </div>
           </div>
         </div>
