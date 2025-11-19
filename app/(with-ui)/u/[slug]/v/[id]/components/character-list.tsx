@@ -6,6 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import IconLocked from "@/public/assets/icons/locked.svg";
+
 interface CharacterListProps {
   characters: CharacterWithProfile[];
   isMyProfile: boolean;
@@ -45,25 +47,34 @@ export function ListCharacter({
               <div
                 className={clsx(
                   "flex flex-col items-center justify-center gap-1 overflow-hidden rounded-md relative group focus-within:ring-2",
-                  colorList?.[
-                    character?.properties?.find?.((i) => i.key === "themeColor")
-                      ?.value || "white"
-                  ] + " bg-opacity-50"
+                  (isMine || !character.password) &&
+                    colorList?.[
+                      character?.properties?.find?.(
+                        (i) => i.key === "themeColor"
+                      )?.value || "white"
+                    ] + " bg-opacity-50"
                 )}
               >
                 <div className="rounded-full overflow-hidden m-2">
-                  <Image
-                    unoptimized
-                    src={
-                      getPublicUrl(character.thumbnail) ||
-                      getPublicUrl(character?.image?.[0]) ||
-                      ""
-                    }
-                    alt={character.name}
-                    width={100}
-                    height={100}
-                  />
+                  {isMine || !character.password ? (
+                    <Image
+                      unoptimized
+                      src={
+                        getPublicUrl(character.thumbnail) ||
+                        getPublicUrl(character?.image?.[0]) ||
+                        ""
+                      }
+                      alt={character.name}
+                      width={100}
+                      height={100}
+                    />
+                  ) : (
+                    <div className="w-[100px] h-[100px] flex justify-center items-center">
+                      <IconLocked width={64} height={64} />
+                    </div>
+                  )}
                 </div>
+
                 <div
                   className={clsx(
                     character.password && "text-opacity-50",

@@ -68,11 +68,6 @@ export default function ListCharacterItem({
               ></div>
             )}
             <div className="rounded-full overflow-hidden m-2 relative">
-              {!isMine && character.password && (
-                <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center z-30 opacity-80">
-                  <IconLocked width={64} height={64} />
-                </div>
-              )}
               {isMine || !character.password ? (
                 <Image
                   unoptimized
@@ -86,7 +81,9 @@ export default function ListCharacterItem({
                   height={100}
                 />
               ) : (
-                <div className="w-[100px] h-[100px]"></div>
+                <div className="w-[100px] h-[100px] flex justify-center items-center">
+                  <IconLocked width={64} height={64} />
+                </div>
               )}
             </div>
           </div>

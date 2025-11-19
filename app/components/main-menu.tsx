@@ -77,29 +77,32 @@ export default function MainMenu() {
   }, [redirectPath]);
 
   return (
-    <div className="flex flex-col flex-1 justify-start items-center gap-4 pt-10 w-full">
+    <div className="flex flex-col flex-1 justify-start items-center gap-8 pt-10 w-full">
       {isSignedIn === false && (
         <>
-          <button
-            onClick={handleTwitterSignIn}
-            className="bg-black text-white w-3/5 py-4 rounded-full hover:bg-gray-800 transition-colors duration-200 flex items-center gap-2 text-xl justify-center"
-          >
-            <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-            </svg>
-            로 시작하기
-          </button>
-          <button
-            onClick={handleGoogleSignIn}
-            className="bg-black text-white w-3/5 py-4 rounded-full hover:bg-gray-800 transition-colors duration-200 flex items-center gap-2 text-xl justify-center"
-          >
-            Google로 시작하기
-          </button>
+          <div className="flex flex-col gap-2.5 w-fit px-6 mb-10 lg:mb-20">
+            <button
+              onClick={handleTwitterSignIn}
+              className="bg-black text-white py-2.5 px-10 flex-1 rounded-full hover:bg-gray-800 transition-colors duration-200 flex items-center gap-2 text-base justify-center"
+            >
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+              로 시작하기
+            </button>
+            <button
+              onClick={handleGoogleSignIn}
+              className="bg-black text-white py-2.5 flex-1  px-10 rounded-full hover:bg-gray-800 transition-colors duration-200 flex items-center gap-2 text-base justify-center"
+            >
+              Google로 시작하기
+            </button>
+          </div>
           <small className="text-gray-500 text-center">
             로그인 시 이용약관 및 개인정보처리방침에 동의한 것으로 처리됩니다.
           </small>
         </>
       )}
+
       {isSignedIn && (
         <>
           <Link href="/">
