@@ -67,10 +67,11 @@ export function ListCharacter({
                       alt={character.name}
                       width={100}
                       height={100}
+                      className="w-20 h-20 md:w-[100px] md:h-[100px]"
                     />
                   ) : (
-                    <div className="w-[100px] h-[100px] flex justify-center items-center">
-                      <IconLocked width={64} height={64} />
+                    <div className="w-20 h-20 md:w-[100px] md:h-[100px] flex justify-center items-center aspect-square">
+                      <IconLocked width={48} height={48} />
                     </div>
                   )}
                 </div>

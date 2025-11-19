@@ -63,11 +63,11 @@ export default function ListCharacterItem({
               <div
                 className={clsx(
                   colorList?.[themeColor || "white"],
-                  " rounded-full absolute bottom-2.5 right-2.5 w-5 h-5 z-20"
+                  " rounded-full absolute bottom-1 right-1 md:bottom-2.5 md:right-2.5 w-5 h-5 z-20"
                 )}
               ></div>
             )}
-            <div className="rounded-full overflow-hidden m-2 relative">
+            <div className="rounded-full overflow-hidden m-2 relative flex justify-center items-center ">
               {isMine || !character.password ? (
                 <Image
                   unoptimized
@@ -77,12 +77,13 @@ export default function ListCharacterItem({
                     ""
                   }
                   alt={character.name}
+                  className="w-20 h-20 md:w-[100px] md:h-[100px]"
                   width={100}
                   height={100}
                 />
               ) : (
-                <div className="w-[100px] h-[100px] flex justify-center items-center">
-                  <IconLocked width={64} height={64} />
+                <div className="w-20 h-20 md:w-[100px] md:h-[100px] flex justify-center items-center aspect-square">
+                  <IconLocked width={48} height={48} />
                 </div>
               )}
             </div>
@@ -98,7 +99,12 @@ export default function ListCharacterItem({
             "w-full h-fit flex justify-center items-center p-2 "
           )}
         >
-          <p className="text-text-black truncate text-sm lg:text-base  dark:text-white dark:text-opacity-100">
+          <p
+            className={clsx(
+              "text-text-black truncate text-sm lg:text-base dark:text-opacity-100 dark:text-white",
+              character.isFavorite && "dark:!text-text-black"
+            )}
+          >
             {character.name}
           </p>
         </div>
