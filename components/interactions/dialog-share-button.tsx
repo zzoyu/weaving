@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { usePathname } from "next/navigation";
 
-import XIcon from "@/public/assets/images/x.svg";
+import XIcon from "@/public/assets/images/share/x.svg";
 import Image from "next/image";
 import Script from "next/script";
 import { useMemo } from "react";
@@ -124,7 +124,7 @@ export function DialogShareButton({
               onClick={shareKakaotalk}
             >
               <Image
-                src="/assets/images/kakaotalk_sharing_btn_medium.png"
+                src="/assets/images/share/kakaotalk_sharing_btn_medium.png"
                 alt="카카오톡 공유 버튼"
                 unoptimized
                 width={0}
