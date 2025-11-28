@@ -26,8 +26,13 @@ import { ButtonAddRelationship } from "./button-add-relationship";
 import ListPropertiesWithValidation from "./list-properties-with-validation";
 import UploadImage from "./upload-image/upload-image";
 
-// 간단한 ID 생성 함수
-const generateId = () => Math.random().toString(36).substr(2, 9);
+// 간단한 ID 생성 함수 (cryptographically secure)
+const generateId = () => {
+  const arr = new Uint8Array(9);
+  window.crypto.getRandomValues(arr);
+  // Convert each byte to base-36 and join
+  return Array.from(arr, b => b.toString(36)).join('');
+};
 
 export default function CharacterAddTemplate({
   slug,
