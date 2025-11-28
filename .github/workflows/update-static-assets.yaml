@@ -1,0 +1,132 @@
+name: Update Static Assets
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-assets:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+          fetch-depth: 0
+
+      - name: Compare index.json last_hash with Gist commit
+        id: compare_hash
+        run: |
+          GIST_ID="${{ secrets.RANDOM_CHARACTER_GIST_ID }}"
+          if [[ -z "$GIST_ID" ]]; then
+            echo "GIST_ID secret not set, skipping hash compare"
+            echo "hash_match=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          REMOTE_COMMIT=$(curl -s -H "Authorization: token ${{ secrets.PAT }}" \
+            "https://api.github.com/gists/$GIST_ID" | jq -r '.history[0].version // "unknown"')
+          LOCAL_HASH=$(jq -r '.last_hash' data/random-character/index.json)
+          echo "Remote Gist commit: $REMOTE_COMMIT"
+          echo "Local index.json last_hash: $LOCAL_HASH"
+          if [[ "$REMOTE_COMMIT" == "$LOCAL_HASH" ]]; then
+            echo "hash_match=true" >> $GITHUB_OUTPUT
+            echo "Gist and index.json hash match."
+          else
+            echo "hash_match=false" >> $GITHUB_OUTPUT
+            echo "Gist and index.json hash do not match."
+          fi
+
+      - name: Determine if updates are available
+        id: check_updates
+        run: |
+          if [[ -z "${GITHUB_EVENT_NAME}" || "${GITHUB_EVENT_NAME}" != "workflow_dispatch" ]]; then
+            echo "Not triggered by workflow_dispatch, skipping update check."
+            echo "updates_available=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          if [[ "${{ steps.compare_hash.outputs.hash_match }}" == "true" ]]; then
+            echo "No updates available (hashes match)."
+            echo "updates_available=false" >> $GITHUB_OUTPUT
+          else
+            echo "Updates available (hashes do not match)."
+            echo "updates_available=true" >> $GITHUB_OUTPUT
+          fi
+          REMOTE_COMMIT=$(curl -s -H "Authorization: token ${{ secrets.PAT }}" \
+            "https://api.github.com/gists/${{ secrets.RANDOM_CHARACTER_GIST_ID }}" | jq -r '.history[0].version // "unknown"')
+          echo "remote_commit=$REMOTE_COMMIT" >> $GITHUB_OUTPUT
+
+      - name: Download and update static assets
+        if: steps.check_updates.outputs.updates_available == 'true'
+        run: |
+          echo "Downloading updated assets from GitHub Gist..."
+
+          GIST_ID="${{ secrets.RANDOM_CHARACTER_GIST_ID }}"
+
+          # 디렉토리 확인 및 생성
+          mkdir -p data/random-character
+
+          # GitHub Gist에서 JSON 파일들 다운로드
+          echo "Fetching gist files..."
+          GIST_DATA=$(curl -s -H "Authorization: token ${{ secrets.PAT }}" \
+            "https://api.github.com/gists/$GIST_ID")
+
+          # index.json에서 categories[].filename 전부 다운로드
+          FILES=$(echo "$GIST_DATA" | jq -r '.files | to_entries[] | select(.value.filename | endswith(".json")) | .value.filename')
+          for FILE in $FILES; do
+            echo "Downloading $FILE..."
+            curl -s -H "Authorization: token ${{ secrets.PAT }}" \
+              "https://gist.githubusercontent.com/${GITHUB_REPOSITORY_OWNER}/${GIST_ID}/raw/${{ steps.check_updates.outputs.remote_commit }}/$FILE" \
+              -o "data/random-character/$FILE"
+          done
+
+          # 버전 정보 저장, index.json의 last_hash 업데이트
+          jq --arg commit "${{ steps.check_updates.outputs.remote_commit }}" \
+            '.last_hash = $commit' data/random-character/index.json > data/random-character/index.tmp.json
+          mv data/random-character/index.tmp.json data/random-character/index.json
+          echo "Assets updated successfully."
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet; then
+            echo "No changes detected"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changes detected"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            git diff --name-only
+          fi
+
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          # 변경된 파일들을 스테이징
+          git add data/ public/assets/ || true
+
+          # 커밋 메시지에 타임스탬프 포함
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          git commit -m "chore: update static assets ($TIMESTAMP)" || exit 0
+
+          # 푸시 시도 (충돌 시 재시도)
+          for i in {1..3}; do
+            git pull --rebase origin main && git push origin main && break
+            echo "Push failed, retrying in 5 seconds... (attempt $i/3)"
+            sleep 5
+          done
+
+      - name: Create summary
+        run: |
+          echo "## Static Assets Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trigger**: Push to main branch" >> $GITHUB_STEP_SUMMARY
+          echo "- **Updates Available**: ${{ steps.check_updates.outputs.updates_available }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Changes Made**: ${{ steps.check_changes.outputs.has_changes }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Timestamp**: $(date -u)" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "${{ steps.check_updates.outputs.updates_available }}" == "true" ]]; then
+            echo "- **Status**: ✅ Assets were successfully updated" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **Status**: ⏭️ No updates needed (source unchanged or unavailable)" >> $GITHUB_STEP_SUMMARY
+          fi

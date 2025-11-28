@@ -1,18 +1,18 @@
 import {
+  GenerateApocalypseResult,
   GenerateCommonResult,
-  GenerateFantasyEastResult,
-  GenerateFantasyWestResult,
-  GenerateHorrorResult,
-  GenerateRealityResult,
+  GenerateFantasyEasternResult,
+  GenerateFantasyWesternResult,
+  GenerateRealisticResult,
   GenerateSciFiResult,
 } from "@/utils/random-character";
 import { useMemo } from "react";
 
 export const additionalGenerators = {
-  "option-reality": GenerateRealityResult,
-  "option-fantasy-west": GenerateFantasyWestResult,
-  "option-fantasy-east": GenerateFantasyEastResult,
-  "option-horror": GenerateHorrorResult,
+  "option-reality": GenerateRealisticResult,
+  "option-fantasy-west": GenerateFantasyWesternResult,
+  "option-fantasy-east": GenerateFantasyEasternResult,
+  "option-horror": GenerateApocalypseResult,
   "option-sf": GenerateSciFiResult,
 };
 

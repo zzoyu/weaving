@@ -1,0 +1,29 @@
+{
+  "last_hash": "",
+  "categories": [
+    {
+      "name": "common",
+      "filename": "common.json"
+    },
+    {
+      "name": "fantasy-eastern",
+      "filename": "fantasy_eastern.json"
+    },
+    {
+      "name": "fantasy-western",
+      "filename": "fantasy_western.json"
+    },
+    {
+      "name": "apocalypse",
+      "filename": "apocalypse.json"
+    },
+    {
+      "name": "sf",
+      "filename": "sf.json"
+    },
+    {
+      "name": "realistic",
+      "filename": "realistic.json"
+    }
+  ]
+}

@@ -1,15 +1,15 @@
+import { GenerateApocalypseResult } from "./apocalypse";
 import { GenerateCommonResult } from "./common";
-import { GenerateFantasyEastResult } from "./fantasy-east";
-import { GenerateFantasyWestResult } from "./fantasy-west";
-import { GenerateHorrorResult } from "./horror";
-import { GenerateRealityResult } from "./reality";
+import { GenerateFantasyEasternResult } from "./fantasy-eastern";
+import { GenerateFantasyWesternResult } from "./fantasy-western";
+import { GenerateRealisticResult } from "./realistic";
 import { GenerateSciFiResult } from "./sf";
 
 export {
+  GenerateApocalypseResult,
   GenerateCommonResult,
-  GenerateFantasyEastResult,
-  GenerateFantasyWestResult,
-  GenerateHorrorResult,
-  GenerateRealityResult,
+  GenerateFantasyEasternResult,
+  GenerateFantasyWesternResult,
+  GenerateRealisticResult,
   GenerateSciFiResult,
 };
