@@ -1,4 +1,5 @@
 import fantasy_western from "@/data/random-character/fantasy-western.json";
+import * as crypto from "crypto";
 
 const status = fantasy_western.traits.status;
 const talent_w = fantasy_western.traits.talent_w;
@@ -7,10 +8,10 @@ const secret = fantasy_western.traits.secret;
 
 function getRandomParameters() {
   return {
-    status: status[Math.floor(Math.random() * status.length)],
-    talent_w: talent_w[Math.floor(Math.random() * talent_w.length)],
-    lineage: lineage[Math.floor(Math.random() * lineage.length)],
-    secret: secret[Math.floor(Math.random() * secret.length)],
+    status: status[crypto.randomInt(status.length)],
+    talent_w: talent_w[crypto.randomInt(talent_w.length)],
+    lineage: lineage[crypto.randomInt(lineage.length)],
+    secret: secret[crypto.randomInt(secret.length)],
   };
 }
 
