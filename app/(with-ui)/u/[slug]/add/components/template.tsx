@@ -13,6 +13,7 @@ import IconHalf from "@/public/assets/icons/image/half.svg";
 import { Character, EPropertyType, Property } from "@/types/character";
 import { PlanLimit } from "@/types/plan";
 import { Relationship } from "@/types/relationship";
+import { generateId } from "@/utils/random-character/common";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 import { CircleAlert } from "lucide-react";
@@ -25,14 +26,6 @@ import { createCharacterSchema } from "../schema";
 import { ButtonAddRelationship } from "./button-add-relationship";
 import ListPropertiesWithValidation from "./list-properties-with-validation";
 import UploadImage from "./upload-image/upload-image";
-
-// 간단한 ID 생성 함수 (cryptographically secure)
-const generateId = () => {
-  const arr = new Uint8Array(9);
-  window.crypto.getRandomValues(arr);
-  // Convert each byte to base-36 and join
-  return Array.from(arr, b => b.toString(36)).join('');
-};
 
 export default function CharacterAddTemplate({
   slug,

@@ -53,5 +53,17 @@ export function GenerateCommonResult() {
 }
 
 export function generateId() {
-  return Math.random().toString(36).substr(2, 9);
+  // Use cryptographically secure random number generator
+  const arr = new Uint8Array(9);
+  if (typeof window !== 'undefined' && window.crypto) {
+    window.crypto.getRandomValues(arr);
+  } else if (typeof crypto !== 'undefined') {
+    // Node.js or Web Worker environment
+    crypto.getRandomValues(arr);
+  } else {
+    // Fallback for environments without crypto API (should not happen in modern browsers/Node.js)
+    throw new Error('No cryptographic random number generator available');
+  }
+  // Convert each byte to base-36 and join
+  return Array.from(arr, b => b.toString(36)).join('');
 }
