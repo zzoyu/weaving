@@ -14,6 +14,7 @@ import { Character, EPropertyType, Property } from "@/types/character";
 import { PlanLimit } from "@/types/plan";
 import { Relationship } from "@/types/relationship";
 import { getPublicUrl } from "@/utils/image";
+import { generateId } from "@/utils/random-character/common";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 import { CircleAlert } from "lucide-react";
@@ -26,9 +27,6 @@ import ListPropertiesWithValidation from "../../../add/components/list-propertie
 import UploadImage from "../../../add/components/upload-image/upload-image";
 import { usePropertyValidation } from "../../../add/hooks/use-property-validation";
 import { updateCharacterSchema } from "../schema";
-
-// 간단한 ID 생성 함수
-const generateId = () => Math.random().toString(36).substr(2, 9);
 
 export default function CharacterEditTemplate({
   character,

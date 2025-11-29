@@ -4,6 +4,7 @@ import AddIcon from "@/public/assets/icons/add.svg";
 import { EPropertyType, Property } from "@/types/character";
 
 import { cn } from "@/lib/utils";
+import { generateId } from "@/utils/random-character/common";
 import { DragDropProvider } from "@dnd-kit/react";
 import { useSortable } from "@dnd-kit/react/sortable";
 import {
@@ -14,9 +15,6 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 import ListPropertiesItem from "./list-properties-item";
-
-// 간단한 ID 생성 함수
-const generateId = () => Math.random().toString(36).substr(2, 9);
 
 export default function ListProperties({
   properties,

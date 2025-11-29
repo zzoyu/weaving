@@ -13,12 +13,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { generateId } from "@/utils/random-character/common";
 import { Info, Minus, Plus } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import StatsChart from "./stats-chart";
-
-// 간단한 ID 생성 함수
-const generateId = () => Math.random().toString(36).substr(2, 9);
 
 function StatProperty({
   value,
