@@ -8,6 +8,7 @@ interface StatsChartProps {
     name: string;
     value: number;
     fullMark: number;
+    max?: number;
   }[];
 }
 
@@ -21,8 +22,9 @@ export default function StatsChart({ data }: StatsChartProps) {
         width={300}
         height={250}
         data={data}
+        maxBarSize={10}
       >
-        <PolarGrid />
+        <PolarGrid max={10} />
         <PolarAngleAxis
           dataKey="id"
           tick={(props) => {
@@ -39,6 +41,7 @@ export default function StatsChart({ data }: StatsChartProps) {
               </text>
             );
           }}
+          max={10}
         />
 
         <Radar
@@ -47,6 +50,7 @@ export default function StatsChart({ data }: StatsChartProps) {
           stroke="#79C78E"
           fill="#97E6AB"
           fillOpacity={0.8}
+          max={10}
         />
       </RadarChart>
     </div>

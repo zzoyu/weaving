@@ -46,7 +46,7 @@ export function generateMetadata(): Metadata {
       description: "우리의 세계가 만나는 곳",
       images: [
         {
-          url: `${baseUrl}/assets/images/og/with-logo.jpg`,
+          url: `${baseUrl}/assets/images/og/with-logo.webp`,
           width: 1200,
           height: 630,
           alt: "위빙 - 우리의 세계가 만나는 곳",

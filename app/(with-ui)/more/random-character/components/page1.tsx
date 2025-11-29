@@ -20,7 +20,7 @@ export default function Page1({
         <Image
           unoptimized
           unselectable="on"
-          src="/assets/images/more/random-character/header.png"
+          src="/assets/images/more/random-character/header.webp"
           alt="Random Character Illustration"
           width={400}
           height={400}

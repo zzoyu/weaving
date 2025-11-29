@@ -34,7 +34,7 @@ export default function Step3({
         <div className="flex flex-col gap-4 items-center relative w-full">
           <div className="relative w-3/4 h-auto aspect-square -mt-10">
             <Image
-              src="/assets/images/onboarding/welcome.png"
+              src="/assets/images/onboarding/welcome.webp"
               className="w-full h-full"
               fill
               objectFit="contain"

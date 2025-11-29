@@ -27,7 +27,7 @@ export default function ListUniverseItem({
             unoptimized
             src={
               getPublicUrl(universe.thumbnail || universe?.image?.[0]) ||
-              `/assets/images/og/with-logo.jpg`
+              `/assets/images/og/with-logo.webp`
             }
             alt={universe.name}
             fill

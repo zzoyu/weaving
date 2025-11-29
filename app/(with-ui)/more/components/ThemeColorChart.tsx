@@ -92,7 +92,7 @@ export default function ThemeColorChart({ characters }: ThemeColorChartProps) {
       <div className="w-full flex flex-col items-center justify-center py-4 lg:py-10 h-full">
         <Image
           unoptimized
-          src={`/assets/images/more/theme-color-biased/${mainColor}.png`}
+          src={`/assets/images/more/theme-color-biased/${mainColor}.webp`}
           alt="theme-color-chart"
           width={300}
           height={300}
