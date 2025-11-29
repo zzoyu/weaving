@@ -56,7 +56,7 @@ function StatProperty({
         step={1}
         min={0}
         max={fullMark}
-        size={10}
+        size={20}
         maxLength={2}
         className="flex justify-center items-center text-center"
       />
@@ -137,11 +137,11 @@ export default function StatsProperties({
               능력치는 최대 6개까지 저장할 수 있어요
             </div>
           )}
-          <div className="flex flex-col px-8">
+          <div className="flex flex-col px-4">
             {currentProperties.map((prop, index) => (
               <div
                 key={`${prop.id}-${index}`}
-                className="flex items-center justify-between mb-4 gap-4"
+                className="flex items-center justify-between mb-4 gap-1"
               >
                 <Input
                   type="text"
