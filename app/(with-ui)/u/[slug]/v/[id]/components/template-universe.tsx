@@ -30,7 +30,7 @@ export default function TemplateUniverse({
         <div className="h-48 relative flex items-center justify-center mt-8 mb-2 w-full content-visibility-auto">
           {universe.image && universe.image.length > 0 ? (
             <Image
-              quality={50}
+              quality={70}
               src={getPublicUrl(universe.image[0]) || ""}
               alt={universe.name}
               fill
