@@ -50,23 +50,27 @@ export default function TemplateProfile({
         isMine={isMyProfile}
       />
 
-      <div className="w-full px-10">
+      <div className="w-full px-10 content-visibility-auto">
         <ColorProperties properties={colorProperties} />
       </div>
 
-      {stats && <StatsChart data={stats} />}
+      {stats && (
+        <div className="content-visibility-auto">
+          <StatsChart data={stats} />
+        </div>
+      )}
 
       {relationships && relationships.length > 0 && (
-        <>
+        <div className="content-visibility-auto">
           <RelationshipCard
             character={characterData}
             relationships={relationships}
           />
-        </>
+        </div>
       )}
 
       {hashtags && hashtags.length > 0 && (
-        <div className="inline-flex flex-wrap gap-2 px-10">
+        <div className="inline-flex flex-wrap gap-2 px-10 content-visibility-auto">
           {hashtags.map((tag, index) => (
             <span key={`hashtag-${index}-${tag}`} className="item-hashtag">
               #{tag}

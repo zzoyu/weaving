@@ -3,6 +3,8 @@ import { isAllowedExternalUrl } from "@/utils/image";
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
+export const revalidate = 43200; // 12시간 캐싱
+
 const pretendardFont = fetch(
   "https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/public/static/Pretendard-ExtraBold.otf"
 ).then(async (res) => await res.arrayBuffer());
@@ -33,6 +35,11 @@ export async function GET(request: Request) {
     }
     const imageBuffer = await imageRes.arrayBuffer();
 
+    // Convert ArrayBuffer to base64 data URL for @vercel/og
+    const base64Image = Buffer.from(imageBuffer).toString("base64");
+    const contentType = imageRes.headers.get("content-type") || "image/png";
+    const dataUrl = `data:${contentType};base64,${base64Image}`;
+
     return new ImageResponse(
       (
         <div
@@ -51,9 +58,11 @@ export async function GET(request: Request) {
           <img
             src={
               process.env.NEXT_PUBLIC_BASE_URL +
-              "/assets/images/og/without-logo.jpg"
+              "/assets/images/og/without-logo.png"
             }
             alt="without-logo"
+            width={600}
+            height={315}
             style={{
               position: "absolute",
               top: 0,
@@ -85,8 +94,10 @@ export async function GET(request: Request) {
               }}
             >
               <img
-                src={imageBuffer as any}
+                src={dataUrl}
                 alt={name || ""}
+                width={180}
+                height={180}
                 style={{
                   width: "100%",
                   height: "100%",

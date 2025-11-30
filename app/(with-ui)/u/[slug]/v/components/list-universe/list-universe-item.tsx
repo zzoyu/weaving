@@ -24,7 +24,7 @@ export default function ListUniverseItem({
       >
         <div className="w-full aspect-[16/9] relative">
           <Image
-            unoptimized
+            quality={50}
             src={
               getPublicUrl(universe.thumbnail || universe?.image?.[0]) ||
               `/assets/images/og/with-logo.webp`

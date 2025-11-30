@@ -113,7 +113,9 @@ export default async function CharacterPage({
           }}
         />
       </Suspense>
-      <MorePageResultAd />
+      <div className="content-visibility-auto">
+        <MorePageResultAd />
+      </div>
     </main>
   );
 }

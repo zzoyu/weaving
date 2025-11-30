@@ -52,6 +52,11 @@ export default async function Image({
     }
     const imageBuffer = await imageRes.arrayBuffer();
 
+    // Convert ArrayBuffer to base64 data URL for @vercel/og
+    const base64Image = Buffer.from(imageBuffer).toString("base64");
+    const contentType = imageRes.headers.get("content-type") || "image/png";
+    const dataUrl = `data:${contentType};base64,${base64Image}`;
+
     return new ImageResponse(
       (
         <div
@@ -70,9 +75,11 @@ export default async function Image({
           <img
             src={
               process.env.NEXT_PUBLIC_BASE_URL +
-              "/assets/images/og/without-logo.jpg"
+              "/assets/images/og/without-logo.png"
             }
             alt="without-logo"
+            width={600}
+            height={315}
             style={{
               position: "absolute",
               top: 0,
@@ -104,8 +111,10 @@ export default async function Image({
               }}
             >
               <img
-                src={imageBuffer as any}
+                src={dataUrl}
                 alt={name || ""}
+                width={180}
+                height={180}
                 style={{
                   width: "100%",
                   height: "100%",

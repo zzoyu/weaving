@@ -27,10 +27,10 @@ export default function TemplateUniverse({
     <div className="w-full max-w-2xl mx-auto flex flex-col items-center gap-8 pb-20">
       {/* 상단 이미지 */}
       {universe?.image?.[0] && (
-        <div className="h-48 relative flex items-center justify-center mt-8 mb-2 w-full">
+        <div className="h-48 relative flex items-center justify-center mt-8 mb-2 w-full content-visibility-auto">
           {universe.image && universe.image.length > 0 ? (
             <Image
-              unoptimized
+              quality={50}
               src={getPublicUrl(universe.image[0]) || ""}
               alt={universe.name}
               fill
@@ -58,7 +58,7 @@ export default function TemplateUniverse({
       </div>
 
       {/* 속성 카드 리스트 */}
-      <div className="flex flex-col justify-center items-center gap-2 w-full">
+      <div className="flex flex-col justify-center items-center gap-2 w-full content-visibility-auto">
         <div className="text-gray-700 w-full px-10">
           {universe.properties && universe.properties.length > 0 && (
             <div className="w-full flex flex-col gap-3 mt-2">
@@ -74,13 +74,13 @@ export default function TemplateUniverse({
       </div>
 
       {/* 캐릭터 리스트 */}
-      <div className="w-full px-0 mt-2">
+      <div className="w-full px-0 mt-2 content-visibility-auto">
         <ListCharacter characters={characters} isMine={isMyProfile} />
       </div>
 
       {/* 해시태그 */}
       {hashtags && (
-        <div className="inline-flex flex-wrap gap-2 px-10">
+        <div className="inline-flex flex-wrap gap-2 px-10 content-visibility-auto">
           {hashtags.map((tag, index) => (
             <span key={index} className="item-hashtag">
               #{tag}

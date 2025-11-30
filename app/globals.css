@@ -115,6 +115,10 @@ svg > text {
   .text-balance {
     text-wrap: balance;
   }
+
+  .content-visibility-auto {
+    content-visibility: auto;
+  }
 }
 
 /* ===== Scrollbar Custom ===== */
