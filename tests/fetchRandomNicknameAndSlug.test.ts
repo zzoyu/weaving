@@ -9,18 +9,18 @@ type TwitterMetadata = { provider_id: string | number };
 
 // mock supabase client used inside the function
 vi.mock("../utils/supabase/server", () => ({
-  createClient: () => ({
-    from: () => ({
-      select: () => ({
-        eq: () => ({
-          limit: () => ({
-            // default: no existing slug
-            then: (cb: any) => cb([]),
-          }),
+  createClient: () =>
+    Promise.resolve({
+      from: () => ({
+        select: () => ({
+          in: () =>
+            Promise.resolve({
+              // default: no existing slug
+              data: [],
+            }),
         }),
       }),
     }),
-  }),
 }));
 
 describe("충돌 테스트", () => {
@@ -30,16 +30,10 @@ describe("충돌 테스트", () => {
     const total = 5000;
     for (let i = 0; i < total; i++) {
       const provider_id = generateProviderId(); // 19자리 숫자 문자열 생성
-      const { nickname, slug, candidates } = await fetchRandomNicknameAndSlug({
+      const { nickname, slug } = await fetchRandomNicknameAndSlug({
         provider_id: provider_id,
-      } as any);
-      if (
-        seenNicknames.has(nickname) ||
-        (seenSlugs.has(slug) &&
-          !Boolean(
-            candidates.some((candidate) => seenSlugs.has(candidate) == false)
-          ))
-      ) {
+      } as TwitterMetadata);
+      if (seenNicknames.has(nickname) || seenSlugs.has(slug)) {
         // print detailed debug info before letting the test fail
         console.log(`Collision at iteration ${i}`);
         console.log(`provider_id: ${provider_id}`);
