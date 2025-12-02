@@ -12,6 +12,9 @@ export const size = {
   height: 315,
 };
 
+// Cache duration in seconds (12 hours)
+const CACHE_MAX_AGE = 43200;
+
 const pretendardFont = fetch(
   "https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/public/static/Pretendard-ExtraBold.otf"
 ).then(async (res) => await res.arrayBuffer());
@@ -177,6 +180,10 @@ export default async function Image({
             style: "normal",
           },
         ],
+        headers: {
+          "Cache-Control": `public, max-age=${CACHE_MAX_AGE}, s-maxage=${CACHE_MAX_AGE}, stale-while-revalidate=${CACHE_MAX_AGE}`,
+          "CDN-Cache-Control": `public, max-age=${CACHE_MAX_AGE}`,
+        },
       }
     );
   } catch (e: unknown) {
