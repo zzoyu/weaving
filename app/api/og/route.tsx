@@ -3,7 +3,9 @@ import { isAllowedExternalUrl } from "@/utils/image";
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const revalidate = 43200; // 12시간 캐싱
+
+// Cache duration in seconds (12 hours)
+const CACHE_MAX_AGE = 43200;
 
 const pretendardFont = fetch(
   "https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/public/static/Pretendard-ExtraBold.otf"
@@ -160,6 +162,10 @@ export async function GET(request: Request) {
             style: "normal",
           },
         ],
+        headers: {
+          "Cache-Control": `public, max-age=${CACHE_MAX_AGE}, s-maxage=${CACHE_MAX_AGE}, stale-while-revalidate=${CACHE_MAX_AGE}`,
+          "CDN-Cache-Control": `public, max-age=${CACHE_MAX_AGE}`,
+        },
       }
     );
   } catch (e: unknown) {
