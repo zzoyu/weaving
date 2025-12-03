@@ -1,5 +1,6 @@
 import { fetchProfileByUserId } from "@/app/profile/actions";
 import { createClient } from "@/utils/supabase/server";
+import ButtonAddAction from "./components/button-add-action";
 import { NavigationSignIn, NavigationSignOut } from "./components/navigation";
 
 export default async function NavigationPage() {
@@ -13,5 +14,10 @@ export default async function NavigationPage() {
     return <NavigationSignOut />;
   }
 
-  return <NavigationSignIn slug={responseProfile?.slug} />;
+  return (
+    <NavigationSignIn
+      slug={responseProfile?.slug}
+      actionButton={<ButtonAddAction slug={responseProfile.slug} />}
+    />
+  );
 }

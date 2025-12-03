@@ -28,6 +28,7 @@ const config: Config = {
         primary: {
           DEFAULT: "#97E6AB",
           secondary: "#79C78E",
+          accent: "#68E7FA",
         },
         state: {
           success: "#4AAE7A",

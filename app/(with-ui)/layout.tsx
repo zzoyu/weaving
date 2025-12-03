@@ -2,6 +2,7 @@ import SidebarAd from "@/components/ads/sidebar-ad";
 import { createClient } from "@/utils/supabase/server";
 import { NavigationSignOut } from "./@navigation/components/navigation";
 import HeaderAd from "./components/header-ad";
+import ScrollContainer from "./components/scroll-container";
 
 export default async function UILayout({
   children,
@@ -20,7 +21,7 @@ export default async function UILayout({
   return (
     <div className="layout flex flex-col !h-full min-h-full max-h-full pt-14 relative">
       {header}
-      <div className="w-full h-full overflow-y-auto grow shrink">
+      <ScrollContainer>
         <HeaderAd />
         {children}
         <div className="px-2 fixed top-14 left-0  z-10 lg:w-40 h-full hidden lg:block pb-10 overflow-y-clip">
@@ -30,7 +31,7 @@ export default async function UILayout({
           {/* Right ad (desktop only) */}
           <SidebarAd position="right" />
         </div>
-      </div>
+      </ScrollContainer>
       {userId ? navigation : <NavigationSignOut />}
     </div>
   );

@@ -2,7 +2,6 @@ import { fetchProfileBySlug } from "@/app/profile/actions";
 import { createClient } from "@/utils/supabase/server";
 import { Suspense } from "react";
 import { fetchUniversesByProfileId } from "./actions";
-import ButtonAddUniverse from "./components/button-add-universe";
 import { UniverseList } from "./components/universe-list";
 import { UniverseListSkeleton } from "./components/universe-list-skeleton";
 
@@ -34,8 +33,6 @@ export default async function UniversePage({
           {universes.length || 0}개의 세계관
         </span>
       </div>
-
-      {isMine && <ButtonAddUniverse slug={params.slug} />}
 
       <div className="w-full mt-2 pb-20">
         <Suspense fallback={<UniverseListSkeleton />}>

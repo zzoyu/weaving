@@ -5,7 +5,9 @@ import { Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -96,11 +98,11 @@ export function DialogShareButton({
           <DialogTitle>공유하기</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-6">
-          <div className="flex flex-row w-full gap-2 mt-2 justify-center">
+          <div className="flex flex-col sm:flex-row w-full gap-2 mt-2 justify-center">
             <Button
               type="button"
               size="icon"
-              className="w-16 h-16 rounded-2xl"
+              className="w-full justify-start sm:justify-center sm:w-16 h-16 px-2 sm:p-0 rounded-lg"
               asChild
               variant="default"
             >
@@ -109,33 +111,48 @@ export function DialogShareButton({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <XIcon
-                  className="text-white !w-6 !h-6"
-                  viewBox="0 0 300 271"
-                  fill="white"
-                />
+                <div className="w-16 h-16 m-0 p-0 flex items-center justify-center fill-white dark:fill-black">
+                  <XIcon
+                    className="text-white !w-6 !h-6"
+                    viewBox="0 0 300 271"
+                  />
+                </div>
+                <span className="sm:hidden ml-4 text-lg">X (twitter)</span>
               </a>
             </Button>
             <Button
               type="button"
               size="lg"
-              className="w-16 h-16 relative"
-              variant="ghost"
+              className="w-full sm:w-16 h-16 relative !bg-[#FAE100] justify-start px-4 sm:p-0 sm:justify-center"
               onClick={shareKakaotalk}
             >
               <Image
                 src="/assets/images/share/kakaotalk_sharing_btn_medium.png"
                 alt="카카오톡 공유 버튼"
                 unoptimized
-                width={0}
-                height={0}
-                fill
+                width={64}
+                height={64}
                 className="h-12 w-12"
               />
+              <span className="sm:hidden ml-6 text-lg text-text-black">
+                카카오톡
+              </span>
+            </Button>
+            <Button
+              type="button"
+              size="lg"
+              className="w-full sm:w-16 h-16 relative justify-start px-2 sm:p-0 sm:justify-center [&_svg]:size-6 sm:hidden"
+              variant="darker-secondary"
+              onClick={handleCopy}
+            >
+              <div className="w-16 h-16 flex items-center justify-center">
+                <Copy />
+              </div>
+              <span className="sm:hidden ml-4 text-lg">링크 복사</span>
             </Button>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="items-center space-x-2 hidden sm:flex">
             <div className="grid flex-1 gap-2">
               <Label htmlFor="link" className="sr-only">
                 Link
@@ -157,6 +174,17 @@ export function DialogShareButton({
             </Button>
           </div>
         </div>
+        <DialogFooter className="sm:hidden">
+          <DialogClose asChild>
+            <Button
+              type="button"
+              variant="secondary"
+              className="w-full h-16 text-lg font-bold text-opacity-70"
+            >
+              닫기
+            </Button>
+          </DialogClose>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

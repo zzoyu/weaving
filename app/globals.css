@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@plugin "@midudev/tailwind-animations";
 
 /* @plugin "tailwindcss/typography"; */
 

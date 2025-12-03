@@ -10,7 +10,6 @@ import {
   fetchFavoriteCharactersByProfileId,
   fetchProfileBySlug,
 } from "./actions";
-import ButtonAddProfile from "./components/button-add-profile";
 import ButtonRequestFriend from "./components/button-request-friend";
 import { ProfileList } from "./components/profile-list";
 import Loading from "./loading";
@@ -132,9 +131,6 @@ export default async function PublicProfilePage({
           />
         )}
       </div>
-      {isMine && myProfile && myProfile?.slug && (
-        <ButtonAddProfile href={`/u/${myProfile.slug}/add#top`} scroll={true} />
-      )}
 
       <Suspense fallback={<Loading />}>
         <ProfileList
