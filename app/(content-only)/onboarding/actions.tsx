@@ -59,7 +59,7 @@ export async function fetchRandomNicknameAndSlug(metadata: TwitterMetadata) {
 
   const supabase = await createClient();
   const { data: existingSlugs } = await supabase
-    .from("profiles")
+    .from("profile")
     .select("slug")
     .in("slug", slugCandidates);
 

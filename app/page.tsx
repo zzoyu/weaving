@@ -17,7 +17,7 @@ export default async function Home({
   } else if (data?.user?.id) {
     // 추가: 프로필이 없는 경우 리디렉션
     const { data: profileData, error: profileError } = await client
-      .from("profiles")
+      .from("profile")
       .select("*")
       .eq("user_id", data.user.id)
       .single();
