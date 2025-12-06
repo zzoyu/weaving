@@ -1,10 +1,9 @@
 import { isGrantedUserByProfileSlug } from "@/actions/is-granted-user";
 import { fetchPlanByProfileId } from "@/app/actions/plan";
 import { fetchCharactersByProfileId } from "@/app/character/actions";
-import { Universe } from "@/types/universe";
-import { createClient } from "@/utils/supabase/server";
 import { notFound, redirect } from "next/navigation";
 import { fetchCharactersByUniverseId, fetchUniverseById } from "../../actions";
+import { updateUniverse } from "./actions";
 import EditUniverse from "./components/edit-universe";
 
 export default async function EditPage({
@@ -12,7 +11,6 @@ export default async function EditPage({
 }: {
   params: { slug: string; id: string };
 }) {
-  const supabase = await createClient();
   const isGranted = await isGrantedUserByProfileSlug(params.slug);
   if (!isGranted) {
     redirect("/");
@@ -39,59 +37,14 @@ export default async function EditPage({
         initialCharacters={characters}
         characters={charactersOfProfile}
         plan={plan}
-        onSubmit={async (
-          data: Universe & { characterUniverses?: { character_id: number }[] }
-        ) => {
+        onSubmit={async (formData: FormData) => {
           "use server";
-          const supabase = await createClient();
-
-          // 이미지가 변경되었는지 확인 (URL이 blob:으로 시작하는 경우)
-          let image = data.image;
-          if (image?.[0]?.startsWith("blob:")) {
-            // TODO: 이미지 업로드 로직 구현
-            // 현재는 임시로 기존 이미지 유지
-            image = universe.image;
-          }
-
-          const { error } = await supabase
-            .from("universes")
-            .update({
-              name: data.name,
-              description: data.description,
-              hashtags: data.hashtags,
-              properties: data.properties,
-              image: image,
-            })
-            .eq("id", universe.id);
-
-          if (error) {
-            throw new Error("세계관 수정 중 오류가 발생했습니다.");
-          }
-
-          // 기존 캐릭터-세계관 관계 삭제
-          await supabase
-            .from("universes_characters")
-            .delete()
-            .eq("universe_id", universe.id);
-
-          // 새로운 캐릭터-세계관 관계 생성
-          const characterUniverses = data.characterUniverses || [];
-          if (characterUniverses.length > 0) {
-            const { error: relationError } = await supabase
-              .from("universes_characters")
-              .insert(
-                characterUniverses.map((cu) => ({
-                  character_id: cu.character_id,
-                  universe_id: universe.id,
-                }))
-              );
-
-            if (relationError) {
-              throw new Error("캐릭터-세계관 관계 생성에 실패했습니다.");
-            }
-          }
-
-          redirect(`/u/${params.slug}/v/${params.id}`);
+          await updateUniverse(
+            formData,
+            universe.id,
+            universe.profile_id,
+            params.slug
+          );
         }}
       />
     </main>

@@ -207,15 +207,47 @@ export default function UniverseForm({
 
             await onSubmit(formData);
           } else {
-            // 수정하는 경우 객체 데이터 사용
-            const formData = {
-              ...universe,
-              name: data.name,
-              description: data.description || "",
-              properties: data.properties,
-              hashtags: data.hashtags,
-              characterUniverses: data.characterUniverses,
-            };
+            // 수정하는 경우에도 FormData 사용 (이미지 업로드 지원)
+            const formData = new FormData();
+
+            formData.append("name", data.name);
+            formData.append("description", data.description || "");
+
+            // 이미지 관련 필드
+            const form = document.querySelector("form") as HTMLFormElement;
+            const imageFile = form["universe-image"] as HTMLInputElement;
+            const thumbnailFile = form[
+              "universe-thumbnail"
+            ] as HTMLInputElement;
+            const imageIsEdited = form[
+              "universe-image-is-edited"
+            ] as HTMLInputElement;
+
+            if (imageFile?.files?.[0]) {
+              formData.append("universe-image", imageFile.files[0]);
+            }
+            if (thumbnailFile?.files?.[0]) {
+              formData.append("universe-thumbnail", thumbnailFile.files[0]);
+            }
+            formData.append(
+              "universe-image-is-edited",
+              imageIsEdited?.value || "false"
+            );
+
+            // 기존 이미지 정보 전달
+            formData.append(
+              "existing-image",
+              JSON.stringify(universe?.image || [])
+            );
+            formData.append("existing-thumbnail", universe?.thumbnail || "");
+
+            // JSON 데이터 추가
+            formData.append("list_properties", JSON.stringify(data.properties));
+            formData.append(
+              "universes_characters",
+              JSON.stringify(data.characterUniverses)
+            );
+            formData.append("hashtags", data.hashtags);
 
             await onSubmit(formData);
           }
