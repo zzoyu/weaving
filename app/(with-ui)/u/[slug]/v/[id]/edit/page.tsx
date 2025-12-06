@@ -27,14 +27,6 @@ export default async function EditPage({
     universe.profile_id
   );
   const { characters } = await fetchCharactersByUniverseId(Number(params.id));
-  console.log(
-    "characters:",
-    characters,
-    params.id,
-    universe,
-    charactersOfProfile
-  );
-
   const plan = await fetchPlanByProfileId(universe.profile_id);
   if (!plan) {
     redirect(`/u/${params.slug}/v/${params.id}`);
