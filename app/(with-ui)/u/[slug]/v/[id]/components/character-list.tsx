@@ -55,7 +55,7 @@ export function ListCharacter({
                     ] + " bg-opacity-50"
                 )}
               >
-                <div className="rounded-full overflow-hidden m-2">
+                <div className="rounded-full overflow-hidden m-2 aspect-square">
                   {isMine || !character.password ? (
                     <Image
                       unoptimized
@@ -67,7 +67,7 @@ export function ListCharacter({
                       alt={character.name}
                       width={100}
                       height={100}
-                      className="w-20 h-20 md:w-[100px] md:h-[100px]"
+                      className="xs:w-10 xs:h-10 w-20 h-20 md:w-[100px] md:h-[100px]"
                     />
                   ) : (
                     <div className="w-20 h-20 md:w-[100px] md:h-[100px] flex justify-center items-center aspect-square">

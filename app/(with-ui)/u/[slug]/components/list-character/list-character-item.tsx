@@ -27,7 +27,12 @@ export default function ListCharacterItem({
   )?.value;
 
   return (
-    <Link href={`/u/${slug}/${character.id}`}>
+    <Link
+      href={`/u/${slug}/${character.id}`}
+      style={{
+        contentVisibility: "auto",
+      }}
+    >
       <div
         className={clsx(
           "flex flex-col items-center justify-center gap-1 overflow-hidden rounded-md relative group focus-within:ring-2"

@@ -246,7 +246,12 @@ export default function UniverseForm({
       })}
       className="flex flex-col gap-4 items-center w-full lg:max-w-md p-4 pb-10"
     >
-      <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
+      <div
+        className="flex flex-col gap-2 w-full justify-center items-center mt-6"
+        style={{
+          contentVisibility: "auto",
+        }}
+      >
         <UploadImage
           name="universe"
           useThumbnail
@@ -257,7 +262,12 @@ export default function UniverseForm({
         />
       </div>
 
-      <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
+      <div
+        className="flex flex-col gap-2 w-full justify-center items-center mt-6"
+        style={{
+          contentVisibility: "auto",
+        }}
+      >
         <input
           className={`text-2xl w-full max-w-72 text-center focus:outline-none ${
             errors.name ? "border-red-500" : "border-primary"
@@ -296,7 +306,12 @@ export default function UniverseForm({
         )}
       </div>
 
-      <div className="w-full px-4">
+      <div
+        className="w-full px-4"
+        style={{
+          contentVisibility: "auto",
+        }}
+      >
         <h2 className="text-xl font-bold mb-2">속성</h2>
         <ListPropertiesWithUniverseValidation
           properties={listProperties}
@@ -326,7 +341,12 @@ export default function UniverseForm({
         )}
       </div>
 
-      <div className="w-full px-4">
+      <div
+        className="w-full px-4"
+        style={{
+          contentVisibility: "auto",
+        }}
+      >
         <h2 className="text-xl font-bold mb-2">소속 캐릭터</h2>
         <div className="flex flex-col gap-2">
           {characterUniverses.length === 0 && (
@@ -378,7 +398,12 @@ export default function UniverseForm({
         </div>
       </div>
 
-      <div className="w-full px-4">
+      <div
+        className="w-full px-4"
+        style={{
+          contentVisibility: "auto",
+        }}
+      >
         <InputHashtag
           error={errors.hashtags}
           value={currentHashtag}

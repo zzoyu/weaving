@@ -114,7 +114,12 @@ export function ProfileCard({
           onClose={() => setIsOpenRelationshipGraph(false)}
         />
       )}
-      <Carousel className="w-full">
+      <Carousel
+        className="w-full "
+        style={{
+          contentVisibility: "auto",
+        }}
+      >
         <CarouselContent>
           {character?.image?.map?.((image: string, index: number) => {
             if (!image) return null;
@@ -138,13 +143,23 @@ export function ProfileCard({
         <CarouselPrevious className="left-2" />
         <CarouselNext className="right-2" />
       </Carousel>
-      <div className="flex flex-col justify-center items-center gap-2 w-full mt-10">
+      <div
+        className="flex flex-col justify-center items-center gap-2 w-full mt-10"
+        style={{
+          contentVisibility: "auto",
+        }}
+      >
         <h2 className="text-2xl font-bold">{character.name}</h2>
         <p className="text-sm text-primary-200">
           {'"' + character.description + '"'}
         </p>
       </div>
-      <div className="flex flex-col justify-center items-center gap-2 w-full">
+      <div
+        className="flex flex-col justify-center items-center gap-2 w-full"
+        style={{
+          contentVisibility: "auto",
+        }}
+      >
         {relationships.length > 0 && (
           <button
             className="bg-green-500 text-background-default rounded-l-full rounded-r-full px-4 py-2 text-sm rounded-lg w-1/3 lg:max-w-40 mb-12"
@@ -154,7 +169,12 @@ export function ProfileCard({
           </button>
         )}
       </div>
-      <div className="flex flex-col justify-center items-center gap-2 w-full">
+      <div
+        className="flex flex-col justify-center items-center gap-2 w-full"
+        style={{
+          contentVisibility: "auto",
+        }}
+      >
         <div className="text-gray-700 w-full px-10">
           {otherProperties?.map?.((property: Property, index) => (
             <CharacterProfileField
