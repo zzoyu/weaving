@@ -44,3 +44,6 @@ next-env.d.ts
 
 # ETC
 CLAUDE.md
+
+# Lock files (project uses bun.lock)
+package-lock.json

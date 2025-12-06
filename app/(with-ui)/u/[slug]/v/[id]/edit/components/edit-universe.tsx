@@ -9,7 +9,7 @@ interface EditUniverseProps {
   universe: Universe;
   characters: Character[];
   initialCharacters?: CharacterWithProfile[];
-  onSubmit: (data: Universe) => Promise<void>;
+  onSubmit: (data: FormData) => Promise<void>;
   plan: Plan;
 }
 
