@@ -43,7 +43,7 @@ export async function updateUniverse(
     let imageUrl = existingImage;
     let thumbnailUrl = existingThumbnail;
 
-    // Only upload new images if they were edited
+    // Only upload new image if it was edited
     if (imageIsEdited && image && image.size > 0) {
       const newImageUrl = await uploadImage(
         image,
