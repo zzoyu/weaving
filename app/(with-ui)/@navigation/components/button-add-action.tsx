@@ -11,13 +11,14 @@ import Link from "next/link";
 export default function ButtonAddAction({ slug }: { slug: string }) {
   return (
     <Dialog>
-      <div className="fixed bottom-6 z-30 w-full flex justify-center pointer-events-none">
-        <DialogTrigger asChild>
-          <button className="relative w-16 h-16 bg-gradient-to-br from-primary to-primary-accent rounded-full flex items-center justify-center dark:text-text-black hover:scale-105 transition-transform hover:rotate-90 hover:-translate-y-0.5 pointer-events-auto ring-1 ring-primary/50">
+      <DialogTrigger asChild>
+        <div className="absolute bottom-0">
+          <button className="button-add-action">
             <PlusIcon className="w-6 h-6" />
           </button>
-        </DialogTrigger>
-      </div>
+        </div>
+      </DialogTrigger>
+
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>추가하기</DialogTitle>

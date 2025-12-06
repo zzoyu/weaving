@@ -63,11 +63,11 @@ export default function ListCharacterItem({
               <div
                 className={clsx(
                   colorList?.[themeColor || "white"],
-                  " rounded-full absolute bottom-1 right-1 md:bottom-2.5 md:right-2.5 w-5 h-5 z-20"
+                  "rounded-full absolute bottom-1 right-1 md:bottom-2.5 md:right-2.5 w-5 h-5 z-20"
                 )}
               ></div>
             )}
-            <div className="rounded-full overflow-hidden m-2 relative flex justify-center items-center ">
+            <div className="rounded-full overflow-hidden m-2 relative flex justify-center items-center aspect-square">
               {isMine || !character.password ? (
                 <Image
                   unoptimized

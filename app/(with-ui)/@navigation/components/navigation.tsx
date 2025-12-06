@@ -53,14 +53,18 @@ export function NavigationSignIn({
               href={item.href}
             >
               <item.icon />
-              <span className=" text-xs">{item.label}</span>
+              <span className="text-xs">{item.label}</span>
             </Link>
           ) : (
-            <div key={index} className="flex flex-col items-center w-3/5" />
+            <div
+              key={index}
+              className="flex flex-col items-center w-3/5 justify-start relative"
+            >
+              {actionButton}
+            </div>
           )
         )}
       </div>
-      {actionButton}
     </nav>
   );
 }
