@@ -244,7 +244,7 @@ export default function UniverseForm({
           setIsSubmitting(false);
         }
       })}
-      className="flex flex-col gap-4 items-center w-full lg:max-w-md p-4"
+      className="flex flex-col gap-4 items-center w-full lg:max-w-md p-4 pb-10"
     >
       <div className="flex flex-col gap-2 w-full justify-center items-center mt-6">
         <UploadImage
@@ -416,7 +416,7 @@ export default function UniverseForm({
       <button
         type="submit"
         disabled={isSubmitting}
-        className="text-background-default bg-text-black rounded w-full text-xl p-2"
+        className="text-background-default bg-text-black w-full text-xl p-2 bottom-0 fixed"
       >
         저장하기
       </button>
