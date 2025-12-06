@@ -149,7 +149,7 @@ export default function ListPropertiesItem({
           </svg>
         </button>
 
-        <div className="flex-1 flex gap-4">
+        <div className="flex-1 flex gap-2 sm:gap-4">
           <div className="flex flex-row lg:hidden">
             <button onClick={() => handleMove(-1)} type="button">
               <ChevronUp className="text-background-dark" />
