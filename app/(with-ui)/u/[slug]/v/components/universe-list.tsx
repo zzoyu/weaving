@@ -35,7 +35,7 @@ export function UniverseList({
   return (
     <article className="flex flex-col items-center justify-center gap-2 lg:gap-4 mt-2 lg:mt-5 w-full max-w-xl px-4 mx-auto">
       <div className="w-full flex flex-row gap-2 lg:gap-4 justify-center items-center mb-10">
-        <div className="flex items-center rounded-full relative w-full max-w-sm lg:max-w-full mx-auto h-fit">
+        <div className="flex items-center rounded-full relative w-full max-w-sm lg:max-w-full mx-auto h-fit px-10">
           <input
             type="text"
             placeholder="검색"

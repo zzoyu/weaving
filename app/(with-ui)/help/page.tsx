@@ -1,3 +1,4 @@
+import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 
 const features = [
@@ -24,15 +25,17 @@ const features = [
 ];
 export default function HelpPage() {
   return (
-    <div className="flex flex-col justify-center h-full bg-white">
-      <header className="fixed top-0 flex h-10 lg:h-14 w-full items-center justify-between px-2 lg:px-8 bg-transparent">
+    <div className="flex flex-col justify-center mt-5">
+      <header className="fixed top-0 flex h-14 w-full items-center justify-between px-2 lg:px-8 bg-background-default dark:bg-neutral-900">
         <Link href="/mypage" replace>
-          <button className="p-1 rounded-full h-10 flex items-center justify-center text-3xl  bg-transparent">
-            <span className="text-primary-300">← 뒤로가기</span>
+          <button className="p-1 rounded-full h-10 flex items-center justify-center text-2xl  bg-transparent">
+            <span className="text-primary-300 flex flex-row items-center gap-1">
+              <ArrowLeftIcon fill="none" stroke="currentColor" />
+            </span>
           </button>
         </Link>
       </header>
-      <main className="flex flex-col h-full w-full justify-center items-center dark:bg-neutral-900">
+      <main className="flex flex-col h-fit w-full justify-center items-center dark:bg-neutral-900">
         <div className="grid grid-cols-2 gap-4 lg:gap-8 place-items-center w-4/5 max-w-4xl auto-rows-fr">
           {features.map((feature) => (
             <Link
