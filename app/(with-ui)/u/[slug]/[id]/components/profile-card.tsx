@@ -129,7 +129,6 @@ export function ProfileCard({
                 className="relative flex justify-center items-center w-full"
               >
                 <Image
-                  quality={70}
                   src={getPublicUrl(image)}
                   alt={character.name}
                   width={200}

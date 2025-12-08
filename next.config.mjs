@@ -15,6 +15,7 @@ const nextConfig = {
   productionBrowserSourceMaps: process.env.NODE_ENV === "production",
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
   images: {
+    unoptimized: true,
     remotePatterns: [
       // change the domains into remotePatterns
       {

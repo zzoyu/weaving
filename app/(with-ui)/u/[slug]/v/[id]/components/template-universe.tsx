@@ -35,7 +35,6 @@ export default function TemplateUniverse({
         >
           {universe.image && universe.image.length > 0 ? (
             <Image
-              quality={70}
               src={getPublicUrl(universe.image[0]) || ""}
               alt={universe.name}
               fill
