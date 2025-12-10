@@ -1,5 +1,23 @@
 import common from "@/data/random-character/common.json";
 
+// For secure random number generation (Node.js/browser support)
+let getSecureRandomValues: (array: Uint8Array) => Uint8Array;
+if (
+  typeof window !== "undefined" &&
+  window.crypto &&
+  typeof window.crypto.getRandomValues === "function"
+) {
+  getSecureRandomValues = arr => window.crypto.getRandomValues(arr);
+} else {
+  // Node.js
+  // Use dynamic import to avoid breaking browser builds
+  const crypto = require("crypto");
+  getSecureRandomValues = arr => {
+    const buf = crypto.randomBytes(arr.length);
+    arr.set(buf);
+    return arr;
+  };
+}
 const body_type = common.traits.body_type;
 const gender = common.traits.gender;
 const personality = common.traits.personality;
@@ -30,8 +48,10 @@ export function getRandomCommonParameters(): RandomCharacterCommonResult {
 export function getRandomColor(): string {
   const letters = "0123456789ABCDEF";
   let color = "#";
+  const randomBytes = getSecureRandomValues(new Uint8Array(6));
   for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
+    // Each byte is 0–255; use value mod 16 for an index 0–15
+    color += letters[randomBytes[i] % 16];
   }
   return color;
 }
