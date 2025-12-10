@@ -39,7 +39,8 @@ export function getPublicUrl(fileName?: string): string {
   if (fileName.trim().toLowerCase().startsWith("blob:")) {
     // Validate that blob: URL matches expected format "blob:<origin>/<uuid>"
     // Typical blob: URL: blob:http(s)://origin/id
-    const blobUrlRegex = /^blob:(https?:\/\/)?[\w\-\.:]+\/[a-fA-F0-9\-]+$/;
+    // Typical blob: URL: blob:{origin}/{uuid}, see https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
+    const blobUrlRegex = /^blob:(https?:\/\/)?[^\s]+$/;
     if (blobUrlRegex.test(fileName.trim())) {
       return fileName;
     } else {
