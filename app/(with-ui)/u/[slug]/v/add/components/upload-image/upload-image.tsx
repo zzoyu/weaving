@@ -43,7 +43,14 @@ export default function UploadImage({
       setImagePreviewSrc(isEdit ? imageUrl || "" : "");
       return;
     }
-    setImagePreviewSrc(URL.createObjectURL(file!));
+    // Only allow image MIME types
+    if (!file.type.startsWith("image/")) {
+      // Optionally show error to user here
+      setIsEdited(false);
+      setImagePreviewSrc(isEdit ? imageUrl || "" : "");
+      return;
+    }
+    setImagePreviewSrc(URL.createObjectURL(file));
     setIsEdited(true);
     if (useThumbnail) {
       setIsOpenedCropLayer(true);
