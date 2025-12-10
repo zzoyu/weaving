@@ -38,6 +38,16 @@ export async function generateRandomCharacter(
   }
 
   const resultCommon = GenerateCommonResult();
+
+  if (
+    !Object.prototype.hasOwnProperty.call(additionalGenerators, type) ||
+    typeof additionalGenerators[type] !== "function"
+  ) {
+    return {
+      error: "지원하지 않는 타입입니다.",
+    };
+  }
+
   const resultAdditional = additionalGenerators[type]();
 
   const client = await createClient();
