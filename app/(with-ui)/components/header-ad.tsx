@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function HeaderAd() {
-  let isPushed = false;
+  const [isPushed, setIsPushed] = useState(false);
   useEffect(() => {
     try {
-      isPushed || ((window.adsbygoogle = window.adsbygoogle || []).push({}), isPushed = true);
+      isPushed || ((window.adsbygoogle = window.adsbygoogle || []).push({}), setIsPushed(true));
     } catch (e) {
       console.error("Adsense error:", e);
     }
