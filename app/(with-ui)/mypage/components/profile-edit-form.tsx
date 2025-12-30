@@ -13,8 +13,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import UploadImageCropLayer from "../../u/[slug]/add/components/upload-image/upload-image-crop-layer";
+import ListFriend from "./list-friend";
 
-export default function ProfileEditForm({ profile }: { profile: Profile }) {
+export default function ProfileEditForm({ profile, friends }: { profile: Profile, friends: Friend[] }) {
   const [name, setName] = useState(profile.nickname);
   const [bio, setBio] = useState(profile.slug);
   const [avatarUrl, setAvatarUrl] = useState(profile.profile_image);
@@ -148,18 +149,25 @@ export default function ProfileEditForm({ profile }: { profile: Profile }) {
         <div className="flex flex-col gap-4 w-full max-w-md">
           <div className="relative flex flex-col gap-8 justify-center items-center">
             <div className="flex flex-row gap-4 items-center w-full justify-center">
-              <div className="relative">
-                <Image
-                  unoptimized
-                  src={avatarUrl || ""}
-                  alt="프로필 사진"
-                  width={96}
-                  height={96}
-                  className="rounded-full"
-                />
-              </div>
+              
               <div className="flex flex-col w-full justify-start">
-                <h2 className="text-xl py-2 px-4 mb-1">{name}</h2>
+                <div className="flex flex-row items-center justify-between w-full py-4">
+                  <div className="relative">
+                    <Image
+                      unoptimized
+                      src={avatarUrl || ""}
+                      alt="프로필 사진"
+                      width={96}
+                      height={96}
+                      className="rounded-full"
+                    />
+                  </div>
+                <div className="flex flex-row items-center justify-between w-full p-6 pr-2">
+
+                <h2 className="text-xl">{name}</h2>
+                <ListFriend friends={friends} />
+                </div>
+                </div>
                 <div className="flex flex-row gap-2 w-full">
                   <Button
                     variant="outline"
@@ -183,7 +191,7 @@ export default function ProfileEditForm({ profile }: { profile: Profile }) {
               </div>
             </div>
 
-            <div className="flex flex-col gap-2 w-full px-2">
+            <div className="flex flex-col gap-2 w-full px-0">
               <div className="w-full flex flex-col gap-2">
                 <label className="text-sm font-medium text-gray-700 dark:text-white">
                   내 우주의 위치

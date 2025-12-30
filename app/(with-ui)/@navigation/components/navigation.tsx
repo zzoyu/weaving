@@ -10,7 +10,7 @@ export function NavigationSignOut() {
         className="text-white flex w-full h-full justify-center items-center p-4 font-bold text-lg"
         href="/"
       >
-        트위터로 시작하기
+        로그인하고 시작하기
       </Link>
     </nav>
   );

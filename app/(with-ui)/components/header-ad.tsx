@@ -3,9 +3,10 @@
 import { useEffect } from "react";
 
 export default function HeaderAd() {
+  let isPushed = false;
   useEffect(() => {
     try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      isPushed || ((window.adsbygoogle = window.adsbygoogle || []).push({}), isPushed = true);
     } catch (e) {
       console.error("Adsense error:", e);
     }
@@ -14,7 +15,7 @@ export default function HeaderAd() {
   return (
     <div
       className="mx-auto w-full flex justify-center items-center overflow-hidden"
-      style={{ height: "100px" }}
+      style={{ height: "50px" }}
     >
       <ins
         className="adsbygoogle block"

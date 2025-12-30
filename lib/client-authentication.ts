@@ -4,11 +4,14 @@ import { createClient } from "@/utils/supabase/client";
 
 export async function signInWithTwitter() {
   const supabase = createClient();
+  
+  const redirectUrl = new URL(window.location.href);
+  redirectUrl.pathname = "/auth/callback";
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "twitter",
     options: {
-      redirectTo: process.env.NEXT_PUBLIC_BASE_URL + "/auth/callback",
+      redirectTo: redirectUrl.toString(),
       queryParams: {
         next: "/",
       },
@@ -21,10 +24,13 @@ export async function signInWithTwitter() {
 export async function signInWithGoogle() {
   const supabase = createClient();
 
+  const redirectUrl = new URL(window.location.href);
+  redirectUrl.pathname = "/auth/callback";
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: process.env.NEXT_PUBLIC_BASE_URL + "/auth/callback",
+      redirectTo: redirectUrl.toString(),
       queryParams: {
         next: "/",
       },
