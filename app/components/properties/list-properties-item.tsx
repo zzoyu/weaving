@@ -154,11 +154,10 @@ export default function ListPropertiesItem({
 
   // Always render the full item layout when not actively dragging.
   const containerClass = cn(
-    "w-full h-fit relative flex items-center justify-center group transform-gpu",
-    {
-      "fixed bottom-0 left-0 right-0 z-50 border-t bg-background-default p-4 shadow-lg":
-        isFixed,
-    },
+    "w-full h-fit relative flex items-center justify-center group",
+    isFixed
+      ? "fixed bottom-0 left-0 right-0 z-50 border-t bg-background-default p-4 shadow-lg"
+      : "transform-gpu",
   );
 
   return (
