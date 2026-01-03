@@ -2,6 +2,7 @@
 
 import type { AutosizeTextAreaRef } from "@/components/ui/autosize-textarea";
 import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
+import { useIsMobileDevice } from "@/hooks/use-is-mobile-device";
 import { cn } from "@/lib/utils";
 import DeleteIcon from "@/public/assets/icons/delete.svg";
 import { Property } from "@/types/character";
@@ -59,6 +60,34 @@ export default function ListPropertiesItem({
   const [isExpanded, setIsExpanded] = useState(false);
   const textareaRef = useRef<AutosizeTextAreaRef | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isFocused, setIsFocused] = useState(false);
+  const itemRef = useRef<HTMLDivElement>(null);
+  const [placeholderHeight, setPlaceholderHeight] = useState(0);
+
+  const isMobile = useIsMobileDevice();
+
+  const handleFocus = () => {
+    if (isMobile) {
+      if (itemRef.current) {
+        setPlaceholderHeight(itemRef.current.offsetHeight);
+      }
+      setIsFocused(true);
+    }
+  };
+
+  const handleBlur = () => {
+    if (isMobile) {
+      // Use setTimeout to allow focus to move to another element in the component
+      setTimeout(() => {
+        if (
+          itemRef.current &&
+          !itemRef.current.contains(document.activeElement)
+        ) {
+          setIsFocused(false);
+        }
+      }, 0);
+    }
+  };
 
   useEffect(() => {
     if (isExpanded) {
@@ -73,7 +102,7 @@ export default function ListPropertiesItem({
       inputRef.current?.focus();
       inputRef.current?.setSelectionRange(
         inputRef.current.value.length,
-        inputRef.current.value.length
+        inputRef.current.value.length,
       );
     }
   }, [isExpanded]);
@@ -121,116 +150,131 @@ export default function ListPropertiesItem({
     );
   }
 
+  const isFixed = !isDragging && isMobile && isFocused;
+
   // Always render the full item layout when not actively dragging.
-  const containerClass = `w-full h-fit relative flex items-center justify-center group transform-gpu`;
+  const containerClass = cn(
+    "w-full h-fit relative flex items-center justify-center group transform-gpu",
+    {
+      "fixed bottom-0 left-0 right-0 z-50 border-t bg-background-default p-4 shadow-lg":
+        isFixed,
+    },
+  );
 
   return (
-    <div className={containerClass} {...(attributes || {})}>
-      <div className="w-full flex gap-4 items-center relative">
-        <button
-          type="button"
-          ref={dragHandleRef}
-          className="p-2 absolute left-0 h-full items-center justify-center lg:flex hidden pointer-events-none lg:pointer-events-auto"
-          aria-label="drag-handle"
-          {...(listeners || {})}
-        >
-          {/* simple grip dots */}
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="text-background-dark h-full"
+    <>
+      {isFixed && <div style={{ height: placeholderHeight }} />}
+      <div ref={itemRef} className={containerClass} {...(attributes || {})}>
+        <div className="w-full flex gap-4 items-center relative">
+          <button
+            type="button"
+            ref={dragHandleRef}
+            className="p-2 absolute left-0 h-full items-center justify-center lg:flex hidden pointer-events-none lg:pointer-events-auto"
+            aria-label="drag-handle"
+            {...(listeners || {})}
           >
-            <circle cx="5" cy="5" r="1.5" fill="currentColor" />
-            <circle cx="5" cy="12" r="1.5" fill="currentColor" />
-            <circle cx="5" cy="19" r="1.5" fill="currentColor" />
-          </svg>
-        </button>
+            {/* simple grip dots */}
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="text-background-dark h-full"
+            >
+              <circle cx="5" cy="5" r="1.5" fill="currentColor" />
+              <circle cx="5" cy="12" r="1.5" fill="currentColor" />
+              <circle cx="5" cy="19" r="1.5" fill="currentColor" />
+            </svg>
+          </button>
 
-        <div className="flex-1 flex gap-2 sm:gap-4">
-          <div className="flex flex-row lg:hidden">
-            <button onClick={() => handleMove(-1)} type="button">
-              <ChevronUp className="text-background-dark" />
-            </button>
-            <button onClick={() => handleMove(1)} type="button">
-              <ChevronDown className="text-background-dark" />
-            </button>
-          </div>
-          <input
-            type="hidden"
-            name="list-properties"
-            value={`${property.key}:${property.value}`}
-          />
-          <div className="lg:w-1/3 w-1/5 flex flex-col">
-            <input
-              className={cn(
-                "text-center p-1 text-base border-background-muted focus:outline-none w-full",
-                {
-                  "border-red-500": keyError || (error && !valueError),
-                }
-              )}
-              type="text"
-              value={property.key}
-              ref={inputRef}
-              onChange={(event) => {
-                onChange({ ...property, key: event.target.value });
-              }}
-            />
-            {keyError && (
-              <span className="text-red-500 text-xs flex items-center gap-1 mt-1">
-                <CircleAlert className="w-3 h-3" />
-                {keyError}
-              </span>
-            )}
-          </div>
-
-          <div className="flex relative flex-1 flex-col">
-            <div className="flex items-center">
-              <AutosizeTextarea
-                ref={textareaRef}
-                minHeight={16}
-                className={cn(
-                  "w-full p-1 border-background-muted focus:outline-none bg-background-default dark:bg-neutral-900 resize-none focus:ring-0 ring-0 text-base",
-                  {
-                    "border-red-500": valueError || (error && !keyError),
-                  }
-                )}
-                value={property.value}
-                onChange={(event) => {
-                  onChange({ ...property, value: event.target.value });
-                }}
-              />
-              <button
-                className="absolute right-0 visible lg:invisible lg:group-hover:visible"
-                type="button"
-                onClick={() => {
-                  onDelete(property);
-                }}
-              >
-                <DeleteIcon
-                  className=" text-background-dark"
-                  width={28}
-                  height={28}
-                />
+          <div className="flex-1 flex gap-2 sm:gap-4">
+            <div className="flex flex-row lg:hidden">
+              <button onClick={() => handleMove(-1)} type="button">
+                <ChevronUp className="text-background-dark" />
+              </button>
+              <button onClick={() => handleMove(1)} type="button">
+                <ChevronDown className="text-background-dark" />
               </button>
             </div>
-            {valueError && (
-              <span className="text-red-500 text-xs flex items-center gap-1 mt-1">
-                <CircleAlert className="inline w-3 h-3" />
-                {valueError}
-              </span>
-            )}
-            {error && !keyError && !valueError && (
-              <span className="text-red-500 text-xs flex items-center gap-1 mt-1">
-                <CircleAlert className="inline w-3 h-3" />
-                {error}
-              </span>
-            )}
+            <input
+              type="hidden"
+              name="list-properties"
+              value={`${property.key}:${property.value}`}
+            />
+            <div className="lg:w-1/3 w-1/5 flex flex-col">
+              <input
+                className={cn(
+                  "text-center p-1 text-base border-background-muted focus:outline-none w-full",
+                  {
+                    "border-red-500": keyError || (error && !valueError),
+                  },
+                )}
+                type="text"
+                value={property.key}
+                ref={inputRef}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                onChange={(event) => {
+                  onChange({ ...property, key: event.target.value });
+                }}
+              />
+              {keyError && (
+                <span className="text-red-500 text-xs flex items-center gap-1 mt-1">
+                  <CircleAlert className="w-3 h-3" />
+                  {keyError}
+                </span>
+              )}
+            </div>
+
+            <div className="flex relative flex-1 flex-col">
+              <div className="flex items-center">
+                <AutosizeTextarea
+                  ref={textareaRef}
+                  minHeight={16}
+                  className={cn(
+                    "w-full p-1 border-background-muted focus:outline-none bg-background-default dark:bg-neutral-900 resize-none focus:ring-0 ring-0 text-base",
+                    {
+                      "border-red-500": valueError || (error && !keyError),
+                    },
+                  )}
+                  value={property.value}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                  onChange={(event) => {
+                    onChange({ ...property, value: event.target.value });
+                  }}
+                />
+                <button
+                  className="absolute right-0 visible lg:invisible lg:group-hover:visible"
+                  type="button"
+                  onClick={() => {
+                    onDelete(property);
+                  }}
+                >
+                  <DeleteIcon
+                    className=" text-background-dark"
+                    width={28}
+                    height={28}
+                  />
+                </button>
+              </div>
+              {valueError && (
+                <span className="text-red-500 text-xs flex items-center gap-1 mt-1">
+                  <CircleAlert className="inline w-3 h-3" />
+                  {valueError}
+                </span>
+              )}
+              {error && !keyError && !valueError && (
+                <span className="text-red-500 text-xs flex items-center gap-1 mt-1">
+                  <CircleAlert className="inline w-3 h-3" />
+                  {error}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
