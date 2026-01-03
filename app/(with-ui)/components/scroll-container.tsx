@@ -21,7 +21,7 @@ export default function ScrollContainer({
   return (
     <div
       ref={scrollRef}
-      className="w-full h-full overflow-y-auto grow shrink"
+      className="relative w-full h-full overflow-y-auto flex flex-col flex-1 min-h-0"
       style={{ scrollbarGutter: "stable" }}
     >
       {children}

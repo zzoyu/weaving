@@ -101,13 +101,14 @@ export default function ThemeColorChart({ characters }: ThemeColorChartProps) {
           {listColorDescription[mainColor as keyof typeof listColorDescription]}
         </h1>
       </div>
-      <div className="w-full mt-4 mb-10">
+      <div className="w-full mt-4 mb-10 mx-10">
         <ResponsiveContainer width="100%" height={80}>
           <BarChart
             data={stackedBarData}
             layout="vertical"
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
             height={80}
+            
           >
             <XAxis type="number" hide domain={[0, totalValue]} />
             <YAxis type="category" dataKey={() => ""} hide />
@@ -125,8 +126,10 @@ export default function ThemeColorChart({ characters }: ThemeColorChartProps) {
                 <Bar
                   key={key}
                   dataKey={key}
+                  
                   stackId="a"
                   fill={hex}
+                  stroke="black"
                   radius={
                     idx === 0
                       ? [4, 0, 0, 4]

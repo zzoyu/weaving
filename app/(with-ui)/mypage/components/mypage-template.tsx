@@ -7,7 +7,7 @@ import ProfileEditForm from "./profile-edit-form";
 export default async function MypageTemplate({ profile, friends }: { profile: Profile, friends: Friend[] }) {
 
   return (
-    <main className="flex flex-col items-center justify-start w-full h-full pt-0">
+    <main className="flex flex-col items-center justify-start w-full h-fit pt-0">
       <section className="w-full max-w-md p-4">
         <div className="mb-4">
           <ProfileEditForm profile={profile} friends={friends} />

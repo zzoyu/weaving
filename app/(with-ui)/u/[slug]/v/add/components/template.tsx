@@ -32,6 +32,14 @@ export default function UniverseAddTemplate({
       slug={slug}
       profileId={profileId}
       onSubmit={handleCreateUniverse}
+      submitButton={
+        <button
+        type="submit"
+        className="text-background-default bg-primary-secondary w-full text-xl p-2 rounded-md mt-4 disabled:opacity-50 disabled:pointer-events-none"
+      >
+        저장하기
+      </button>
+      }
     />
   );
 }

@@ -418,7 +418,7 @@ export default function CharacterAddTemplate({
       <button
         type="submit"
         disabled={isLoading}
-        className="text-background-default bg-text-black rounded w-full text-xl p-2"
+        className="text-background-default bg-primary-secondary rounded w-full text-xl p-2"
       >
         저장하기
       </button>

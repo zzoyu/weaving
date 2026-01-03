@@ -4,6 +4,7 @@ import { fetchUniverseById } from "@/app/(with-ui)/u/[slug]/v/actions";
 import { fetchProfileByUserId } from "@/app/profile/actions";
 import UniverseMenu from "@/components/universe-menu";
 import { createClient } from "@/utils/supabase/server";
+import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 
 export default async function Header({
@@ -32,7 +33,7 @@ export default async function Header({
     >
       <Link href={`/u/${params.slug}/v/`}>
         <button className="p-1 rounded-full h-10 flex items-center justify-center text-2xl bg-transparent">
-          <span className="text-primary-300">← 세계관</span>
+          <span className="text-primary-300 flex items-center gap-2"><ArrowLeftIcon fill="none" stroke="currentColor" /> 세계관</span>
         </button>
       </Link>
       <div className="flex gap-2 items-start justify-center">

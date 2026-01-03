@@ -50,7 +50,7 @@ export default async function FriendPage() {
                     alt={friend.nickname}
                     width={0}
                     height={0}
-                    className="rounded-full w-10 h-10 object-cover"
+                    className="rounded-full w-10 h-10 object-cover bg-white"
                   />
                   <div className="text-gray-500">{friend.nickname}</div>
                 </Link>
