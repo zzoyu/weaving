@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { fetchProfileByUserId } from "../../profile/actions";
+import { fetchFriendsByProfileId } from "./actions";
 import MypageTemplate from "./components/mypage-template";
 
 export default async function EditPage() {
@@ -10,6 +11,7 @@ export default async function EditPage() {
   if (!profile) {
     redirect("/");
   }
+  const friends = await fetchFriendsByProfileId(profile.id)
 
-  return <MypageTemplate profile={profile} />;
+  return <MypageTemplate profile={profile} friends={friends} />;
 }

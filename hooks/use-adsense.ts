@@ -78,7 +78,12 @@ export function useAdSense(
       }
 
       // AdSense 광고 푸시
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
+      catch (e) {
+        console.error("Adsense push error:", e);
+      }
       setIsLoading(false);
       setIsVisible(true);
     } catch (error) {

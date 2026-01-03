@@ -2,26 +2,24 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import ButtonDelete from "./button-delete";
 import ButtonLogout from "./button-logout";
-import ListFriend from "./list-friend";
 import ProfileEditForm from "./profile-edit-form";
 
-export default function MypageTemplate({ profile }: { profile: Profile }) {
+export default async function MypageTemplate({ profile, friends }: { profile: Profile, friends: Friend[] }) {
+
   return (
-    <main className="flex flex-col items-center justify-start w-full h-full pt-0 lg:pt-10">
+    <main className="flex flex-col items-center justify-start w-full h-fit pt-0">
       <section className="w-full max-w-md p-4">
         <div className="mb-4">
-          <ProfileEditForm profile={profile} />
+          <ProfileEditForm profile={profile} friends={friends} />
         </div>
-        <ListFriend profile={profile} />
         <div className="mb-4 flex flex-col">
-          <Separator className="my-2" />
-          <ButtonLogout />
-          <Separator className="my-2" />
           <Link href={"/help"} className="w-full px-4 py-2 text-center">
             도움센터
           </Link>
           <Separator className="my-2" />
-          <ButtonDelete userId={profile.user_id} />
+        <ButtonLogout />
+        <Separator className="my-2" />
+        <ButtonDelete userId={profile.user_id} />
         </div>
       </section>
 

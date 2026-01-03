@@ -28,6 +28,14 @@ export default function EditUniverse({
       characters={characters}
       plan={plan}
       onSubmit={onSubmit}
+      submitButton={
+        <button
+        type="submit"
+        className="text-background-default bg-primary-secondary w-full text-xl p-2 disabled:opacity-50 disabled:pointer-events-none fixed bottom-0"
+      >
+        저장하기
+      </button>
+      }
     />
   );
 }

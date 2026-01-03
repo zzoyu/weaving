@@ -25,10 +25,11 @@ import { useEffect, useState } from "react";
 export default function Landing() {
   const [activeFeature, setActiveFeature] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [isPushed, setIsPushed] = useState(false);
 
   useEffect(() => {
     try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      isPushed || ((window.adsbygoogle = window.adsbygoogle || []).push({}), setIsPushed(true));
     } catch (e) {
       console.error("Adsense error:", e);
     }

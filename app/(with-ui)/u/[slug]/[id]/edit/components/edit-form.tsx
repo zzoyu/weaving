@@ -457,7 +457,7 @@ export default function CharacterEditTemplate({
         <button
           type="submit"
           disabled={isLoading}
-          className="fixed bottom-0 text-background-default bg-text-black w-full text-xl p-2 "
+          className="fixed bottom-0 text-background-default bg-primary-secondary w-full text-xl p-2 "
         >
           저장하기
         </button>

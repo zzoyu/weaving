@@ -24,7 +24,7 @@ export default async function NoticePage({ searchParams }: NoticePageProps) {
   )) ?? { hasNotifications: false };
 
   return (
-    <main className="flex flex-col justify-start pt-2 lg:pt-10 w-full lg:max-w-[40rem] mx-auto">
+    <main className="flex flex-col justify-start pt-2 w-full lg:max-w-[40rem] mx-auto">
       <div className="fixed top-0 w-full flex p-4">
         <h2 className="flex gap-2 items-center text-xl">
           <ButtonBack />

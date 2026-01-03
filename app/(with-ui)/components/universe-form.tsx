@@ -33,7 +33,8 @@ interface UniverseFormProps {
   slug?: string;
   initialCharacters?: CharacterWithProfile[];
   profileId?: number;
-  onSubmit: (data: any) => Promise<void>;
+  onSubmit: (data: FormData) => Promise<void>;
+  submitButton: React.ReactNode;
 }
 
 const defaultProperties: Property[] = [
@@ -72,6 +73,7 @@ export default function UniverseForm({
   slug,
   profileId,
   onSubmit,
+  submitButton,
 }: UniverseFormProps) {
   const { toast } = useToast();
   const router = useRouter();
@@ -470,13 +472,7 @@ export default function UniverseForm({
       />
       <input type="hidden" {...register("hashtags")} value={hashtags} />
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="text-background-default bg-text-black w-full text-xl p-2 bottom-0 fixed"
-      >
-        저장하기
-      </button>
+      {submitButton}
       {isSubmitting ? (
         <OverlayLoading message="세계관을 저장 중입니다..." />
       ) : null}

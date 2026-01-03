@@ -43,7 +43,7 @@ export default function MorePageResultAd({
       key={"more-page-result-ad"}
     >
       <AdContainer className="w-full" label="결과 페이지 광고">
-        {isLoading && <AdSkeleton height="h-40" className="rounded-lg" />}
+        <AdSkeleton height="h-40" className="rounded-lg" />
         <div className="w-full h-full">
           <ins
             className="adsbygoogle block w-full min-h-[160px] rounded-lg"

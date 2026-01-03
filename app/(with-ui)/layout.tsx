@@ -26,10 +26,10 @@ export default async function UILayout({
         {children}
         <div className="px-2 fixed top-14 left-0  z-10 lg:w-40 h-full hidden lg:block pb-10 overflow-y-clip">
           {/* Left ad (desktop only) */}
-          <SidebarAd position="left" />
+          <SidebarAd position="left" key="left" />
 
           {/* Right ad (desktop only) */}
-          <SidebarAd position="right" />
+          <SidebarAd position="right" key="right" />
         </div>
       </ScrollContainer>
       {userId ? navigation : <NavigationSignOut />}

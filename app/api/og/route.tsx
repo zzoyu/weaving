@@ -1,3 +1,4 @@
+
 /* eslint-disable @next/next/no-img-element */
 import { isAllowedExternalUrl } from "@/utils/image";
 import { ImageResponse } from "next/og";

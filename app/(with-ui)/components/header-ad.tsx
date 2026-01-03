@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function HeaderAd() {
+  const [isPushed, setIsPushed] = useState(false);
   useEffect(() => {
     try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      isPushed || ((window.adsbygoogle = window.adsbygoogle || []).push({}), setIsPushed(true));
     } catch (e) {
       console.error("Adsense error:", e);
     }
@@ -14,7 +15,7 @@ export default function HeaderAd() {
   return (
     <div
       className="mx-auto w-full flex justify-center items-center overflow-hidden"
-      style={{ height: "100px" }}
+      style={{ height: "50px" }}
     >
       <ins
         className="adsbygoogle block"

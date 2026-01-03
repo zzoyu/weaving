@@ -1,3 +1,4 @@
+import { ArrowLeftIcon } from "lucide-react";
 import { marked } from "marked";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -101,7 +102,7 @@ export default async function BlogDetailPage({
       <div className="fixed top-0 w-full flex p-4 z-10">
         <h2 className="flex gap-2 items-center text-xl">
           <Link href="/blog" className="transition-colors">
-            ← 블로그
+            <ArrowLeftIcon fill="none" stroke="currentColor" /> 블로그
           </Link>
         </h2>
       </div>
