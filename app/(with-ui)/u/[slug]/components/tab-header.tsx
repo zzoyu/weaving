@@ -16,9 +16,9 @@ function TabHeaderItem({
     <Link
       href={href || ""}
       className={clsx(
-        "text-black w-full text-center border-b-4 flex flex-row items-center justify-center relative",
+        "text-black dark:text-white w-full text-center border-b-4 flex flex-row items-center justify-center relative",
         {
-          "text-black border-black": isActive,
+          "text-black border-black dark:text-white dark:border-white": isActive,
           "text-gray-400 border-gray-400": !isActive,
         }
       )}

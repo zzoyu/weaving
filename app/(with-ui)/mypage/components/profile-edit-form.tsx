@@ -192,7 +192,7 @@ export default function ProfileEditForm({ profile, friends }: { profile: Profile
             </div>
 
             <div className="flex flex-col gap-2 w-full px-0">
-              <div className="w-full flex flex-col gap-2">
+              <div className="w-full flex flex-col gap-2 border border-gray-200 dark:border-neutral-700 rounded-lg p-4">
                 <label className="text-sm font-medium text-gray-700 dark:text-white">
                   내 우주의 위치
                 </label>

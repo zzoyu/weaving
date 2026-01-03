@@ -17,7 +17,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     // blogData가 null인 경우 처리
     if (!blogData) {
       return (
-        <main className="flex flex-col justify-start pt-2 lg:pt-10 w-full lg:max-w-[40rem] mx-auto">
+        <main className="flex flex-col justify-start pt-2 w-full lg:max-w-[40rem] mx-auto">
           <div className="fixed top-0 w-full flex p-4 z-10">
             <h2 className="flex gap-2 items-center text-xl">블로그</h2>
           </div>
@@ -33,7 +33,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     }
 
     return (
-      <main className="flex flex-col justify-start pt-2 lg:pt-10 w-full lg:max-w-[40rem] mx-auto">
+      <main className="flex flex-col justify-start pt-2 w-full lg:max-w-[40rem] mx-auto">
         <div className="fixed top-0 w-full flex p-4 z-10">
           <h2 className="flex gap-2 items-center text-xl">블로그</h2>
         </div>
@@ -86,7 +86,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   } catch (error) {
     console.error("Blog page error:", error);
     return (
-      <main className="flex flex-col justify-start pt-2 lg:pt-10 w-full lg:max-w-[40rem] mx-auto">
+      <main className="flex flex-col justify-start pt-2 w-full lg:max-w-[40rem] mx-auto">
         <div className="fixed top-0 w-full flex p-4 z-10">
           <h2 className="flex gap-2 items-center text-xl">블로그</h2>
         </div>
