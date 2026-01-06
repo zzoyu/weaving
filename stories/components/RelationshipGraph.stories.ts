@@ -1,6 +1,6 @@
 import RelationshipGraph from "@/app/(with-ui)/u/[slug]/[id]/components/relationship-graph";
-import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/nextjs";
+import { fn } from "storybook/test";
 import ProfileDummy from "../assets/components/profile-dummy.png";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export

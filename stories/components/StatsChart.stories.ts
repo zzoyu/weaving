@@ -1,6 +1,6 @@
 import StatsChart from "@/app/components/properties/stats-chart";
 import { generateId } from "@/utils/random-character/common";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/nextjs";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
