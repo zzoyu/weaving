@@ -5,6 +5,6 @@
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit"
   },
-  "conventionalCommits.scopes": ["content", "BUG"],
+  "conventionalCommits.scopes": ["content", "BUG", "UI"],
   "tailwindCSS.classFunctions": ["cva", "cx", "cn"]
 }
