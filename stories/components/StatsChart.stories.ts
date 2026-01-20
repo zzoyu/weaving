@@ -25,6 +25,11 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Demo: Story = {
   args: {
-    data: [{ id: generateId(), name: "어쩌고1", value: 10, fullMark: 10 }],
+    data: [
+      { id: generateId(), name: "어쩌고1", value: 10, fullMark: 10 },
+      { id: generateId(), name: "어쩌고2", value: 6, fullMark: 10 },
+      { id: generateId(), name: "어쩌고3", value: 7, fullMark: 10 },
+      { id: generateId(), name: "어쩌고4", value: 3, fullMark: 10 },
+    ],
   },
 };
