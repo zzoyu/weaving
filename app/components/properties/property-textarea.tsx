@@ -7,6 +7,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Property } from "@/types/character";
+import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor, UseEditorOptions } from "@tiptap/react";
 import StarterKit, { StarterKitOptions } from "@tiptap/starter-kit";
 import {
@@ -14,13 +15,12 @@ import {
   CircleAlert,
   Heading1Icon,
   Heading2Icon,
-  Heading3Icon,
   ItalicIcon,
   ListIcon,
   StrikethroughIcon,
   UnderlineIcon,
 } from "lucide-react";
-import { useRef } from "react";
+import { useMemo, useState } from "react";
 
 interface PropertyTextareaProps {
   property: Property;
@@ -43,29 +43,44 @@ export default function PropertyTextarea({
   error,
   limit,
 }: PropertyTextareaProps) {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
+  const [localPropertyValue, setLocalPropertyValue] = useState(
+    property.value || "",
+  );
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        heading: { levels: [1, 2, 3] },
+        heading: { levels: [1, 2] },
       } as StarterKitOptions),
+      Underline,
     ],
     content: property.value || "",
-    immediatelyRender: false,
+
+    immediatelyRender: true,
     editorProps: {
       attributes: {
         class:
-          "w-full min-h-4 overflow-y-auto p-2 focus-visible:outline-none focus-visible:ring-0 focus:ring-0 text-sm",
+          "w-full min-h-4 overflow-y-auto p-2 focus-visible:outline-none focus-visible:ring-0 focus:ring-0 text-sm bg-transparent",
       },
+      onFocus: handleFocus,
+      onBlur: handleBlur,
+    },
+    onUpdate: ({ editor }) => {
+      const html = editor.getHTML();
+      onChange({ ...property, value: html });
+      setLocalPropertyValue(html);
     },
   } as UseEditorOptions);
+
+  const currentLength = useMemo(
+    () => editor.getText().length || 0,
+    [localPropertyValue],
+  );
 
   return (
     <div className="w-full relative">
       <InputGroup
         className={cn(
-          "w-full border ring-1 ring-neutral-950 dark:ring-neutral-300",
+          "w-full border ring-1 ring-neutral-950 dark:ring-neutral-300 dark:bg-neutral-900 bg-white",
           { "ring-red-500": valueError || keyError },
         )}
       >
@@ -81,10 +96,13 @@ export default function PropertyTextarea({
               variant="outline"
               className={cn(
                 "rounded-sm",
-                editor?.isActive?.("bold") ? "opacity-50" : "opacity-100",
+                editor?.isActive?.("bold") &&
+                  "bg-neutral-100 dark:bg-neutral-800",
               )}
               size="icon-xs"
-              onClick={() => editor.commands.toggleBold()}
+              onClick={() => editor?.commands.toggleBold()}
+              aria-label="굵게"
+              aria-pressed={editor?.isActive?.("bold") ?? false}
             >
               <BoldIcon />
             </InputGroupButton>
@@ -92,10 +110,13 @@ export default function PropertyTextarea({
               variant="outline"
               className={cn(
                 "rounded-sm",
-                editor?.isActive?.("italic") ? "opacity-50" : "opacity-100",
+                editor?.isActive?.("italic") &&
+                  "bg-neutral-100 dark:bg-neutral-800",
               )}
               size="icon-xs"
-              onClick={() => editor.commands.toggleItalic()}
+              onClick={() => editor?.commands.toggleItalic()}
+              aria-label="기울임"
+              aria-pressed={editor?.isActive?.("italic") ?? false}
             >
               <ItalicIcon />
             </InputGroupButton>
@@ -103,10 +124,13 @@ export default function PropertyTextarea({
               variant="outline"
               className={cn(
                 "rounded-sm",
-                editor?.isActive?.("underline") ? "opacity-50" : "opacity-100",
+                editor?.isActive?.("underline") &&
+                  "bg-neutral-100 dark:bg-neutral-800",
               )}
               size="icon-xs"
-              onClick={() => editor.commands.toggleUnderline()}
+              onClick={() => editor?.commands.toggleUnderline()}
+              aria-label="밑줄"
+              aria-pressed={editor?.isActive?.("underline") ?? false}
             >
               <UnderlineIcon />
             </InputGroupButton>
@@ -114,10 +138,13 @@ export default function PropertyTextarea({
               variant="outline"
               className={cn(
                 "rounded-sm",
-                editor?.isActive?.("strike") ? "opacity-50" : "opacity-100",
+                editor?.isActive?.("strike") &&
+                  "bg-neutral-100 dark:bg-neutral-800",
               )}
               size="icon-xs"
-              onClick={() => editor.commands.toggleStrike()}
+              onClick={() => editor?.commands.toggleStrike()}
+              aria-label="취소선"
+              aria-pressed={editor?.isActive?.("strike") ?? false}
             >
               <StrikethroughIcon />
             </InputGroupButton>
@@ -128,12 +155,15 @@ export default function PropertyTextarea({
               variant="outline"
               className={cn(
                 "rounded-sm",
-                editor?.isActive?.("heading", { level: 1 })
-                  ? "opacity-50"
-                  : "opacity-100",
+                editor?.isActive?.("heading", { level: 1 }) &&
+                  "bg-neutral-100 dark:bg-neutral-800",
               )}
               size="icon-xs"
-              onClick={() => editor.commands.toggleHeading({ level: 1 })}
+              onClick={() => editor?.commands.toggleHeading({ level: 1 })}
+              aria-label="제목 1"
+              aria-pressed={
+                editor?.isActive?.("heading", { level: 1 }) ?? false
+              }
             >
               <Heading1Icon />
             </InputGroupButton>
@@ -141,12 +171,15 @@ export default function PropertyTextarea({
               variant="outline"
               className={cn(
                 "rounded-sm",
-                editor?.isActive?.("heading", { level: 2 })
-                  ? "opacity-50"
-                  : "opacity-100",
+                editor?.isActive?.("heading", { level: 2 }) &&
+                  "bg-neutral-100 dark:bg-neutral-800",
               )}
               size="icon-xs"
-              onClick={() => editor.commands.toggleHeading({ level: 2 })}
+              onClick={() => editor?.commands.toggleHeading({ level: 2 })}
+              aria-label="제목 2"
+              aria-pressed={
+                editor?.isActive?.("heading", { level: 2 }) ?? false
+              }
             >
               <Heading2Icon />
             </InputGroupButton>
@@ -154,32 +187,22 @@ export default function PropertyTextarea({
               variant="outline"
               className={cn(
                 "rounded-sm",
-                editor?.isActive?.("heading", { level: 3 })
-                  ? "opacity-50"
-                  : "opacity-100",
-              )}
-              size="icon-xs"
-              onClick={() => editor.commands.toggleHeading({ level: 3 })}
-            >
-              <Heading3Icon />
-            </InputGroupButton>
-            <InputGroupButton
-              variant="outline"
-              className={cn(
-                "rounded-sm",
-                editor?.isActive?.("bulletList") ? "opacity-50" : "opacity-100",
+                editor?.isActive?.("bulletList") &&
+                  "bg-neutral-100 dark:bg-neutral-800",
               )}
               size="icon-xs"
               onClick={() =>
-                editor.commands.toggleList("bulletList", "listItem")
+                editor?.commands.toggleList("bulletList", "listItem")
               }
+              aria-label="글머리 기호"
+              aria-pressed={editor?.isActive?.("bulletList") ?? false}
             >
               <ListIcon />
             </InputGroupButton>
           </div>
 
           <InputGroupText className="ml-auto opacity-90 text-xs leading-none">
-            {property.value.length}/{limit ?? "∞"}
+            {currentLength}/{limit ?? "∞"}
           </InputGroupText>
         </InputGroupAddon>
       </InputGroup>
