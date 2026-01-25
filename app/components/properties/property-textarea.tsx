@@ -17,6 +17,7 @@ import {
   Heading2Icon,
   ItalicIcon,
   ListIcon,
+  QuoteIcon,
   StrikethroughIcon,
   UnderlineIcon,
 } from "lucide-react";
@@ -59,10 +60,8 @@ export default function PropertyTextarea({
     editorProps: {
       attributes: {
         class:
-          "w-full min-h-4 overflow-y-auto p-2 focus-visible:outline-none focus-visible:ring-0 focus:ring-0 text-sm bg-transparent",
+          "w-full min-h-4 overflow-y-auto p-2 focus-visible:outline-none focus-visible:ring-0 focus:ring-0 text-sm bg-transparent prose prose-sm prose-neutral",
       },
-      onFocus: handleFocus,
-      onBlur: handleBlur,
     },
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
@@ -81,7 +80,7 @@ export default function PropertyTextarea({
       <InputGroup
         className={cn(
           "w-full border ring-1 ring-neutral-950 dark:ring-neutral-300 dark:bg-neutral-900 bg-white",
-          { "ring-red-500": valueError || keyError },
+          { "ring-red-500": valueError || keyError || error },
         )}
       >
         <EditorContent
@@ -192,16 +191,39 @@ export default function PropertyTextarea({
               )}
               size="icon-xs"
               onClick={() =>
-                editor?.commands.toggleList("bulletList", "listItem")
+                editor
+                  ?.chain()
+                  .focus()
+                  .toggleList("bulletList", "listItem")
+                  .run()
               }
               aria-label="글머리 기호"
               aria-pressed={editor?.isActive?.("bulletList") ?? false}
             >
               <ListIcon />
             </InputGroupButton>
+            <InputGroupButton
+              variant="outline"
+              className={cn(
+                "rounded-sm",
+                editor?.isActive?.("blockQuote") &&
+                  "bg-neutral-100 dark:bg-neutral-800",
+              )}
+              size="icon-xs"
+              onClick={() => editor?.chain().focus().toggleBlockquote().run()}
+              aria-label="인용"
+              aria-pressed={editor?.isActive?.("blockQuote") ?? false}
+            >
+              <QuoteIcon />
+            </InputGroupButton>
           </div>
 
-          <InputGroupText className="ml-auto opacity-90 text-xs leading-none">
+          <InputGroupText
+            className={cn(
+              "ml-auto opacity-90 text-xs leading-none w-fit",
+              currentLength > (limit ?? Infinity) && "text-red-500",
+            )}
+          >
             {currentLength}/{limit ?? "∞"}
           </InputGroupText>
         </InputGroupAddon>

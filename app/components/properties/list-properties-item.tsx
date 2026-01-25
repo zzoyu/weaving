@@ -4,13 +4,6 @@ import {
   AutosizeTextarea,
   type AutosizeTextAreaRef,
 } from "@/components/ui/autosize-textarea";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupText,
-} from "@/components/ui/input-group";
-import { Separator } from "@/components/ui/separator";
 import { useIsMobileDevice } from "@/hooks/use-is-mobile-device";
 import { cn } from "@/lib/utils";
 import { Property } from "@/types/character";
@@ -19,6 +12,7 @@ import {
   DraggableSyntheticListeners,
 } from "@dnd-kit/core";
 // drag props may come from different dnd libs; accept a loose shape
+import DeleteIcon from "@/public/assets/icons/delete.svg";
 import { ChevronDown, ChevronUp, CircleAlert } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -110,7 +104,7 @@ export default function ListPropertiesItem({
       inputRef.current?.focus();
       inputRef.current?.setSelectionRange(
         inputRef.current.value.length,
-        inputRef.current.value.length
+        inputRef.current.value.length,
       );
     }
   }, [isExpanded]);
@@ -128,12 +122,12 @@ export default function ListPropertiesItem({
         className="w-full h-12 relative flex items-center justify-center group bg-background-default dark:bg-neutral-900 rounded border shadow-md transform-gpu"
         {...(attributes || {})}
       >
-        <div className="w-full flex gap-2 items-center relative px-4">
+        <div className="w-full flex gap-2 items-center relative px-4 justify-center">
           <button
             type="button"
             ref={dragHandleRef}
             {...(listeners || {})}
-            className="flex-shrink-0"
+            className="flex-shrink-0 leading-6 absolute left-0"
             aria-label="drag-handle"
           >
             <svg
@@ -165,7 +159,7 @@ export default function ListPropertiesItem({
     "w-full h-fit relative flex items-center justify-center group",
     isFixed
       ? "fixed bottom-0 left-0 right-0 z-50 border-t bg-background-default p-4 shadow-lg"
-      : "transform-gpu"
+      : "transform-gpu",
   );
 
   return (
@@ -176,7 +170,7 @@ export default function ListPropertiesItem({
           <button
             type="button"
             ref={dragHandleRef}
-            className="p-2 absolute left-0 h-full items-center justify-center lg:flex hidden pointer-events-none lg:pointer-events-auto"
+            className="p-2 absolute left-0 top-0 items-center justify-center lg:flex hidden pointer-events-none lg:pointer-events-auto"
             aria-label="drag-handle"
             {...(listeners || {})}
           >
@@ -215,7 +209,7 @@ export default function ListPropertiesItem({
                   "text-center p-1 text-base border-background-muted focus:outline-none w-full",
                   {
                     "border-red-500": keyError || (error && !valueError),
-                  }
+                  },
                 )}
                 type="text"
                 value={property.key}
@@ -234,55 +228,16 @@ export default function ListPropertiesItem({
               )}
             </div>
 
-            <InputGroup
-              className="w-full border ring-1 ring-neutral-950 dark:ring-neutral-300"
-              onClick={() => {
-                textareaRef.current?.textArea.focus();
-              }}
-            >
-              <AutosizeTextarea
-                ref={textareaRef}
-                data-slot="input-group-control"
-                minHeight={16}
-                className={cn(
-                  "w-full p-1 border-none focus:outline-none focus:ring-0 ring-0 resize-none",
-                  {
-                    "border-red-500": valueError || (error && !keyError),
-                  }
-                )}
-                value={property.value}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                onChange={(event) => {
-                  onChange({ ...property, value: event.target.value });
-                }}
-              />
-              <InputGroupAddon align="block-end">
-                <InputGroupButton
-                  variant="outline"
-                  className="rounded-full"
-                  size="icon-xs"
-                >
-                  1
-                </InputGroupButton>
-
-                <Separator orientation="vertical" className="!h-4" />
-                <InputGroupText className="ml-auto">
-                  {20}/{100}
-                </InputGroupText>
-              </InputGroupAddon>
-            </InputGroup>
-
             <div className="flex relative flex-1 flex-col">
               <div className="flex items-center">
-                {/* <AutosizeTextarea
+                <AutosizeTextarea
                   ref={textareaRef}
                   minHeight={16}
                   className={cn(
                     "w-full p-1 border-background-muted focus:outline-none bg-background-default dark:bg-neutral-900 resize-none focus:ring-0 ring-0 text-base",
                     {
                       "border-red-500": valueError || (error && !keyError),
-                    }
+                    },
                   )}
                   value={property.value}
                   onFocus={handleFocus}
@@ -303,7 +258,7 @@ export default function ListPropertiesItem({
                     width={28}
                     height={28}
                   />
-                </button> */}
+                </button>
               </div>
             </div>
           </div>

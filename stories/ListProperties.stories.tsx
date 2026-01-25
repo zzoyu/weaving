@@ -8,7 +8,7 @@ const sampleProperties = [
   {
     key: "Theme Color",
     value: "#ff0044",
-    type: EPropertyType.COLOR,
+    type: EPropertyType.STRING,
     uuid: "p2",
   },
 ];
@@ -21,8 +21,6 @@ const meta = {
   args: {
     properties: sampleProperties,
     handler: fn(),
-    disabled: false,
-    errors: undefined,
   },
 } satisfies Meta<typeof ListProperties>;
 

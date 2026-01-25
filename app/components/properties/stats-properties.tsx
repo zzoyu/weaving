@@ -8,13 +8,8 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { generateId } from "@/utils/random-character/common";
-import { Info, Minus, Plus } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import StatsChart from "./stats-chart";
 
@@ -49,7 +44,7 @@ function StatProperty({
         onChange={(e) => {
           const newValue = Math.min(
             fullMark,
-            Math.max(0, parseInt(e.target.value || "0"))
+            Math.max(0, parseInt(e.target.value || "0")),
           );
           setStatValue(newValue);
         }}
@@ -79,7 +74,7 @@ export default function StatsProperties({
 }: {
   properties?: { name: string; value: number; fullMark: number }[];
   handler?: (
-    properties: { name: string; value: number; fullMark: number }[]
+    properties: { name: string; value: number; fullMark: number }[],
   ) => void;
 }) {
   const initialProperties = Array.from({ length: 6 }, () => ({
@@ -95,7 +90,7 @@ export default function StatsProperties({
         return { ...properties[index], id: generateId() };
       }
       return prop;
-    })
+    }),
   );
 
   const filteredStats = useMemo(() => {
@@ -115,17 +110,14 @@ export default function StatsProperties({
               isOpen ? setIsOpen(false) : setIsOpen(true);
             }}
           >
-            <h2 className="text-lg font-bold flex items-center justify-start gap-1 w-full cursor-pointer h-fit">
-              능력치 설정
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Info className="w-4 h-4 ml-1" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  이름이 입력된 개수만큼 능력치가 표시됩니다.
-                </TooltipContent>
-              </Tooltip>
-            </h2>
+            <div className="flex flex-col flex-1">
+              <h2 className="text-lg font-bold flex items-center justify-start gap-1 w-full cursor-pointer h-fit">
+                능력치 설정
+              </h2>
+              <span className="text-left">
+                이름이 입력된 개수만큼 능력치가 표시됩니다.
+              </span>
+            </div>
             {isOpen ? <Minus /> : <Plus />}
           </Button>
         </CollapsibleTrigger>
