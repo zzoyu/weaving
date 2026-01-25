@@ -1,13 +1,18 @@
+import { EPropertyType } from "@/types/character";
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import { fn } from "storybook/test";
 import PropertyTextarea from "../app/components/properties/property-textarea";
 
 const meta = {
-  title: "Components/PropertyTextarea",
+  title: "Components/Properties/PropertyTextarea",
   component: PropertyTextarea,
   tags: ["autodocs"],
   args: {
-    property: { key: "bio", value: "이곳에 내용을 입력하세요.", type: "string" },
+    property: {
+      key: "bio",
+      value: "이곳에 내용을 입력하세요.",
+      type: EPropertyType.STRING,
+    },
     onChange: fn(),
     handleFocus: fn(),
     handleBlur: fn(),
@@ -17,7 +22,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    limit: 100,
+  },
+};
 
 export const WithValueError: Story = {
   args: {
@@ -25,9 +34,16 @@ export const WithValueError: Story = {
   },
 };
 
+export const WithLimitExceedError: Story = {
+  args: {
+    valueError: "글자 수 초과",
+    limit: 10,
+  },
+};
+
 export const WithError: Story = {
   args: {
-    error: "알 수 없는 오류가 발생했습니다.",
+    valueError: "알 수 없는 오류가 발생했습니다.",
   },
 };
 
