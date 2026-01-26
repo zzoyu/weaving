@@ -30,8 +30,6 @@ interface PropertyTextareaProps {
   error?: string;
   limit?: number;
   onChange: (updatedProperty: Property) => void;
-  handleFocus: () => void;
-  handleBlur: () => void;
 }
 
 export default function PropertyTextarea({
@@ -39,8 +37,6 @@ export default function PropertyTextarea({
   keyError,
   valueError,
   onChange,
-  handleFocus,
-  handleBlur,
   error,
   limit,
 }: PropertyTextareaProps) {
@@ -56,11 +52,11 @@ export default function PropertyTextarea({
     ],
     content: property.value || "",
 
-    immediatelyRender: true,
+    immediatelyRender: false,
     editorProps: {
       attributes: {
         class:
-          "w-full min-h-4 overflow-y-auto p-2 focus-visible:outline-none focus-visible:ring-0 focus:ring-0 text-sm bg-transparent prose prose-sm prose-neutral",
+          "w-full min-h-4 overflow-y-auto p-2 focus-visible:outline-none focus-visible:ring-0 focus:ring-0 text-sm bg-transparent prose prose-sm prose-neutral dark:text-background-muted",
       },
     },
     onUpdate: ({ editor }) => {
@@ -71,7 +67,7 @@ export default function PropertyTextarea({
   } as UseEditorOptions);
 
   const currentLength = useMemo(
-    () => editor.getText().length || 0,
+    () => editor?.getText?.().length || 0,
     [localPropertyValue],
   );
 
@@ -79,7 +75,7 @@ export default function PropertyTextarea({
     <div className="w-full relative">
       <InputGroup
         className={cn(
-          "w-full border ring-1 ring-neutral-950 dark:ring-neutral-300 dark:bg-neutral-900 bg-white",
+          "w-full border ring-0  border-background-muted dark:border-background-muted focus:outline-none bg-transparent",
           { "ring-red-500": valueError || keyError || error },
         )}
       >
@@ -220,7 +216,7 @@ export default function PropertyTextarea({
 
           <InputGroupText
             className={cn(
-              "ml-auto opacity-90 text-xs leading-none w-fit",
+              "ml-auto opacity-90 text-xs leading-none w-fit whitespace-nowrap",
               currentLength > (limit ?? Infinity) && "text-red-500",
             )}
           >

@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  AutosizeTextarea,
-  type AutosizeTextAreaRef,
-} from "@/components/ui/autosize-textarea";
+import { type AutosizeTextAreaRef } from "@/components/ui/autosize-textarea";
 import { useIsMobileDevice } from "@/hooks/use-is-mobile-device";
 import { cn } from "@/lib/utils";
 import { Property } from "@/types/character";
@@ -15,6 +12,7 @@ import {
 import DeleteIcon from "@/public/assets/icons/delete.svg";
 import { ChevronDown, ChevronUp, CircleAlert } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import PropertyTextarea from "./property-textarea";
 
 export function SmallPreview({ property }: { property: Property }) {
   const truncatedValue =
@@ -230,7 +228,14 @@ export default function ListPropertiesItem({
 
             <div className="flex relative flex-1 flex-col">
               <div className="flex items-center">
-                <AutosizeTextarea
+                <PropertyTextarea
+                  property={property}
+                  onChange={onChange}
+                  error={error}
+                  keyError={keyError}
+                  valueError={valueError}
+                />
+                {/* <AutosizeTextarea
                   ref={textareaRef}
                   minHeight={16}
                   className={cn(
@@ -245,7 +250,7 @@ export default function ListPropertiesItem({
                   onChange={(event) => {
                     onChange({ ...property, value: event.target.value });
                   }}
-                />
+                /> */}
                 <button
                   className="absolute right-0 visible lg:invisible lg:group-hover:visible"
                   type="button"
