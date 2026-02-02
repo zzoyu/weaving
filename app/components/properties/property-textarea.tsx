@@ -56,7 +56,7 @@ export default function PropertyTextarea({
     editorProps: {
       attributes: {
         class:
-          "w-full min-h-4 overflow-y-auto p-2 focus-visible:outline-none focus-visible:ring-0 focus:ring-0 text-sm bg-transparent prose prose-sm prose-neutral dark:text-background-muted",
+          "w-full min-h-4 overflow-y-auto p-2 focus-visible:outline-none focus-visible:ring-0 focus:ring-0 text-sm bg-transparent prose prose-sm prose-neutral dark:text-background-muted dark:text-neutral-200 dark:prose-invert max-w-none",
       },
     },
     onUpdate: ({ editor }) => {

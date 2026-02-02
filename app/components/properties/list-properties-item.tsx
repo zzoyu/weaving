@@ -3,16 +3,15 @@
 import { type AutosizeTextAreaRef } from "@/components/ui/autosize-textarea";
 import { useIsMobileDevice } from "@/hooks/use-is-mobile-device";
 import { cn } from "@/lib/utils";
-import { Property } from "@/types/character";
+import { EPropertyType, Property } from "@/types/character";
 import {
   DraggableAttributes,
   DraggableSyntheticListeners,
 } from "@dnd-kit/core";
 // drag props may come from different dnd libs; accept a loose shape
-import DeleteIcon from "@/public/assets/icons/delete.svg";
 import { ChevronDown, ChevronUp, CircleAlert } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import PropertyTextarea from "./property-textarea";
+import { ExpandableTextarea } from "./test";
 
 export function SmallPreview({ property }: { property: Property }) {
   const truncatedValue =
@@ -187,7 +186,7 @@ export default function ListPropertiesItem({
             </svg>
           </button>
 
-          <div className="flex-1 flex gap-2 sm:gap-4">
+          <div className="flex-1 flex gap-2 sm:gap-2">
             <div className="flex flex-row lg:hidden">
               <button onClick={() => handleMove(-1)} type="button">
                 <ChevronUp className="text-background-dark" />
@@ -228,12 +227,19 @@ export default function ListPropertiesItem({
 
             <div className="flex relative flex-1 flex-col">
               <div className="flex items-center">
-                <PropertyTextarea
-                  property={property}
-                  onChange={onChange}
-                  error={error}
-                  keyError={keyError}
-                  valueError={valueError}
+                <ExpandableTextarea
+                  property={{
+                    key: "",
+                    value: "",
+                    type: EPropertyType.STRING,
+                    uuid: undefined,
+                  }}
+                  onChange={(property) => {
+                    onChange({ ...property, value: property.value });
+                  }}
+                  onDelete={(property) => {
+                    onDelete(property);
+                  }}
                 />
                 {/* <AutosizeTextarea
                   ref={textareaRef}
@@ -250,7 +256,7 @@ export default function ListPropertiesItem({
                   onChange={(event) => {
                     onChange({ ...property, value: event.target.value });
                   }}
-                /> */}
+                />
                 <button
                   className="absolute right-0 visible lg:invisible lg:group-hover:visible"
                   type="button"
@@ -263,7 +269,7 @@ export default function ListPropertiesItem({
                     width={28}
                     height={28}
                   />
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
