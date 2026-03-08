@@ -7,7 +7,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Property } from "@/types/character";
-import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor, UseEditorOptions } from "@tiptap/react";
 import StarterKit, { StarterKitOptions } from "@tiptap/starter-kit";
 import {
@@ -48,7 +47,6 @@ export default function PropertyTextarea({
       StarterKit.configure({
         heading: { levels: [1, 2] },
       } as StarterKitOptions),
-      Underline,
     ],
     content: property.value || "",
 
@@ -72,7 +70,7 @@ export default function PropertyTextarea({
   );
 
   return (
-    <div className="w-full relative">
+    <div className="w-full relative group">
       <InputGroup
         className={cn(
           "w-full border ring-0  border-background-muted dark:border-background-muted focus:outline-none bg-transparent",
@@ -85,8 +83,11 @@ export default function PropertyTextarea({
           className="w-full h-fit"
         />
 
-        <InputGroupAddon align="block-end">
-          <div className="flex gap-1">
+        <InputGroupAddon
+          align="block-end"
+          className="hidden group-focus-within:flex gap-1"
+        >
+          <div className="flex gap-px">
             <InputGroupButton
               variant="outline"
               className={cn(
@@ -145,7 +146,7 @@ export default function PropertyTextarea({
             </InputGroupButton>
           </div>
           <Separator orientation="vertical" className="!h-4" />
-          <div className="flex gap-1">
+          <div className="flex gap-px">
             <InputGroupButton
               variant="outline"
               className={cn(

@@ -3,15 +3,15 @@
 import { type AutosizeTextAreaRef } from "@/components/ui/autosize-textarea";
 import { useIsMobileDevice } from "@/hooks/use-is-mobile-device";
 import { cn } from "@/lib/utils";
-import { EPropertyType, Property } from "@/types/character";
+import { Property } from "@/types/character";
 import {
   DraggableAttributes,
   DraggableSyntheticListeners,
 } from "@dnd-kit/core";
 // drag props may come from different dnd libs; accept a loose shape
-import { ChevronDown, ChevronUp, CircleAlert } from "lucide-react";
+import { ChevronDown, ChevronUp, CircleAlert, XIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { ExpandableTextarea } from "./test";
+import { ExpandableTextarea } from "./wip-textarea";
 
 export function SmallPreview({ property }: { property: Property }) {
   const truncatedValue =
@@ -186,8 +186,8 @@ export default function ListPropertiesItem({
             </svg>
           </button>
 
-          <div className="flex-1 flex gap-2 sm:gap-2">
-            <div className="flex flex-row lg:hidden">
+          <div className="flex-1 flex gap-2 flex-row items-start">
+            <div className="flex flex-col lg:hidden">
               <button onClick={() => handleMove(-1)} type="button">
                 <ChevronUp className="text-background-dark" />
               </button>
@@ -200,76 +200,59 @@ export default function ListPropertiesItem({
               name="list-properties"
               value={`${property.key}:${property.value}`}
             />
-            <div className="lg:w-1/3 w-1/5 flex flex-col">
-              <input
-                className={cn(
-                  "text-center p-1 text-base border-background-muted focus:outline-none w-full",
-                  {
-                    "border-red-500": keyError || (error && !valueError),
-                  },
-                )}
-                type="text"
-                value={property.key}
-                ref={inputRef}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                onChange={(event) => {
-                  onChange({ ...property, key: event.target.value });
-                }}
-              />
-              {keyError && (
-                <span className="text-red-500 text-xs flex items-center gap-1 mt-1">
-                  <CircleAlert className="w-3 h-3" />
-                  {keyError}
-                </span>
-              )}
-            </div>
-
-            <div className="flex relative flex-1 flex-col">
-              <div className="flex items-center">
-                <ExpandableTextarea
-                  property={{
-                    key: "",
-                    value: "",
-                    type: EPropertyType.STRING,
-                    uuid: undefined,
-                  }}
-                  onChange={(property) => {
-                    onChange({ ...property, value: property.value });
-                  }}
-                  onDelete={(property) => {
-                    onDelete(property);
-                  }}
-                />
-                {/* <AutosizeTextarea
-                  ref={textareaRef}
-                  minHeight={16}
+            <div className="w-full flex flex-col sm:flex-row gap-2">
+              <div className="w-full sm:w-1/5 flex flex-shrink-0 flex-col">
+                <input
                   className={cn(
-                    "w-full p-1 border-background-muted focus:outline-none bg-background-default dark:bg-neutral-900 resize-none focus:ring-0 ring-0 text-base",
+                    "text-left sm:text-center p-1 pl-2 sm:pl-0 text-base border-background-muted focus:outline-none w-full h-fit",
                     {
-                      "border-red-500": valueError || (error && !keyError),
+                      "border-red-500": keyError || (error && !valueError),
                     },
                   )}
-                  value={property.value}
+                  type="text"
+                  value={property.key}
+                  ref={inputRef}
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                   onChange={(event) => {
-                    onChange({ ...property, value: event.target.value });
+                    onChange({ ...property, key: event.target.value });
                   }}
                 />
-                <button
-                  className="absolute right-0 visible lg:invisible lg:group-hover:visible"
-                  type="button"
-                  onClick={() => {
-                    onDelete(property);
-                  }}
-                >
-                  <DeleteIcon
-                    className=" text-background-dark"
-                    width={28}
-                    height={28}
+                {keyError && (
+                  <span className="text-red-500 text-xs flex items-center gap-1 mt-1">
+                    <CircleAlert className="w-3 h-3" />
+                    {keyError}
+                  </span>
+                )}
+              </div>
+
+              <div className="flex relative flex-col flex-1">
+                <div className="flex items-center w-full">
+                  <ExpandableTextarea
+                    property={property}
+                    onChange={(property) => {
+                      onChange({ ...property, value: property.value });
+                    }}
+                    onDelete={(property) => {
+                      onDelete(property);
+                    }}
+                    className="w-full"
                   />
-                </button> */}
+
+                  <button
+                    className="absolute right-0 -top-10 sm:top-1 visible lg:invisible lg:group-hover:visible"
+                    type="button"
+                    onClick={() => {
+                      onDelete(property);
+                    }}
+                  >
+                    <XIcon
+                      className=" text-background-dark"
+                      width={28}
+                      height={28}
+                    />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
