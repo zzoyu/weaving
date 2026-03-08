@@ -2,6 +2,7 @@
 
 import { uploadImage } from "@/actions/upload-image";
 import { fetchPlanByProfileId } from "@/app/actions/plan";
+import { sanitizeServerUserInput } from "@/lib/sanitize-html.server";
 import { Property } from "@/types/character";
 import { ImagePath } from "@/types/image";
 import { createClient } from "@/utils/supabase/server";
@@ -14,7 +15,7 @@ import {
 
 export async function createCharacter(
   formData: FormData,
-  properties: Property[]
+  properties: Property[],
 ) {
   try {
     const supabase = await createClient();
@@ -23,7 +24,7 @@ export async function createCharacter(
     const profile_id = Number(formData.get("profile_id") as string);
     const rawRelationshipData = formData.get("relationships");
     const relationships: { to_id: number; name: string }[] = JSON.parse(
-      rawRelationshipData as string
+      rawRelationshipData as string,
     );
 
     // Get user's plan and check character limit
@@ -49,7 +50,7 @@ export async function createCharacter(
     }
     if ((count || 0) >= userPlan.limit.maxCharacterSlots) {
       const err = new Error(
-        `캐릭터 생성 한도(${userPlan.limit.maxCharacterSlots}개)를 초과했습니다.`
+        `캐릭터 생성 한도(${userPlan.limit.maxCharacterSlots}개)를 초과했습니다.`,
       );
       Sentry.captureException(err);
       return {
@@ -61,7 +62,7 @@ export async function createCharacter(
     // Check relationship count
     if (relationships.length > userPlan.limit.maxRelationshipsPerCharacter) {
       const err = new Error(
-        `캐릭터당 관계 한도(${userPlan.limit.maxRelationshipsPerCharacter}개)를 초과했습니다.`
+        `캐릭터당 관계 한도(${userPlan.limit.maxRelationshipsPerCharacter}개)를 초과했습니다.`,
       );
       Sentry.captureException(err);
       return {
@@ -85,12 +86,12 @@ export async function createCharacter(
     const thumbnail = formData.get("half-thumbnail") as File | null;
 
     const imageFiles = [halfImage, fullImage].filter(
-      (file): file is File => file !== null && file.size > 0
+      (file): file is File => file !== null && file.size > 0,
     );
 
     if (imageFiles.length > userPlan.limit.maxImagesPerCharacter) {
       const err = new Error(
-        `캐릭터당 이미지 한도(${userPlan.limit.maxImagesPerCharacter}개)를 초과했습니다.`
+        `캐릭터당 이미지 한도(${userPlan.limit.maxImagesPerCharacter}개)를 초과했습니다.`,
       );
       Sentry.captureException(err);
       return {
@@ -115,7 +116,7 @@ export async function createCharacter(
       `${profile_id}_${Math.floor(Math.random() * 10000).toString()}`,
       ImagePath.CHARACTER_THUMBNAIL,
       true,
-      false
+      false,
     );
     const imageUrls = await Promise.all(
       imageFiles.map(async (image) => {
@@ -124,10 +125,16 @@ export async function createCharacter(
           `${profile_id}_${Math.floor(Math.random() * 10000).toString()}`,
           ImagePath.CHARACTER,
           true,
-          true
+          true,
         );
-      })
+      }),
     );
+
+    // sanitize properties
+    const sanitizedProperties = properties.map((property) => ({
+      ...property,
+      value: sanitizeServerUserInput(property.value),
+    }));
 
     const { data, error } = await supabase
       .from("character")
@@ -138,7 +145,7 @@ export async function createCharacter(
           description,
           image: imageUrls,
           thumbnail: thumbnailUrl,
-          properties,
+          properties: sanitizedProperties,
           hashtags,
         },
       ])
@@ -168,14 +175,8 @@ export async function createCharacter(
 
 export async function updateCharacter(
   formData: FormData,
-  properties: Property[]
+  properties: Property[],
 ) {
-  console.log("🚀 updateCharacter 함수 호출됨!");
-  console.log("📝 받은 데이터:", {
-    formDataEntries: Array.from(formData.entries()),
-    propertiesLength: properties.length,
-  });
-
   try {
     const supabase = await createClient();
     const name = formData.get("name") as string;
@@ -214,16 +215,6 @@ export async function updateCharacter(
 
     const originalImages = formData.getAll("original_image[]") as string[];
 
-    console.log("🖼️ 이미지 검증:", {
-      isHalfEdited,
-      isFullEdited,
-      halfImageExists: !!imageFiles[0] && imageFiles[0].size > 0,
-      fullImageExists: !!imageFiles[1] && imageFiles[1].size > 0,
-      thumbnailExists: !!thumbnail && thumbnail.size > 0,
-      originalThumbnail: !!originalThumbnail,
-      imageFilesLength: imageFiles.length,
-    });
-
     // 상반신 이미지 체크: 새 파일이 있거나 기존 이미지가 유지되어야 함
     if (!originalImages[0] && !isHalfEdited) {
       const err = new Error("Image is required");
@@ -253,7 +244,7 @@ export async function updateCharacter(
           thumbnail,
           `${profile_id}_${Math.floor(Math.random() * 10000).toString()}`,
           ImagePath.CHARACTER_THUMBNAIL,
-          true
+          true,
         )
       : originalThumbnail;
 
@@ -276,14 +267,20 @@ export async function updateCharacter(
             `${profile_id}_${Math.floor(Math.random() * 10000).toString()}`,
             ImagePath.CHARACTER,
             true,
-            true
+            true,
           );
         } catch (error) {
           Sentry.captureException(error);
           return originalImages[index]; // 실패시 기존 이미지 URL 유지
         }
-      })
+      }),
     );
+
+    // sanitize properties
+    const sanitizedProperties = properties.map((property) => ({
+      ...property,
+      value: sanitizeServerUserInput(property.value),
+    }));
 
     const { data, error } = await supabase
       .from("character")
@@ -292,7 +289,7 @@ export async function updateCharacter(
         description,
         image: imageUrls || [],
         thumbnail: thumbnailUrl,
-        properties,
+        properties: sanitizedProperties,
         hashtags: formData.get("hashtags") as string,
       })
       .eq("id", characterId);
@@ -304,7 +301,7 @@ export async function updateCharacter(
 
     const rawRelationshipData = formData.get("relationships");
     const relationships: { to_id: number; name: string }[] = JSON.parse(
-      rawRelationshipData as string
+      rawRelationshipData as string,
     );
 
     console.log("🔄 관계 업데이트 준비:", { characterId, relationships });
