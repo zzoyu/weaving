@@ -127,6 +127,7 @@ const nextConfig = {
         process.env.NEXT_PUBLIC_BASE_URL,
       ],
       "font-src": [
+        "'self'",
         "https://fonts.gstatic.com",
         "https://*.weavv.in",
         process.env.NEXT_PUBLIC_BASE_URL,
