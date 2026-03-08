@@ -22,7 +22,7 @@ export default function MorePageResultAd({
       adFormat: "auto",
       fullWidthResponsive: true,
     },
-    containerRef
+    containerRef,
   );
 
   // 광고가 뷰포트에 들어오지 않았을 때 placeholder

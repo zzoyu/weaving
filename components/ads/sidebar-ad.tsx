@@ -1,7 +1,7 @@
 "use client";
 
 import { useAdSense } from "@/hooks/use-adsense";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AdContainer, AdSkeleton } from "./ad-components";
 
 type Props = {
@@ -17,6 +17,19 @@ export default function SidebarAd({
 }: Props) {
   const adRef = useRef<HTMLDivElement>(null);
   const [isSticky, setIsSticky] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
+
+  // 뷰포트가 충분히 큰 경우에만 광고를 렌더링
+  useEffect(() => {
+    const checkViewport = () => {
+      // lg 브레이크포인트는 1024px
+      setShouldRender(window.innerWidth >= 1024);
+    };
+
+    checkViewport();
+    window.addEventListener("resize", checkViewport);
+    return () => window.removeEventListener("resize", checkViewport);
+  }, []);
 
   const { isLoading, hasError } = useAdSense(
     {
@@ -25,10 +38,10 @@ export default function SidebarAd({
       adFormat: "auto",
       fullWidthResponsive: true,
     },
-    adRef
+    shouldRender ? adRef : undefined, // 렌더링하지 않을 경우 ref 전달하지 않음
   );
 
-  if (hasError) {
+  if (hasError || !shouldRender) {
     return null;
   }
 

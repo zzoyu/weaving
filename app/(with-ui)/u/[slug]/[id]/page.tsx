@@ -28,7 +28,7 @@ const baseMetadata: Metadata = {
 
 export async function generateMetadata(
   { params, searchParams }: Props,
-  parent: ResolvingMetadata
+  parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { id } = params;
 
@@ -64,7 +64,7 @@ export default async function CharacterPage({
   if (!data) notFound();
 
   const myProfile = await fetchProfileByUserId(
-    currentUser?.data.user?.id as string
+    currentUser?.data.user?.id as string,
   );
 
   const responseIsFriend = await fetchIsFriendByIds(data?.id, myProfile?.id);
@@ -81,13 +81,13 @@ export default async function CharacterPage({
 
   const colorProperties =
     characterData.properties?.filter(
-      (property) => property.type === EPropertyType.COLOR
+      (property) => property.type === EPropertyType.COLOR,
     ) || [];
 
   const cookie = await cookies();
   const responseIsPasswordCorrect = await compareCharacterPassword(
     Number(id),
-    cookie?.get(`${slug}-${id}`)?.value
+    cookie?.get(`${slug}-${id}`)?.value,
   );
   const isGranted =
     isMyProfile ||

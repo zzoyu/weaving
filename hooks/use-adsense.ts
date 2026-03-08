@@ -3,10 +3,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 // 컨테이너가 유효한 크기를 가지는지 확인
-export function hasValidSize(element: HTMLElement | null): boolean {
+// AdSense는 최소 크기 요구사항이 있음 (일반적으로 최소 250px 권장, 최소 120px 이상은 필요)
+export function hasValidSize(
+  element: HTMLElement | null,
+  minWidth = 120,
+): boolean {
   if (!element) return false;
   const rect = element.getBoundingClientRect();
-  return rect.width > 0 && rect.height > 0;
+  return rect.width >= minWidth && rect.height > 0;
 }
 
 // AdSense 환경 설정 확인
@@ -47,7 +51,7 @@ export interface AdConfig {
 
 export function useAdSense(
   config: AdConfig,
-  containerRef?: React.RefObject<HTMLElement>
+  containerRef?: React.RefObject<HTMLElement>,
 ) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -64,7 +68,7 @@ export function useAdSense(
       if (!configValidation.isValid) {
         console.warn(
           "AdSense: Invalid configuration -",
-          configValidation.error
+          configValidation.error,
         );
         setHasError(true);
         setIsLoading(false);
@@ -73,15 +77,19 @@ export function useAdSense(
 
       // 컨테이너 크기 확인 (있는 경우만)
       if (containerRef && !hasValidSize(containerRef.current)) {
-        console.warn("AdSense: Container size is invalid, skipping ad load");
+        const rect = containerRef.current?.getBoundingClientRect();
+        console.warn(
+          `AdSense: Container size is too small (width: ${rect?.width}px), minimum 120px required. Skipping ad load.`,
+        );
+        setHasError(true);
+        setIsLoading(false);
         return;
       }
 
       // AdSense 광고 푸시
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
-      }
-      catch (e) {
+      } catch (e) {
         console.error("Adsense push error:", e);
       }
       setIsLoading(false);
@@ -117,7 +125,10 @@ export function useAdSense(
             containerCheckCount++;
             timeoutId = setTimeout(checkContainerSize, 100);
           } else {
-            console.warn("AdSense: Container size check timeout");
+            const rect = containerRef.current?.getBoundingClientRect();
+            console.warn(
+              `AdSense: Container size check timeout. Final size: ${rect?.width}px x ${rect?.height}px (minimum 120px width required)`,
+            );
             setHasError(true);
             setIsLoading(false);
           }

@@ -29,7 +29,9 @@ export default function Landing() {
 
   useEffect(() => {
     try {
-      isPushed || ((window.adsbygoogle = window.adsbygoogle || []).push({}), setIsPushed(true));
+      isPushed ||
+        ((window.adsbygoogle = window.adsbygoogle || []).push({}),
+        setIsPushed(true));
     } catch (e) {
       console.error("Adsense error:", e);
     }
