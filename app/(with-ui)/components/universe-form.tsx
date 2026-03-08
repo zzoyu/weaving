@@ -7,6 +7,10 @@ import OverlayLoading from "@/components/overlay-loading";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import {
+  UniverseFormData,
+  universeFormSchema,
+} from "@/lib/schema/universe-form-schema";
+import {
   Character,
   CharacterWithProfile,
   EPropertyType,
@@ -22,7 +26,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import ListPropertiesWithUniverseValidation from "./list-properties-with-universe-validation";
-import { UniverseFormData, universeFormSchema } from "./universe-form-schema";
 import { useUniversePropertyValidation } from "./use-universe-property-validation";
 
 interface UniverseFormProps {
@@ -80,7 +83,7 @@ export default function UniverseForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [hashtags, setHashtags] = useState<string>(
-    mode === "edit" ? universe?.hashtags || "" : ""
+    mode === "edit" ? universe?.hashtags || "" : "",
   );
   const [currentHashtag, setCurrentHashtag] = useState<string>("");
   const [listProperties, setListProperties] = useState<Property[]>(
@@ -89,14 +92,14 @@ export default function UniverseForm({
           ...p,
           uuid: generateId(),
         })) || []
-      : defaultProperties
+      : defaultProperties,
   );
   const [characterUniverses, setCharacterUniverses] = useState<
     { character_id: number }[]
   >(
     mode === "edit" && initialCharacters
       ? initialCharacters.map((c) => ({ character_id: c.id }))
-      : []
+      : [],
   );
 
   const {
@@ -132,7 +135,7 @@ export default function UniverseForm({
   const handleAddCharacter = (
     characterIds: {
       character_id: number;
-    }[]
+    }[],
   ) => {
     setCharacterUniverses(() => [...characterIds]);
   };
@@ -203,7 +206,7 @@ export default function UniverseForm({
             formData.append("list_properties", JSON.stringify(data.properties));
             formData.append(
               "universes_characters",
-              JSON.stringify(data.characterUniverses)
+              JSON.stringify(data.characterUniverses),
             );
             formData.append("hashtags", data.hashtags);
 
@@ -233,13 +236,13 @@ export default function UniverseForm({
             }
             formData.append(
               "universe-image-is-edited",
-              imageIsEdited?.value || "false"
+              imageIsEdited?.value || "false",
             );
 
             // 기존 이미지 정보 전달
             formData.append(
               "existing-image",
-              JSON.stringify(universe?.image || [])
+              JSON.stringify(universe?.image || []),
             );
             formData.append("existing-thumbnail", universe?.thumbnail || "");
 
@@ -247,7 +250,7 @@ export default function UniverseForm({
             formData.append("list_properties", JSON.stringify(data.properties));
             formData.append(
               "universes_characters",
-              JSON.stringify(data.characterUniverses)
+              JSON.stringify(data.characterUniverses),
             );
             formData.append("hashtags", data.hashtags);
 
@@ -390,7 +393,7 @@ export default function UniverseForm({
           )}
           {characterUniverses.map((cu) => {
             const character = characters.find(
-              (c) => Number(c.id) === Number(cu.character_id)
+              (c) => Number(c.id) === Number(cu.character_id),
             );
             return (
               <div
@@ -407,8 +410,8 @@ export default function UniverseForm({
                   onClick={() => {
                     setCharacterUniverses(
                       characterUniverses.filter(
-                        (c) => c.character_id !== cu.character_id
-                      )
+                        (c) => c.character_id !== cu.character_id,
+                      ),
                     );
                   }}
                 >
@@ -454,7 +457,7 @@ export default function UniverseForm({
                 .trim()
                 .split(" ")
                 .filter((_, i) => i !== index)
-                .join(" ")
+                .join(" "),
             );
           }}
         />

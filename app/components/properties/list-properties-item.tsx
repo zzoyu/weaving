@@ -43,6 +43,7 @@ export default function ListPropertiesItem({
   attributes,
   dragHandleRef,
   handleMove,
+  max = 0,
 }: {
   property: Property;
   onChange: (property: Property) => void;
@@ -55,6 +56,7 @@ export default function ListPropertiesItem({
   attributes?: DraggableAttributes;
   dragHandleRef?: (element: Element | null) => void;
   handleMove: (amount: number) => void;
+  max?: number;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const textareaRef = useRef<AutosizeTextAreaRef | null>(null);
@@ -187,7 +189,7 @@ export default function ListPropertiesItem({
           </button>
 
           <div className="flex-1 flex gap-2 flex-row items-start">
-            <div className="flex flex-col lg:hidden">
+            <div className="flex flex-col lg:hidden -mt-1">
               <button onClick={() => handleMove(-1)} type="button">
                 <ChevronUp className="text-background-dark" />
               </button>
@@ -204,7 +206,7 @@ export default function ListPropertiesItem({
               <div className="w-full sm:w-1/5 flex flex-shrink-0 flex-col">
                 <input
                   className={cn(
-                    "text-left sm:text-center p-1 pl-2 sm:pl-0 text-base border-background-muted focus:outline-none w-full h-fit",
+                    "text-left sm:text-center p-2 text-base border-background-muted focus:outline-none w-full h-fit",
                     {
                       "border-red-500": keyError || (error && !valueError),
                     },
@@ -227,7 +229,7 @@ export default function ListPropertiesItem({
               </div>
 
               <div className="flex relative flex-col flex-1">
-                <div className="flex items-center w-full">
+                <div className="flex items-center w-full h-full flex-1">
                   <ExpandableTextarea
                     property={property}
                     onChange={(property) => {
@@ -237,10 +239,12 @@ export default function ListPropertiesItem({
                       onDelete(property);
                     }}
                     className="w-full"
+                    error={valueError || (error && !keyError) ? " " : undefined}
+                    maxCharacters={max}
                   />
 
                   <button
-                    className="absolute right-0 -top-10 sm:top-1 visible lg:invisible lg:group-hover:visible"
+                    className="absolute right-1 -top-10 sm:top-1.5 visible lg:invisible lg:group-hover:visible"
                     type="button"
                     onClick={() => {
                       onDelete(property);
@@ -248,8 +252,8 @@ export default function ListPropertiesItem({
                   >
                     <XIcon
                       className=" text-background-dark"
-                      width={28}
-                      height={28}
+                      width={24}
+                      height={24}
                     />
                   </button>
                 </div>

@@ -38,6 +38,7 @@ const ExpandableTextarea = React.forwardRef<
       keyError = false,
       property,
       onDelete,
+      maxCharacters,
     },
     ref,
   ) => {
@@ -126,6 +127,7 @@ const ExpandableTextarea = React.forwardRef<
           onChange={(updatedProperty: Property) => {
             onChange({ ...updatedProperty, value: updatedProperty.value });
           }}
+          limit={maxCharacters}
         />
       </div>
     );

@@ -47,7 +47,7 @@ function RelationshipModal({
 }) {
   const filteredCharacters = characters.filter((character) => {
     const existingRelationship = relationships?.find(
-      (relationship) => relationship.character?.id === character.id
+      (relationship) => relationship.character?.id === character.id,
     );
     return !existingRelationship;
   });
@@ -191,16 +191,15 @@ export function ButtonAddRelationship({
 
         if (myData) {
           const filteredMyData = myData.filter(
-            (relatable) => relatable.id !== character?.id
+            (relatable) => relatable.id !== character?.id,
           );
           setMyCharacters(filteredMyData);
         }
         setIsMyCharactersLoading(false);
 
         // 친구 프로필 캐릭터 가져오기
-        const friendData = await fetchCharactersFromFriendsByProfileId(
-          profileId
-        );
+        const friendData =
+          await fetchCharactersFromFriendsByProfileId(profileId);
 
         if (friendData) {
           setFriendCharacters(friendData);
@@ -236,7 +235,7 @@ export function ButtonAddRelationship({
           }}
           addRelationship={(data) => {
             const existingItem = tempRelationships.find(
-              (rel) => rel.character?.id === data.characterId
+              (rel) => rel.character?.id === data.characterId,
             );
             if (existingItem) {
               existingItem.name = data.name;
@@ -345,7 +344,7 @@ export function ButtonAddRelationship({
                     <span
                       onClick={() => {
                         const updatedRelationships = tempRelationships.filter(
-                          (_, i) => i !== index
+                          (_, i) => i !== index,
                         );
                         setRelationships(updatedRelationships);
                         onChange(updatedRelationships);

@@ -13,6 +13,7 @@ import IconHalf from "@/public/assets/icons/image/half.svg";
 import { Character, EPropertyType, Property } from "@/types/character";
 import { PlanLimit } from "@/types/plan";
 import { Relationship } from "@/types/relationship";
+import { SCHEMA } from "@/types/schema";
 import { getPublicUrl } from "@/utils/image";
 import { generateId } from "@/utils/random-character/common";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -41,14 +42,14 @@ export default function CharacterEditTemplate({
 }) {
   const propertiesWithoutStats =
     character?.properties?.filter(
-      (property) => property.type !== EPropertyType.STAT
+      (property) => property.type !== EPropertyType.STAT,
     ) || [];
 
   const [properties, setProperties] = useState<Property[]>(
-    propertiesWithoutStats.map((p) => ({ ...p, uuid: generateId() }))
+    propertiesWithoutStats.map((p) => ({ ...p, uuid: generateId() })),
   );
   const [hashtags, setHashtags] = useState<string>(
-    character.hashtags?.length || 0 > 0 ? character.hashtags + " " : ""
+    character.hashtags?.length || 0 > 0 ? character.hashtags + " " : "",
   );
   const [currentHashtag, setCurrentHashtag] = useState<string>("");
   const previewHashtags = useMemo(() => {
@@ -100,25 +101,25 @@ export default function CharacterEditTemplate({
   }, [properties, currentColors, stats]);
 
   const [relationshipsState, setRelationships] = useState<Relationship[]>(
-    relationships || []
+    relationships || [],
   );
 
   const [currentThumbnail, setCurrentThumbnail] = useState<string>(
-    getPublicUrl(character.thumbnail) || ""
+    getPublicUrl(character.thumbnail) || "",
   );
 
   const [currentHalfImage, setCurrentHalfImage] = useState<string>(
-    getPublicUrl(character.image?.[0]) || ""
+    getPublicUrl(character.image?.[0]) || "",
   );
 
   const [currentFullImage, setCurrentFullImage] = useState<string>(
-    getPublicUrl(character.image?.[1]) || ""
+    getPublicUrl(character.image?.[1]) || "",
   );
 
   const handleRelationshipNameChange = (character: Character) => {
     const updatedRelationships = [...relationshipsState];
     const relationshipIndex = updatedRelationships.findIndex(
-      (relationship) => relationship.to_id === character.id
+      (relationship) => relationship.to_id === character.id,
     );
     if (relationshipIndex !== -1) {
       updatedRelationships[relationshipIndex].name = character.name;
@@ -245,13 +246,13 @@ export default function CharacterEditTemplate({
 
             // Add image files from UploadImage component
             const halfImageInput = document.querySelector(
-              'input[name="half-image"]'
+              'input[name="half-image"]',
             ) as HTMLInputElement;
             const fullImageInput = document.querySelector(
-              'input[name="full-image"]'
+              'input[name="full-image"]',
             ) as HTMLInputElement;
             const halfThumbnailInput = document.querySelector(
-              'input[name="half-thumbnail"]'
+              'input[name="half-thumbnail"]',
             ) as HTMLInputElement;
 
             if (halfImageInput?.files?.[0]) {
@@ -340,7 +341,7 @@ export default function CharacterEditTemplate({
         <div className="flex flex-col gap-2 w-full justify-center items-center mt-6 mb-4">
           <input
             className={clsx(
-              errors.name ? variants.input.error : variants.input.default
+              errors.name ? variants.input.error : variants.input.default,
             )}
             type="text"
             {...register("name")}
@@ -356,7 +357,9 @@ export default function CharacterEditTemplate({
             type="text"
             {...register("description")}
             className={clsx(
-              errors.description ? variants.input.error : variants.input.default
+              errors.description
+                ? variants.input.error
+                : variants.input.default,
             )}
             placeholder="캐릭터의 한 마디"
           />
@@ -381,6 +384,7 @@ export default function CharacterEditTemplate({
             }}
             getPropertyError={getPropertyError}
             getLengthError={getLengthError}
+            schema={SCHEMA}
           />
           {/* react-hook-form errors 표시 */}
           {errors.properties &&
@@ -437,7 +441,7 @@ export default function CharacterEditTemplate({
                 .trim()
                 .split(" ")
                 .filter((_, i) => i !== index)
-                .join(" ")
+                .join(" "),
             );
           }}
         />

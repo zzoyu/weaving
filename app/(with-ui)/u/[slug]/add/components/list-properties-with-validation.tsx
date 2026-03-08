@@ -2,15 +2,19 @@
 
 import ListProperties from "@/app/components/properties/list-properties";
 import { Property } from "@/types/character";
+import { PlanLimit } from "@/types/plan";
+import { SCHEMA } from "@/types/schema";
 
 interface ListPropertiesWithValidationProps {
   properties: Property[];
   handler: (properties: Property[]) => void;
   getPropertyError: (
     index: number,
-    field: "key" | "value"
+    field: "key" | "value",
   ) => string | undefined;
   getLengthError: () => string | null;
+  planLimit?: PlanLimit;
+  schema?: typeof SCHEMA;
 }
 
 export default function ListPropertiesWithValidation({
@@ -18,6 +22,8 @@ export default function ListPropertiesWithValidation({
   handler,
   getPropertyError,
   getLengthError,
+  planLimit,
+  schema,
 }: ListPropertiesWithValidationProps) {
   // errors prop을 ListProperties가 기대하는 형태로 변환
   const formattedErrors = properties.map((_, index) => {
@@ -46,6 +52,7 @@ export default function ListPropertiesWithValidation({
       properties={properties}
       handler={handler}
       errors={formattedErrors as any}
+      schema={schema}
     />
   );
 }

@@ -1,11 +1,6 @@
-import { Property } from "@/types/character";
+import { UNIVERSE_SCHEMA_VALUES } from "@/lib/schema/universe-form-schema";
+import { Property } from "@/types/universe";
 import { useMemo } from "react";
-
-enum EPropertyType {
-  STRING = "string",
-  COLOR = "color",
-  DATE = "date",
-}
 
 export function useUniversePropertyValidation(properties: Property[]) {
   const validationErrors = useMemo(() => {
@@ -16,38 +11,34 @@ export function useUniversePropertyValidation(properties: Property[]) {
       const propertyErrors: { key?: string; value?: string } = {};
 
       // key validation
-      if (property.type !== EPropertyType.COLOR) {
-        if (!property.key || property.key.trim().length === 0) {
-          if (property.value && property.value.trim().length > 0) {
-            propertyErrors.key = "필수 입력값입니다";
-          }
-        } else {
-          if (property.key.length > 50) {
-            propertyErrors.key = "50자 이하여야 합니다";
-          }
-          if (property.key.trim().length === 0) {
-            propertyErrors.key = "공백만 입력할 수 없습니다";
-          }
+      if (!property.key || property.key.trim().length === 0) {
+        if (property.value && property.value.trim().length > 0) {
+          propertyErrors.key = "필수 입력값입니다";
+        }
+      } else {
+        if (property.key.length > UNIVERSE_SCHEMA_VALUES.maxKeyLength) {
+          propertyErrors.key = `${UNIVERSE_SCHEMA_VALUES.maxKeyLength}자 이하여야 합니다`;
+        }
+        if (property.key.trim().length === 0) {
+          propertyErrors.key = "공백만 입력할 수 없습니다";
         }
       }
 
       // value validation
-      if (property.value && property.value.length > 1500) {
-        propertyErrors.value = "최대 1500자 이하여야 합니다";
+      if (
+        property.value &&
+        property.value.length > UNIVERSE_SCHEMA_VALUES.maxValueLength
+      ) {
+        propertyErrors.value = `최대 ${UNIVERSE_SCHEMA_VALUES.maxValueLength}자 이하여야 합니다`;
       }
 
       if (Object.keys(propertyErrors).length > 0) {
         errors[index] = propertyErrors;
       }
     });
-
-    // 중복 키 validation
-    const nonColorProperties = properties.filter(
-      (p) => p.type !== EPropertyType.COLOR
-    );
     const keyMap = new Map<string, number[]>();
 
-    nonColorProperties.forEach((property, originalIndex) => {
+    properties.forEach((property, originalIndex) => {
       const actualIndex = properties.indexOf(property);
       if (property.key && property.key.trim().length > 0) {
         const normalizedKey = property.key.trim().toLowerCase();

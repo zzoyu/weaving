@@ -13,6 +13,7 @@ import IconHalf from "@/public/assets/icons/image/half.svg";
 import { Character, EPropertyType, Property } from "@/types/character";
 import { PlanLimit } from "@/types/plan";
 import { Relationship } from "@/types/relationship";
+import { SCHEMA } from "@/types/schema";
 import { generateId } from "@/utils/random-character/common";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
@@ -39,7 +40,7 @@ export default function CharacterAddTemplate({
   planLimit: PlanLimit;
 }) {
   const [properties, setProperties] = useState<Property[]>(
-    [...baseProperties].map((p) => ({ ...p, uuid: generateId() }))
+    [...baseProperties].map((p) => ({ ...p, uuid: generateId() })),
   );
   const [hashtags, setHashtags] = useState<string>("");
   const [currentHashtag, setCurrentHashtag] = useState<string>("");
@@ -53,12 +54,12 @@ export default function CharacterAddTemplate({
 
   const [colors, setColors] = useState<Property[]>(
     character?.properties?.filter((property) =>
-      ["themeColor", "eyeColor", "hairColor"].includes(property.key)
+      ["themeColor", "eyeColor", "hairColor"].includes(property.key),
     ) || [
       { key: "themeColor", value: "", type: EPropertyType.COLOR },
       { key: "eyeColor", value: "", type: EPropertyType.COLOR },
       { key: "hairColor", value: "", type: EPropertyType.COLOR },
-    ]
+    ],
   );
 
   const [stats, setStats] = useState<Property[]>([
@@ -86,7 +87,7 @@ export default function CharacterAddTemplate({
   const handleRelationshipNameChange = (character: Character) => {
     const updatedRelationships = [...relationships];
     const relationshipIndex = updatedRelationships.findIndex(
-      (relationship) => relationship.to_id === character.id
+      (relationship) => relationship.to_id === character.id,
     );
     if (relationshipIndex !== -1) {
       updatedRelationships[relationshipIndex].name = character.name;
@@ -203,13 +204,13 @@ export default function CharacterAddTemplate({
 
           // Add image files from UploadImage component
           const halfImageInput = document.querySelector(
-            'input[name="half-image"]'
+            'input[name="half-image"]',
           ) as HTMLInputElement;
           const fullImageInput = document.querySelector(
-            'input[name="full-image"]'
+            'input[name="full-image"]',
           ) as HTMLInputElement;
           const halfThumbnailInput = document.querySelector(
-            'input[name="half-thumbnail"]'
+            'input[name="half-thumbnail"]',
           ) as HTMLInputElement;
 
           if (halfImageInput?.files?.[0]) {
@@ -286,7 +287,7 @@ export default function CharacterAddTemplate({
       <div className="flex flex-col gap-2 w-full justify-center items-center mt-6 mb-4">
         <input
           className={clsx(
-            errors.name ? variants.input.error : variants.input.default
+            errors.name ? variants.input.error : variants.input.default,
           )}
           type="text"
           {...register("name")}
@@ -302,7 +303,7 @@ export default function CharacterAddTemplate({
           type="text"
           {...register("description")}
           className={clsx(
-            errors.description ? variants.input.error : variants.input.default
+            errors.description ? variants.input.error : variants.input.default,
           )}
           placeholder="캐릭터의 한 마디"
         />
@@ -327,6 +328,8 @@ export default function CharacterAddTemplate({
           }}
           getPropertyError={getPropertyError}
           getLengthError={getLengthError}
+          planLimit={planLimit}
+          schema={SCHEMA}
         />
         {/* react-hook-form errors 표시 */}
         {errors.properties && typeof errors.properties.message === "string" && (
@@ -361,7 +364,7 @@ export default function CharacterAddTemplate({
               name: string;
               value: number;
               fullMark: number;
-            }[]
+            }[],
           ) => {
             const updatedStats = newValue
               .filter((stat) => stat.name.trim() !== "")
@@ -398,7 +401,7 @@ export default function CharacterAddTemplate({
               .trim()
               .split(" ")
               .filter((_, i) => i !== index)
-              .join(" ")
+              .join(" "),
           );
         }}
       />

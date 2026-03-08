@@ -4,6 +4,7 @@ import AddIcon from "@/public/assets/icons/add.svg";
 import { EPropertyType, Property } from "@/types/character";
 
 import { cn } from "@/lib/utils";
+import { SCHEMA } from "@/types/schema";
 import { generateId } from "@/utils/random-character/common";
 import { DragDropProvider } from "@dnd-kit/react";
 import { useSortable } from "@dnd-kit/react/sortable";
@@ -21,6 +22,7 @@ export default function ListProperties({
   handler,
   errors,
   disabled,
+  schema,
 }: {
   properties: Property[];
   handler: (properties: Property[]) => void;
@@ -28,6 +30,7 @@ export default function ListProperties({
     lengthError?: { message: string };
   };
   disabled?: boolean;
+  schema?: typeof SCHEMA;
 }) {
   const [localProperties, setLocalProperties] =
     useState<Property[]>(properties);
@@ -38,7 +41,7 @@ export default function ListProperties({
     const newProperties = [...localProperties];
     const targetIndex = Math.min(
       Math.max(fromIndex + amount, 0),
-      newProperties.length - 1
+      newProperties.length - 1,
     );
 
     if (fromIndex !== targetIndex) {
@@ -70,7 +73,7 @@ export default function ListProperties({
       onDragEnd={(event) => {
         const overId = event.operation.target?.id;
         const activeIndex = findIndexById(
-          event.operation.source?.id?.toString()
+          event.operation.source?.id?.toString(),
         );
         const overIndex = findIndexById(overId?.toString());
 
@@ -128,12 +131,13 @@ export default function ListProperties({
                     }}
                     onDelete={(propertyToDelete) => {
                       const newProperties = localProperties.filter(
-                        (p) => p.uuid !== propertyToDelete.uuid
+                        (p) => p.uuid !== propertyToDelete.uuid,
                       );
                       setLocalProperties(newProperties);
                       handler(newProperties);
                     }}
                     moveProperty={moveProperty}
+                    max={schema?.maxValueLength || 0}
                   />
                 </motion.div>
               ))}
@@ -192,6 +196,7 @@ function SortableItem({
   onChange,
   onDelete,
   moveProperty,
+  max = 0,
 }: {
   id: string;
   index: number;
@@ -202,6 +207,7 @@ function SortableItem({
   onChange: (property: Property) => void;
   onDelete: (property: Property) => void;
   moveProperty: (fromIndex: number, amount: number) => void;
+  max?: number;
 }) {
   const { ref, isDragging, handleRef } = useSortable({
     id,
@@ -218,6 +224,7 @@ function SortableItem({
         error={error}
         keyError={keyError}
         valueError={valueError}
+        max={max}
         onChange={onChange}
         onDelete={onDelete}
         isDragging={isDragging}
@@ -227,7 +234,7 @@ function SortableItem({
             "SortableItem handleMove called with amount:",
             amount,
             "index:",
-            index
+            index,
           );
           moveProperty(index, amount);
         }}

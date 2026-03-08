@@ -24,4 +24,3 @@ interface Universe {
 
 export { EPropertyType };
 export type { Property, Universe };
-
