@@ -40,7 +40,7 @@ function PopupRelationshipGraph({
         setIsLoading(true);
         setError(null);
         const dataExtended = await fetchRelationshipsWithDepthExtended(
-          character.id
+          character.id,
         );
         setDeepRelationshipsExtended(dataExtended);
       } catch (error) {
@@ -97,13 +97,13 @@ export function ProfileCard({
   const [isOpenRelationshipGraph, setIsOpenRelationshipGraph] = useState(false);
   const ColorProperties =
     character.properties?.filter((property) =>
-      ["themeColor", "eyeColor", "hairColor"].includes(property.key)
+      ["themeColor", "eyeColor", "hairColor"].includes(property.key),
     ) || [];
   const otherProperties =
     character.properties?.filter(
       (property) =>
         !["themeColor", "eyeColor", "hairColor"].includes(property.key) &&
-        property.type !== "stat"
+        property.type !== "stat",
     ) || [];
   return (
     <div className="flex flex-col items-center gap-4 w-full">
@@ -191,7 +191,12 @@ export const CharacterProfileField = ({ property }: { property: Property }) => {
   return (
     <div className="flex justify-between border-b py-2 w-full text-text-black dark:text-background-default">
       <span className="w-1/3 font-bold break-all">{property?.key}</span>
-      <span className="w-full">{property?.value}</span>
+      <span
+        className="w-full prose"
+        dangerouslySetInnerHTML={{
+          __html: property.value,
+        }}
+      ></span>
     </div>
   );
 };

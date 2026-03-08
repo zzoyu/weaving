@@ -1,5 +1,6 @@
 "use server";
 
+import { sanitizeServerUserInput } from "@/lib/sanitize-html.server";
 import { Character } from "@/types/character";
 import { Relationship, RelationshipNode } from "@/types/relationship";
 import { buildRelationshipTree } from "@/utils/relationship";
@@ -17,12 +18,20 @@ export async function fetchCharacter(id: number): Promise<Character | null> {
   if (error) {
     throw error;
   }
+  const properties = data?.properties || [];
+  // sanitize properties
+  data.properties = properties.map(
+    (property: { key: string; value: string }) => ({
+      ...property,
+      value: sanitizeServerUserInput(property.value),
+    }),
+  );
   revalidateTag("relationships");
   return data;
 }
 
 export async function fetchRelationships(
-  id: number
+  id: number,
 ): Promise<Relationship[] | null> {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -30,7 +39,7 @@ export async function fetchRelationships(
     .select(
       `id, from_id, to_id, name,
       character!relationship_to_id_fkey(id, name, thumbnail)
-      `
+      `,
     )
     .eq("from_id", id);
 
@@ -43,7 +52,7 @@ export async function fetchRelationships(
 }
 
 export async function fetchRelationshipsWithDepth(
-  id: number
+  id: number,
 ): Promise<RelationshipNode[] | null> {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("relationship_with_depth", {
@@ -64,7 +73,7 @@ export async function fetchRelationshipsWithDepth(
 }
 
 export async function fetchRelationshipsWithDepthExtended(
-  id: number
+  id: number,
 ): Promise<RelationshipNode[] | null> {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc(
@@ -72,7 +81,7 @@ export async function fetchRelationshipsWithDepthExtended(
     {
       start_id: id,
       max_depth: 3,
-    }
+    },
   );
 
   if (error) {
@@ -91,7 +100,7 @@ export async function createBulkRelationships(
   relationships: {
     to_id: number;
     name: string;
-  }[]
+  }[],
 ) {
   const supabase = await createClient();
   const { data, error } = await supabase.from("relationship").insert(
@@ -99,7 +108,7 @@ export async function createBulkRelationships(
       from_id,
       to_id: relationship.to_id,
       name: relationship.name || "friend",
-    }))
+    })),
   );
   if (error) {
     throw error;
@@ -111,7 +120,7 @@ export async function createBulkRelationships(
 export async function createRelationship(
   from_id: number,
   to_id: number,
-  name: string
+  name: string,
 ) {
   const supabase = await createClient();
   const { data, error } = await supabase.from("relationship").insert({
@@ -157,7 +166,7 @@ export async function deleteRelationship(id: number) {
 
 export async function fetchIsFavoriteById(
   profile_id?: number,
-  character_id?: number
+  character_id?: number,
 ): Promise<boolean> {
   if (!profile_id || !character_id) return false;
   const supabase = await createClient();
@@ -178,7 +187,7 @@ export async function fetchIsFavoriteById(
 
 export async function updateCharacterPassword(
   character_id: number,
-  password: string
+  password: string,
 ) {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -194,7 +203,7 @@ export async function updateCharacterPassword(
 
 export async function compareCharacterPassword(
   character_id: number,
-  password?: string
+  password?: string,
 ) {
   if (!password) {
     return false;
@@ -218,7 +227,7 @@ export async function updateBulkRelationships(
   relationships: {
     to_id: number;
     name: string;
-  }[]
+  }[],
 ) {
   const supabase = await createClient();
 
